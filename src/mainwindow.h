@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
+#include <QGraphicsView>
+
+#include <view/networkgraphics.h>
 
 namespace Ui {
 class MainWindow;

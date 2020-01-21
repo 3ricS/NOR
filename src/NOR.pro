@@ -26,10 +26,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        view/networkgraphics.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+        view/networkgraphics.h
 
 FORMS += \
         mainwindow.ui

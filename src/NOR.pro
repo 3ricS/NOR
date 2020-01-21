@@ -27,10 +27,12 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
+        model/model.cpp \
         view/networkgraphics.cpp
 
 HEADERS += \
         mainwindow.h \
+        model/model.h \
         view/networkgraphics.h
 
 FORMS += \

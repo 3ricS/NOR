@@ -3,9 +3,11 @@
 
 #include <model/model.h>
 #include <view/networkgraphics.h>
+
 #include <QListView>
 #include <QHBoxLayout>
 #include <QComboBox>
+#include <QToolBar>
 
 
 MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), _model(model)
@@ -19,6 +21,7 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(
     ui->networkView->setScene(_networkScene);
 
 
+
     //setup upper ToolBar
     setupUpperToolBar();
 
@@ -28,6 +31,7 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(
     connect(_model, SIGNAL(newResistorElement()), this, SLOT(paintSampleResistor()));
 }
 
+// Erstellen der Toolbar
 void MainWindow::setupUpperToolBar(void)
 {
     //Create upper ToolBar

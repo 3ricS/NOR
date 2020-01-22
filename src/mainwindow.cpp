@@ -30,14 +30,14 @@ void MainWindow::dropped()
 
 void MainWindow::paintSampleLine()
 {
-    _networkScene->addConnection(_networkScene, 1630, 120, 30, 800);
+    _networkScene->addConnection(1630, 120, 30, 800);
     ui->networkView->setScene(_networkScene);
 }
 
 void MainWindow::paintSampleResistor()
 {
-    _networkScene->addResistor(_networkScene, 0, 800);
-    _networkScene->addResistor(_networkScene, 1600, 0);
+    _networkScene->addResistor(1, 0, 800);
+    _networkScene->addResistor(1, 1600, 0);
     ui->networkView->setScene(_networkScene);
 }
 

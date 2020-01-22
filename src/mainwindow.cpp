@@ -5,7 +5,8 @@
 #include <view/networkgraphics.h>
 #include <QListView>
 #include <QHBoxLayout>
-#include <QToolButton>
+#include <QComboBox>
+
 
 MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), _model(model)
 {
@@ -17,29 +18,38 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(
     _networkScene = new NetworkGraphics();
     ui->networkView->setScene(_networkScene);
 
-   QToolBar* _upperToolBar = new QToolBar("upper");
-    _upperToolBar->setIconSize(QSize(20, 20));
-    _upperToolBar->setOrientation(Qt::Horizontal);
-    _upperToolBar->setMovable(false);
-    addToolBar(_upperToolBar);
-
-    QToolButton* Dateibutton = new QToolButton();
-    Dateibutton->showMenu();
-    Dateibutton->setText("Datei");
-    Dateibutton->setSizeIncrement(50,20);
-    _upperToolBar->addWidget(Dateibutton);
-
-    QToolButton* Buildbutton = new QToolButton();
-    Buildbutton->showMenu();
-    Buildbutton->setText("Erstellen");
-    Buildbutton->setSizeIncrement(50,20);
-    _upperToolBar->addWidget(Buildbutton);
-
+    //setup upper ToolBar
+    setupUpperToolBar();
 
     // set connections
     connect(ui->drawButton, SIGNAL(released()), this, SLOT(dropped()));
     connect(_model, SIGNAL(newResistorElement()), this, SLOT(paintSampleLine()));
     connect(_model, SIGNAL(newResistorElement()), this, SLOT(paintSampleResistor()));
+}
+
+void MainWindow::setupUpperToolBar(void)
+{
+    //Create upper ToolBar
+    _upperToolBar = new QToolBar("upper");
+    _upperToolBar->setIconSize(QSize(20, 20));
+    _upperToolBar->setOrientation(Qt::Horizontal);
+    _upperToolBar->setMovable(false);
+
+    //hinzufügen der ToolBar zum MainWindow
+    addToolBar(_upperToolBar);
+
+    //Create Dateibutton für obere ToolBar
+    _dateibutton = new QToolButton();
+    _dateibutton->showMenu();
+    _dateibutton->setText("Datei");
+    _dateibutton->setSizeIncrement(50,20);
+
+    //Hinzufügen Button zu ToolBar
+    _upperToolBar->addWidget(_dateibutton);
+
+
+   // QComboBox* c = new QComboBox();
+
 }
 
 void MainWindow::dropped()

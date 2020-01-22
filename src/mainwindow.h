@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QGraphicsView>
+#include <QToolButton>
 
 class Model;
 class NetworkGraphics;
@@ -29,9 +30,17 @@ public slots:
     void paintSampleLine();
 
 private:
+//Methods
+    void setupUpperToolBar(void);
+
+
+
+//Variables
     Ui::MainWindow *ui;
     Model* _model = nullptr;
     NetworkGraphics* _networkScene = nullptr;
+    QToolBar* _upperToolBar = nullptr;
+    QToolButton* _dateibutton = nullptr;
 };
 
 #endif // MAINWINDOW_H

@@ -6,6 +6,7 @@
 #include <QListView>
 #include <QHBoxLayout>
 #include <QComboBox>
+#include <QMenu>
 
 
 MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), _model(model)
@@ -40,14 +41,36 @@ void MainWindow::setupUpperToolBar(void)
     //hinzufügen der ToolBar zum MainWindow
     addToolBar(_upperToolBar);
 
+    //Ich habe mal eine eigene Menübar gemacht und diese erstmal auskommentiert. Können es ja vergleichen.
     //Create Dateibutton für obere ToolBar
-    _dateibutton = new QToolButton();
+    /*_dateibutton = new QToolButton();
     _dateibutton->showMenu();
     _dateibutton->setText("Datei");
     _dateibutton->setSizeIncrement(50,20);
 
     //Hinzufügen Button zu ToolBar
-    _upperToolBar->addWidget(_dateibutton);
+    _upperToolBar->addWidget(_dateibutton);*/
+    _fileMenu = new QMenu("Datei");
+    menuBar()->addMenu(_fileMenu);
+
+    _fileMenu->addAction(_newFile);
+
+    _newFile = new QAction("Neu");
+    _fileMenu->addAction(_newFile);
+
+    _openFile = new QAction("Öffnen");
+    _fileMenu->addAction(_openFile);
+
+    _saveFile = new QAction("Speichern");
+    _fileMenu->addAction(_saveFile);
+
+}
+
+QAction* MainWindow::createMenuAction(QString text, QKeySequence shortcut)
+{
+    QAction* action = new QAction(text);
+    action->setShortcut(shortcut);
+    return action;
 }
 
 void MainWindow::dropped()

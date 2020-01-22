@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QGraphicsView>
 #include <QToolButton>
+#include <QMenu>
+#include <QAction>
 
 class Model;
 class NetworkGraphics;
@@ -32,6 +34,8 @@ public slots:
 private:
 //Methods
     void setupUpperToolBar(void);
+    QAction* createMenuAction(QString text, QKeySequence shortcut);
+
 
 
 
@@ -41,6 +45,10 @@ private:
     NetworkGraphics* _networkScene = nullptr;
     QToolBar* _upperToolBar = nullptr;
     QToolButton* _dateibutton = nullptr;
+    QAction* _newFile = nullptr;
+    QMenu* _fileMenu = nullptr;
+    QAction* _openFile = nullptr;
+    QAction* _saveFile = nullptr;
 };
 
 #endif // MAINWINDOW_H

@@ -50,6 +50,31 @@
     </item>
    </layout>
   </widget>
+<<<<<<< HEAD
+=======
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>845</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+>>>>>>> 27732d5ada3b210c5751d7055d0b68f208c23eaa
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

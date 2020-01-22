@@ -11,31 +11,29 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(
 {
     ui->setupUi(this);
     this->setWindowTitle("NOR - Network of Resistance");
-    this->resize(1080,720);
+    this->resize(1080, 720);
 
     // setup ui
     _networkScene = new NetworkGraphics();
     ui->networkView->setScene(_networkScene);
 
-    /*
-    QToolBar* _upperToolBar = new QToolBar("upper");
+    QToolBar* _upperToolBar = new QToolBar("left");
     _upperToolBar->setIconSize(QSize(20, 20));
     _upperToolBar->setOrientation(Qt::Horizontal);
     _upperToolBar->setMovable(false);
     addToolBar(_upperToolBar);
 
-    QToolButton* Dateibutton = new QToolButton();
-    Dateibutton->showMenu();
-    Dateibutton->setText("Datei");
-    Dateibutton->setSizeIncrement(50,20);
-    _upperToolBar->addWidget(Dateibutton);
+    QToolButton* dateiButton = new QToolButton();
+    dateiButton->showMenu();
+    dateiButton->setText("Datei");
+    dateiButton->setSizeIncrement(50, 20);
+    _upperToolBar->addWidget(dateiButton);
 
-    QToolButton* Buildbutton = new QToolButton();
-    Buildbutton->showMenu();
-    Buildbutton->setText("Erstellen");
-    Buildbutton->setSizeIncrement(50,20);
-    _upperToolBar->addWidget(Buildbutton);
-    */
+    QToolButton* buildButton = new QToolButton();
+    buildButton->showMenu();
+    buildButton->setText("Erstellen");
+    buildButton->setSizeIncrement(50, 20);
+    _upperToolBar->addWidget(buildButton);
 
     // set connections
     connect(ui->drawButton, SIGNAL(released()), this, SLOT(dropped()));

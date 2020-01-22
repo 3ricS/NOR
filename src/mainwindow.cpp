@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include <model/model.h>
+#include <view/networkgraphics.h>
+#include <QListView>
+#include <QHBoxLayout>
 
 MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), _model(model)
 {
@@ -8,17 +12,15 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(
     this->setWindowTitle("NOR - Network of Resistance");
     this->resize(1800, 1000);
 
-    QPushButton* draw = new QPushButton("Zeichne");
+    // setup ui
+    _networkScene = new NetworkGraphics();
+    ui->networkView->setScene(_networkScene);
 
-    _scene = new NetworkGraphics();
-    _scene->addWidget(draw);
 
-    _view = new QGraphicsView(_scene);
-
-    setCentralWidget(_view);
-    connect(draw,SIGNAL(released()),this,SLOT(dropped()));
-    connect(_model,SIGNAL(newResistorElement()),this,SLOT(paintNewLine()));
-    connect(_model,SIGNAL(newResistorElement()),this,SLOT(paintNewResistor()));
+    // set connections
+    connect(ui->drawButton, SIGNAL(released()), this, SLOT(dropped()));
+    connect(_model, SIGNAL(newResistorElement()), this, SLOT(paintSampleLine()));
+    connect(_model, SIGNAL(newResistorElement()), this, SLOT(paintSampleResistor()));
 }
 
 void MainWindow::dropped()
@@ -26,17 +28,17 @@ void MainWindow::dropped()
     _model->paintObject();
 }
 
-void MainWindow::paintNewLine()
+void MainWindow::paintSampleLine()
 {
-    _scene->addConnection(_scene, 1630, 120, 30, 800);
-    _view->setScene(_scene);
+    _networkScene->addConnection(_networkScene, 1630, 120, 30, 800);
+    ui->networkView->setScene(_networkScene);
 }
 
-void MainWindow::paintNewResistor()
+void MainWindow::paintSampleResistor()
 {
-    _scene->addResistor(_scene, 0, 800);
-    _scene->addResistor(_scene, 1600, 0);
-    _view->setScene(_scene);
+    _networkScene->addResistor(_networkScene, 0, 800);
+    _networkScene->addResistor(_networkScene, 1600, 0);
+    ui->networkView->setScene(_networkScene);
 }
 
 MainWindow::~MainWindow()

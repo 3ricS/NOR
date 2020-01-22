@@ -5,9 +5,8 @@
 #include <QPushButton>
 #include <QGraphicsView>
 
-#include <view/networkgraphics.h>
-
 class Model;
+class NetworkGraphics;
 
 namespace Ui {
 class MainWindow;
@@ -26,14 +25,13 @@ public slots:
     void dropped(void);         //Übergabewert dann vlt. das Zeichenelemt welches ausgewählt wurde
 
 //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüft welches im Model emitted wird)
-    void paintNewResistor();
-    void paintNewLine();
+    void paintSampleResistor();
+    void paintSampleLine();
 
 private:
     Ui::MainWindow *ui;
     Model* _model = nullptr;
-    NetworkGraphics* _scene = nullptr;
-    QGraphicsView* _view = nullptr;
+    NetworkGraphics* _networkScene = nullptr;
 };
 
 #endif // MAINWINDOW_H

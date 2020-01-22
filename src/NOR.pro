@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         model/model.cpp \
-        view/networkgraphics.cpp
+        view/networkgraphics.cpp \
+        view/resistorviewelement.cpp
 
 HEADERS += \
         mainwindow.h \
         model/model.h \
-        view/networkgraphics.h
+        view/networkgraphics.h \
+        view/resistorviewelement.h
 
 FORMS += \
         mainwindow.ui

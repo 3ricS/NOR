@@ -12,11 +12,12 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), ui(
 {
     ui->setupUi(this);
     this->setWindowTitle("NOR - Network of Resistance");
-    this->resize(1080,720);
+    this->resize(1080, 720);
 
     // setup ui
     _networkScene = new NetworkGraphics();
     ui->networkView->setScene(_networkScene);
+
 
     //setup upper ToolBar
     setupUpperToolBar();
@@ -31,6 +32,7 @@ void MainWindow::setupUpperToolBar(void)
 {
     //Create upper ToolBar
     _upperToolBar = new QToolBar("upper");
+
     _upperToolBar->setIconSize(QSize(20, 20));
     _upperToolBar->setOrientation(Qt::Horizontal);
     _upperToolBar->setMovable(false);
@@ -46,10 +48,6 @@ void MainWindow::setupUpperToolBar(void)
 
     //Hinzufügen Button zu ToolBar
     _upperToolBar->addWidget(_dateibutton);
-
-
-   // QComboBox* c = new QComboBox();
-
 }
 
 void MainWindow::dropped()
@@ -59,7 +57,7 @@ void MainWindow::dropped()
 
 void MainWindow::paintSampleLine()
 {
-    _networkScene->addConnection(_networkScene, 330, 400, 430, 500);
+    _networkScene->addConnection(1630, 120, 30, 800);
     ui->networkView->setScene(_networkScene);
     //Hide DrawButton
     ui->drawButton->hide();
@@ -67,8 +65,8 @@ void MainWindow::paintSampleLine()
 
 void MainWindow::paintSampleResistor()
 {
-    _networkScene->addResistor(_networkScene, 300, 300);
-    _networkScene->addResistor(_networkScene, 400, 500);
+    _networkScene->addResistor(1, 0, 800);
+    _networkScene->addResistor(1, 1600, 0);
     ui->networkView->setScene(_networkScene);
 }
 

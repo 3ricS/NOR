@@ -30,6 +30,7 @@ SOURCES += \
         model/component.cpp \
         model/model.cpp \
         model/powersupply.cpp \
+        model/resistor.cpp \
         view/networkgraphics.cpp \
         view/resistorviewelement.cpp
 
@@ -38,6 +39,7 @@ HEADERS += \
         model/component.h \
         model/model.h \
         model/powersupply.h \
+        model/resistor.h \
         view/networkgraphics.h \
         view/resistorviewelement.h
 

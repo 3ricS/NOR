@@ -27,13 +27,17 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
+        model/component.cpp \
         model/model.cpp \
+        model/powersupply.cpp \
         view/networkgraphics.cpp \
         view/resistorviewelement.cpp
 
 HEADERS += \
         mainwindow.h \
+        model/component.h \
         model/model.h \
+        model/powersupply.h \
         view/networkgraphics.h \
         view/resistorviewelement.h
 

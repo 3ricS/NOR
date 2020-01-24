@@ -1,16 +1,7 @@
-#include "mainwindow.h"
+#include "view/mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <model/model.h>
-#include <view/networkgraphics.h>
 
-#include <QToolBar>
-#include <QListView>
-#include <QHBoxLayout>
-#include <QComboBox>
-#include <QMenu>
-
-#include <QDebug>
 
 MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), _ui(new Ui::MainWindow), _model(model)
 {

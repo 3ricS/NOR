@@ -8,6 +8,15 @@
 #include <QMenu>
 #include <QAction>
 
+#include <QToolBar>
+#include <QListView>
+#include <QHBoxLayout>
+#include <QComboBox>
+#include <QDebug>
+
+#include <model/model.h>
+#include <view/networkgraphics.h>
+
 class Model;
 class NetworkGraphics;
 

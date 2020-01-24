@@ -1,0 +1,19 @@
+Moritz
+
+Leonel
+
+Sören
+
+Eric
+
+
+
+
+___________________________________________________________________
+
+Model
+
+
+
+View
+-initialize size of graphicsscene

@@ -1,0 +1,9 @@
+Moritz
+
+Leonel
+
+Sören
+
+Eric
+-Sollen alle Slots in der Klasse MainWindow entgegengenommen werden?
+-Ist ein Fenster zum Bearbeiten der Eigenschaften besser?

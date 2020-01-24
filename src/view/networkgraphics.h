@@ -2,19 +2,26 @@
 #define NETWORKGRAPHICS_H
 
 #include <QGraphicsScene>
-#include <string>
+#include <QGraphicsSceneMouseEvent>
+#include <QDebug>
+
+#include <model/model.h>
 
 class NetworkGraphics : public QGraphicsScene
 {
 public:
-    NetworkGraphics() : QGraphicsScene() {_graphics = new QGraphicsScene();}
+    NetworkGraphics(Model* model) : QGraphicsScene(), _model(model) {_graphics = new QGraphicsScene();}
     void addResistor(int x, int y);
     void addConnection(int x_start, int y_start, int x_end, int y_end);
 
+    //Only for testing in public; see mainwindow.cpp connect()
+    QGraphicsScene* _graphics = nullptr;
 
 private:
-    QGraphicsScene* _graphics = nullptr;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
     double _zoomFactor = 1.0;
+    Model* _model;
 };
 
 #endif // NETWORKGRAPHICS_H

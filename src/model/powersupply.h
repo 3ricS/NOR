@@ -8,10 +8,15 @@
 class PowerSupply : public Component
 {
 public:
-    PowerSupply();
+    PowerSupply(QString name, int x, int y);
+
+    //getter
+    virtual int getXStartPosition() override;
+    virtual int getYStartPosition() override;
 
 private:
     QString _name;
+
 };
 
 #endif // POWERSUPPLY_H

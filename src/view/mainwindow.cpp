@@ -19,7 +19,7 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), _ui
     this->resize(1080, 720);
 
     // setup ui
-    _networkScene = new NetworkGraphics();
+    _networkScene = new NetworkGraphics(_model);
     _ui->networkView->setScene(_networkScene);
 
 
@@ -70,13 +70,6 @@ void MainWindow::setupUpperToolBar(void)
     _toolBar->addWidget(_fileButton);
 }
 
-QAction* MainWindow::createMenuAction(QString text, QKeySequence shortcut)
-{
-    QAction* action = new QAction(text);
-    action->setShortcut(shortcut);
-    return action;
-}
-
 void MainWindow::dropped()
 {
     _model->addResistor("Testwiderstand 1", 100, 200, 300);
@@ -90,7 +83,7 @@ void MainWindow::paintView()
         // if it is a Resistor
         if(component->getComponentType() == 1)
         {
-            _networkScene->addResistor(component->getXPosition(), component->getYPosition());
+            _networkScene->addResistor(component->getXStartPosition(), component->getYStartPosition());
         }
     }
 }

@@ -33,7 +33,6 @@ public slots:
 private:
 //Methods
     void setupUpperToolBar(void);
-    QAction* createMenuAction(QString text, QKeySequence shortcut);
 
 
 

@@ -23,3 +23,15 @@ void NetworkGraphics::addConnection(int x_start, int y_start, int x_end, int y_e
 }
 
 
+
+//Mouse interaction
+
+void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    QPointF position = event->scenePos();
+
+    // for testing, resistor is not in the model!!!!
+    _model->addResistor("R" + QString(Resistor::getResistorCount() + 1), 100, position.toPoint().x(), position.toPoint().y());
+}
+
+

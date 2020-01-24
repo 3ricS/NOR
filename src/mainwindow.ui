@@ -16,10 +16,13 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,7">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="5,1">
       <property name="sizeConstraint">
        <enum>QLayout::SetMaximumSize</enum>
       </property>
+      <item>
+       <widget class="QGraphicsView" name="networkView"/>
+      </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
         <property name="spacing">
@@ -42,9 +45,6 @@
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QGraphicsView" name="networkView"/>
       </item>
      </layout>
     </item>

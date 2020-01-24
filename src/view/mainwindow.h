@@ -28,8 +28,7 @@ public slots:
     void dropped(void);         //Übergabewert, vllt. das Zeichenelemt welches ausgewählt wurde
 
     //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüft welches im Model emitted wird)
-    void paintResistor();
-    void paintLine();
+    void paintView();
 
 private:
 //Methods

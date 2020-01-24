@@ -4,7 +4,17 @@ Model::Model(QObject *parent) : QObject(parent)
 {
 
 }
-void Model::paintObject()
+
+void Model::addResistor(QString name, int value, int x, int y)
 {
-    emit newResistorElement();
+    Component* resistor = new Resistor(name, value, x, y);
+    addObject(resistor);
+}
+
+void Model::addObject(Component* component)
+{
+    _componentList.append(component);
+
+    //the model has changed now
+    emit modelChanged();
 }

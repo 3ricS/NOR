@@ -8,10 +8,9 @@
 #include <QListView>
 #include <QHBoxLayout>
 #include <QComboBox>
-
 #include <QMenu>
 
-
+#include <QDebug>
 
 MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), _ui(new Ui::MainWindow), _model(model)
 {
@@ -28,10 +27,12 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), _ui
     //setup upper ToolBar
     setupUpperToolBar();
 
-    // set connections
+    // set connections to model
     connect(_ui->drawButton, SIGNAL(released()), this, SLOT(dropped()));
-    connect(_model, SIGNAL(newResistorElement()), this, SLOT(paintLine()));
-    connect(_model, SIGNAL(newResistorElement()), this, SLOT(paintResistor()));
+
+    // connect signals from model
+    connect(_model, SIGNAL(modelChanged()), this, SLOT(paintView()));
+    //connect(_model, SIGNAL(newResistorElement()), this, SLOT(paintResistor()));
 }
 
 // Erstellen der Toolbar
@@ -67,9 +68,6 @@ void MainWindow::setupUpperToolBar(void)
 
     //Add File Button to ToolBar
     _toolBar->addWidget(_fileButton);
-
-
-
 }
 
 QAction* MainWindow::createMenuAction(QString text, QKeySequence shortcut)
@@ -81,23 +79,37 @@ QAction* MainWindow::createMenuAction(QString text, QKeySequence shortcut)
 
 void MainWindow::dropped()
 {
-    _model->paintObject();
+    _model->addResistor("Testwiderstand 1", 100, 200, 300);
 }
 
-void MainWindow::paintLine()
+void MainWindow::paintView()
 {
-    _networkScene->addConnection(1630, 120, 30, 800);
+    for (Component* component : _model->getComponentList())
+    {
+        // if it is a Resistor
+        if(component->getComponentType() == 1)
+        {
+            _networkScene->addResistor(component->getXPosition(), component->getYPosition());
+        }
+    }
+}
+
+/*
+void MainWindow::paintLine(int x_start, int y_start, int x_end, int y_end)
+{
+    _networkScene->addConnection(x_start, y_start, x_end, y_end);
     _ui->networkView->setScene(_networkScene);
+
     //Hide DrawButton
     _ui->drawButton->hide();
 }
 
-void MainWindow::paintResistor()
+void MainWindow::paintResistor(int x, int y)
 {
-    _networkScene->addResistor(0, 800);
-    _networkScene->addResistor(1600, 0);
+    _networkScene->addResistor(x, y);
     _ui->networkView->setScene(_networkScene);
 }
+*/
 
 MainWindow::~MainWindow()
 {

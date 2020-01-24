@@ -2,21 +2,28 @@
 #define MODEL_H
 
 #include <QObject>
+#include <QDebug>
 
 #include <model/component.h>
+#include <model/resistor.h>
 
 class Model : public QObject
 {
     Q_OBJECT
 public:
     explicit Model(QObject *parent = nullptr);
-    void paintObject(void);
+    void addResistor(QString name, int value, int x, int y);
+
+    //getter
+    QList<Component*> getComponentList() {return _componentList;}
 
 signals:
-    void newResistorElement(void);
+    void modelChanged(void);
 
 private:
-    QList<Component> _componentList;       //statt int wird es eine Liste von Widerständen sein?
+    void addObject(Component* component);
+
+    QList<Component*> _componentList;
 
 };
 

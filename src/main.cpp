@@ -1,6 +1,9 @@
-#include "mainwindow.h"
-#include <QApplication>
+#include "view/mainwindow.h"
 #include <model/model.h>
+
+#include <QApplication>
+
+int Component::_count = 0;
 
 int main(int argc, char *argv[])
 {

@@ -7,7 +7,7 @@
 class Resistor : public Component
 {
 public:
-    Resistor();
+    Resistor(QString _name, int value, int x, int y);
 
 private:
     QString _name;

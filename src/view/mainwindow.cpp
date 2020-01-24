@@ -80,6 +80,7 @@ QAction* MainWindow::createMenuAction(QString text, QKeySequence shortcut)
 void MainWindow::dropped()
 {
     _model->addResistor("Testwiderstand 1", 100, 200, 300);
+    _model->addResistor("Testwiderstand 1", 100, 1600, 1850);
 }
 
 void MainWindow::paintView()

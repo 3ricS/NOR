@@ -14,6 +14,7 @@ public:
 
 private:
     QGraphicsScene* _graphics = nullptr;
+    double _zoomFactor = 1.0;
 };
 
 #endif // NETWORKGRAPHICS_H

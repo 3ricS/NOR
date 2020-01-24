@@ -26,22 +26,20 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
         model/component.cpp \
         model/model.cpp \
         model/powersupply.cpp \
         model/resistor.cpp \
-        view/networkgraphics.cpp \
-        view/resistorviewelement.cpp
+        view/mainwindow.cpp \
+        view/networkgraphics.cpp
 
 HEADERS += \
-        mainwindow.h \
         model/component.h \
         model/model.h \
         model/powersupply.h \
         model/resistor.h \
-        view/networkgraphics.h \
-        view/resistorviewelement.h
+        view/mainwindow.h \
+        view/networkgraphics.h
 
 FORMS += \
         mainwindow.ui

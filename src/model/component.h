@@ -10,8 +10,8 @@ public:
     Component();
 
 signals:
-    virtual void draw(void);
-    virtual void remove(void);
+    void added(void);
+    void remove(void);
 
 private:
     int _xPosition;

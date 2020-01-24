@@ -2,11 +2,5 @@
 
 PowerSupply::PowerSupply()
 {
-
-
-}
-
-void PowerSupply::createPowerSupply()
-{
-    emit draw();
+    emit added();
 }

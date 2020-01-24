@@ -1,7 +1,7 @@
 #include "view/networkgraphics.h"
 
 
-void NetworkGraphics::addResistor(int value, int x, int y)
+void NetworkGraphics::addResistor(int x, int y)
 {
     //Resistor has length of 120 and width of 60
     this->addRect(x, y + 20, 60, 80);

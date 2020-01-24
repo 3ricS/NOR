@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include <model/component.h>
+
 class Model : public QObject
 {
     Q_OBJECT
@@ -14,7 +16,7 @@ signals:
     void newResistorElement(void);
 
 private:
-    QList<int> _resistorList;       //statt int wird es eine Liste von Widerständen sein?
+    QList<Component> _componentList;       //statt int wird es eine Liste von Widerständen sein?
 
 };
 

@@ -18,6 +18,9 @@ public:
 
     static int getResistorCount() {return _resistorCount;}
 
+    void setResistance(int resistance) {_value = resistance;}
+
+
 // Component interface
 signals:
     void draw();

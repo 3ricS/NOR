@@ -18,3 +18,4 @@ Model
 View
 -initialize size of graphicsscene
 -Buttons zum wechseln der Bauteile
+-Raster für Drag and Drop?

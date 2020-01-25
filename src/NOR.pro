@@ -27,6 +27,7 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         model/component.cpp \
+        model/connection.cpp \
         model/model.cpp \
         model/powersupply.cpp \
         model/resistor.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
 
 HEADERS += \
         model/component.h \
+        model/connection.h \
         model/model.h \
         model/powersupply.h \
         model/resistor.h \

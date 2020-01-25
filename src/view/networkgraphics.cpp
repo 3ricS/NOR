@@ -33,15 +33,13 @@ void NetworkGraphics::addPowerSupply(int x, int y)
 //Mouse interaction und Entscheidung je nachdem in welchem Modus man ist
 void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    //Herausfinden der Position die geklicked wurde
     QPointF position = event->scenePos();
 
+    //Ansprechen des Model("Hier wurde etwas geklickt an der und der Position was muss ich tun")
     _model->clickInterpretation(position);
 }
 
-//Wenn ESC gedrückt wird soll es sofort in den Mouse Modus gehen
-void NetworkGraphics::keyPressEvent(QKeyEvent *event)
-{
 
-}
 
 

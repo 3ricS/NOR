@@ -22,7 +22,6 @@ public:
 
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
 
     double _zoomFactor = 1.0;
     Model* _model;

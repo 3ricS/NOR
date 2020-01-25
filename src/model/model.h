@@ -26,6 +26,7 @@ private:
     void addObject(Component* component);
     void addResistor(QString name, int value, int x, int y);
     void addPowerSupply(QString name, int x, int y);
+    void tryFindComponent(QPointF position);
 
     //Variables
     MouseMode _mode = Mouse;

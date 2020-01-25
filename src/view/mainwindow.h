@@ -44,6 +44,8 @@ public slots:
 private:
 //Methods
     void setupUpperToolBar(void);
+    void keyPressEvent(QKeyEvent *event) override;
+    void setMouseMode(void);
 
 
 

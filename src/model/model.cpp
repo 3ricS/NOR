@@ -23,7 +23,6 @@ void Model::clickInterpretation(QPointF position)
 {
     if(_mode == ResistorMode)
     {
-        // for testing, resistor is not in the model!!!!
         addResistor("R" + QString(Resistor::getResistorCount() + 1), 100, position.toPoint().x(), position.toPoint().y());
     }
 
@@ -31,6 +30,24 @@ void Model::clickInterpretation(QPointF position)
     {
         addPowerSupply("Test", position.toPoint().x(), position.toPoint().y());
     }
+
+    if(_mode == Mouse)
+    {
+        tryFindComponent(position);
+    }
+}
+
+//Es wird versucht das angeklickte Objekt ausfindig zu machen -- Funktioniert noch nicht
+void Model::tryFindComponent(QPointF position)
+{
+    for(Component* c : _componentList)
+    {
+        if((c->getXPosition() + 100 > position.rx() && c->getXPosition() - 100 < position.rx()) && (c->getYPosition() + 100 < position.ry() && c->getYPosition() - 100 < position.ry()))
+        {
+            qDebug() << "Gefunden!";
+        }
+    }
+
 }
 
 void Model::addObject(Component* component)

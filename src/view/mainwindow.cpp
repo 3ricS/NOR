@@ -1,5 +1,6 @@
 #include "view/mainwindow.h"
 #include "ui_mainwindow.h"
+#include "QKeyEvent"
 
 
 
@@ -113,6 +114,21 @@ void MainWindow::setResistorMode()
 void MainWindow::setPowerSupplyMode()
 {
     _model->setMode(Model::MouseMode::PowerSupplyMode);
+}
+
+//Maus-Modus wird eingeschaltet, kein neues Zeichen einer Komponente
+void MainWindow::setMouseMode()
+{
+    _model->setMode(Model::MouseMode::Mouse);
+}
+
+//Wenn ESC gedrückt wird soll es sofort in den Mouse Modus gehen
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Escape)
+    {
+        setMouseMode();
+    }
 }
 
 MainWindow::~MainWindow()

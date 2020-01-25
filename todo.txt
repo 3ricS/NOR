@@ -1,4 +1,4 @@
-Moritz
+﻿Moritz
 
 Leonel
 
@@ -17,3 +17,4 @@ Model
 
 View
 -initialize size of graphicsscene
+-Buttons zum wechseln der Bauteile

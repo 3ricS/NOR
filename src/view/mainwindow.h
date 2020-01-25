@@ -38,10 +38,13 @@ public slots:
 
     //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüpft welches im Model emitted wird)
     void paintView();
+    void setResistorMode(void);
+    void setPowerSupplyMode(void);
 
 private:
 //Methods
     void setupUpperToolBar(void);
+
 
 
 
@@ -56,6 +59,7 @@ private:
     QMenu*              _fileMenu = nullptr;
     QAction*            _openFile = nullptr;
     QAction*            _saveFile = nullptr;
+    QPushButton*         _powerSupplyButton = nullptr;
 };
 
 #endif // MAINWINDOW_H

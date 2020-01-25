@@ -12,10 +12,10 @@ class Model : public QObject
 {
     Q_OBJECT
 public:
+    enum MouseMode{ResistorMode, PowerSupplyMode, DeleteMode, Mouse};
     explicit Model(QObject *parent = nullptr);
-    void addResistor(QString name, int value, int x, int y);
-    void addPowerSupply(QString name, int x, int y);
-
+    void clickInterpretation(QPointF position);
+    void setMode(MouseMode newMode){_mode = newMode;}
     //getter
     QList<Component*> getComponentList() {return _componentList;}
 
@@ -24,7 +24,11 @@ signals:
 
 private:
     void addObject(Component* component);
+    void addResistor(QString name, int value, int x, int y);
+    void addPowerSupply(QString name, int x, int y);
 
+    //Variables
+    MouseMode _mode = Mouse;
     QList<Component*> _componentList;
 
 };

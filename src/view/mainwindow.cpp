@@ -20,6 +20,8 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), _ui
 
     // set connections to model
     connect(_ui->drawButton, SIGNAL(released()), this, SLOT(dropped()));
+    connect(_ui->Resistor, SIGNAL(released()), this, SLOT(setResistorMode()));
+    connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
 
     // connect signals from model
     connect(_model, SIGNAL(modelChanged()), this, SLOT(paintView()));
@@ -63,8 +65,6 @@ void MainWindow::setupUpperToolBar(void)
 
 void MainWindow::dropped()
 {
-    _model->addResistor("Testwiderstand 1", 100, 200, 300);
-    _model->addResistor("Testwiderstand 1", 100, 1600, 1850);
 
 }
 
@@ -77,6 +77,10 @@ void MainWindow::paintView()
         {
             _networkScene->addResistor(component->getXStartPosition(), component->getYStartPosition());
             //Test um zu gucken wie die Power Supply gezeichnet wird
+
+        }
+        if(component->getComponentType() == 2)
+        {
             _networkScene->addPowerSupply(component->getXPosition() + 100, component->getYPosition());
         }
     }
@@ -98,6 +102,18 @@ void MainWindow::paintResistor(int x, int y)
     _ui->networkView->setScene(_networkScene);
 }
 */
+
+// Setzen des Widerstands-Modus
+void MainWindow::setResistorMode()
+{
+    _model->setMode(Model::MouseMode::ResistorMode);
+}
+
+// Setzen des PowerSupply-Modus
+void MainWindow::setPowerSupplyMode()
+{
+    _model->setMode(Model::MouseMode::PowerSupplyMode);
+}
 
 MainWindow::~MainWindow()
 {

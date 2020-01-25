@@ -30,15 +30,18 @@ void NetworkGraphics::addPowerSupply(int x, int y)
 }
 
 
-//Mouse interaction
-
+//Mouse interaction und Entscheidung je nachdem in welchem Modus man ist
 void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QPointF position = event->scenePos();
 
-    // for testing, resistor is not in the model!!!!
-    _model->addResistor("R" + QString(Resistor::getResistorCount() + 1), 100, position.toPoint().x(), position.toPoint().y());
-    _model->addPowerSupply("Test", position.toPoint().x(), position.toPoint().y());
+    _model->clickInterpretation(position);
+}
+
+//Wenn ESC gedrückt wird soll es sofort in den Mouse Modus gehen
+void NetworkGraphics::keyPressEvent(QKeyEvent *event)
+{
+
 }
 
 

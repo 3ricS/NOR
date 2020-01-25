@@ -9,8 +9,9 @@ public:
     Connection(int xStart, int yStart, int xEnd, int yEnd);
 
     // Component interface
-    int getXStartPosition();
-    int getYStartPosition();
+    virtual int getXStartPosition() override;
+    virtual int getYStartPosition() override;
+
 
 signals:
     void draw();

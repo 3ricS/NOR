@@ -14,6 +14,11 @@ public:
     virtual int getXStartPosition() override;
     virtual int getYStartPosition() override;
 
+// Component interface
+signals:
+    void draw();
+    void remove();
+
 private:
     QString _name;
 

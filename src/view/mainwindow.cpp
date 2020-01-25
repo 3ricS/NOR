@@ -65,6 +65,7 @@ void MainWindow::dropped()
 {
     _model->addResistor("Testwiderstand 1", 100, 200, 300);
     _model->addResistor("Testwiderstand 1", 100, 1600, 1850);
+
 }
 
 void MainWindow::paintView()
@@ -75,6 +76,8 @@ void MainWindow::paintView()
         if(component->getComponentType() == 1)
         {
             _networkScene->addResistor(component->getXStartPosition(), component->getYStartPosition());
+            //Test um zu gucken wie die Power Supply gezeichnet wird
+            _networkScene->addPowerSupply(component->getXPosition() + 100, component->getYPosition());
         }
     }
 }

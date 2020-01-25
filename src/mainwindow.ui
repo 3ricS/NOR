@@ -24,7 +24,7 @@
        <widget class="QGraphicsView" name="networkView"/>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
         <property name="spacing">
          <number>7</number>
         </property>
@@ -41,6 +41,27 @@
           </property>
           <property name="text">
            <string>Zeichnen</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="PowerSupply">
+          <property name="text">
+           <string>Spannungsquelle</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Resistor">
+          <property name="text">
+           <string>Widerstand</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Connection">
+          <property name="text">
+           <string>Verbindung</string>
           </property>
          </widget>
         </item>

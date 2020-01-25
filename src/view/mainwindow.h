@@ -36,7 +36,7 @@ public slots:
     //Slots die dem Model etwas mitteilen:
     void dropped(void);         //Übergabewert, vllt. das Zeichenelemt welches ausgewählt wurde
 
-    //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüft welches im Model emitted wird)
+    //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüpft welches im Model emitted wird)
     void paintView();
 
 private:

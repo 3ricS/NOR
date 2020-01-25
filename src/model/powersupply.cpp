@@ -1,9 +1,9 @@
 #include "powersupply.h"
 
 PowerSupply::PowerSupply(QString name, int x, int y) :
-    Component(x, y, 100, 100,  2, 2) //wrong values, only for testing!
+    Component(x, y, 120, 60,  2, 2)
 {
-
+    _name = name;
 }
 
 int PowerSupply::getXStartPosition()

@@ -22,6 +22,12 @@ void NetworkGraphics::addConnection(int x_start, int y_start, int x_end, int y_e
     this->addLine(x_end, y_middle, x_end, y_end);
 }
 
+void NetworkGraphics::addPowerSupply(int x, int y)
+{
+    //Power Supply has length of 120 and width of 60
+    this->addEllipse(x - 30, y - 30, 60, 60);
+    this->addLine(x, y + 60, x, y - 60);
+}
 
 
 //Mouse interaction
@@ -32,6 +38,7 @@ void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     // for testing, resistor is not in the model!!!!
     _model->addResistor("R" + QString(Resistor::getResistorCount() + 1), 100, position.toPoint().x(), position.toPoint().y());
+    _model->addPowerSupply("Test", position.toPoint().x(), position.toPoint().y());
 }
 
 

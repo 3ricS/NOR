@@ -6,6 +6,7 @@
 
 #include <model/component.h>
 #include <model/resistor.h>
+#include <model/powersupply.h>
 
 class Model : public QObject
 {
@@ -13,6 +14,7 @@ class Model : public QObject
 public:
     explicit Model(QObject *parent = nullptr);
     void addResistor(QString name, int value, int x, int y);
+    void addPowerSupply(QString name, int x, int y);
 
     //getter
     QList<Component*> getComponentList() {return _componentList;}

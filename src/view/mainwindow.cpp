@@ -76,13 +76,13 @@ void MainWindow::paintView()
         // if it is a Resistor
         if(component->getComponentType() == 1)
         {
-            _networkScene->addResistor(component->getXStartPosition(), component->getYStartPosition());
+            _networkScene->paintResistor(component->getXStartPosition(), component->getYStartPosition());
             //Test um zu gucken wie die Power Supply gezeichnet wird
 
         }
         if(component->getComponentType() == 2)
         {
-            _networkScene->addPowerSupply(component->getXPosition() + 100, component->getYPosition());
+            _networkScene->paintPowerSupply(component->getXPosition(), component->getYPosition());
         }
     }
 }

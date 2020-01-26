@@ -14,6 +14,10 @@ public:
     virtual int getXStartPosition() override;
     virtual int getYStartPosition() override;
 
+    int getWidth() {return _width;}
+    int getHeight() {return _height;}
+
+
 // Component interface
 signals:
     void draw();
@@ -21,6 +25,8 @@ signals:
 
 private:
     QString _name;
+    static constexpr int _height = 120;
+    static constexpr int _width = 60;
 
 };
 

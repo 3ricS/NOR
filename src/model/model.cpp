@@ -21,6 +21,10 @@ void Model::addPowerSupply(QString name, int x, int y)
 
 void Model::clickInterpretation(QPointF position)
 {
+    //filter position to make a grid
+    position.setX(position.toPoint().x() - (position.toPoint().x() % 100) + 50);
+    position.setY(position.toPoint().y() - (position.toPoint().y() % 100) - 50);
+
     if(_mode == ResistorMode)
     {
         addResistor("R" + QString(Resistor::getResistorCount() + 1), 100, position.toPoint().x(), position.toPoint().y());

@@ -12,10 +12,10 @@ class Model : public QObject
 {
     Q_OBJECT
 public:
-    enum MouseMode{ResistorMode, PowerSupplyMode, DeleteMode, Mouse};
+    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, DeleteMode, Mouse};
     explicit Model(QObject *parent = nullptr);
     void clickInterpretation(QPointF position);
-    void setMode(MouseMode newMode){_mode = newMode;}
+    void setMode(MouseMode newMode) {_mode = newMode;}
     //getter
     QList<Component*> getComponentList() {return _componentList;}
 

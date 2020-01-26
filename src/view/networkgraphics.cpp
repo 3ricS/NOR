@@ -1,15 +1,15 @@
 #include "view/networkgraphics.h"
 
 
-void NetworkGraphics::addResistor(int x, int y)
+void NetworkGraphics::paintResistor(int x, int y)
 {
     //Resistor has length of 120 and width of 60
-    this->addRect(x, y + 20, 60, 80);
-    this->addLine(x + 30, y + 0, x + 30, y + 20);
-    this->addLine(x + 30, y + 100, x + 30, y + 120);
+    this->addRect(x, y + 20, 40, 60);
+    this->addLine(x + 20, y + 0, x + 20, y + 20);
+    this->addLine(x + 20, y + 80, x + 20, y + 100);
 }
 
-void NetworkGraphics::addConnection(int x_start, int y_start, int x_end, int y_end)
+void NetworkGraphics::paintConnection(int x_start, int y_start, int x_end, int y_end)
 {
     //first calculate the coordinates of the middle
     int x_middle = x_start + 0.5 * (x_end - x_start);
@@ -22,7 +22,7 @@ void NetworkGraphics::addConnection(int x_start, int y_start, int x_end, int y_e
     this->addLine(x_end, y_middle, x_end, y_end);
 }
 
-void NetworkGraphics::addPowerSupply(int x, int y)
+void NetworkGraphics::paintPowerSupply(int x, int y)
 {
     //Power Supply has length of 120 and width of 60
     this->addEllipse(x - 30, y - 30, 60, 60);

@@ -12,9 +12,9 @@ class NetworkGraphics : public QGraphicsScene
 public:
 
     NetworkGraphics(Model* model) : QGraphicsScene(), _model(model) {_graphics = new QGraphicsScene();}
-    void addResistor(int x, int y);
-    void addConnection(int x_start, int y_start, int x_end, int y_end);
-    void addPowerSupply(int x, int y);
+    void paintResistor(int x, int y);
+    void paintConnection(int x_start, int y_start, int x_end, int y_end);
+    void paintPowerSupply(int x, int y);
 
 
     //Only for testing in public; see mainwindow.cpp connect()

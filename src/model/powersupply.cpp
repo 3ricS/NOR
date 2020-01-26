@@ -1,7 +1,7 @@
 #include "powersupply.h"
 
 PowerSupply::PowerSupply(QString name, int x, int y) :
-    Component(x, y, 120, 60,  2, 2)
+    Component(x, y,  2, 2)
 {
     _name = name;
 }
@@ -13,5 +13,5 @@ int PowerSupply::getXStartPosition()
 
 int PowerSupply::getYStartPosition()
 {
-    return this->getYPosition() - (this->getHight() / 2);
+    return this->getYPosition() - (this->getHeight() / 2);
 }

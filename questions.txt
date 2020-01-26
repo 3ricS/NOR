@@ -7,3 +7,5 @@ Sören
 Eric
 -Sollen alle Slots in der Klasse MainWindow entgegengenommen werden?
 -Ist ein Fenster zum Bearbeiten der Eigenschaften besser?
+	Sören: Vielleicht mit Rechtsklick ein Info-Fenster? Sonst vielleicht dieses 		       Eigenschaften-Fenster wieder verschwinden lassen wenn etwas angeklickt 		       wird, was kein Widerstand ist? Fand so leer sah das immer doof aus.
+					

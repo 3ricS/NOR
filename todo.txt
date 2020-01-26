@@ -1,4 +1,4 @@
-﻿Moritz
+Moritz
 
 Leonel
 
@@ -12,10 +12,13 @@ Eric
 ___________________________________________________________________
 
 Model
-
-
+-Speichern/Laden
+-Erkennen des Ortes des Bauteils
+-Getter für den (PropertyView?), dafür muss aber erst das Objekt erkannt werden
 
 View
 -initialize size of graphicsscene
--Buttons zum wechseln der Bauteile
+-Buttons zum wechseln der Bauteile 
 -Raster für Drag and Drop?
+-Raster aufjedenfall
+-Bau einen Widgets in dem rechten ListView (PropertyView oder so vlt?)

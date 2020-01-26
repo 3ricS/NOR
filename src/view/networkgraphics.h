@@ -13,8 +13,10 @@ public:
 
     NetworkGraphics(Model* model) : QGraphicsScene(), _model(model) {_graphics = new QGraphicsScene();}
     void paintResistor(int x, int y);
+    void paintResistor90Degree(int x, int y);
     void paintConnection(int x_start, int y_start, int x_end, int y_end);
     void paintPowerSupply(int x, int y);
+    void paintPowerSupply90Degree(int x, int y);
 
 
     //Only for testing in public; see mainwindow.cpp connect()

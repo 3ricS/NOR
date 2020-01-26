@@ -9,6 +9,13 @@ void NetworkGraphics::paintResistor(int x, int y)
     this->addLine(x + 20, y + 80, x + 20, y + 100);
 }
 
+void NetworkGraphics::paintResistor90Degree(int x, int y)
+{
+    this->addRect(x - 30, y - 20, 60, 40);
+    this->addLine(x -30 , y + 0, x - 50, y + 0);
+    this->addLine(x + 30, y + 0, x + 60, y + 0);
+}
+
 void NetworkGraphics::paintConnection(int x_start, int y_start, int x_end, int y_end)
 {
     //first calculate the coordinates of the middle
@@ -27,6 +34,13 @@ void NetworkGraphics::paintPowerSupply(int x, int y)
     //Power Supply has length of 120 and width of 60
     this->addEllipse(x - 30, y - 30, 60, 60);
     this->addLine(x, y + 60, x, y - 60);
+}
+
+void NetworkGraphics::paintPowerSupply90Degree(int x, int y)
+{
+    //Power Supply has length of 120 and width of 60
+    this->addEllipse(x - 30, y - 30, 60, 60);
+    this->addLine(x - 60, y, x + 60, y);
 }
 
 

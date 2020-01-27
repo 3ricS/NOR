@@ -32,7 +32,7 @@ SOURCES += \
         model/powersupply.cpp \
         model/resistor.cpp \
         view/mainwindow.cpp \
-        view/networkgraphics.cpp
+        model/networkgraphics.cpp
 
 HEADERS += \
         model/component.h \
@@ -41,7 +41,7 @@ HEADERS += \
         model/powersupply.h \
         model/resistor.h \
         view/mainwindow.h \
-        view/networkgraphics.h
+        model/networkgraphics.h
 
 FORMS += \
         mainwindow.ui

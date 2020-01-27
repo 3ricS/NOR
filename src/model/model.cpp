@@ -29,9 +29,13 @@ void Model::clickInterpretation(QPointF position, QPointF positionEnd)
 {
     //filter position to make a grid
     position.setX(position.toPoint().x() - (position.toPoint().x() % 100) + 50);
+<<<<<<< HEAD
     position.setY(position.toPoint().y() - (position.toPoint().y() % 100) - 50);
     //positionEnd.setX(position.toPoint().x() - (positionEnd.toPoint().x() % 100) + 50);
     //positionEnd.setY(position.toPoint().y() - (positionEnd.toPoint().y() % 100) - 50);
+=======
+    position.setY(position.toPoint().y() - (position.toPoint().y() % 100) + 50);
+>>>>>>> 6fed4396bd50885ed85680859e3eaab350702233
 
     if(_mode == ResistorMode)
     {

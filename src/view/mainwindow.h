@@ -55,13 +55,6 @@ private:
     Ui::MainWindow*     _ui;
     Model*              _model = nullptr;
     NetworkGraphics*    _networkScene = nullptr;
-    QToolBar*           _toolBar = nullptr;
-    QToolButton*        _fileButton = nullptr;
-    QAction*            _newFile = nullptr;
-    QMenu*              _fileMenu = nullptr;
-    QAction*            _openFile = nullptr;
-    QAction*            _saveFile = nullptr;
-    QPushButton*         _powerSupplyButton = nullptr;
 };
 
 #endif // MAINWINDOW_H

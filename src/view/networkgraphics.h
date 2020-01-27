@@ -19,13 +19,9 @@ public:
     void paintPowerSupply90Degree(int x, int y);
 
 
-    //Only for testing in public; see mainwindow.cpp connect()
-    QGraphicsScene* _graphics = nullptr;
-
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-
-    double _zoomFactor = 1.0;
+    QGraphicsScene* _graphics = nullptr;
     Model* _model;
 
 };

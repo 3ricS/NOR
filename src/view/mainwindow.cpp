@@ -32,36 +32,45 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), _ui
 // Erstellen der Toolbar
 void MainWindow::setupUpperToolBar(void)
 {
-    //Create upper ToolBar
-    _toolBar = new QToolBar("upper");
-    _toolBar->setIconSize(QSize(20, 20));
-    _toolBar->setOrientation(Qt::Horizontal);
-    _toolBar->setMovable(false);
-    //add ToolBar to MainWindow
-    addToolBar(_toolBar);
 
+    QToolBar           _toolBar ("upper");
+    QToolButton        _fileButton;
+    QAction            _newFile;
+    QMenu              _fileMenu;
+    QAction            _openFile;
+    QAction            _saveFile;
+
+    //Create upper ToolBar
+    _toolBar.setIconSize(QSize(20, 20));
+    _toolBar.setOrientation(Qt::Horizontal);
+    _toolBar.setMovable(false);
+    //add ToolBar to MainWindow
+    addToolBar(&_toolBar);
+
+    /*
     //Create File Menu
     _fileMenu = new QMenu("Datei");
-    _fileMenu->addAction(_newFile);
+    _fileMenu.addAction(&_newFile);
     //Action New
     _newFile = new QAction("Neu");
-    _fileMenu->addAction(_newFile);
+    _fileMenu.addAction(&_newFile);
     //Action Open
     _openFile = new QAction("Öffnen");
-    _fileMenu->addAction(_openFile);
+    _fileMenu.addAction(&_openFile);
     //Action Save
     _saveFile = new QAction("Speichern");
-    _fileMenu->addAction(_saveFile);
+    _fileMenu.addAction(&_saveFile);
 
     //Create _fileButton
     _fileButton = new QToolButton();
-    _fileButton->setText("Datei");
+    _fileButton.setText("Datei");
     //_fileButton->setSizeIncrement(50,20);
-    _fileButton->setMenu(_fileMenu);
-    _fileButton->setPopupMode(QToolButton::InstantPopup);
+    _fileButton.setMenu(&_fileMenu);
+    _fileButton.setPopupMode(QToolButton::InstantPopup);
 
     //Add File Button to ToolBar
-    _toolBar->addWidget(_fileButton);
+    _toolBar.addWidget(&_fileButton);
+    */
 }
 
 void MainWindow::dropped()

@@ -2,7 +2,7 @@
 
 
 Resistor::Resistor(QString name, int value, int x, int y)
-    : Component(x, y, 1, 2)
+    : Component(x, y, 0, 0, 1, 2)
 {
     //Properties of Resistor
     //_countPorts 2

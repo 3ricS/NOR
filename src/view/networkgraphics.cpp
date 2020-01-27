@@ -43,15 +43,18 @@ void NetworkGraphics::paintPowerSupply90Degree(int x, int y)
     this->addLine(x - 60, y, x + 60, y);
 }
 
-
 //Mouse interaction und Entscheidung je nachdem in welchem Modus man ist
 void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //Herausfinden der Position die geklicked wurde
-    QPointF position = event->scenePos();
+    _position = event->scenePos();
+}
 
-    //Ansprechen des Model("Hier wurde etwas geklickt an der und der Position was muss ich tun")
-    _model->clickInterpretation(position);
+void NetworkGraphics::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    _positionEnd = event->scenePos();
+       //Ansprechen des Model("Hier wurde etwas geklickt an der und der Position was muss ich tun"
+       _model->clickInterpretation(_position, _positionEnd);
 }
 
 

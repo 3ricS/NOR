@@ -24,9 +24,12 @@ public:
 
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
     double _zoomFactor = 1.0;
     Model* _model;
+    QPointF _position;
+    QPointF _positionEnd;
 
 };
 

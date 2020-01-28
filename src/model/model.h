@@ -15,7 +15,7 @@ class Model : public QObject
 public:
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, DeleteMode, Mouse};
     explicit Model(QObject *parent = nullptr);
-    void clickInterpretation(QPointF position, QPointF positionEnd);
+    void clickInterpretation(QPointF position);
     void setMode(MouseMode newMode) {_mode = newMode;}
     //getter
     QList<Component*> getComponentList() {return _componentList;}

@@ -1,4 +1,4 @@
-#include "view/networkgraphics.h"
+#include "model/networkgraphics.h"
 
 
 void NetworkGraphics::paintResistor(int x, int y)

@@ -15,7 +15,7 @@
 #include <QDebug>
 
 #include <model/model.h>
-#include <view/networkgraphics.h>
+#include <model/networkgraphics.h>
 
 class Model;
 class NetworkGraphics;

@@ -1,15 +1,13 @@
 #include "resistor.h"
 
 
-Resistor::Resistor(QString name, int value, int x, int y)
-    : Component(x, y, 0, 0, 1, 2)
+Resistor::Resistor(QString name, int value, int x, int y, bool isVertical)
+    : Component(x, y, isVertical, 1, 2),
+    _name(name), _value(value)
 {
     //Properties of Resistor
     //_countPorts 2
     //_componentType 1
-
-    _name = name;
-    _value = value;
 }
 
 Resistor::~Resistor()

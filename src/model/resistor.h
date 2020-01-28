@@ -8,7 +8,7 @@
 class Resistor : public Component
 {
 public:
-    Resistor(QString _name, int value, int x, int y);
+    Resistor(QString _name, int value, int x, int y, bool isVertical);
     ~Resistor();
 
     //getter
@@ -20,12 +20,6 @@ public:
     int getHeight() {return _height;}
 
     void setResistance(int resistance) {_value = resistance;}
-
-
-// Component interface
-signals:
-    void draw();
-    void remove();
 
 private:
     static int _resistorCount;

@@ -1,9 +1,10 @@
 #include "powersupply.h"
 
-PowerSupply::PowerSupply(QString name, int x, int y) :
-    Component(x, y, 0, 0, 2, 2)
+PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical) :
+    Component(x, y, isVertical, 2, 2),
+    _name(name)
 {
-    _name = name;
+
 }
 
 int PowerSupply::getXStartPosition()

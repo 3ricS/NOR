@@ -9,14 +9,12 @@ public:
     Connection(int xStart, int yStart, int xEnd, int yEnd);
 
     // Component interface
-    virtual int getXStartPosition() override {return _xStart;}
-    virtual int getYStartPosition() override {return _yStart;}
     int getXEndPosition() {return  _xEnd;}
     int getYEndPosition() {return _yEnd;}
 
-signals:
-    void draw();
-    void remove();
+    int getXStartPosition() override;
+
+    int getYStartPosition() override;
 
 private:
     int _xStart;

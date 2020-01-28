@@ -32,7 +32,8 @@ SOURCES += \
         model/powersupply.cpp \
         model/resistor.cpp \
         view/mainwindow.cpp \
-        model/networkgraphics.cpp
+        model/networkgraphics.cpp \
+        view/networkview.cpp
 
 HEADERS += \
         model/component.h \
@@ -41,10 +42,11 @@ HEADERS += \
         model/powersupply.h \
         model/resistor.h \
         view/mainwindow.h \
-        model/networkgraphics.h
+        model/networkgraphics.h \
+        view/networkview.h
 
 FORMS += \
-        mainwindow.ui
+        view/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -28,8 +28,8 @@ signals:
 
 private:
     void addObject(Component* component);
-    void addResistor(QString name, int value, int x, int y);
-    void addPowerSupply(QString name, int x, int y);
+    void addResistor(QString name, int value, int x, int y, bool isVertical);
+    void addPowerSupply(QString name, int x, int y, bool isVertical);
     void addConnection(int xStart, int yStart, int xEnd, int yEnd);
     void tryFindComponent(QPointF position);
 

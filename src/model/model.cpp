@@ -7,15 +7,15 @@ Model::Model(QObject *parent) : QObject(parent)
 
 }
 
-void Model::addResistor(QString name, int value, int x, int y)
+void Model::addResistor(QString name, int value, int x, int y, bool isVertical)
 {
-    Component* resistor = new Resistor(name, value, x, y);
+    Component* resistor = new Resistor(name, value, x, y, isVertical);
     addObject(resistor);
 }
 
-void Model::addPowerSupply(QString name, int x, int y)
+void Model::addPowerSupply(QString name, int x, int y, bool isVertical)
 {
-    Component* powersupply = new PowerSupply(name, x, y);
+    Component* powersupply = new PowerSupply(name, x, y, isVertical);
     addObject(powersupply);
 }
 
@@ -35,12 +35,12 @@ void Model::clickInterpretation(QPointF position)
 
     if(_mode == ResistorMode)
     {
-        addResistor("R" + QString(Resistor::getResistorCount() + 1), 100, position.toPoint().x(), position.toPoint().y());
+        addResistor("R" + QString(Resistor::getResistorCount() + 1), 100, position.toPoint().x(), position.toPoint().y(), true);
     }
 
     if(_mode == PowerSupplyMode)
     {
-        addPowerSupply("Test", position.toPoint().x(), position.toPoint().y());
+        addPowerSupply("Test", position.toPoint().x(), position.toPoint().y(), true);
     }
 
     if(_mode == Mouse)

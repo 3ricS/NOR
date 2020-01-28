@@ -15,6 +15,7 @@ set(CMAKE_AUTORCC ON)
 # Tell cmake to find the modules Qt5Core and Qt5widgets
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt5 COMPONENTS Gui REQUIRED)
 find_package(Qt5 COMPONENTS Sql REQUIRED)
 
 include_directories(doc)
@@ -28,8 +29,10 @@ set(MOC_HEADERS
         model/model.h
         model/powersupply.h
         model/resistor.h
-        view/mainwindow.h
         model/networkgraphics.cpp
+
+        view/mainwindow.h
+        view/NetworkView.h
         )
 
 # set .cpp files
@@ -40,9 +43,10 @@ set (SOURCES
         model/model.cpp
         model/powersupply.cpp
         model/resistor.cpp
-        view/mainwindow.cpp
         model/networkgraphics.cpp
-        )
+
+        view/mainwindow.cpp
+        view/NetworkView.cpp)
 
 # set .ui files
 set(UIS
@@ -64,3 +68,4 @@ add_executable(NOR
 
 target_link_libraries(NOR Qt5::Widgets)
 target_link_libraries(NOR Qt5::Core)
+target_link_libraries(NOR Qt5::Gui)

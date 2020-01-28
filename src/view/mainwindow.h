@@ -16,6 +16,7 @@
 
 #include <model/model.h>
 #include <model/networkgraphics.h>
+#include "view/NetworkView.h"
 
 class Model;
 class NetworkGraphics;
@@ -33,9 +34,6 @@ public:
     ~MainWindow();
 
 public slots:
-    //Slots die dem Model etwas mitteilen:
-    void dropped(void);         //Übergabewert, vllt. das Zeichenelemt welches ausgewählt wurde
-
     //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüpft welches im Model emitted wird)
     void paintView();
     void setResistorMode(void);
@@ -43,7 +41,6 @@ public slots:
     void setConnectionMode(void);
 
 private:
-//Methods
     void setupUpperToolBar(void);
     void keyPressEvent(QKeyEvent *event) override;
     void setMouseMode(void);

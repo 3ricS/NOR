@@ -1,19 +1,18 @@
 #include "model/networkgraphics.h"
 
 
-void NetworkGraphics::paintResistor(int x, int y)
+void NetworkGraphics::paintResistor(int x, int y, bool isVertical)
 {
-    //Resistor has length of 120 and width of 60
-    this->addRect(x, y + 20, 40, 60);
-    this->addLine(x + 20, y + 0, x + 20, y + 20);
-    this->addLine(x + 20, y + 80, x + 20, y + 100);
-}
-
-void NetworkGraphics::paintResistor90Degree(int x, int y)
-{
-    this->addRect(x - 30, y - 20, 60, 40);
-    this->addLine(x -30 , y + 0, x - 50, y + 0);
-    this->addLine(x + 30, y + 0, x + 60, y + 0);
+    if(isVertical) {
+        //Resistor has length of 120 and width of 60
+        this->addRect(x, y + 20, 40, 60);
+        this->addLine(x + 20, y + 0, x + 20, y + 20);
+        this->addLine(x + 20, y + 80, x + 20, y + 100);
+    } else {
+        this->addRect(x - 30, y - 20, 60, 40);
+        this->addLine(x -30 , y + 0, x - 50, y + 0);
+        this->addLine(x + 30, y + 0, x + 60, y + 0);
+    }
 }
 
 void NetworkGraphics::paintConnection(int x_start, int y_start, int x_end, int y_end)
@@ -29,20 +28,17 @@ void NetworkGraphics::paintConnection(int x_start, int y_start, int x_end, int y
     this->addLine(x_end, y_middle, x_end, y_end);
 }
 
-void NetworkGraphics::paintPowerSupply(int x, int y)
+void NetworkGraphics::paintPowerSupply(int x, int y, bool isVertical)
 {
     //Power Supply has length of 120 and width of 60
-    this->addEllipse(x - 30, y - 30, 60, 60);
-    this->addLine(x, y + 60, x, y - 60);
+    if(isVertical) {
+        this->addEllipse(x - 30, y - 30, 60, 60);
+        this->addLine(x, y + 60, x, y - 60);
+    } else {
+        this->addEllipse(x - 30, y - 30, 60, 60);
+        this->addLine(x - 60, y, x + 60, y);
+    }
 }
-
-void NetworkGraphics::paintPowerSupply90Degree(int x, int y)
-{
-    //Power Supply has length of 120 and width of 60
-    this->addEllipse(x - 30, y - 30, 60, 60);
-    this->addLine(x - 60, y, x + 60, y);
-}
-
 
 //Mouse interaction und Entscheidung je nachdem in welchem Modus man ist
 void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)

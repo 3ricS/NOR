@@ -1,10 +1,9 @@
 #include "view/mainwindow.h"
 #include "ui_mainwindow.h"
-#include "QKeyEvent"
 
 
 
-MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), _ui(new Ui::MainWindow), _model(model)
+MainWindow::MainWindow(Model* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow), _model(model)
 {
     _ui->setupUi(this);
     this->setWindowTitle("NOR - Network of Resistance");
@@ -20,7 +19,6 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), _ui
     setupUpperToolBar();
 
     // set connections to model
-    connect(_ui->drawButton, SIGNAL(released()), this, SLOT(dropped()));
     connect(_ui->Resistor, SIGNAL(released()), this, SLOT(setResistorMode()));
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
@@ -74,11 +72,6 @@ void MainWindow::setupUpperToolBar(void)
     */
 }
 
-void MainWindow::dropped()
-{
-
-}
-
 void MainWindow::paintView()
 {
     for (Component* component : _model->getComponentList())
@@ -86,37 +79,20 @@ void MainWindow::paintView()
         // if it is a Resistor
         if(component->getComponentType() == 1)
         {
-            _networkScene->paintResistor(component->getXStartPosition(), component->getYStartPosition());
+            _networkScene->paintResistor(component->getXStartPosition(), component->getYStartPosition(), component->isVertical());
             //Test um zu gucken wie die Power Supply gezeichnet wird
 
         }
         if(component->getComponentType() == 2)
         {
-            _networkScene->paintPowerSupply(component->getXPosition(), component->getYPosition());
+            _networkScene->paintPowerSupply(component->getXPosition(), component->getYPosition(), component->isVertical());
         }
         if(component->getComponentType() == 3)
         {
-            _networkScene->paintConnection(component->getXPosition(), component->getYPosition(), component->getXEndPosition(), component->getYEndPosition());
+            _networkScene->paintConnection(component->getXPosition(), component->getYPosition(), 100, 100);
         }
     }
 }
-
-/*
-void MainWindow::paintLine(int x_start, int y_start, int x_end, int y_end)
-{
-    _networkScene->addConnection(x_start, y_start, x_end, y_end);
-    _ui->networkView->setScene(_networkScene);
-
-    //Hide DrawButton
-    _ui->drawButton->hide();
-}
-
-void MainWindow::paintResistor(int x, int y)
-{
-    _networkScene->addResistor(x, y);
-    _ui->networkView->setScene(_networkScene);
-}
-*/
 
 // Setzen des Widerstands-Modus
 void MainWindow::setResistorMode()
@@ -142,13 +118,10 @@ void MainWindow::setMouseMode()
     _model->setMode(Model::MouseMode::Mouse);
 }
 
-//Wenn ESC gedrückt wird soll es sofort in den Mouse Modus gehen
-void MainWindow::keyPressEvent(QKeyEvent *event)
+//Wenn ESC gedrückt wird, soll es sofort in den Mouse Modus gehen
+void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-    if(event->key() == Qt::Key_Escape)
-    {
-        setMouseMode();
-    }
+
 }
 
 MainWindow::~MainWindow()

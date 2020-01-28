@@ -21,7 +21,7 @@
        <enum>QLayout::SetMaximumSize</enum>
       </property>
       <item>
-       <widget class="QGraphicsView" name="networkView"/>
+       <widget class="NetworkView" name="networkView"/>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
@@ -73,6 +73,13 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>NetworkView</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">view/networkview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

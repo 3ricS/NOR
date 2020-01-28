@@ -1,0 +1,20 @@
+﻿Protokoll vom 27. Januar 2020
+
+Anwesend:
+Leonel Fransen
+Moritz Fichte
+Sören Köstler
+Eric Schniedermeyer
+Herr Henseler
+
+Protokollant:
+Leonel Fransen
+
+Protokoll:
+-View und Model mehr trennen
+-QGraphicsscene ist eine Model-Klasse -> umändern zu QGraphicsview
+-> Beispiele von den Klassen angucken
+-Klassendiagramm in einer Sprache schreiben
+-Qt Concept Tutorials angucken
+
+

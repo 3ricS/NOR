@@ -23,6 +23,7 @@ MainWindow::MainWindow(Model* model, QWidget *parent) : QMainWindow(parent), _ui
     connect(_ui->drawButton, SIGNAL(released()), this, SLOT(dropped()));
     connect(_ui->Resistor, SIGNAL(released()), this, SLOT(setResistorMode()));
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
+    connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
 
     // connect signals from model
     connect(_model, SIGNAL(modelChanged()), this, SLOT(paintView()));
@@ -93,6 +94,10 @@ void MainWindow::paintView()
         {
             _networkScene->paintPowerSupply(component->getXPosition(), component->getYPosition());
         }
+        if(component->getComponentType() == 3)
+        {
+            _networkScene->paintConnection(component->getXPosition(), component->getYPosition(), component->getXEndPosition(), component->getYEndPosition());
+        }
     }
 }
 
@@ -123,6 +128,12 @@ void MainWindow::setResistorMode()
 void MainWindow::setPowerSupplyMode()
 {
     _model->setMode(Model::MouseMode::PowerSupplyMode);
+}
+
+//Setzen des Connection-Modus
+void MainWindow::setConnectionMode()
+{
+    _model->setMode(Model::MouseMode::ConnectionMode);
 }
 
 //Maus-Modus wird eingeschaltet, kein neues Zeichen einer Komponente

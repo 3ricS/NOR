@@ -40,6 +40,7 @@ public slots:
     void paintView();
     void setResistorMode(void);
     void setPowerSupplyMode(void);
+    void setConnectionMode(void);
 
 private:
 //Methods

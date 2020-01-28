@@ -1,7 +1,7 @@
 #include "powersupply.h"
 
 PowerSupply::PowerSupply(QString name, int x, int y) :
-    Component(x, y,  2, 2)
+    Component(x, y, 0, 0, 2, 2)
 {
     _name = name;
 }

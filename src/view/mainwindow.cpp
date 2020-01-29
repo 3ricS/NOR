@@ -72,25 +72,25 @@ void MainWindow::setupUpperToolBar(void)
 }
 
 // Setzen des Widerstands-Modus
-void MainWindow::setResistorMode()
+void MainWindow::setResistorMode(void)
 {
     _model->setMode(NetworkGraphics::MouseMode::ResistorMode);
 }
 
 // Setzen des PowerSupply-Modus
-void MainWindow::setPowerSupplyMode()
+void MainWindow::setPowerSupplyMode(void)
 {
     _model->setMode(NetworkGraphics::MouseMode::PowerSupplyMode);
 }
 
 //Setzen des Connection-Modus
-void MainWindow::setConnectionMode()
+void MainWindow::setConnectionMode(void)
 {
     _model->setMode(NetworkGraphics::MouseMode::ConnectionMode);
 }
 
 //Maus-Modus wird eingeschaltet, kein neues Zeichen einer Komponente
-void MainWindow::setMouseMode()
+void MainWindow::setMouseMode(void)
 {
     _model->setMode(NetworkGraphics::MouseMode::Mouse);
 }
@@ -98,7 +98,8 @@ void MainWindow::setMouseMode()
 //Wenn ESC gedrückt wird, soll es sofort in den Mouse Modus gehen
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-    if(event->key() == Qt::Key_Escape) {
+    if(event->key() == Qt::Key_Escape)
+    {
         _model->setMode(NetworkGraphics::MouseMode::Mouse);
     }
 }

@@ -16,13 +16,13 @@ public:
     QRectF boundingRect() const;
 
     //getter
-    int getComponentType() {return _componentType;}
-    int getXPosition() {return _xPosition;}
-    int getYPosition() {return _yPosition;}
-    bool isVertical() {return _isVertical;}
+    int getComponentType(void) const {return _componentType;}
+    int getXPosition(void) const {return _xPosition;}
+    int getYPosition(void) const {return _yPosition;}
+    bool isVertical(void) const {return _isVertical;}
 
     //setter
-    void setVertical(bool orientation){_isVertical = orientation;}
+    void setVertical(bool orientation) {_isVertical = orientation;}
 
     //virtual Methoden
     virtual int getXStartPosition() = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert

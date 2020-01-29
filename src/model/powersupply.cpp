@@ -10,10 +10,13 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical) :
 void PowerSupply::show(QGraphicsScene* scene)
 {
     //Power Supply has length of 120 and width of 60
-    if(_isVertical) {
+    if(_isVertical)
+    {
         scene->addEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
         scene->addLine(_xPosition, _yPosition + 60, _xPosition, _yPosition - 60);
-    } else {
+    }
+    else
+    {
         scene->addEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
         scene->addLine(_xPosition - 60, _yPosition, _xPosition + 60, _yPosition);
     }
@@ -21,21 +24,24 @@ void PowerSupply::show(QGraphicsScene* scene)
 
 void PowerSupply::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if(_isVertical) {
+    if(_isVertical)
+    {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
         painter->drawLine(_xPosition, _yPosition + 60, _xPosition, _yPosition - 60);
-    } else {
+    }
+    else
+    {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
         painter->drawLine(_xPosition - 60, _yPosition, _xPosition + 60, _yPosition);
     }
 }
 
-int PowerSupply::getXStartPosition()
+int PowerSupply::getXStartPosition(void)
 {
     return this->getXPosition() - (this->getWidth() / 2);
 }
 
-int PowerSupply::getYStartPosition()
+int PowerSupply::getYStartPosition(void)
 {
     return this->getYPosition() - (this->getHeight() / 2);
 }

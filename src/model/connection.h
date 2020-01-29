@@ -14,10 +14,10 @@ public:
     void show(QGraphicsScene* scene);
 
     // Component interface
-    int getXStartPosition() const {return _xStart;}
-    int getYStartPosition() const {return _yStart;}
-    int getXEndPosition() const {return  _xEnd;}
-    int getYEndPosition() const {return _yEnd;}
+    int getXStartPosition(void) const {return _xStart;}
+    int getYStartPosition(void) const {return _yStart;}
+    int getXEndPosition(void) const {return  _xEnd;}
+    int getYEndPosition(void) const {return _yEnd;}
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;

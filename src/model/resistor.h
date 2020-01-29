@@ -13,12 +13,12 @@ public:
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     //getter
-    virtual int getXStartPosition() override;
-    virtual int getYStartPosition() override;
+    virtual int getXStartPosition(void) override;
+    virtual int getYStartPosition(void) override;
 
-    static int getResistorCount() {return _resistorCount;}
-    int getWidth() {return _width;}
-    int getHeight() {return _height;}
+    static int getResistorCount(void) {return _resistorCount;}
+    int getWidth(void) const {return _width;}
+    int getHeight(void) const {return _height;}
 
     void setResistance(int resistance) {_value = resistance;}
 

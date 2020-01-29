@@ -5,10 +5,12 @@
 #include <QPainter>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
+#include <QDebug>
 
 class Component : public QGraphicsItem
 {
 public:
+    //TODO: darf amn das groß schreiben
     enum ComponentType{Resistor, PowerSupply};
     Component(int _xPosition, int _yPosition, bool isVertical, ComponentType componentTyp, int countPorts);
 

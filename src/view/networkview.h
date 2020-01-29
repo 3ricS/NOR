@@ -3,6 +3,7 @@
 
 #include <QMouseEvent>
 #include <QGraphicsView>
+#include <QDebug>
 
 #include <model/networkgraphics.h>
 

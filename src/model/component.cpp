@@ -9,5 +9,6 @@ Component::Component(int x, int y, bool isVertical, ComponentType componentTyp, 
 
 QRectF Component::boundingRect() const
 {
+    return QRectF(_xPosition - 50, _yPosition - 50, 100, 100);
 }
 

@@ -30,8 +30,6 @@ private:
     QString _name;
     int _value;
 
-    // QGraphicsItem interface
-
 };
 
 #endif // RESISTOR_H

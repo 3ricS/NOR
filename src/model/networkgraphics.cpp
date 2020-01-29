@@ -1,39 +1,15 @@
 #include "model/networkgraphics.h"
 
-
-//TODO: Einbinden in NetworkView
-//Mouse interaction und Entscheidung je nachdem in welchem Modus man ist
-void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    //Herausfinden der Position die geklicked wurde
-    QPointF position = event->scenePos();
-
-    //Ansprechen des Model("Hier wurde etwas geklickt an der und der Position was muss ich tun")
-    clickInterpretation(position);
-}
-
-
-void NetworkGraphics::addResistor(QString name, int value, int x, int y, bool isVertical)
-{
-    Component* resistor = new Resistor(name, value, x, y, isVertical);
-    addObject(resistor);
-}
-
-void NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical)
-{
-    Component* powersupply = new PowerSupply(name, x, y, isVertical);
-    addObject(powersupply);
-}
-
 void NetworkGraphics::addConnection(int xStart, int yStart, int xEnd, int yEnd)
 {
     Connection* connection = new Connection(xStart, yStart, xEnd, yEnd);
     _connectionList.append(connection);
+    //TODO: connection als Item hinzufügen
     //addItem(connection);
     update();
 }
 
-void NetworkGraphics::clickInterpretation(QPointF position)
+void NetworkGraphics::clickInterpretation(QPoint position)
 {
     //filter position to make a grid
     //position.setX(position.toPoint().x() - (position.toPoint().x() % 100) + 50);
@@ -41,12 +17,16 @@ void NetworkGraphics::clickInterpretation(QPointF position)
 
     if(_mouseMode == ResistorMode)
     {
-        addResistor("R" + QString(Resistor::getResistorCount() + 1), 100, position.toPoint().x(), position.toPoint().y(), true);
+        QString name = "R" + QString::number(Resistor::getResistorCount() + 1);
+        Component* resistor = new Resistor(name, 100, position.x(), position.y(), true);
+        addObject(resistor);
     }
 
     if(_mouseMode == PowerSupplyMode)
     {
-        addPowerSupply("Test", position.toPoint().x(), position.toPoint().y(), true);
+        //TODO: powersupply benennen
+        Component* powerSupply = new PowerSupply("Test", position.x(), position.y(), true);
+        addObject(powerSupply);
     }
 
     if(_mouseMode == Mouse)
@@ -61,4 +41,3 @@ void NetworkGraphics::addObject(Component* component)
     addItem(component);
     update();
 }
-

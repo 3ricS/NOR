@@ -15,16 +15,11 @@ public:
     NetworkGraphics() : QGraphicsScene() {_graphics = new QGraphicsScene();}
 
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, Mouse};
-    void clickInterpretation(QPointF position);
+    void clickInterpretation(QPoint position);
     void setMode(MouseMode newMode) {_mouseMode = newMode;}
 
 private:
-    // TODO: Einbinden in NetworkView
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-
-    void addResistor(QString name, int value, int x, int y, bool isVertical);
     void addConnection(int xStart, int yStart, int xEnd, int yEnd);
-    void addPowerSupply(QString name, int x, int y, bool isVertical);
     void addObject(Component* component);
 
     MouseMode _mouseMode = Mouse;

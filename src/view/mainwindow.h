@@ -29,7 +29,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(NetworkGraphics* model,QWidget *parent = nullptr);
+    explicit MainWindow(NetworkGraphics* model, QWidget *parent = nullptr);
     ~MainWindow();
 
 public slots:
@@ -41,7 +41,6 @@ public slots:
 private:
     void setupUpperToolBar(void);
     void keyPressEvent(QKeyEvent *event) override;
-    void setMouseMode(void);
 
 
 

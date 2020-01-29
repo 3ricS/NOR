@@ -18,6 +18,8 @@ private:
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event);
+
+    void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif // NETWORKVIEW_H

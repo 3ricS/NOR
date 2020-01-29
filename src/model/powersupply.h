@@ -9,20 +9,18 @@ public:
     PowerSupply(QString name, int _xPosition, int _yPosition, bool isVertical);
 
     //Methoden
-    virtual void show(QGraphicsScene *scene) override;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     //getter
     virtual int getXStartPosition(void) override;
     virtual int getYStartPosition(void) override;
 
-    int getWidth(void) const {return _width;}
-    int getHeight(void) const {return _height;}
+    static int getCount() {return _powerSupplyCount;}
 
 private:
+    static int _powerSupplyCount;
+
     QString _name;
-    static constexpr int _height = 120;
-    static constexpr int _width = 60;
 
 };
 

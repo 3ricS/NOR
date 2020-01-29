@@ -15,12 +15,17 @@ public:
     NetworkGraphics() : QGraphicsScene() {_graphics = new QGraphicsScene();}
 
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, Mouse};
-    void clickInterpretation(QPoint position);
+    void mouseReleaseInterpretation(QPointF position);
+    void mousePressInterpretation(QPointF position);
     void setMode(MouseMode newMode) {_mouseMode = newMode;}
 
 private:
     void addConnection(int xStart, int yStart, int xEnd, int yEnd);
     void addObject(Component* component);
+
+    //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
+    bool _connectionStarted = false;
+    QPointF _connectionPointStart;
 
     MouseMode _mouseMode = Mouse;
     QList<Component*> _componentList;

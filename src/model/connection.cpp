@@ -36,5 +36,6 @@ void Connection::paint(QPainter* painter, const QStyleOptionGraphicsItem *option
 
 QRectF Connection::boundingRect() const
 {
+    return QRectF(std::min(_xStart, _xEnd), std::min(_yStart, _yEnd), abs(_xEnd - _xStart), abs(_yEnd - _yStart));
 }
 

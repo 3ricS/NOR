@@ -5,6 +5,7 @@
 
 int Component::_count = 0;
 int Resistor::_resistorCount = 0;
+int PowerSupply::_powerSupplyCount = 0;
 
 int main(int argc, char *argv[])
 {

@@ -29,7 +29,6 @@ public:
     //virtual Methoden
     virtual int getXStartPosition() = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
     virtual int getYStartPosition() = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
-    virtual void show(QGraphicsScene* scene) = 0;
 
 protected:
     int _xPosition;

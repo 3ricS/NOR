@@ -4,11 +4,16 @@
 #include <model/component.h>
 
 #include <QPainter>
+#include <algorithm>
 
-class Connection : QGraphicsItem
+class Connection : public QGraphicsItem
 {
 public:
     Connection(int xStart, int yStart, int xEnd, int yEnd);
+
+    //TODO: boundingRect muss noch beschrieben werden
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     //Methoden
     void show(QGraphicsScene* scene);
@@ -20,10 +25,6 @@ public:
     int getYEndPosition(void) const {return _yEnd;}
 
 private:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-
-    //TODO: boundingRect muss noch beschrieben werden
-    QRectF boundingRect() const;
     int _xStart;
     int _yStart;
     int _xEnd;

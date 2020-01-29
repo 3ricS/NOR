@@ -26,7 +26,6 @@ set(MOC_HEADERS
         main.h
         model/component.h
         model/connection.h
-        model/model.h
         model/powersupply.h
         model/resistor.h
         model/networkgraphics.cpp
@@ -40,7 +39,6 @@ set (SOURCES
         main.cpp
         model/component.cpp
         model/connection.cpp
-        model/model.cpp
         model/powersupply.cpp
         model/resistor.cpp
         model/networkgraphics.cpp

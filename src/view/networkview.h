@@ -2,8 +2,8 @@
 #define NETWORKVIEW_H
 
 #include <QMouseEvent>
-
 #include <QGraphicsView>
+
 #include <model/networkgraphics.h>
 
 class NetworkView : public QGraphicsView

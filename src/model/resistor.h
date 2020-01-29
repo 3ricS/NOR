@@ -1,8 +1,6 @@
 #ifndef RESISTOR_H
 #define RESISTOR_H
 
-#include <QString>
-
 #include <model/component.h>
 
 class Resistor : public Component

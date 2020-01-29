@@ -98,7 +98,9 @@ void MainWindow::setMouseMode()
 //Wenn ESC gedrückt wird, soll es sofort in den Mouse Modus gehen
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-
+    if(event->key() == Qt::Key_Escape) {
+        _model->setMode(NetworkGraphics::MouseMode::Mouse);
+    }
 }
 
 MainWindow::~MainWindow()

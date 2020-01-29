@@ -1,10 +1,6 @@
 #ifndef POWERSUPPLY_H
 #define POWERSUPPLY_H
 
-#include <QString>
-#include <QPainter>
-#include <QStyleOptionGraphicsItem>
-
 #include <model/component.h>
 
 class PowerSupply : public Component
@@ -15,6 +11,7 @@ public:
     //Methoden
     virtual void show(QGraphicsScene *scene) override;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
     //getter
     virtual int getXStartPosition() override;
     virtual int getYStartPosition() override;

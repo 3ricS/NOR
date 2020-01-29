@@ -14,7 +14,7 @@ class NetworkGraphics : public QGraphicsScene
 public:
     NetworkGraphics() : QGraphicsScene() {_graphics = new QGraphicsScene();}
 
-    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, DeleteMode, Mouse};
+    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, Mouse};
     void clickInterpretation(QPointF position);
     void setMode(MouseMode newMode) {_mouseMode = newMode;}
 
@@ -25,12 +25,12 @@ private:
     void addResistor(QString name, int value, int x, int y, bool isVertical);
     void addConnection(int xStart, int yStart, int xEnd, int yEnd);
     void addPowerSupply(QString name, int x, int y, bool isVertical);
+    void addObject(Component* component);
 
     MouseMode _mouseMode = Mouse;
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;
     QGraphicsScene* _graphics = nullptr;
-
 };
 
 #endif // NETWORKGRAPHICS_H

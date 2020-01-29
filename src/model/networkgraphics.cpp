@@ -16,30 +16,28 @@ void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void NetworkGraphics::addResistor(QString name, int value, int x, int y, bool isVertical)
 {
     Component* resistor = new Resistor(name, value, x, y, isVertical);
-    _componentList.append(resistor);
+    addObject(resistor);
 }
 
 void NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical)
 {
     Component* powersupply = new PowerSupply(name, x, y, isVertical);
-    _componentList.append(powersupply);
-    addItem(powersupply);
-    update();
+    addObject(powersupply);
 }
 
 void NetworkGraphics::addConnection(int xStart, int yStart, int xEnd, int yEnd)
 {
     Connection* connection = new Connection(xStart, yStart, xEnd, yEnd);
     _connectionList.append(connection);
+    //addItem(connection);
+    update();
 }
 
 void NetworkGraphics::clickInterpretation(QPointF position)
 {
     //filter position to make a grid
-    position.setX(position.toPoint().x() - (position.toPoint().x() % 100) + 50);
-    position.setY(position.toPoint().y() - (position.toPoint().y() % 100) - 50);
-    //positionEnd.setX(position.toPoint().x() - (positionEnd.toPoint().x() % 100) + 50);
-    //positionEnd.setY(position.toPoint().y() - (positionEnd.toPoint().y() % 100) - 50);
+    //position.setX(position.toPoint().x() - (position.toPoint().x() % 100) + 50);
+    //position.setY(position.toPoint().y() - (position.toPoint().y() % 100) - 50);
 
     if(_mouseMode == ResistorMode)
     {
@@ -55,5 +53,12 @@ void NetworkGraphics::clickInterpretation(QPointF position)
     {
         //tryFindComponent(position);
     }
+}
+
+void NetworkGraphics::addObject(Component* component)
+{
+    _componentList.append(component);
+    addItem(component);
+    update();
 }
 

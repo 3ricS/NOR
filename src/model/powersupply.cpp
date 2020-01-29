@@ -1,7 +1,7 @@
 #include "powersupply.h"
 
 PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical) :
-    Component(x, y, isVertical, 2, 2),
+    Component(x, y, isVertical, Component::ComponentType::PowerSupply, 2),
     _name(name)
 {
 
@@ -21,10 +21,13 @@ void PowerSupply::show(QGraphicsScene* scene)
 
 void PowerSupply::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-   // painter->setBrush(Qt::black);
-    painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
-    painter->drawLine(_xPosition, _yPosition + 60, _xPosition, _yPosition - 60);
-
+    if(_isVertical) {
+        painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
+        painter->drawLine(_xPosition, _yPosition + 60, _xPosition, _yPosition - 60);
+    } else {
+        painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
+        painter->drawLine(_xPosition - 60, _yPosition, _xPosition + 60, _yPosition);
+    }
 }
 
 int PowerSupply::getXStartPosition()

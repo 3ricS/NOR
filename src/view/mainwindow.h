@@ -14,9 +14,8 @@
 #include <QComboBox>
 #include <QDebug>
 
-#include <model/model.h>
 #include <model/networkgraphics.h>
-#include "view/NetworkView.h"
+#include "view/networkview.h"
 
 class Model;
 class NetworkGraphics;
@@ -30,12 +29,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(Model* model,QWidget *parent = nullptr);
+    explicit MainWindow(NetworkGraphics* model,QWidget *parent = nullptr);
     ~MainWindow();
 
 public slots:
     //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüpft welches im Model emitted wird)
-    void paintView();
     void setResistorMode(void);
     void setPowerSupplyMode(void);
     void setConnectionMode(void);
@@ -51,8 +49,7 @@ private:
 
 //Variables
     Ui::MainWindow*     _ui;
-    Model*              _model = nullptr;
-    NetworkGraphics*    _networkScene = nullptr;
+    NetworkGraphics*    _model = nullptr;
 };
 
 #endif // MAINWINDOW_H

@@ -1,45 +1,7 @@
 #include "model/networkgraphics.h"
 
 
-void NetworkGraphics::paintResistor(int x, int y, bool isVertical)
-{
-    if(isVertical) {
-        //Resistor has length of 120 and width of 60
-        this->addRect(x, y + 20, 40, 60);
-        this->addLine(x + 20, y + 0, x + 20, y + 20);
-        this->addLine(x + 20, y + 80, x + 20, y + 100);
-    } else {
-        this->addRect(x - 30, y - 20, 60, 40);
-        this->addLine(x -30 , y + 0, x - 50, y + 0);
-        this->addLine(x + 30, y + 0, x + 60, y + 0);
-    }
-}
-
-void NetworkGraphics::paintConnection(int x_start, int y_start, int x_end, int y_end)
-{
-    //first calculate the coordinates of the middle
-    int x_middle = x_start + 0.5 * (x_end - x_start);
-    int y_middle = y_start + 0.5 * (y_end - y_start);
-
-    //draw the four lines to make the connection square
-    this->addLine(x_start, y_start, x_start, y_middle);
-    this->addLine(x_start, y_middle, x_middle, y_middle);
-    this->addLine(x_middle, y_middle, x_end, y_middle);
-    this->addLine(x_end, y_middle, x_end, y_end);
-}
-
-void NetworkGraphics::paintPowerSupply(int x, int y, bool isVertical)
-{
-    //Power Supply has length of 120 and width of 60
-    if(isVertical) {
-        this->addEllipse(x - 30, y - 30, 60, 60);
-        this->addLine(x, y + 60, x, y - 60);
-    } else {
-        this->addEllipse(x - 30, y - 30, 60, 60);
-        this->addLine(x - 60, y, x + 60, y);
-    }
-}
-
+//TODO: Einbinden in NetworkView
 //Mouse interaction und Entscheidung je nachdem in welchem Modus man ist
 void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -47,9 +9,51 @@ void NetworkGraphics::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QPointF position = event->scenePos();
 
     //Ansprechen des Model("Hier wurde etwas geklickt an der und der Position was muss ich tun")
-    _model->clickInterpretation(position);
+    clickInterpretation(position);
 }
 
 
+void NetworkGraphics::addResistor(QString name, int value, int x, int y, bool isVertical)
+{
+    Component* resistor = new Resistor(name, value, x, y, isVertical);
+    _componentList.append(resistor);
+}
 
+void NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical)
+{
+    Component* powersupply = new PowerSupply(name, x, y, isVertical);
+    _componentList.append(powersupply);
+    addItem(powersupply);
+    update();
+}
+
+void NetworkGraphics::addConnection(int xStart, int yStart, int xEnd, int yEnd)
+{
+    Connection* connection = new Connection(xStart, yStart, xEnd, yEnd);
+    _connectionList.append(connection);
+}
+
+void NetworkGraphics::clickInterpretation(QPointF position)
+{
+    //filter position to make a grid
+    position.setX(position.toPoint().x() - (position.toPoint().x() % 100) + 50);
+    position.setY(position.toPoint().y() - (position.toPoint().y() % 100) - 50);
+    //positionEnd.setX(position.toPoint().x() - (positionEnd.toPoint().x() % 100) + 50);
+    //positionEnd.setY(position.toPoint().y() - (positionEnd.toPoint().y() % 100) - 50);
+
+    if(_mouseMode == ResistorMode)
+    {
+        addResistor("R" + QString(Resistor::getResistorCount() + 1), 100, position.toPoint().x(), position.toPoint().y(), true);
+    }
+
+    if(_mouseMode == PowerSupplyMode)
+    {
+        addPowerSupply("Test", position.toPoint().x(), position.toPoint().y(), true);
+    }
+
+    if(_mouseMode == Mouse)
+    {
+        //tryFindComponent(position);
+    }
+}
 

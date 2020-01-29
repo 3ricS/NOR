@@ -8,8 +8,11 @@
 class Resistor : public Component
 {
 public:
-    Resistor(QString _name, int value, int x, int y, bool isVertical);
+    Resistor(QString _name, int value, int _xPosition, int _yPosition, bool isVertical);
     ~Resistor();
+
+    virtual void show(QGraphicsScene *scene) override;
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     //getter
     virtual int getXStartPosition() override;
@@ -28,6 +31,9 @@ private:
 
     QString _name;
     int _value;
+
+    // QGraphicsItem interface
+
 };
 
 #endif // RESISTOR_H

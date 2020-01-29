@@ -1,9 +1,6 @@
 #include "connection.h"
-#include <model/component.h>
 
-//TODO: isVertical only for testing true
-Connection::Connection(int xStart, int yStart, int xEnd, int yEnd) :
-    Component(xStart, yStart, true, 3, 2)
+Connection::Connection(int xStart, int yStart, int xEnd, int yEnd)
 {
     _xStart = xStart;
     _yStart = yStart;
@@ -11,10 +8,16 @@ Connection::Connection(int xStart, int yStart, int xEnd, int yEnd) :
     _yEnd   = yEnd;
 }
 
-int Connection::getXStartPosition() {
-    return 0;
+void Connection::show(QGraphicsScene* scene)
+{
+    //first calculate the coordinates of the middle
+    int xMiddle = _xStart + 0.5 * (_xEnd - _xStart);
+    int yMiddle = _yStart + 0.5 * (_yEnd - _yStart);
+
+    //draw the four lines to make the connection square
+    scene->addLine(_xStart, _yStart, _xStart, yMiddle);
+    scene->addLine(_xStart, yMiddle, xMiddle, yMiddle);
+    scene->addLine(xMiddle, yMiddle, _xEnd, yMiddle);
+    scene->addLine(_xEnd, yMiddle, _xEnd, _yEnd);
 }
 
-int Connection::getYStartPosition() {
-    return 0;
-}

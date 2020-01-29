@@ -28,7 +28,6 @@ SOURCES += \
         main.cpp \
         model/component.cpp \
         model/connection.cpp \
-        model/model.cpp \
         model/powersupply.cpp \
         model/resistor.cpp \
         view/mainwindow.cpp \
@@ -38,7 +37,6 @@ SOURCES += \
 HEADERS += \
         model/component.h \
         model/connection.h \
-        model/model.h \
         model/powersupply.h \
         model/resistor.h \
         view/mainwindow.h \

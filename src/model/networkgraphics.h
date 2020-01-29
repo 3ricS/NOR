@@ -5,26 +5,31 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 
-#include <model/model.h>
+#include <model/resistor.h>
+#include <model/powersupply.h>
+#include <model/connection.h>
 
 class NetworkGraphics : public QGraphicsScene
 {
 public:
+    NetworkGraphics() : QGraphicsScene() {_graphics = new QGraphicsScene();}
 
-    NetworkGraphics(Model* model) : QGraphicsScene(), _model(model) {_graphics = new QGraphicsScene();}
-    void paintResistor(int x, int y, bool isVertical);
-    void paintResistor90Degree(int x, int y);
-    void paintConnection(int x_start, int y_start, int x_end, int y_end);
-    void paintPowerSupply(int x, int y, bool isVertical);
-    void paintPowerSupply90Degree(int x, int y);
+    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, DeleteMode, Mouse};
+    void clickInterpretation(QPointF position);
+    void setMode(MouseMode newMode) {_mouseMode = newMode;}
 
 private:
+    // TODO: Einbinden in NetworkView
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    QGraphicsScene* _graphics = nullptr;
 
-    double _zoomFactor = 1.0;
-    Model* _model;
-    QPointF _position;
+    void addResistor(QString name, int value, int x, int y, bool isVertical);
+    void addConnection(int xStart, int yStart, int xEnd, int yEnd);
+    void addPowerSupply(QString name, int x, int y, bool isVertical);
+
+    MouseMode _mouseMode = Mouse;
+    QList<Component*> _componentList;
+    QList<Connection*> _connectionList;
+    QGraphicsScene* _graphics = nullptr;
 
 };
 

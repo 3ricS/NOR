@@ -1,13 +1,15 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <QObject>
+#include <QGraphicsItem>
+#include <QGraphicsScene>
 
-class Component : public QObject
+class Component : public QGraphicsItem
 {
-    Q_OBJECT
 public:
-    Component(int x, int y, bool isVertical, int componentTyp, int countPorts);
+    Component(int _xPosition, int _yPosition, bool isVertical, int componentTyp, int countPorts);
+
+    QRectF boundingRect() const;
 
     //getter
     int getComponentType() {return _componentType;}
@@ -15,15 +17,23 @@ public:
     int getYPosition() {return _yPosition;}
     bool isVertical() {return _isVertical;}
 
-    virtual int getXStartPosition() = 0;
-    virtual int getYStartPosition() = 0;
+    //setter
+    void setVertical(bool orientation){_isVertical = orientation;}
+
+    //virtual Methoden
+    virtual int getXStartPosition() = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
+    virtual int getYStartPosition() = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
+    virtual void show(QGraphicsScene* scene) = 0;
+    //virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+protected:
+    int _xPosition;
+    int _yPosition;
+    bool _isVertical;
 
 private:
     static int _count;
     const int _id;
-    int _xPosition;
-    int _yPosition;
-    bool _isVertical;
 
     //_componentTyp gets the type of the object
     //0: Line, 1: Resistor, 2: Power Supply

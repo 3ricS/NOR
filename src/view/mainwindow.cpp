@@ -3,15 +3,15 @@
 
 
 
-MainWindow::MainWindow(Model* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow), _model(model)
+MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow), _model(model)
 {
     _ui->setupUi(this);
     this->setWindowTitle("NOR - Network of Resistance");
     this->resize(1080, 720);
 
     // setup ui
-    _networkScene = new NetworkGraphics(_model);
-    _ui->networkView->setScene(_networkScene);
+    _ui->networkView->setModel(_model);
+    _ui->networkView->setScene(_model);
 
 
 
@@ -24,8 +24,7 @@ MainWindow::MainWindow(Model* model, QWidget* parent) : QMainWindow(parent), _ui
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
 
     // connect signals from model
-    connect(_model, SIGNAL(modelChanged()), this, SLOT(paintView()));
-    //connect(_model, SIGNAL(newResistorElement()), this, SLOT(paintResistor()));
+
 }
 
 // Erstellen der Toolbar
@@ -72,50 +71,28 @@ void MainWindow::setupUpperToolBar(void)
     */
 }
 
-void MainWindow::paintView()
-{
-    for (Component* component : _model->getComponentList())
-    {
-        // if it is a Resistor
-        if(component->getComponentType() == 1)
-        {
-            _networkScene->paintResistor(component->getXStartPosition(), component->getYStartPosition(), component->isVertical());
-            //Test um zu gucken wie die Power Supply gezeichnet wird
-
-        }
-        if(component->getComponentType() == 2)
-        {
-            _networkScene->paintPowerSupply(component->getXPosition(), component->getYPosition(), component->isVertical());
-        }
-        if(component->getComponentType() == 3)
-        {
-            _networkScene->paintConnection(component->getXPosition(), component->getYPosition(), 100, 100);
-        }
-    }
-}
-
 // Setzen des Widerstands-Modus
 void MainWindow::setResistorMode()
 {
-    _model->setMode(Model::MouseMode::ResistorMode);
+    _model->setMode(NetworkGraphics::MouseMode::ResistorMode);
 }
 
 // Setzen des PowerSupply-Modus
 void MainWindow::setPowerSupplyMode()
 {
-    _model->setMode(Model::MouseMode::PowerSupplyMode);
+    _model->setMode(NetworkGraphics::MouseMode::PowerSupplyMode);
 }
 
 //Setzen des Connection-Modus
 void MainWindow::setConnectionMode()
 {
-    _model->setMode(Model::MouseMode::ConnectionMode);
+    _model->setMode(NetworkGraphics::MouseMode::ConnectionMode);
 }
 
 //Maus-Modus wird eingeschaltet, kein neues Zeichen einer Komponente
 void MainWindow::setMouseMode()
 {
-    _model->setMode(Model::MouseMode::Mouse);
+    _model->setMode(NetworkGraphics::MouseMode::Mouse);
 }
 
 //Wenn ESC gedrückt wird, soll es sofort in den Mouse Modus gehen

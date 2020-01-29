@@ -3,18 +3,20 @@
 
 #include <model/component.h>
 
-class Connection : public Component
+
+class Connection
 {
 public:
     Connection(int xStart, int yStart, int xEnd, int yEnd);
 
+    //Methoden
+    void show(QGraphicsScene* scene);
+
     // Component interface
-    int getXEndPosition() {return  _xEnd;}
-    int getYEndPosition() {return _yEnd;}
-
-    int getXStartPosition() override;
-
-    int getYStartPosition() override;
+    int getXStartPosition() const {return _xStart;}
+    int getYStartPosition() const {return _yStart;}
+    int getXEndPosition() const {return  _xEnd;}
+    int getYEndPosition() const {return _yEnd;}
 
 private:
     int _xStart;

@@ -13,12 +13,12 @@ void PowerSupply::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     if(_isVertical)
     {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
-        painter->drawLine(_xPosition, _yPosition + 60, _xPosition, _yPosition - 60);
+        painter->drawLine(_xPosition, _yPosition + 50, _xPosition, _yPosition - 50);
     }
     else
     {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
-        painter->drawLine(_xPosition - 60, _yPosition, _xPosition + 60, _yPosition);
+        painter->drawLine(_xPosition - 50, _yPosition, _xPosition + 50, _yPosition);
     }
 }
 

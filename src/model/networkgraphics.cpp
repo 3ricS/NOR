@@ -8,6 +8,7 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 
 void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
 {
+    pointToGrid(&position);
     //filter position to make a grid
     //position.setX(position.toPoint().x() - (position.toPoint().x() % 100) + 50);
     //position.setY(position.toPoint().y() - (position.toPoint().y() % 100) - 50);
@@ -40,6 +41,8 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
 
 void NetworkGraphics::mousePressInterpretation(QPointF position)
 {
+    pointToGrid(&position);
+
     if (_mouseMode != ConnectionMode)
     {
         _connectionStarted = false;
@@ -68,4 +71,10 @@ void NetworkGraphics::addObject(Component* component)
     _componentList.append(component);
     addItem(component);
     update();
+}
+
+void NetworkGraphics::pointToGrid(QPointF* position)
+{
+    position->setX(position->toPoint().x() / 100 * 100 - 50);
+    position->setY(position->toPoint().y() / 100 * 100 - 50);
 }

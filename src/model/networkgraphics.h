@@ -25,6 +25,8 @@ private:
     void addConnection(int xStart, int yStart, int xEnd, int yEnd);
     void addObject(Component* component);
 
+    void pointToGrid(QPointF* position);
+
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     bool _connectionStarted = false;
     QPointF _connectionPointStart;

@@ -13,6 +13,10 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
     //position.setX(position.toPoint().x() - (position.toPoint().x() % 100) + 50);
     //position.setY(position.toPoint().y() - (position.toPoint().y() % 100) - 50);
 
+    if(isThereAComponent(&position) == true)
+    {
+        return;
+    }
     switch (_mouseMode)
     {
         case MouseMode::ResistorMode:
@@ -71,6 +75,18 @@ void NetworkGraphics::addObject(Component* component)
     _componentList.append(component);
     addItem(component);
     update();
+}
+
+bool NetworkGraphics::isThereAComponent(QPointF* position)
+{
+    for(const Component* component : _componentList )
+    {
+        if((component->getXPosition() == position->toPoint().x()) && (component->getYPosition() == position->toPoint().y()))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void NetworkGraphics::pointToGrid(QPointF* position)

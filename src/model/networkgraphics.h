@@ -12,7 +12,7 @@
 class NetworkGraphics : public QGraphicsScene
 {
 public:
-    NetworkGraphics() : QGraphicsScene() {_graphics = new QGraphicsScene();}
+    NetworkGraphics();
 
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, Mouse};
     void mouseReleaseInterpretation(QPointF position);
@@ -20,6 +20,8 @@ public:
     void setMode(MouseMode newMode) {_mouseMode = newMode;}
 
 private:
+    static constexpr int _defaultSceneSize = 6000;
+
     void addConnection(int xStart, int yStart, int xEnd, int yEnd);
     void addObject(Component* component);
 

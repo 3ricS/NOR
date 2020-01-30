@@ -17,7 +17,7 @@ private:
    NetworkGraphics* _model  = nullptr;
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 };
 

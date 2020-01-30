@@ -1,6 +1,11 @@
 #include "model/networkgraphics.h"
 
 
+NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsScene())
+{
+    setSceneRect(-_defaultSceneSize, -_defaultSceneSize, _defaultSceneSize, _defaultSceneSize);
+}
+
 void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
 {
     //filter position to make a grid

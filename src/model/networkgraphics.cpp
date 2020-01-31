@@ -64,6 +64,9 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
 void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 {
     pointToGrid(&position);
+    _highlightedRect = addRect(position.toPoint().x() - 50, position.toPoint().y() - 50, 100, 100, Qt::NoPen, QColor("#ffcccc"));
+    removeItem(_previousRect);
+    _previousRect = _highlightedRect;
 }
 
 void NetworkGraphics::addConnection(int xStart, int yStart, int xEnd, int yEnd)

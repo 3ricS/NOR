@@ -33,6 +33,8 @@ private:
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     bool _connectionStarted = false;
     QPointF _connectionPointStart;
+    QGraphicsItem* _highlightedRect = nullptr;
+    QGraphicsItem* _previousRect = nullptr;
 
     MouseMode _mouseMode = Mouse;
     QList<Component*> _componentList;

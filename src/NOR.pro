@@ -30,7 +30,7 @@ SOURCES += \
         model/connection.cpp \
         model/powersupply.cpp \
         model/resistor.cpp \
-        view/editingview.cpp \
+        view/editview.cpp \
         view/mainwindow.cpp \
         model/networkgraphics.cpp \
         view/networkview.cpp
@@ -40,12 +40,13 @@ HEADERS += \
         model/connection.h \
         model/powersupply.h \
         model/resistor.h \
-        view/editingview.h \
+        view/editview.h \
         view/mainwindow.h \
         model/networkgraphics.h \
         view/networkview.h
 
 FORMS += \
+        view/editview.ui \
         view/mainwindow.ui
 
 # Default rules for deployment.

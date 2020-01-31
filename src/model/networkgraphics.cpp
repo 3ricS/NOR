@@ -3,6 +3,7 @@
 
 NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsScene())
 {
+    // die Anfangsgröße wird initialisiert
     setSceneRect(-_defaultSceneSize, -_defaultSceneSize, _defaultSceneSize, _defaultSceneSize);
 }
 
@@ -17,7 +18,7 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
     {
     case MouseMode::ResistorMode:
     {
-        if(isThereAComponent(&position) == true)
+        if(isThereAComponent(&position))
         {
             return;
         }
@@ -26,26 +27,26 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         Component* resistor = new Resistor(name, 756, position.x(), position.y(), true);
         addObject(resistor);
     }
-        break;
+    break;
     case MouseMode::PowerSupplyMode:
     {
-        if(isThereAComponent(&position) == true)
+        if (isThereAComponent(&position))
         {
             return;
         }
 
         QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
-        Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false);
+        Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false, 100);
         addObject(powerSupply);
     }
-        break;
+    break;
     case MouseMode::ConnectionMode:
     {
         addConnection(_connectionPointStart.x(), _connectionPointStart.y(), position.x(), position.y());
     }
-        break;
+    break;
     default:
-        break;
+    break;
     }
 }
 
@@ -79,7 +80,7 @@ void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
             {
                 if((component->getXPosition() == position.toPoint().x()) && (component->getYPosition() == position.toPoint().y()))
                 {
-                    _editingView = new EditingView(component);
+                    _editingView = new EditView(component);
                     _editingView->show();
                 }
             }
@@ -91,16 +92,19 @@ void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
 void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 {
     pointToGrid(&position);
-    _highlightedRect = addRect(position.toPoint().x() - 50, position.toPoint().y() - 50, 100, 100, Qt::NoPen, QColor("#ffcccc"));
+    //TODO: Zoomfaktor einfügen
+    int positionX = position.toPoint().x();
+    int positionY = position.toPoint().y();
+    QColor highlightColor = QColor("#ffcccc");
+    QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, highlightColor);
     removeItem(_previousRect);
-    _previousRect = _highlightedRect;
+    _previousRect = highlightedRect;
 }
 
 void NetworkGraphics::addConnection(int xStart, int yStart, int xEnd, int yEnd)
 {
     Connection* connection = new Connection(xStart, yStart, xEnd, yEnd);
     _connectionList.append(connection);
-    //TODO: connection als Item hinzufügen
     addItem(connection);
     update();
 }
@@ -116,7 +120,9 @@ bool NetworkGraphics::isThereAComponent(QPointF* position)
 {
     for(const Component* component : _componentList )
     {
-        if((component->getXPosition() == position->toPoint().x()) && (component->getYPosition() == position->toPoint().y()))
+        bool equalX = (component->getXPosition() == position->toPoint().x());
+        bool equalY = (component->getYPosition() == position->toPoint().y());
+        if(equalX && equalY)
         {
             return true;
         }

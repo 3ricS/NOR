@@ -6,20 +6,15 @@
 class PowerSupply : public Component
 {
 public:
-    PowerSupply(QString name, int _xPosition, int _yPosition, bool isVertical);
+    PowerSupply(QString name, int x, int y, bool isVertical, int valueVoltage);
 
     //Methoden
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 
     //getter
-    virtual int getXStartPosition(void) override;
-    virtual int getYStartPosition(void) override;
-    virtual int getValue() override;
-    virtual QString getName() override{return _name;}
 
     //setter
-    virtual void setName(QString name) override{_name = name;}
 
     //Klassenmethoden
     static int getCount() {return _powerSupplyCount;}
@@ -33,7 +28,6 @@ private:
     virtual void paintInformations(QPainter* painter) override;
 
     //Variablen
-    QString _name;
 };
 
 #endif // POWERSUPPLY_H

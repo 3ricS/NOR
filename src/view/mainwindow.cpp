@@ -1,13 +1,10 @@
 #include "view/mainwindow.h"
-#include "ui_mainwindow.h"
-
-
 
 MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow), _model(model)
 {
     _ui->setupUi(this);
-    this->setWindowTitle("NOR - Network of Resistance");
-    this->resize(1080, 720);
+    setWindowTitle("NOR - Network of Resistance");
+    resize(1080, 720);
 
     // setup ui
     _ui->networkView->setModel(_model);

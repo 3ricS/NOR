@@ -6,7 +6,7 @@
 class Resistor : public Component
 {
 public:
-    Resistor(QString _name, int value, int _xPosition, int _yPosition, bool isVertical);
+    Resistor(QString _name, int valueResistance, int _xPosition, int _yPosition, bool isVertical);
     ~Resistor();
 
     //Methoden
@@ -14,17 +14,13 @@ public:
 
 
     //getter
-    virtual int getXStartPosition(void) override;
-    virtual int getYStartPosition(void) override;
-    virtual int getValue() override{return _value;}
-    virtual QString getName() override{return _name;}
 
     //Klassenmethoden
     static int getCount(void) {return _resistorCount;}
 
     //setter
     void setResistance(int resistance) {_value = resistance;}
-    virtual void setName(QString name) override{_name = name;}
+
 
 private:
 
@@ -35,8 +31,6 @@ private:
     virtual void paintInformations(QPainter* painter) override;
 
     //Variablen
-    int _value;
-    QString _name;
 
 };
 

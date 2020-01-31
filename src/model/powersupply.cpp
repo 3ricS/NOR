@@ -1,8 +1,7 @@
 #include "powersupply.h"
 
-PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical) :
-    Component(x, y, isVertical, Component::ComponentType::PowerSupply, 2),
-    _name(name)
+PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, int valueVoltage) :
+    Component(x, y, isVertical, valueVoltage, Component::ComponentType::PowerSupply, 2)
 {
     _powerSupplyCount++;
 }
@@ -26,20 +25,5 @@ void PowerSupply::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 void PowerSupply::paintInformations(QPainter* painter)
 {
     painter->drawText(_xPosition - 40, _yPosition - 40, _name);
-}
-
-int PowerSupply::getXStartPosition(void)
-{
-    return this->getXPosition() - 50;
-}
-
-int PowerSupply::getYStartPosition(void)
-{
-    return this->getYPosition() - 50;
-}
-
-int PowerSupply::getValue()
-{
-    return 0;
 }
 

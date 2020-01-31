@@ -28,10 +28,12 @@ set(MOC_HEADERS
         model/connection.h
         model/powersupply.h
         model/resistor.h
-        model/networkgraphics.cpp
+        model/networkgraphics.h
+
 
         view/mainwindow.h
         view/NetworkView.h
+        view/editview.h
         )
 
 # set .cpp files
@@ -44,11 +46,14 @@ set (SOURCES
         model/networkgraphics.cpp
 
         view/mainwindow.cpp
-        view/NetworkView.cpp)
+        view/NetworkView.cpp
+        view/editview.cpp
+        )
 
 # set .ui files
 set(UIS
-        src/mainwindow.ui
+        src/view/editview.ui
+        src/view/mainwindow.ui
         )
 
 # set ressources

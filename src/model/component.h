@@ -10,11 +10,10 @@
 class Component : public QGraphicsItem
 {
 public:
-    //TODO: darf amn das groß schreiben
+    //TODO: darf amn das groß schreiben?
     enum ComponentType{Resistor, PowerSupply};
-    Component(int _xPosition, int _yPosition, bool isVertical, ComponentType componentTyp, int countPorts);
+    Component(int x, int y, bool isVertical, int value, ComponentType componentTyp, int countPorts);
 
-    //TODO: boundingRect muss noch beschrieben werden
     QRectF boundingRect() const;
 
     //getter
@@ -23,20 +22,26 @@ public:
     int getYPosition(void) const {return _yPosition;}
     bool isVertical(void) const {return _isVertical;}
 
+    QString getName(void) const {return _name;}
+    int getValue(void) const {return _value;}
+
     //setter
     void setVertical(bool orientation) {_isVertical = orientation;}
+    void setName(QString name) {_name = name;}
+    void setValue(int newValue) {_value = newValue;}
 
     //virtual Methoden
-    virtual int getXStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
-    virtual int getYStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
-    virtual int getValue(void) = 0;
-    virtual QString getName(void) = 0;
-    virtual void setName(QString name) = 0;
+    //virtual int getXStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
+    //virtual int getYStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
+
 protected:
     //Variables
     int _xPosition;
     int _yPosition;
     bool _isVertical;
+
+    QString _name;
+    int _value;
 
     //virtuelle Methoden
     virtual void paintInformations(QPainter* painter) = 0; 

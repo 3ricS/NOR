@@ -8,7 +8,7 @@
 #include <model/resistor.h>
 #include <model/powersupply.h>
 #include <model/connection.h>
-#include <view/editingview.h>
+#include <view/editview.h>
 
 class NetworkGraphics : public QGraphicsScene
 {
@@ -35,14 +35,13 @@ private:
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     bool _connectionStarted = false;
     QPointF _connectionPointStart;
-    QGraphicsItem* _highlightedRect = nullptr;
     QGraphicsItem* _previousRect = nullptr;
 
     MouseMode _mouseMode = Mouse;
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;
     QGraphicsScene* _graphics = nullptr;
-    EditingView* _editingView = nullptr;
+    EditView* _editingView = nullptr;
 };
 
 #endif // NETWORKGRAPHICS_H

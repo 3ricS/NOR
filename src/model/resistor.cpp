@@ -1,9 +1,8 @@
 #include "resistor.h"
 
 
-Resistor::Resistor(QString name, int value, int x, int y, bool isVertical)
-    : Component(x, y, isVertical, Component::ComponentType::Resistor, 2),
-      _value(value), _name(name)
+Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVertical)
+    : Component(x, y, isVertical, valueResistance, Component::ComponentType::Resistor, 2)
 {
 
     _resistorCount++;
@@ -66,14 +65,3 @@ void Resistor::paintInformations(QPainter* painter)
         }
     }
 }
-
-int Resistor::getXStartPosition()
-{
-    return int(this->getXPosition() - 50);
-}
-
-int Resistor::getYStartPosition()
-{
-    return int(this->getYPosition() - 50);
-}
-

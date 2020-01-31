@@ -16,12 +16,13 @@
 
 #include <model/networkgraphics.h>
 #include "view/networkview.h"
+#include "ui_mainwindow.h"
 
 class Model;
 class NetworkGraphics;
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow

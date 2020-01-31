@@ -38,3 +38,8 @@ int PowerSupply::getYStartPosition(void)
     return this->getYPosition() - 50;
 }
 
+int PowerSupply::getValue()
+{
+    return 0;
+}
+

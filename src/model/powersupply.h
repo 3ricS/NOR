@@ -15,7 +15,13 @@ public:
     //getter
     virtual int getXStartPosition(void) override;
     virtual int getYStartPosition(void) override;
+    virtual int getValue() override;
+    virtual QString getName() override{return _name;}
 
+    //setter
+    virtual void setName(QString name) override{_name = name;}
+
+    //Klassenmethoden
     static int getCount() {return _powerSupplyCount;}
 
 private:
@@ -28,7 +34,6 @@ private:
 
     //Variablen
     QString _name;
-
 };
 
 #endif // POWERSUPPLY_H

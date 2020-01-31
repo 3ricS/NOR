@@ -16,10 +16,15 @@ public:
     //getter
     virtual int getXStartPosition(void) override;
     virtual int getYStartPosition(void) override;
+    virtual int getValue() override{return _value;}
+    virtual QString getName() override{return _name;}
 
+    //Klassenmethoden
     static int getCount(void) {return _resistorCount;}
 
+    //setter
     void setResistance(int resistance) {_value = resistance;}
+    virtual void setName(QString name) override{_name = name;}
 
 private:
 
@@ -30,8 +35,8 @@ private:
     virtual void paintInformations(QPainter* painter) override;
 
     //Variablen
-    QString _name;
     int _value;
+    QString _name;
 
 };
 

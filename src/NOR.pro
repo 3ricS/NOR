@@ -30,6 +30,7 @@ SOURCES += \
         model/connection.cpp \
         model/powersupply.cpp \
         model/resistor.cpp \
+        view/editingview.cpp \
         view/mainwindow.cpp \
         model/networkgraphics.cpp \
         view/networkview.cpp
@@ -39,6 +40,7 @@ HEADERS += \
         model/connection.h \
         model/powersupply.h \
         model/resistor.h \
+        view/editingview.h \
         view/mainwindow.h \
         model/networkgraphics.h \
         view/networkview.h

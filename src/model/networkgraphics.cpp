@@ -13,33 +13,39 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
     //position.setX(position.toPoint().x() - (position.toPoint().x() % 100) + 50);
     //position.setY(position.toPoint().y() - (position.toPoint().y() % 100) - 50);
 
-    if(isThereAComponent(&position) == true)
-    {
-        return;
-    }
     switch (_mouseMode)
     {
-        case MouseMode::ResistorMode:
+    case MouseMode::ResistorMode:
+    {
+        if(isThereAComponent(&position) == true)
         {
-            QString name = "R" + QString::number(Resistor::getCount() + 1);
-            Component* resistor = new Resistor(name, 756, position.x(), position.y(), true);
-            addObject(resistor);
+            return;
         }
-            break;
-        case MouseMode::PowerSupplyMode:
+
+        QString name = "R" + QString::number(Resistor::getCount() + 1);
+        Component* resistor = new Resistor(name, 756, position.x(), position.y(), true);
+        addObject(resistor);
+    }
+        break;
+    case MouseMode::PowerSupplyMode:
+    {
+        if(isThereAComponent(&position) == true)
         {
-            QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
-            Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false);
-            addObject(powerSupply);
+            return;
         }
-            break;
-        case ConnectionMode:
-        {
-            addConnection(_connectionPointStart.x(), _connectionPointStart.y(), position.x(), position.y());
-        }
-            break;
-        default:
-            break;
+
+        QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
+        Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false);
+        addObject(powerSupply);
+    }
+        break;
+    case MouseMode::ConnectionMode:
+    {
+        addConnection(_connectionPointStart.x(), _connectionPointStart.y(), position.x(), position.y());
+    }
+        break;
+    default:
+        break;
     }
 }
 
@@ -54,11 +60,32 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
 
     switch (_mouseMode)
     {
-        case ConnectionMode:
-            _connectionStarted = true;
-            _connectionPointStart = position;
-            break;
+    case ConnectionMode:
+        _connectionStarted = true;
+        _connectionPointStart = position;
+        break;
     }
+}
+
+void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
+{
+    if(_mouseMode == Mouse)
+    {
+        pointToGrid(&position);
+
+        if(isThereAComponent(&position))
+        {
+            for(Component* component : _componentList)
+            {
+                if((component->getXPosition() == position.toPoint().x()) && (component->getYPosition() == position.toPoint().y()))
+                {
+                    _editingView = new EditingView(component);
+                    _editingView->show();
+                }
+            }
+        }
+    }
+
 }
 
 void NetworkGraphics::mouseMoveInterpretation(QPointF position)

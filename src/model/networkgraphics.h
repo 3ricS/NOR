@@ -8,6 +8,7 @@
 #include <model/resistor.h>
 #include <model/powersupply.h>
 #include <model/connection.h>
+#include <view/editingview.h>
 
 class NetworkGraphics : public QGraphicsScene
 {
@@ -17,6 +18,7 @@ public:
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, Mouse};
     void mouseReleaseInterpretation(QPointF position);
     void mousePressInterpretation(QPointF position);
+    void mouseDoublePressInterpretation(QPointF position);
     void mouseMoveInterpretation(QPointF position);
     void setMode(MouseMode newMode) {_mouseMode = newMode;}
 
@@ -40,6 +42,7 @@ private:
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;
     QGraphicsScene* _graphics = nullptr;
+    EditingView* _editingView = nullptr;
 };
 
 #endif // NETWORKGRAPHICS_H

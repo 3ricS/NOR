@@ -26,3 +26,9 @@ void NetworkView::mouseMoveEvent(QMouseEvent *event)
     _model->mouseMoveInterpretation(scenePoint);
 }
 
+void NetworkView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    QPointF scenePoint = mapToScene(event->pos());
+    _model->mouseDoublePressInterpretation(scenePoint);
+}
+

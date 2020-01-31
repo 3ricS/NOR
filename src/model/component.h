@@ -27,9 +27,11 @@ public:
     void setVertical(bool orientation) {_isVertical = orientation;}
 
     //virtual Methoden
-    virtual int getXStartPosition() = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
-    virtual int getYStartPosition() = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
-
+    virtual int getXStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
+    virtual int getYStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
+    virtual int getValue(void) = 0;
+    virtual QString getName(void) = 0;
+    virtual void setName(QString name) = 0;
 protected:
     //Variables
     int _xPosition;
@@ -37,7 +39,7 @@ protected:
     bool _isVertical;
 
     //virtuelle Methoden
-    virtual void paintInformations(QPainter* painter) = 0;
+    virtual void paintInformations(QPainter* painter) = 0; 
 
 private:
     static int _count;
@@ -46,6 +48,7 @@ private:
     //_componentTyp gets the type of the object
     const ComponentType _componentType;
     const int _countPorts;
+
 };
 
 #endif // COMPONENT_H

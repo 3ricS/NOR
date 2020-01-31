@@ -22,14 +22,14 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         case MouseMode::ResistorMode:
         {
             QString name = "R" + QString::number(Resistor::getCount() + 1);
-            Component* resistor = new Resistor(name, 100, position.x(), position.y(), true);
+            Component* resistor = new Resistor(name, 756, position.x(), position.y(), true);
             addObject(resistor);
         }
             break;
         case MouseMode::PowerSupplyMode:
         {
             QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
-            Component* powerSupply = new PowerSupply(name, position.x(), position.y(), true);
+            Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false);
             addObject(powerSupply);
         }
             break;

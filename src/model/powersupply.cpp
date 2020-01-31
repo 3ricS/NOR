@@ -9,7 +9,8 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical) :
 
 void PowerSupply::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->drawText(_xPosition - 40, _yPosition - 40, _name);
+    paintInformations(painter);
+
     if(_isVertical)
     {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
@@ -20,6 +21,11 @@ void PowerSupply::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
         painter->drawLine(_xPosition - 50, _yPosition, _xPosition + 50, _yPosition);
     }
+}
+
+void PowerSupply::paintInformations(QPainter* painter)
+{
+    painter->drawText(_xPosition - 40, _yPosition - 40, _name);
 }
 
 int PowerSupply::getXStartPosition(void)

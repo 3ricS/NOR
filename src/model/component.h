@@ -31,9 +31,13 @@ public:
     virtual int getYStartPosition() = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
 
 protected:
+    //Variables
     int _xPosition;
     int _yPosition;
     bool _isVertical;
+
+    //virtuelle Methoden
+    virtual void paintInformations(QPainter* painter) = 0;
 
 private:
     static int _count;

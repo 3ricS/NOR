@@ -17,6 +17,7 @@ public:
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, Mouse};
     void mouseReleaseInterpretation(QPointF position);
     void mousePressInterpretation(QPointF position);
+    void mouseMoveInterpretation(QPointF position);
     void setMode(MouseMode newMode) {_mouseMode = newMode;}
 
 private:

@@ -61,6 +61,11 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
     }
 }
 
+void NetworkGraphics::mouseMoveInterpretation(QPointF position)
+{
+    pointToGrid(&position);
+}
+
 void NetworkGraphics::addConnection(int xStart, int yStart, int xEnd, int yEnd)
 {
     Connection* connection = new Connection(xStart, yStart, xEnd, yEnd);

@@ -18,3 +18,11 @@ void NetworkView::mousePressEvent(QMouseEvent *event) {
     QPointF scenePoint = mapToScene(event->pos());
     _model->mousePressInterpretation(scenePoint);
 }
+
+void NetworkView::mouseMoveEvent(QMouseEvent *event)
+{
+    setMouseTracking(true);
+    QPointF scenePoint = mapToScene(event->pos());
+    _model->mouseMoveInterpretation(scenePoint);
+}
+

@@ -19,7 +19,6 @@ void EditView::setupView()
 
     QString valueDescription = "";
     QString valuePlaceHolder = "";
-    QString orientation = "Vertical";
 
     if(_component->getComponentType() == Component::ComponentType::Resistor)
     {
@@ -32,52 +31,45 @@ void EditView::setupView()
         valuePlaceHolder = "Spannungswert hier eingeben";
     }
 
-    if(!_component->isVertical())
-    {
-        orientation = "Horizontal";
-    }
-
     _editViewUi->labelValue->setText(valueDescription);
     _editViewUi->textEditName->setText(_component->getName());
     _editViewUi->textEditValue->setText(QString::number(_component->getValue()));
     _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
-
+    /*
     _orientationBox = new QComboBox(this);
     _orientationBox->addItem("Vertikal");
     _orientationBox->addItem("Horizontal");
     _orientationBox->setCurrentText(orientation);
-
     _orientationTitle = new QLabel("Ausrichtung:", this);
 
     _editViewUi->verticalLayout->addWidget(_orientationTitle);
     _editViewUi->verticalLayout->addWidget(_orientationBox);
-
+     */
+    _editViewUi->comboBoxOrientation->addItem("Horizontal");
+    _editViewUi->comboBoxOrientation->addItem("Vertikal");
+    if(_component->isVertical())
+    {
+        _editViewUi->comboBoxOrientation->setCurrentIndex(1);
+    } else {
+        _editViewUi->comboBoxOrientation->setCurrentIndex(0);
+    }
 }
 
 void EditView::accept()
 {
 
     //Wert prüfen
-    QString newValueString = _editViewUi->textEditValue->toPlainText();
+    QString newValueString = _editViewUi->textEditValue->text();
     bool convertSuccsessful = false;
     int  newValue = newValueString.toInt(&convertSuccsessful);
 
     //Werte übernehmen
     if(convertSuccsessful)
     {
-        // Name setzen
-        QString newName = _editViewUi->textEditName->toPlainText();
+        QString newName = _editViewUi->textEditName->text();
         _component->setName(newName);
-
-        //Wert setzen
         _component->setValue(newValue);
-
-        //Orientierung setzen
-        bool isVerticalNew = false;
-        if(_orientationBox->currentText() == "Horizontal")
-        {
-            isVerticalNew = false;
-        }
+        bool isVerticalNew = !(_editViewUi->comboBoxOrientation->currentText() == "Horizontal");
         _component->setVertical(isVerticalNew);
 
         close();

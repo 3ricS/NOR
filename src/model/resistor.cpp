@@ -28,7 +28,7 @@ void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     {
         painter->drawRect(_xPosition - 30, _yPosition - 20, 60, 40);
         painter->drawLine(_xPosition - 30, _yPosition + 0, _xPosition - 50, _yPosition + 0);
-        painter->drawLine(_xPosition + 30, _yPosition + 0, _xPosition + 60, _yPosition + 0);
+        painter->drawLine(_xPosition + 30, _yPosition + 0, _xPosition + 50, _yPosition + 0);
     }
 }
 

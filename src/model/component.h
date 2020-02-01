@@ -34,6 +34,7 @@ public:
     void setVertical(bool orientation) {_isVertical = orientation;}
     void setName(QString name) {_name = name;}
     void setValue(int newValue) {_value = newValue;}
+    void setPosition(QPointF gridPosition);
 
     //virtual Methoden
     //virtual int getXStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert

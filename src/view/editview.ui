@@ -24,10 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QTextEdit" name="textEditName">
-       <property name="lineWrapMode">
-        <enum>QTextEdit::WidgetWidth</enum>
-       </property>
+      <widget class="QLineEdit" name="textEditName">
        <property name="placeholderText">
         <string>Name hier eingeben</string>
        </property>
@@ -41,11 +38,17 @@
       </widget>
      </item>
      <item>
-      <widget class="QTextEdit" name="textEditValue">
-       <property name="placeholderText">
-        <string>Widerstandswert hier eingeben</string>
+      <widget class="QLineEdit" name="textEditValue"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelOrientation">
+       <property name="text">
+        <string>Ausrichtung:</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBoxOrientation"/>
      </item>
      <item>
       <spacer name="verticalSpacer">

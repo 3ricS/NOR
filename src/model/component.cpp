@@ -73,3 +73,9 @@ QPointF Component::getPortPosition(Component::Port port) const
     //TODO: Zoomfaktor einfügen
     return QPointF(getPortPositionXOrY(_xPosition, port, true), getPortPositionXOrY(_yPosition, port, false));
 }
+
+void Component::setPosition(QPointF gridPosition)
+{
+    _xPosition = gridPosition.toPoint().x();
+    _yPosition = gridPosition.toPoint().y();
+}

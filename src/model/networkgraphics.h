@@ -29,7 +29,7 @@ private:
 
     void addConnection(Component* componentA, Component::Port componentAPort, Component* componentB, Component::Port componentBPort);
     void addObject(Component* component);
-    Component* findComponent(QPointF position);
+    Component* getComponentAtPosition(QPointF gridPosition);
     bool isThereAComponent(QPointF position);
     Component* getComponentWithPortAtPosition(QPointF position, bool& hasFoundPort);
 
@@ -40,6 +40,7 @@ private:
     Component* _connectionComponentStart;
     Component::Port _connectionComponentStartPort;
     QGraphicsItem* _previousRect = nullptr;
+    Component* _selectedComponentToMove;
 
     MouseMode _mouseMode = SelectionMode;
     QList<Component*> _componentList;

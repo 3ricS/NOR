@@ -9,27 +9,19 @@
 class Connection : public QGraphicsItem
 {
 public:
-    Connection(int xStart, int yStart, int xEnd, int yEnd);
+    Connection(Component* componentA, Component::Port componentAPort, Component* componentB, Component::Port componentBPort);
 
     //TODO: boundingRect muss noch beschrieben werden
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     //Methoden
-    void show(QGraphicsScene* scene);
-
-    // Component interface
-    int getXStartPosition(void) const {return _xStart;}
-    int getYStartPosition(void) const {return _yStart;}
-    int getXEndPosition(void) const {return  _xEnd;}
-    int getYEndPosition(void) const {return _yEnd;}
 
 private:
-    int _xStart;
-    int _yStart;
-    int _xEnd;
-    int _yEnd;
-
+    Component* _componentA;
+    Component::Port _portA;
+    Component* _componentB;
+    Component::Port _portB;
 };
 
 #endif // CONNECTION_H

@@ -15,29 +15,33 @@ class NetworkGraphics : public QGraphicsScene
 public:
     NetworkGraphics();
 
-    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, Mouse};
+    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode};
     void mouseReleaseInterpretation(QPointF position);
     void mousePressInterpretation(QPointF position);
     void mouseDoublePressInterpretation(QPointF position);
     void mouseMoveInterpretation(QPointF position);
+
+    //setter
     void setMode(MouseMode newMode) {_mouseMode = newMode;}
 
 private:
     static constexpr int _defaultSceneSize = 6000;
 
-    void addConnection(int xStart, int yStart, int xEnd, int yEnd);
+    void addConnection(Component* componentA, Component::Port componentAPort, Component* componentB, Component::Port componentBPort);
     void addObject(Component* component);
-
-    bool isThereAComponent(QPointF* position);
+    Component* findComponent(QPointF position);
+    bool isThereAComponent(QPointF position);
+    Component* getComponentWithPortAtPosition(QPointF position, bool& hasFoundPort);
 
     void pointToGrid(QPointF* position);
 
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     bool _connectionStarted = false;
-    QPointF _connectionPointStart;
+    Component* _connectionComponentStart;
+    Component::Port _connectionComponentStartPort;
     QGraphicsItem* _previousRect = nullptr;
 
-    MouseMode _mouseMode = Mouse;
+    MouseMode _mouseMode = SelectionMode;
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;
     QGraphicsScene* _graphics = nullptr;

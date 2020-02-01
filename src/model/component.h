@@ -12,18 +12,23 @@ class Component : public QGraphicsItem
 public:
     //TODO: darf amn das groß schreiben?
     enum ComponentType{Resistor, PowerSupply};
-    Component(int x, int y, bool isVertical, int value, ComponentType componentTyp, int countPorts);
+    enum Port{A, B, null};
+    Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int countPorts);
 
     QRectF boundingRect() const;
+
+    bool isVertical(void) const {return _isVertical;}
+    bool hasPortAtPosition(QPointF position) const;
 
     //getter
     int getComponentType(void) const {return _componentType;}
     int getXPosition(void) const {return _xPosition;}
     int getYPosition(void) const {return _yPosition;}
-    bool isVertical(void) const {return _isVertical;}
-
     QString getName(void) const {return _name;}
     int getValue(void) const {return _value;}
+
+    Component::Port getPort(QPointF position) const;
+    QPointF getPortPosition(Port port) const;
 
     //setter
     void setVertical(bool orientation) {_isVertical = orientation;}
@@ -47,6 +52,8 @@ protected:
     virtual void paintInformations(QPainter* painter) = 0; 
 
 private:
+    int getPortPositionXOrY(int positionValue, Port port, bool isX) const;
+
     static int _count;
     const int _id;
 
@@ -54,6 +61,7 @@ private:
     const ComponentType _componentType;
     const int _countPorts;
 
+    static constexpr int _hitBoxSize = 15;
 };
 
 #endif // COMPONENT_H

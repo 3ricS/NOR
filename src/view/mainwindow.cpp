@@ -86,11 +86,11 @@ void MainWindow::setConnectionMode()
     _model->setMode(NetworkGraphics::MouseMode::ConnectionMode);
 }
 
-//Wenn ESC gedrückt wird, soll es sofort in den Mouse Modus gehen
+//Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
     if(event->key() == Qt::Key_Escape) {
-        _model->setMode(NetworkGraphics::MouseMode::Mouse);
+        _model->setMode(NetworkGraphics::MouseMode::SelectionMode);
     }
 }
 

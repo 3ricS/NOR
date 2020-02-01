@@ -1,7 +1,7 @@
 #include "powersupply.h"
 
 PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, int valueVoltage) :
-    Component(x, y, isVertical, valueVoltage, Component::ComponentType::PowerSupply, 2)
+        Component(x, y, isVertical, name, valueVoltage, Component::ComponentType::PowerSupply, 2)
 {
     _powerSupplyCount++;
 }

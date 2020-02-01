@@ -3,13 +3,13 @@
 
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
-#include <QLineEdit>
 #include <QWidget>
+#include <QComboBox>
 
 #include <model/resistor.h>
 #include <model/powersupply.h>
 #include <ui_editview.h>
+
 
 namespace Ui {
     class EditView;
@@ -30,12 +30,8 @@ private:
 
     //Variablen
     Ui::EditView* _editViewUi;
-    QVBoxLayout* _vLayout = nullptr;
-    QHBoxLayout* _hLayout = nullptr;
-    QPushButton* _uebernehmenButton = nullptr;
-    QLineEdit* _valueInput = nullptr;
-    QLineEdit* _nameInput = nullptr;
-
+    QComboBox* _orientationBox = nullptr;
+    QLabel* _orientationTitle = nullptr;
     Component* _component = nullptr;
 };
 

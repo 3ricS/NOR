@@ -1,5 +1,6 @@
 #include "view/editview.h"
 
+#include <QMessageBox>
 
 EditView::EditView(Component* component, QWidget *parent):
     QDialog(parent),
@@ -14,9 +15,12 @@ void EditView::setupView()
 {
     _editViewUi->setupUi(this);
     resize(400, 250);
+    setWindowTitle("Eigenschaften");
 
     QString valueDescription = "";
     QString valuePlaceHolder = "";
+    QString orientation = "Vertical";
+
     if(_component->getComponentType() == Component::ComponentType::Resistor)
     {
         valueDescription = "Widerstandswert [Ohm]:";
@@ -27,47 +31,60 @@ void EditView::setupView()
         valueDescription = "Spannung [V]:";
         valuePlaceHolder = "Spannungswert hier eingeben";
     }
+
+    if(!_component->isVertical())
+    {
+        orientation = "Horizontal";
+    }
+
     _editViewUi->labelValue->setText(valueDescription);
     _editViewUi->textEditName->setText(_component->getName());
     _editViewUi->textEditValue->setText(QString::number(_component->getValue()));
     _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
 
-    /*
-    _vLayout = new QVBoxLayout(this);
+    _orientationBox = new QComboBox(this);
+    _orientationBox->addItem("Vertikal");
+    _orientationBox->addItem("Horizontal");
+    _orientationBox->setCurrentText(orientation);
 
-    //Erstellt LineEdit für Namen
-    _nameInput = new QLineEdit(_component->getName(),this);
-    _vLayout->addWidget(_nameInput);
+    _orientationTitle = new QLabel("Ausrichtung:", this);
 
-    //Erstellt LineEdit für Value
-    _valueInput = new QLineEdit(QString::number(_component->getValue()) ,this);
-    _vLayout->addWidget(_valueInput);
+    _editViewUi->verticalLayout->addWidget(_orientationTitle);
+    _editViewUi->verticalLayout->addWidget(_orientationBox);
 
-    _uebernehmenButton = new QPushButton("Hallo", this);
-    _vLayout->addWidget(_uebernehmenButton);
-
-    _valueInput->show();
-    _nameInput->show();
-    _uebernehmenButton->show();
-     */
 }
 
 void EditView::accept()
 {
-    // Name setzen
-    QString newName = _editViewUi->textEditName->toPlainText();
-    _component->setName(newName);
 
-    //Wert setzen
+    //Wert prüfen
     QString newValueString = _editViewUi->textEditValue->toPlainText();
     bool convertSuccsessful = false;
     int  newValue = newValueString.toInt(&convertSuccsessful);
+
+    //Werte übernehmen
     if(convertSuccsessful)
     {
+        // Name setzen
+        QString newName = _editViewUi->textEditName->toPlainText();
+        _component->setName(newName);
+
+        //Wert setzen
         _component->setValue(newValue);
-    } else {
-        //TODO: Errormeldung Fehleingabe im textEditValue
+
+        //Orientierung setzen
+        bool isVerticalNew = false;
+        if(_orientationBox->currentText() == "Horizontal")
+        {
+            isVerticalNew = false;
+        }
+        _component->setVertical(isVerticalNew);
+
+        close();
+    }
+    else
+    {
+        QMessageBox::about(this, "Fehler", "Ungültiger Wert wurde eingeben.");
     }
 
-    close();
 }

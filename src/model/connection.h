@@ -16,6 +16,8 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     //Methoden
+    Component* getComponentA(void){return _componentA;}
+    Component* getComponentB(void){return _componentB;}
 
 private:
     Component* _componentA;

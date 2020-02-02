@@ -118,16 +118,24 @@ void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
 
 void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 {
-    pointToGrid(&position);
-    //TODO: Zoomfaktor einfügen
-    int positionX = position.toPoint().x();
-    int positionY = position.toPoint().y();
-    QColor highlightColor = QColor("#ffcccc");
-    QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, highlightColor);
-    removeItem(_previousRect);
-    _previousRect = highlightedRect;
+    if((_mouseMode == ResistorMode) || (_mouseMode == PowerSupplyMode))
+    {
+        pointToGrid(&position);
+        //TODO: Zoomfaktor einfügen
+        int positionX = position.toPoint().x();
+        int positionY = position.toPoint().y();
+        QColor highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
+        QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, highlightColor);
+        removeItem(_previousRect);
+        _previousRect = highlightedRect;
 
-    update();
+        update();
+    }
+    if((_mouseMode == ConnectionMode) || (_mouseMode == SelectionMode))
+    {
+        removeItem(_previousRect);
+    }
+
 }
 
 void NetworkGraphics::addConnection(Component* componentA, Component::Port componentAPort, Component* componentB,

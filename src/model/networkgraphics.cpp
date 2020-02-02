@@ -146,7 +146,7 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
            //TODO: Zoomfaktor einfügen
            int positionX = position.toPoint().x();
            int positionY = position.toPoint().y();
-           QGraphicsItem* highlightedRect = addRect(positionX + 30, positionY + 30, 20, 20, Qt::NoPen, highlightColor);
+           QGraphicsItem* highlightedRect = addRect(positionX - 20, positionY + 30, 40, 20, Qt::NoPen, highlightColor);
            delete _previousRect;
            _previousRect = highlightedRect;
            }
@@ -198,7 +198,7 @@ void NetworkGraphics::pointToGrid(QPointF* position)
 
 void NetworkGraphics::highlightResistorEnd(QPointF *position)
 {
-    position->setX(position->toPoint().x() / 20 * 20 - 50);
+    position->setX(position->toPoint().x() / 100 * 100 - 50);
     position->setY(position->toPoint().y() / 20 * 20 - 50);
 }
 

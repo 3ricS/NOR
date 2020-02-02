@@ -6,7 +6,7 @@ project(NOR)
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_PREFIX_PATH "C:\\Qt\\5.14.1\\mingw73_64")
+set(CMAKE_PREFIX_PATH "C:\\Qt\\5.14.0\\mingw73_64")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -29,6 +29,7 @@ set(MOC_HEADERS
         model/powersupply.h
         model/resistor.h
         model/networkgraphics.h
+        model/calculator.h
 
 
         view/mainwindow.h
@@ -44,6 +45,7 @@ set (SOURCES
         model/powersupply.cpp
         model/resistor.cpp
         model/networkgraphics.cpp
+        model/calculator.cpp
 
         view/mainwindow.cpp
         view/NetworkView.cpp

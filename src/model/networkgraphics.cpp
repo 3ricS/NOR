@@ -125,8 +125,9 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
         int positionX = position.toPoint().x();
         int positionY = position.toPoint().y();
         QColor highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
-        QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, highlightColor);
         removeItem(_previousRect);
+        QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, highlightColor);
+        delete _previousRect;
         _previousRect = highlightedRect;
 
         update();

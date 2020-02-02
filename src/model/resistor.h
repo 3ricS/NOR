@@ -29,7 +29,7 @@ private:
 
     //Methoden
     virtual void paintInformations(QPainter* painter) override;
-
+    void paintOrientationSensitiv(QPainter* painter, int xPosText, int yPosText, int xPosValue, int yPosValue);
     //Variablen
 
 };

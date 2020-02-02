@@ -26,6 +26,7 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
+        model/calculator.cpp \
         model/component.cpp \
         model/connection.cpp \
         model/powersupply.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
         view/networkview.cpp
 
 HEADERS += \
+        model/calculator.h \
         model/component.h \
         model/connection.h \
         model/powersupply.h \

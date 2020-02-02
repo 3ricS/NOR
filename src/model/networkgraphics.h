@@ -4,7 +4,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
+#include <QMessageBox>
 
+#include <model/calculator.h>
 #include <model/resistor.h>
 #include <model/powersupply.h>
 #include <model/connection.h>
@@ -20,6 +22,8 @@ public:
     void mousePressInterpretation(QPointF position);
     void mouseDoublePressInterpretation(QPointF position);
     void mouseMoveInterpretation(QPointF position);
+
+    void calculate(void);
 
     //setter
     void setMode(MouseMode newMode) {_mouseMode = newMode;}

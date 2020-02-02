@@ -38,6 +38,7 @@ public slots:
     void setResistorMode(void);
     void setPowerSupplyMode(void);
     void setConnectionMode(void);
+    void setCalculation(void);
 
 private:
     void setupUpperToolBar(void);

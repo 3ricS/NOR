@@ -19,6 +19,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->Resistor, SIGNAL(released()), this, SLOT(setResistorMode()));
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
+    connect(_ui->Calculate, SIGNAL(released()), this, SLOT(setCalculation()));
+
 
     // connect signals from model
 
@@ -84,6 +86,11 @@ void MainWindow::setPowerSupplyMode()
 void MainWindow::setConnectionMode()
 {
     _model->setMode(NetworkGraphics::MouseMode::ConnectionMode);
+}
+
+void MainWindow::setCalculation()
+{
+    _model->calculate();
 }
 
 //Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen

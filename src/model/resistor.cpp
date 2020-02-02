@@ -34,32 +34,27 @@ void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 
 void Resistor::paintInformations(QPainter* painter)
 {
-    //TODO: hier ist Dopplung des Codes; Switch-Case einfügen
     if(_isVertical)
     {
-        // Zeichnen des Namens
-        painter->drawText(_xPosition - 40, _yPosition - 40, _name);
+        paintOrientationSensitiv(painter, _xPosition - 40, _yPosition - 40, _xPosition - 60, _yPosition);
+    }
+    else
+    {
+        paintOrientationSensitiv(painter, _xPosition - 5, _yPosition - 30, _xPosition - 5, _yPosition + 40);
+    }
+}
 
-        // Darstellung des Widerstandwertes
-        if(_value < 1000)
-        {
-            painter->drawText(_xPosition - 60, _yPosition, QString::number(_value) + "Ω");
-        } else
-        {
-            painter->drawText(_xPosition - 60, _yPosition, QString::number(_value / 1000) + "kΩ");
-        }
+void Resistor::paintOrientationSensitiv(QPainter* painter, int xPosText, int yPosText, int xPosValue, int yPosValue)
+{
+    // Zeichnen des Namens
+    painter->drawText(xPosText, yPosText, _name);
+
+    // Darstellung des Widerstandwertes
+    if(_value < 1000)
+    {
+        painter->drawText(xPosValue, yPosValue, QString::number(_value) + "Ω");
     } else
     {
-        // Zeichnen des Namens
-        painter->drawText(_xPosition - 5, _yPosition - 30, _name);
-
-        // Darstellung des Widerstandwertes
-        if(_value < 1000)
-        {
-            painter->drawText(_xPosition - 5, _yPosition + 40, QString::number(_value) + "Ω");
-        } else
-        {
-            painter->drawText(_xPosition - 5, _yPosition + 40, QString::number(_value / 1000) + "kΩ");
-        }
+        painter->drawText(xPosValue, yPosValue, QString::number((double)_value / 1000) + "kΩ");
     }
 }

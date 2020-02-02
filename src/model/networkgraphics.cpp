@@ -147,6 +147,7 @@ void NetworkGraphics::addConnection(Component* componentA, Component::Port compo
     update();
 }
 
+
 void NetworkGraphics::addObject(Component* component)
 {
     _componentList.append(component);
@@ -193,4 +194,10 @@ Component* NetworkGraphics::getComponentWithPortAtPosition(QPointF position, boo
     }
     hasFoundPort = false;
     return nullptr;
+}
+void NetworkGraphics::calculate()
+{
+    Calculator* calculator = new Calculator(_connectionList, _componentList);
+    calculator->calculate();
+    QMessageBox::about(nullptr, "Wert",QString::number(calculator->getResistanceValue()));
 }

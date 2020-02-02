@@ -35,16 +35,6 @@ void EditView::setupView()
     _editViewUi->textEditName->setText(_component->getName());
     _editViewUi->textEditValue->setText(QString::number(_component->getValue()));
     _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
-    /*
-    _orientationBox = new QComboBox(this);
-    _orientationBox->addItem("Vertikal");
-    _orientationBox->addItem("Horizontal");
-    _orientationBox->setCurrentText(orientation);
-    _orientationTitle = new QLabel("Ausrichtung:", this);
-
-    _editViewUi->verticalLayout->addWidget(_orientationTitle);
-    _editViewUi->verticalLayout->addWidget(_orientationBox);
-     */
     _editViewUi->comboBoxOrientation->addItem("Horizontal");
     _editViewUi->comboBoxOrientation->addItem("Vertikal");
     if(_component->isVertical())

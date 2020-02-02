@@ -22,7 +22,7 @@ private:
     double _resistanceValue;
 
     //Methoden
-    void rowAnalysis(Component* comp, double& actualImpedanz);
+    void rowAnalysis(Component* comp, double& actualImpedanz, Component* lastComponent = nullptr);
     void parallelAnalysis(void);
 };
 

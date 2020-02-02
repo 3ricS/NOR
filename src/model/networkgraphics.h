@@ -38,6 +38,7 @@ private:
     Component* getComponentWithPortAtPosition(QPointF position, bool& hasFoundPort);
 
     void pointToGrid(QPointF* position);
+    void highlightResistorEnd(QPointF* position);
 
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     bool _connectionStarted = false;

@@ -118,6 +118,7 @@ void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
 
 void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 {
+    removeItem(_previousRect);
     if((_mouseMode == ResistorMode) || (_mouseMode == PowerSupplyMode))
     {
         pointToGrid(&position);
@@ -125,18 +126,33 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
         int positionX = position.toPoint().x();
         int positionY = position.toPoint().y();
         QColor highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
-        removeItem(_previousRect);
         QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, highlightColor);
         delete _previousRect;
         _previousRect = highlightedRect;
 
         update();
     }
-    if((_mouseMode == ConnectionMode) || (_mouseMode == SelectionMode))
+    if(_mouseMode == ConnectionMode)
     {
-        removeItem(_previousRect);
+        QPointF shortMemory = position;
+        pointToGrid(&shortMemory);
+       if(isThereAComponent(shortMemory))
+       {
+           bool isThereAPort;
+           getComponentWithPortAtPosition(position, isThereAPort);
+           if(isThereAPort)
+           {
+           highlightResistorEnd(&position);
+           //TODO: Zoomfaktor einfügen
+           int positionX = position.toPoint().x();
+           int positionY = position.toPoint().y();
+           QColor highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
+           QGraphicsItem* highlightedRect = addRect(positionX + 30, positionY + 30, 20, 20, Qt::NoPen, highlightColor);
+           delete _previousRect;
+           _previousRect = highlightedRect;
+           }
+       }
     }
-
 }
 
 void NetworkGraphics::addConnection(Component* componentA, Component::Port componentAPort, Component* componentB,
@@ -179,6 +195,12 @@ void NetworkGraphics::pointToGrid(QPointF* position)
 {
     position->setX(position->toPoint().x() / 100 * 100 - 50);
     position->setY(position->toPoint().y() / 100 * 100 - 50);
+}
+
+void NetworkGraphics::highlightResistorEnd(QPointF *position)
+{
+    position->setX(position->toPoint().x() / 20 * 20 - 50);
+    position->setY(position->toPoint().y() / 20 * 20 - 50);
 }
 
 Component* NetworkGraphics::getComponentWithPortAtPosition(QPointF position, bool& hasFoundPort)

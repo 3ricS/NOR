@@ -11,7 +11,8 @@ void NetworkView::mouseReleaseEvent(QMouseEvent *event)
     _model->mouseReleaseInterpretation(scenePoint);
 }
 
-void NetworkView::mousePressEvent(QMouseEvent *event) {
+void NetworkView::mousePressEvent(QMouseEvent *event)
+{
     QPointF scenePoint = mapToScene(event->pos());
     _model->mousePressInterpretation(scenePoint);
 }

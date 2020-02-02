@@ -26,7 +26,7 @@ signals:
 private:
     //Methoden
     void setupView(void);
-    virtual void accept() override;
+    virtual void accept(void) override;
 
     //Variablen
     Ui::EditView* _editViewUi;

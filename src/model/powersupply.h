@@ -17,7 +17,7 @@ public:
     //setter
 
     //Klassenmethoden
-    static int getCount() {return _powerSupplyCount;}
+    static int getCount(void) {return _powerSupplyCount;}
 
 private:
 

@@ -9,7 +9,7 @@ Component::Component(int x, int y, bool isVertical, QString name, int value, Com
 
 }
 
-QRectF Component::boundingRect() const
+QRectF Component::boundingRect(void) const
 {
     //TODO: Zoomfaktor hier einfügen
     return QRectF(_xPosition - 50, _yPosition - 50, 100, 100);

@@ -96,7 +96,8 @@ void MainWindow::setCalculation()
 //Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-    if(event->key() == Qt::Key_Escape) {
+    if(event->key() == Qt::Key_Escape)
+    {
         _model->setMode(NetworkGraphics::MouseMode::SelectionMode);
     }
 }

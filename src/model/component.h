@@ -15,7 +15,7 @@ public:
     enum Port{A, B, null};
     Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int countPorts);
 
-    QRectF boundingRect() const;
+    QRectF boundingRect(void) const;
 
     bool isVertical(void) const {return _isVertical;}
     bool hasPortAtPosition(QPointF position) const;

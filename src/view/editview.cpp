@@ -11,7 +11,7 @@ EditView::EditView(Component* component, QWidget *parent):
 
 }
 
-void EditView::setupView()
+void EditView::setupView(void)
 {
     _editViewUi->setupUi(this);
     resize(400, 250);
@@ -45,7 +45,7 @@ void EditView::setupView()
     }
 }
 
-void EditView::accept()
+void EditView::accept(void)
 {
 
     //Wert prüfen

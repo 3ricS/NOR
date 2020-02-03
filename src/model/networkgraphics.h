@@ -10,6 +10,7 @@
 #include <model/resistor.h>
 #include <model/powersupply.h>
 #include <model/connection.h>
+#include <model/filemanager.h>
 #include <view/editview.h>
 
 class NetworkGraphics : public QGraphicsScene
@@ -24,6 +25,7 @@ public:
     void mouseMoveInterpretation(QPointF position);
 
     void calculate(void);
+    void save(void);
 
     //setter
     void setMode(MouseMode newMode) {_mouseMode = newMode;}

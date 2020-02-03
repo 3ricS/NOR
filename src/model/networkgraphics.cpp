@@ -113,7 +113,6 @@ void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
             _editingView->show();
         }
     }
-
 }
 
 void NetworkGraphics::mouseMoveInterpretation(QPointF position)
@@ -217,9 +216,15 @@ Component* NetworkGraphics::getComponentWithPortAtPosition(QPointF position, boo
     hasFoundPort = false;
     return nullptr;
 }
-void NetworkGraphics::calculate()
+void NetworkGraphics::calculate(void)
 {
     Calculator* calculator = new Calculator(_connectionList, _componentList);
     calculator->calculate();
     QMessageBox::about(nullptr, "Wert",QString::number(calculator->getResistanceValue()));
+}
+
+void NetworkGraphics::save(void)
+{
+  FileManager* manager = new FileManager(_componentList, _connectionList);
+  manager->saving();
 }

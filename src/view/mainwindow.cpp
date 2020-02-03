@@ -22,6 +22,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
     connect(_ui->Calculate, SIGNAL(released()), this, SLOT(setCalculation()));
     connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
+    connect(_load,SIGNAL(triggered()), this, SLOT(setLoadFile()));
 
     // connect signals from model
 
@@ -103,6 +104,11 @@ void MainWindow::setSaveFile()
     _model->save();
 }
 
+void MainWindow::setLoadFile()
+{
+    _model->load();
+}
+
 //Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
@@ -117,6 +123,9 @@ void MainWindow::createUpperMenu()
 {
     _save = new QAction("Speichern");
     _ui->menuDatei->addAction(_save);
+
+    _load = new QAction("Laden");
+    _ui->menuDatei->addAction(_load);
 }
 
 MainWindow::~MainWindow()

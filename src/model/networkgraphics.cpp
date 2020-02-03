@@ -62,6 +62,7 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
             break;
         case MouseMode::SelectionMode:
         {
+            QApplication::setOverrideCursor(Qt::OpenHandCursor);
             pointToGrid(&position);
             bool hasSelectedComponentToMove = (_selectedComponentToMove != nullptr);
             if(hasSelectedComponentToMove)
@@ -106,6 +107,7 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
             break;
         case SelectionMode:
         {
+            QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             pointToGrid(&position);
             _selectedComponentToMove = getComponentAtPosition(position);
         }

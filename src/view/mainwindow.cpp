@@ -76,18 +76,21 @@ void MainWindow::setupUpperToolBar(void)
 void MainWindow::setResistorMode()
 {
     _model->setMode(NetworkGraphics::MouseMode::ResistorMode);
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 // Setzen des PowerSupply-Modus
 void MainWindow::setPowerSupplyMode()
 {
     _model->setMode(NetworkGraphics::MouseMode::PowerSupplyMode);
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 //Setzen des Connection-Modus
 void MainWindow::setConnectionMode()
 {
     _model->setMode(NetworkGraphics::MouseMode::ConnectionMode);
+    QApplication::setOverrideCursor(Qt::CrossCursor);
 }
 
 void MainWindow::setCalculation()
@@ -106,6 +109,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
     if(event->key() == Qt::Key_Escape)
     {
         _model->setMode(NetworkGraphics::MouseMode::SelectionMode);
+        QApplication::setOverrideCursor(Qt::OpenHandCursor);
     }
 }
 

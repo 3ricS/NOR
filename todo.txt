@@ -17,8 +17,9 @@ Model
 -Getter für den (PropertyView?), dafür muss aber erst das Objekt erkannt werden
 
 View
--initialize size of graphicsscene
--Buttons zum wechseln der Bauteile 
--Raster für Drag and Drop?
--Raster aufjedenfall
+-Buttons zum wechseln der Bauteile
 -Bau einen Widgets in dem rechten ListView (PropertyView oder so vlt?)
+
+- anderer Cursor
+- Component Port A und B tauschen
+- highlithed Hitbox für Ports

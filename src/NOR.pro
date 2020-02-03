@@ -35,7 +35,8 @@ SOURCES += \
         view/editview.cpp \
         view/mainwindow.cpp \
         model/networkgraphics.cpp \
-        view/networkview.cpp
+        view/networkview.cpp \
+        model/ComponentPort.cpp
 
 HEADERS += \
         model/calculator.h \
@@ -47,7 +48,8 @@ HEADERS += \
         view/editview.h \
         view/mainwindow.h \
         model/networkgraphics.h \
-        view/networkview.h
+        view/networkview.h \
+        model/ComponentPort.h
 
 FORMS += \
         view/editview.ui \

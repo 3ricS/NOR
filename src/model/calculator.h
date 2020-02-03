@@ -3,6 +3,7 @@
 
 #include <model/component.h>
 #include <model/connection.h>
+#include <model/componentport.h>
 
 class Calculator
 {
@@ -24,6 +25,8 @@ private:
     //Methoden
     void rowAnalysis(Component* comp, double& actualImpedanz, Component* lastComponent = nullptr);
     void parallelAnalysis(void);
+    QList<ComponentPort> findConnectedComponents(ComponentPort componentPort, QList<ComponentPort>& connectedComponents);
+
 };
 
 #endif // CALCULATOR_H

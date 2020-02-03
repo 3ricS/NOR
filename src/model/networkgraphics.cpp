@@ -32,9 +32,15 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
                 return;
             }
 
-            QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
-            Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false, 100);
-            addObject(powerSupply);
+            if(PowerSupply::getCount() < 1)
+            {
+                QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
+                Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false, 100);
+                addObject(powerSupply);
+            } else
+            {
+                QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
+            }
         }
             break;
         case MouseMode::ConnectionMode:
@@ -117,53 +123,53 @@ void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
 
 void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 {
-    removeItem(_previousRect);
     QColor highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
-    if((_mouseMode == ResistorMode) || (_mouseMode == PowerSupplyMode))
+
+    if(nullptr != _previousRect)
     {
-        pointToGrid(&position);
-        //TODO: Zoomfaktor einfügen
-        int positionX = position.toPoint().x();
-        int positionY = position.toPoint().y();
-        QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, highlightColor);
+        removeItem(_previousRect);
         delete _previousRect;
-        _previousRect = highlightedRect;
-
-        update();
+        _previousRect = nullptr;
     }
-    if(_mouseMode == ConnectionMode)
-    {
-        QPointF shortMemory = position;
-        pointToGrid(&shortMemory);
-       if(isThereAComponent(shortMemory))
-       {
-           bool isThereAPort;
-           getComponentWithPortAtPosition(position, isThereAPort);
-           if(isThereAPort)
-           {
-           if(getComponentWithPortAtPosition(position,isThereAPort)->isVertical())
-           {
-                highlightResistorEndVertikal(&position);
-                //TODO: Zoomfaktor einfügen
-                int positionX = position.toPoint().x();
-                int positionY = position.toPoint().y();
-                QGraphicsItem* highlightedRect = addRect(positionX - 20, positionY + 30, 40, 20, Qt::NoPen, highlightColor);
-                delete _previousRect;
-                _previousRect = highlightedRect;
-           }
-           else
-           {
-               highlightResistorEndHorizontal(&position);
-               //TODO: Zoomfaktor einfügen
-               int positionX = position.toPoint().x();
-               int positionY = position.toPoint().y();
-               QGraphicsItem* highlightedRect = addRect(positionX + 30, positionY - 20, 20, 40, Qt::NoPen, highlightColor);
-               delete _previousRect;
-               _previousRect = highlightedRect;
 
-           }
-           }
-       }
+    switch (_mouseMode)
+    {
+        case (ResistorMode || PowerSupplyMode):
+        {
+            pointToGrid(&position);
+            //TODO: Zoomfaktor einfügen
+            int positionX = position.toPoint().x();
+            int positionY = position.toPoint().y();
+            QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen,
+                                                     highlightColor);
+
+
+            _previousRect = highlightedRect;
+            update();
+        }
+            break;
+        case ConnectionMode:
+        {
+            QPointF shortMemory = position;
+            pointToGrid(&shortMemory);
+            if(isThereAComponent(shortMemory))
+            {
+                bool isThereAPort;
+                getComponentWithPortAtPosition(position, isThereAPort);
+                if(isThereAPort)
+                {
+                    highlightResistorEndHorizontal(&position);
+                    //TODO: Zoomfaktor einfügen
+                    int positionX = position.toPoint().x();
+                    int positionY = position.toPoint().y();
+                    QGraphicsItem* highlightedRect = addRect(positionX - 20, positionY + 30, 40, 20, Qt::NoPen,
+                                                             highlightColor);
+
+                    _previousRect = highlightedRect;
+                    update();
+                }
+            }
+        }
     }
 }
 
@@ -236,15 +242,16 @@ Component* NetworkGraphics::getComponentWithPortAtPosition(QPointF position, boo
     hasFoundPort = false;
     return nullptr;
 }
-void NetworkGraphics::calculate(void)
+
+void NetworkGraphics::calculate()
 {
     Calculator* calculator = new Calculator(_connectionList, _componentList);
     calculator->calculate();
-    QMessageBox::about(nullptr, "Wert",QString::number(calculator->getResistanceValue()));
+    QMessageBox::about(nullptr, "Wert", QString::number(calculator->getResistanceValue()));
 }
 
 void NetworkGraphics::save(void)
 {
-  FileManager* manager = new FileManager(_componentList, _connectionList);
-  manager->saving();
+    FileManager* manager = new FileManager(_componentList, _connectionList);
+    manager->saving();
 }

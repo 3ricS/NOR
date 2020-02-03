@@ -30,6 +30,7 @@ set(MOC_HEADERS
         model/resistor.h
         model/networkgraphics.h
         model/calculator.h
+        model/filemanager.h
 
 
         view/mainwindow.h
@@ -46,11 +47,12 @@ set (SOURCES
         model/resistor.cpp
         model/networkgraphics.cpp
         model/calculator.cpp
+        model/filemanager.cpp
 
         view/mainwindow.cpp
         view/NetworkView.cpp
         view/editview.cpp
-        )
+        model/ComponentPort.cpp model/ComponentPort.h)
 
 # set .ui files
 set(UIS

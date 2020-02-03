@@ -62,7 +62,7 @@ private:
     const ComponentType _componentType;
     const int _countPorts;
 
-    static constexpr int _hitBoxSize = 15;
+    static constexpr int _hitBoxSize = 20;
 };
 
 #endif // COMPONENT_H

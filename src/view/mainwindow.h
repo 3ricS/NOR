@@ -39,18 +39,17 @@ public slots:
     void setPowerSupplyMode(void);
     void setConnectionMode(void);
     void setCalculation(void);
+    void setSaveFile(void);
 
 private:
     void setupUpperToolBar(void);
     void keyPressEvent(QKeyEvent *event) override;
-
-
-
-
+    void createUpperMenu(void);
 
 //Variables
     Ui::MainWindow*     _ui;
     NetworkGraphics*    _model = nullptr;
+    QAction* _save = nullptr;
 };
 
 #endif // MAINWINDOW_H

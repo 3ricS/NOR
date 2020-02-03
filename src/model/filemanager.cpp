@@ -1,5 +1,7 @@
 #include "filemanager.h"
 
+#include <QStandardPaths>
+
 FileManager::FileManager(QList<Component*> components, QList<Connection*> connections) :
     _components(components), _connections(connections)
 {
@@ -7,8 +9,9 @@ FileManager::FileManager(QList<Component*> components, QList<Connection*> connec
 
 void FileManager::saving(void)
 {
+    _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     QFile _actualFile;
-    _actualFile.setFileName(QFileDialog::getSaveFileName  (nullptr,"Speichern", "*/Desktop", "Json (*.json);;Text (*.txt)"));
+    _actualFile.setFileName(QFileDialog::getSaveFileName  (nullptr,"Speichern", _dirFilePath.absolutePath(), "Json (*.json);;Text (*.txt)"));
 
     if (_actualFile.open(QFile::WriteOnly | QFile::Truncate)) {
         QTextStream out(&_actualFile);
@@ -72,5 +75,7 @@ QJsonObject FileManager::saveConnection(Connection *connection)
     c.insert("type", "Connection");
     c.insert("_componentA", connection->getComponentA()->getName());
     c.insert("_componentB", connection->getComponentB()->getName());
+    c.insert("_portA", connection->getPortA());
+    c.insert("_portB", connection->getPortB());
     return c;
 }

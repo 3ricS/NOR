@@ -18,6 +18,8 @@ public:
     //Methoden
     Component* getComponentA(void){return _componentA;}
     Component* getComponentB(void){return _componentB;}
+    Component::Port getPortA(void){return _portA;}
+    Component::Port getPortB(void){return _portB;}
 
 private:
     Component* _componentA;

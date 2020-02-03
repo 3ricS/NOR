@@ -26,6 +26,7 @@ private:
 
     QList<Component*> _components;
     QList<Connection*> _connections;
+    QDir _dirFilePath;
 
 
 };

@@ -10,7 +10,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     _ui->networkView->setModel(_model);
     _ui->networkView->setScene(_model);
 
-
+    //Menuleisten Action wird erzeugt
+    createUpperMenu();
 
     //setup upper ToolBar
     setupUpperToolBar();
@@ -20,7 +21,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
     connect(_ui->Calculate, SIGNAL(released()), this, SLOT(setCalculation()));
-
+    connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
 
     // connect signals from model
 
@@ -29,7 +30,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
 // Erstellen der Toolbar
 void MainWindow::setupUpperToolBar(void)
 {
-
+/*
     QToolBar           _toolBar ("upper");
     QToolButton        _fileButton;
     QAction            _newFile;
@@ -44,7 +45,9 @@ void MainWindow::setupUpperToolBar(void)
     //add ToolBar to MainWindow
     addToolBar(&_toolBar);
 
-    /*
+*/
+
+/*
     //Create File Menu
     _fileMenu = new QMenu("Datei");
     _fileMenu.addAction(&_newFile);
@@ -66,8 +69,7 @@ void MainWindow::setupUpperToolBar(void)
     _fileButton.setPopupMode(QToolButton::InstantPopup);
 
     //Add File Button to ToolBar
-    _toolBar.addWidget(&_fileButton);
-    */
+    _toolBar.addWidget(&_fileButton);*/
 }
 
 // Setzen des Widerstands-Modus
@@ -93,6 +95,11 @@ void MainWindow::setCalculation()
     _model->calculate();
 }
 
+void MainWindow::setSaveFile()
+{
+    _model->save();
+}
+
 //Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
@@ -100,6 +107,12 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
     {
         _model->setMode(NetworkGraphics::MouseMode::SelectionMode);
     }
+}
+
+void MainWindow::createUpperMenu()
+{
+    _save = new QAction("Speichern");
+    _ui->menuDatei->addAction(_save);
 }
 
 MainWindow::~MainWindow()

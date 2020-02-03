@@ -112,13 +112,7 @@
      <string>Datei</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuSpeichern">
-    <property name="title">
-     <string>Speichern</string>
-    </property>
-   </widget>
    <addaction name="menuDatei"/>
-   <addaction name="menuSpeichern"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

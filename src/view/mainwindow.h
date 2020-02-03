@@ -40,6 +40,7 @@ public slots:
     void setConnectionMode(void);
     void setCalculation(void);
     void setSaveFile(void);
+    void setLoadFile(void);
 
 private:
     void setupUpperToolBar(void);
@@ -50,6 +51,7 @@ private:
     Ui::MainWindow*     _ui;
     NetworkGraphics*    _model = nullptr;
     QAction* _save = nullptr;
+    QAction* _load = nullptr;
 };
 
 #endif // MAINWINDOW_H

@@ -26,6 +26,7 @@ public:
 
     void calculate(void);
     void save(void);
+    void load(void);
 
     //setter
     void setMode(MouseMode newMode) {_mouseMode = newMode;}

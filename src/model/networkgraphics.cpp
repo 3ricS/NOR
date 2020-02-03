@@ -274,3 +274,9 @@ void NetworkGraphics::save(void)
     FileManager* manager = new FileManager(_componentList, _connectionList);
     manager->saving();
 }
+
+void NetworkGraphics::load()
+{
+    qDebug() << "TestKlaus";
+    //Moritz hier kannst du deine FileManager-Funktion aufrufen. :)
+}

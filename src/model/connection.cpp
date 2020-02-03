@@ -29,7 +29,7 @@ void Connection::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->drawLine(xEnd, yMiddle, xEnd, yEnd);
 }
 
-QRectF Connection::boundingRect() const
+QRectF Connection::boundingRect(void) const
 {
     QPointF start = _componentA->getPortPosition(_portA);
     QPointF end = _componentB->getPortPosition(_portB);
@@ -40,4 +40,3 @@ QRectF Connection::boundingRect() const
 
     return QRectF(std::min(xStart, xEnd), std::min(yStart, yEnd), abs(xEnd - xStart), abs(yEnd - yStart));
 }
-

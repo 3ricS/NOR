@@ -12,7 +12,7 @@ public:
     Connection(Component* componentA, Component::Port componentAPort, Component* componentB, Component::Port componentBPort);
 
     //TODO: boundingRect muss noch beschrieben werden
-    QRectF boundingRect() const;
+    QRectF boundingRect(void) const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     //Methoden

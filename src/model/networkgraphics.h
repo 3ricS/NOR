@@ -40,6 +40,10 @@ private:
     ComponentPort* getComponentPortAtPosition(QPointF position);
 
     void pointToGrid(QPointF* position);
+    void highlightRect(QPointF* position, QColor* highlightColor);
+
+    bool _mousIsPressed = false;
+    bool _componentIsGrabbed = false;
 
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     bool _connectionStarted = false;

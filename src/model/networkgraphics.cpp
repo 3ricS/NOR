@@ -9,6 +9,8 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 
 void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
 {
+    _mousIsPressed = false;
+    _componentIsGrabbed = false;
     switch (_mouseMode)
     {
         case MouseMode::ResistorMode:
@@ -76,6 +78,10 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
 
 void NetworkGraphics::mousePressInterpretation(QPointF position)
 {
+    _mousIsPressed = true;
+    QPointF memory = position;
+    pointToGrid(&memory);
+    _componentIsGrabbed = isThereAComponent(memory);
     if(_mouseMode != ConnectionMode)
     {
         _connectionStarted = false;
@@ -136,18 +142,14 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 
     switch (_mouseMode)
     {
-        case (ResistorMode || PowerSupplyMode):
+        case (ResistorMode):
         {
-            pointToGrid(&position);
-            //TODO: Zoomfaktor einfügen
-            int positionX = position.toPoint().x();
-            int positionY = position.toPoint().y();
-            QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen,
-                                                     highlightColor);
-
-
-            _previousRect = highlightedRect;
-            update();
+            highlightRect(&position, &highlightColor);
+        }
+        break;
+        case (PowerSupplyMode):
+        {
+           highlightRect(&position, &highlightColor);
         }
             break;
         case ConnectionMode:
@@ -175,6 +177,15 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
                 }
             }
         }
+        break;
+        case (SelectionMode):
+        {
+            if (_mousIsPressed && _componentIsGrabbed)
+            {
+                highlightRect(&position, &highlightColor);
+            }
+        }
+            break;
     }
 }
 
@@ -218,6 +229,20 @@ void NetworkGraphics::pointToGrid(QPointF* position)
 {
     position->setX(position->toPoint().x() / 100 * 100 - 50);
     position->setY(position->toPoint().y() / 100 * 100 - 50);
+}
+
+void NetworkGraphics::highlightRect(QPointF* position, QColor* highlightColor)
+{
+    pointToGrid(position);
+    //TODO: Zoomfaktor einfügen
+    int positionX = position->toPoint().x();
+    int positionY = position->toPoint().y();
+    QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen,
+                                              *highlightColor);
+
+
+    _previousRect = highlightedRect;
+    update();
 }
 
 ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF position)

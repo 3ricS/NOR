@@ -37,11 +37,9 @@ private:
     void addObject(Component* component);
     Component* getComponentAtPosition(QPointF gridPosition);
     bool isThereAComponent(QPointF position);
-    Component* getComponentWithPortAtPosition(QPointF position, bool& hasFoundPort);
+    ComponentPort* getComponentPortAtPosition(QPointF position);
 
     void pointToGrid(QPointF* position);
-    void highlightResistorEndVertikal(QPointF* position);
-    void highlightResistorEndHorizontal(QPointF* position);
 
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     bool _connectionStarted = false;

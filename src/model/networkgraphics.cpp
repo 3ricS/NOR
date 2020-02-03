@@ -47,10 +47,10 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         {
             if(_connectionStarted)
             {
-                bool hasFoundPort;
-                Component* connectionComponentEnd = getComponentWithPortAtPosition(position, hasFoundPort);
-                if(hasFoundPort)
+                ComponentPort* connectionComponentPortEnd = getComponentPortAtPosition(position);
+                if(connectionComponentPortEnd != nullptr)
                 {
+                    Component* connectionComponentEnd = connectionComponentPortEnd->getComponent();
                     Component::Port connectionComponentEndPort = connectionComponentEnd->getPort(position);
                     addConnection(_connectionComponentStart, _connectionComponentStartPort, connectionComponentEnd,
                                   connectionComponentEndPort);
@@ -68,7 +68,7 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
                 update();
             }
         }
-        break;
+            break;
         default:
             break;
     }
@@ -85,10 +85,10 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
     {
         case ConnectionMode:
         {
-            bool hasFoundPort;
-            Component* foundComponent = getComponentWithPortAtPosition(position, hasFoundPort);
-            if(hasFoundPort)
+            ComponentPort* foundComponentPort = getComponentPortAtPosition(position);
+            if(foundComponentPort != nullptr)
             {
+                Component* foundComponent = foundComponentPort->getComponent();
                 _connectionStarted = true;
                 _connectionComponentStart = foundComponent;
                 _connectionComponentStartPort = foundComponent->getPort(position);
@@ -130,6 +130,8 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
         removeItem(_previousRect);
         delete _previousRect;
         _previousRect = nullptr;
+
+        update();
     }
 
     switch (_mouseMode)
@@ -150,19 +152,22 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
             break;
         case ConnectionMode:
         {
-            QPointF shortMemory = position;
-            pointToGrid(&shortMemory);
-            if(isThereAComponent(shortMemory))
+            QPointF gridPosition = position;
+            pointToGrid(&gridPosition);
+            if(isThereAComponent(gridPosition))
             {
-                bool isThereAPort;
-                getComponentWithPortAtPosition(position, isThereAPort);
-                if(isThereAPort)
+                ComponentPort* foundComponentPort = getComponentPortAtPosition(position);
+                if(foundComponentPort != nullptr)
                 {
-                    highlightResistorEndHorizontal(&position);
+                    Component* foundComponent = foundComponentPort->getComponent();
+                    Component::Port port = foundComponentPort->getPort();
+
                     //TODO: Zoomfaktor einfügen
-                    int positionX = position.toPoint().x();
-                    int positionY = position.toPoint().y();
-                    QGraphicsItem* highlightedRect = addRect(positionX - 20, positionY + 30, 40, 20, Qt::NoPen,
+                    int hitBoxHighlight = Component::_hitBoxSize / 1.5;
+                    int positionX = foundComponent->getPortPosition(port).x() - hitBoxHighlight;
+                    int positionY = foundComponent->getPortPosition(port).y() - hitBoxHighlight;
+
+                    QGraphicsItem* highlightedRect = addRect(positionX, positionY, 2 * hitBoxHighlight, 2 * hitBoxHighlight, Qt::NoPen,
                                                              highlightColor);
 
                     _previousRect = highlightedRect;
@@ -215,31 +220,18 @@ void NetworkGraphics::pointToGrid(QPointF* position)
     position->setY(position->toPoint().y() / 100 * 100 - 50);
 }
 
-void NetworkGraphics::highlightResistorEndVertikal(QPointF *position)
-{
-    position->setX(position->toPoint().x() / 100 * 100 - 50);
-    position->setY(position->toPoint().y() / 20 * 20 - 50);
-}
-
-void NetworkGraphics::highlightResistorEndHorizontal(QPointF *position)
-{
-    position->setX(position->toPoint().x() / 20 * 20 - 50);
-    position->setY(position->toPoint().y() / 100 * 100 - 50);
-}
-
-Component* NetworkGraphics::getComponentWithPortAtPosition(QPointF position, bool& hasFoundPort)
+ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF position)
 {
     for (Component* component : _componentList)
     {
-        hasFoundPort = component->hasPortAtPosition(position);
+        bool hasFoundPort = component->hasPortAtPosition(position);
         if(hasFoundPort)
         {
-            //Component::Port foundPort = component->getPort(position);
-            //QPointF portPosition = component->getComponentWithPortAtPosition(foundPort);
-            return component;
+            Component::Port port = component->getPort(position);
+            ComponentPort* cp = new ComponentPort(component, port);
+            return cp;
         }
     }
-    hasFoundPort = false;
     return nullptr;
 }
 

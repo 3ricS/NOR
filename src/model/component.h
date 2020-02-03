@@ -40,6 +40,8 @@ public:
     //virtual int getXStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
     //virtual int getYStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
 
+    static constexpr int _hitBoxSize = 20;
+
 protected:
     //Variables
     int _xPosition;
@@ -50,7 +52,7 @@ protected:
     int _value;
 
     //virtuelle Methoden
-    virtual void paintInformations(QPainter* painter) = 0; 
+    virtual void paintInformations(QPainter* painter) = 0;
 
 private:
     int getPortPositionXOrY(int positionValue, Port port, bool isX) const;
@@ -61,8 +63,6 @@ private:
     //_componentTyp gets the type of the object
     const ComponentType _componentType;
     const int _countPorts;
-
-    static constexpr int _hitBoxSize = 20;
 };
 
 #endif // COMPONENT_H

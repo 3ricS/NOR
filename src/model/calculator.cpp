@@ -10,7 +10,7 @@ void Calculator::calculate()
 {
     double actualImpedanz = 0;
     Component* firstComponent = nullptr;
-    for(Connection* connection : _connections)
+    for (Connection* connection : _connections)
     {
         //Suche nach dem ersten Widerstand
         if((connection->getComponentA()->getComponentType() == Component::PowerSupply) ||
@@ -18,18 +18,21 @@ void Calculator::calculate()
         {
             if(connection->getComponentA()->getComponentType() == Component::PowerSupply)
             {
-               firstComponent = connection->getComponentB();
-            }
-            else
+                firstComponent = connection->getComponentB();
+            } else
             {
                 firstComponent = connection->getComponentA();
-            }    
-            _connections.removeOne(connection);
+            }
+            //_connections.removeOne(connection);
             break;
         }
     }
-    rowAnalysis(firstComponent, actualImpedanz);
-    _resistanceValue = actualImpedanz;
+    //rowAnalysis(firstComponent, actualImpedanz);
+    //_resistanceValue = actualImpedanz;
+
+    QList<ComponentPort> connectedComponents;
+    connectedComponents = findConnectedComponents(ComponentPort(firstComponent, Component::Port::A),
+                                                  connectedComponents);
 }
 
 void Calculator::rowAnalysis(Component* comp, double& actualImpedanz, Component* lastComponent)

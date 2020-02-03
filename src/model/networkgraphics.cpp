@@ -266,7 +266,8 @@ void NetworkGraphics::calculate()
 {
     Calculator* calculator = new Calculator(_connectionList, _componentList);
     calculator->calculate();
-    QMessageBox::about(nullptr, "Wert", QString::number(calculator->getResistanceValue()));
+    QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
+                       QString::number(calculator->getResistanceValue()) + "Ω");
 }
 
 void NetworkGraphics::save(void)
@@ -277,6 +278,5 @@ void NetworkGraphics::save(void)
 
 void NetworkGraphics::load()
 {
-    qDebug() << "TestKlaus";
     //Moritz hier kannst du deine FileManager-Funktion aufrufen. :)
 }

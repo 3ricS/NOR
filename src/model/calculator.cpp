@@ -19,7 +19,8 @@ void Calculator::calculate()
             if(connection->getComponentA()->getComponentType() == Component::PowerSupply)
             {
                 firstComponent = connection->getComponentB();
-            } else
+            }
+            else
             {
                 firstComponent = connection->getComponentA();
             }
@@ -45,7 +46,8 @@ void Calculator::rowAnalysis(Component* comp, double& actualImpedanz, Component*
         {
             count++;
             nextComponent = connection->getComponentB();
-        } else if(connection->getComponentB() == comp && connection->getComponentA() != lastComponent)
+        }
+        else if(connection->getComponentB() == comp && connection->getComponentA() != lastComponent)
         {
             count++;
             nextComponent = connection->getComponentA();
@@ -72,7 +74,8 @@ Calculator::findConnectedComponents(ComponentPort componentPort, QList<Component
             foundComponent = connection->getComponentA();
             foundPort = connection->getPortA();
             found = true;
-        } else if(componentPort.getComponent() == connection->getComponentA())
+        }
+        else if(componentPort.getComponent() == connection->getComponentA())
         {
             foundComponent = connection->getComponentB();
             foundPort = connection->getPortB();
@@ -91,5 +94,3 @@ Calculator::findConnectedComponents(ComponentPort componentPort, QList<Component
     }
     return connectedComponents;
 }
-
-

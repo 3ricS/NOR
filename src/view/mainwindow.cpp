@@ -75,37 +75,37 @@ void MainWindow::setupUpperToolBar(void)
 }
 
 // Setzen des Widerstands-Modus
-void MainWindow::setResistorMode()
+void MainWindow::setResistorMode(void)
 {
     _model->setMode(NetworkGraphics::MouseMode::ResistorMode);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 // Setzen des PowerSupply-Modus
-void MainWindow::setPowerSupplyMode()
+void MainWindow::setPowerSupplyMode(void)
 {
     _model->setMode(NetworkGraphics::MouseMode::PowerSupplyMode);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 //Setzen des Connection-Modus
-void MainWindow::setConnectionMode()
+void MainWindow::setConnectionMode(void)
 {
     _model->setMode(NetworkGraphics::MouseMode::ConnectionMode);
     QApplication::setOverrideCursor(Qt::CrossCursor);
 }
 
-void MainWindow::setCalculation()
+void MainWindow::setCalculation(void)
 {
     _model->calculate();
 }
 
-void MainWindow::setSaveFile()
+void MainWindow::setSaveFile(void)
 {
     _model->save();
 }
 
-void MainWindow::setLoadFile()
+void MainWindow::setLoadFile(void)
 {
     _model->load();
 }
@@ -120,7 +120,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void MainWindow::createUpperMenu()
+void MainWindow::createUpperMenu(void)
 {
     _save = new QAction("Speichern");
     _ui->menuDatei->addAction(_save);

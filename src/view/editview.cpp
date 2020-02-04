@@ -8,7 +8,6 @@ EditView::EditView(Component* component, QWidget *parent):
 {
     _component = component;
     setupView();
-
 }
 
 void EditView::setupView(void)
@@ -40,7 +39,9 @@ void EditView::setupView(void)
     if(_component->isVertical())
     {
         _editViewUi->comboBoxOrientation->setCurrentIndex(1);
-    } else {
+    }
+    else
+    {
         _editViewUi->comboBoxOrientation->setCurrentIndex(0);
     }
 }

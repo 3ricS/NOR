@@ -39,7 +39,8 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
                 QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
                 Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false, 100);
                 addObject(powerSupply);
-            } else
+            }
+            else
             {
                 QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
             }
@@ -99,7 +100,8 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
                 _connectionStarted = true;
                 _connectionComponentStart = foundComponent;
                 _connectionComponentStartPort = foundComponent->getPort(position);
-            } else
+            }
+            else
             {
                 _connectionStarted = false;
             }
@@ -262,7 +264,7 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF position)
     return nullptr;
 }
 
-void NetworkGraphics::calculate()
+void NetworkGraphics::calculate(void)
 {
     Calculator* calculator = new Calculator(_connectionList, _componentList);
     calculator->calculate();
@@ -276,7 +278,7 @@ void NetworkGraphics::save(void)
     manager->saving();
 }
 
-void NetworkGraphics::load()
+void NetworkGraphics::load(void)
 {
     //Moritz hier kannst du deine FileManager-Funktion aufrufen. :)
 }

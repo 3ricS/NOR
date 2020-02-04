@@ -4,7 +4,6 @@
 Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVertical)
         : Component(x, y, isVertical, name, valueResistance, Component::ComponentType::Resistor, 2)
 {
-
     _resistorCount++;
 }
 
@@ -24,7 +23,8 @@ void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
         painter->drawRect(_xPosition - 20, _yPosition - 30, 40, 60);
         painter->drawLine(_xPosition, _yPosition - 30, _xPosition, _yPosition - 50);
         painter->drawLine(_xPosition, _yPosition + 30, _xPosition, _yPosition + 50);
-    } else
+    }
+    else
     {
         painter->drawRect(_xPosition - 30, _yPosition - 20, 60, 40);
         painter->drawLine(_xPosition - 30, _yPosition + 0, _xPosition - 50, _yPosition + 0);
@@ -53,7 +53,8 @@ void Resistor::paintOrientationSensitiv(QPainter* painter, int xPosText, int yPo
     if(_value < 1000)
     {
         painter->drawText(xPosValue, yPosValue, QString::number(_value) + "Ω");
-    } else
+    }
+    else
     {
         painter->drawText(xPosValue, yPosValue, QString::number((double)_value / 1000) + "kΩ");
     }

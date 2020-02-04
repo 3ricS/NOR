@@ -6,7 +6,6 @@ Component::Component(int x, int y, bool isVertical, QString name, int value, Com
           _name(name), _value(value),
           _componentType(componentTyp), _countPorts(countPorts)
 {
-
 }
 
 QRectF Component::boundingRect(void) const
@@ -33,7 +32,8 @@ int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
     {
         //TODO: Zoomfaktor einfügen
         return positionValue + factor * 50;
-    } else
+    }
+    else
     {
         return positionValue;
     }
@@ -53,10 +53,12 @@ Component::Port Component::getPort(QPointF position) const
     if(xEqualPortA && yEqualPortA)
     {
         return Port::A;
-    } else if(xEqualPortB && yEqualPortB)
+    }
+    else if(xEqualPortB && yEqualPortB)
     {
         return Port::B;
-    } else
+    }
+    else
     {
         return Port::null;
     }

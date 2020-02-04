@@ -13,14 +13,15 @@ void FileManager::saving(void)
     QFile _actualFile;
     _actualFile.setFileName(QFileDialog::getSaveFileName  (nullptr,"Speichern", _dirFilePath.absolutePath(), "Json (*.json);;Text (*.txt)"));
 
-    if (_actualFile.open(QFile::WriteOnly | QFile::Truncate)) {
+    if (_actualFile.open(QFile::WriteOnly | QFile::Truncate))
+    {
         QTextStream out(&_actualFile);
         out << createSaveData();
         _actualFile.close();
     }
 }
 
-QString FileManager::createSaveData()
+QString FileManager::createSaveData(void)
 {
     QJsonDocument json;
     QJsonArray array;

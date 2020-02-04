@@ -19,7 +19,7 @@ public:
     void saving(void);
 
 private:
-    QString createSaveData();
+    QString createSaveData(void);
     QJsonObject saveResistor(Component* component);
     QJsonObject savePowerSupply(Component* component);
     QJsonObject saveConnection(Connection* connection);

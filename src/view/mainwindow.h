@@ -43,7 +43,6 @@ public slots:
     void setLoadFile(void);
 
 private:
-    void setupUpperToolBar(void);
     void keyPressEvent(QKeyEvent *event) override;
     void createUpperMenu(void);
 

@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     QSysInfo s;
     if(s.productType() == "windows")
     {
-        a.setWindowIcon(QIcon(":/img/NOR_win.png"));
+        a.setWindowIcon(QIcon(":/img/NOR_win.jpeg"));
     }
     else if(s.productType() == "osx")
     {

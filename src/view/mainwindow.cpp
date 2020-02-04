@@ -4,7 +4,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
 {
     _ui->setupUi(this);
     setWindowTitle("NOR - Network of Resistance");
-    setWindowIcon(QIcon(":/img/ZFlogo.png"));
+   // setWindowIcon(QIcon(":/img/ZFlogo.png"));
     resize(1080, 720);
 
     // setup ui

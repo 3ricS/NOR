@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>img/ZFlogo.png</file>
+        <file>img/Zf_Logo.icns</file>
     </qresource>
 </RCC>

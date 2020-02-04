@@ -13,6 +13,15 @@ int main(int argc, char *argv[])
     NetworkGraphics* _model = new NetworkGraphics();
     MainWindow window(_model);
     window.show();
+    QSysInfo s;
+    if(s.productType() == "windows")
+    {
+        a.setWindowIcon(QIcon(":/img/ZFlogo.png"));
+    }
+    else if(s.productType() == "osx")
+    {
+        a.setWindowIcon(QIcon(":/img/Zf_Logo.icns"));
+    }
 
     return a.exec();
 }

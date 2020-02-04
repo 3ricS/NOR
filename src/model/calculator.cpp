@@ -10,26 +10,93 @@ void Calculator::calculate()
 {
     double actualImpedanz = 0;
     Component* firstComponent = nullptr;
+    QList<ComponentPort> foundComponents;
     for (Connection* connection : _connections)
     {
-        //Suche nach dem ersten Widerstand
-        if((connection->getComponentA()->getComponentType() == Component::PowerSupply) ||
-           (connection->getComponentB()->getComponentType() == Component::PowerSupply))
+        //Suche nach den ersten Widerständen
+        if(((connection->getComponentA()->getComponentType() == Component::PowerSupply) && connection->getPortA() == Component::A )||
+           ((connection->getComponentB()->getComponentType() == Component::PowerSupply && connection->getPortB() == Component::A)))
         {
             if(connection->getComponentA()->getComponentType() == Component::PowerSupply)
             {
-                firstComponent = connection->getComponentB();
+                foundComponents.append(ComponentPort(connection->getComponentB(),connection->getPortB()));
+                _connections.removeOne(connection);
             }
-            else
+            if(connection->getComponentB()->getComponentType() == Component::PowerSupply)
             {
-                firstComponent = connection->getComponentA();
+                foundComponents.append(ComponentPort(connection->getComponentA(),connection->getPortA()));
+                _connections.removeOne(connection);
             }
-            //_connections.removeOne(connection);
-            break;
+
         }
     }
-    //rowAnalysis(firstComponent, actualImpedanz);
-    //_resistanceValue = actualImpedanz;
+    //Parallelschaltung wurde erkannt
+    if(foundComponents.count() >= 2)
+    {
+        //ob gefunden wurde
+        bool gefunden = false;
+        //Analyse der einzelnen Pfade des vorher gefundenen
+        for(ComponentPort c : foundComponents)
+        {
+            //Möchte vom entgegengesetzten Port ausgehen
+            Component* actualComp = c.getComponent();
+            Component::Port aPort = c.getOppisitePort();
+            QList<ComponentPort> newFoundComps;
+
+            //Hinzufügen der gefundenen Objekte vom entgegengesetzten Port
+            for(Connection* c : _connections)
+            {
+                if(actualComp == c->getComponentA() && c->getPortA() == aPort && c->getComponentA()->getComponentType() != Component::ComponentType::PowerSupply)
+                {
+                    newFoundComps.append(ComponentPort(c->getComponentA(),c->getPortA()));
+                }
+                else if (actualComp == c->getComponentB() && c->getPortB() == aPort && c->getComponentB()->getComponentType() != Component::ComponentType::PowerSupply) {
+                    newFoundComps.append(ComponentPort(c->getComponentB(),c->getPortB()));
+                }
+            }
+            //Wenn soviele Componenten gefunden wurden wie in der Liste waren können wir sagen Schaltung wurde geschlossen
+            int i = 0;
+            for(ComponentPort cp : foundComponents)
+            {
+                for(ComponentPort ck : newFoundComps)
+                {
+                    if(cp.getComponent() == ck.getComponent())
+                    {
+                        qDebug() << ck.getComponent()->getName();
+                        i++;
+                        break;
+
+                    }
+                }
+            }
+            if(i == foundComponents.count())
+            {
+                gefunden = true;
+            }
+            if(gefunden)
+            {
+                break;
+            }
+        }
+        //Berechnung der Werte
+        double zaehler = 1;
+        for(int i = 0; i < foundComponents.count(); i++)
+        {
+            zaehler *= foundComponents[i].getComponent()->getValue();
+        }
+        double nenner = 0;
+        for(int i = 0; i < foundComponents.count(); i++)
+        {
+            nenner += foundComponents[i].getComponent()->getValue();
+        }
+        _resistanceValue = zaehler / nenner;
+    }
+    if(foundComponents.count() == 1)
+    {
+        rowAnalysis(foundComponents[0].getComponent(), actualImpedanz);
+    }
+
+    _resistanceValue = actualImpedanz;
 
     QList<ComponentPort> connectedComponents;
     connectedComponents = findConnectedComponents(ComponentPort(firstComponent, Component::Port::A),

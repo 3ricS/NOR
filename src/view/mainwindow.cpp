@@ -18,12 +18,12 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
     connect(_ui->Calculate, SIGNAL(released()), this, SLOT(setCalculation()));
+    connect(_new, SIGNAL(triggered()), this, SLOT(setNewFile()));
+    connect(_saveAs, SIGNAL(triggered()), this, SLOT(setSaveAsFile()));
     connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
-    connect(_load, SIGNAL(triggered()), this, SLOT(setLoadFile()));
+    connect(_open, SIGNAL(triggered()), this, SLOT(setOpenFile()));
     connect(_ui->ZoomIn, SIGNAL(released()), this, SLOT(setZoomIn()));
     connect(_ui->ZoomOut, SIGNAL(released()), this, SLOT(setZoomOut()));
-
-    // connect signals from model
 
 }
 
@@ -58,9 +58,18 @@ void MainWindow::setSaveFile(void)
     _model->save();
 }
 
-void MainWindow::setLoadFile(void)
+void MainWindow::setOpenFile(void)
 {
     _model->load();
+}
+
+void MainWindow::setNewFile(void)
+{
+
+}
+void MainWindow::setSaveAsFile()
+{
+
 }
 
 //Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen
@@ -75,11 +84,25 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 
 void MainWindow::createUpperMenu(void)
 {
+    _new = new QAction("Neu");
+    _new->setShortcut(QKeySequence::New);
+    _new->setStatusTip("Neue Datei erstellen");
+    _ui->menuDatei->addAction(_new);
+
+    _open = new QAction("Öffnen");
+    _open->setShortcut(QKeySequence::Open);
+    _open->setStatusTip("Öffne bestehende Datei");
+    _ui->menuDatei->addAction(_open);
+
     _save = new QAction("Speichern");
+    _save->setShortcut(QKeySequence::Save);
+    _save->setStatusTip("Speichern der Datei");
     _ui->menuDatei->addAction(_save);
 
-    _load = new QAction("Laden");
-    _ui->menuDatei->addAction(_load);
+    _saveAs = new QAction("Speichern unter...");
+    _saveAs->setShortcut(QKeySequence::SaveAs);
+    _saveAs->setStatusTip("Speichern unter neuem Dateipfad");
+    _ui->menuDatei->addAction(_saveAs);
 }
 
 //Zoom in

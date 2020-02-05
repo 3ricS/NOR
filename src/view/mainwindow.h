@@ -40,9 +40,11 @@ public slots:
     void setConnectionMode(void);
     void setCalculation(void);
     void setSaveFile(void);
-    void setLoadFile(void);
+    void setOpenFile(void);
     void setZoomIn(void);
     void setZoomOut(void);
+    void setNewFile(void);
+    void setSaveAsFile(void);
 
 private:
     void keyPressEvent(QKeyEvent *event) override;
@@ -52,7 +54,9 @@ private:
     Ui::MainWindow*     _ui;
     NetworkGraphics*    _model = nullptr;
     QAction* _save = nullptr;
-    QAction* _load = nullptr;
+    QAction* _saveAs = nullptr;
+    QAction* _open = nullptr;
+    QAction* _new = nullptr;
 };
 
 #endif // MAINWINDOW_H

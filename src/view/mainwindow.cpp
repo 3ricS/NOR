@@ -65,7 +65,11 @@ void MainWindow::setOpenFile(void)
 
 void MainWindow::setNewFile(void)
 {
-
+    //ToDo: Momentan werden noch Objekte mit weiterzählenden id's erzeugt die Statik sind, wenn jemand ne Idee hat immer man ändern
+    NetworkGraphics* _model = new NetworkGraphics();
+    MainWindow* window = new MainWindow(_model);
+    window->show();
+    qDebug() << "Show";
 }
 void MainWindow::setSaveAsFile()
 {

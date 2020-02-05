@@ -9,22 +9,22 @@ Calculator::Calculator(QList<Connection*> connections, QList<Component*> compone
 void Calculator::calculate()
 {
     double actualImpedanz = 0;
-    Component* firstComponent = nullptr;
     QList<ComponentPort> foundComponents;
     for (Connection* connection : _connections)
     {
         //Suche nach den ersten Widerständen
-        if(((connection->getComponentA()->getComponentType() == Component::PowerSupply) && connection->getPortA() == Component::A )||
-           ((connection->getComponentB()->getComponentType() == Component::PowerSupply && connection->getPortB() == Component::A)))
+        if(((connection->getComponentPortA().getComponent()->getComponentType() == Component::PowerSupply) &&
+                connection->getComponentPortA().getPort() == Component::A ) ||
+           ((connection->getComponentPortB().getComponent()->getComponentType() == Component::PowerSupply && connection->getComponentPortB().getPort() == Component::A)))
         {
-            if(connection->getComponentA()->getComponentType() == Component::PowerSupply)
+            if(connection->getComponentPortA().getComponent()->getComponentType() == Component::PowerSupply)
             {
-                foundComponents.append(ComponentPort(connection->getComponentB(),connection->getPortB()));
+                foundComponents.append(connection->getComponentPortB());
                 _connections.removeOne(connection);
             }
-            if(connection->getComponentB()->getComponentType() == Component::PowerSupply)
+            if(connection->getComponentPortB().getComponent()->getComponentType() == Component::PowerSupply)
             {
-                foundComponents.append(ComponentPort(connection->getComponentA(),connection->getPortA()));
+                foundComponents.append(connection->getComponentPortA());
                 _connections.removeOne(connection);
             }
 
@@ -36,22 +36,23 @@ void Calculator::calculate()
         //ob gefunden wurde
         bool gefunden = false;
         //Analyse der einzelnen Pfade des vorher gefundenen
-        for(ComponentPort c : foundComponents)
+        for(ComponentPort actualComponentPort : foundComponents)
         {
             //Möchte vom entgegengesetzten Port ausgehen
-            Component* actualComp = c.getComponent();
-            Component::Port aPort = c.getOppisitePort();
+            actualComponentPort.invertPort();
             QList<ComponentPort> newFoundComps;
 
             //Hinzufügen der gefundenen Objekte vom entgegengesetzten Port
             for(Connection* c : _connections)
             {
-                if(actualComp == c->getComponentA() && c->getPortA() == aPort && c->getComponentA()->getComponentType() != Component::ComponentType::PowerSupply)
+                if(actualComponentPort == c->getComponentPortA() &&
+                        c->getComponentPortA().getComponent()->getComponentType() != Component::ComponentType::PowerSupply)
                 {
-                    newFoundComps.append(ComponentPort(c->getComponentA(),c->getPortA()));
+                    newFoundComps.append(c->getComponentPortA());
                 }
-                else if (actualComp == c->getComponentB() && c->getPortB() == aPort && c->getComponentB()->getComponentType() != Component::ComponentType::PowerSupply) {
-                    newFoundComps.append(ComponentPort(c->getComponentB(),c->getPortB()));
+                else if (actualComponentPort == c->getComponentPortB() &&
+                        c->getComponentPortB().getComponent()->getComponentType() != Component::ComponentType::PowerSupply) {
+                    newFoundComps.append(c->getComponentPortB());
                 }
             }
             //Wenn soviele Componenten gefunden wurden wie in der Liste waren können wir sagen Schaltung wurde geschlossen
@@ -110,15 +111,15 @@ void Calculator::rowAnalysis(Component* comp, double& actualImpedanz, Component*
     Component* nextComponent = nullptr;
     for (Connection* connection : _connections)
     {
-        if(connection->getComponentA() == comp && connection->getComponentB() != lastComponent)
+        if(connection->getComponentPortA().getComponent() == comp && connection->getComponentPortB().getComponent() != lastComponent)
         {
             count++;
-            nextComponent = connection->getComponentB();
+            nextComponent = connection->getComponentPortB().getComponent();
         }
-        else if(connection->getComponentB() == comp && connection->getComponentA() != lastComponent)
+        else if(connection->getComponentPortB().getComponent() == comp && connection->getComponentPortA().getComponent() != lastComponent)
         {
             count++;
-            nextComponent = connection->getComponentA();
+            nextComponent = connection->getComponentPortA().getComponent();
         }
     }
     if(count == 1)
@@ -134,24 +135,26 @@ Calculator::findConnectedComponents(ComponentPort componentPort, QList<Component
 {
     for (Connection* connection : _connections)
     {
-        Component* foundComponent;
-        Component::Port foundPort;
+        ComponentPort foundComponentPort = ComponentPort(nullptr, Component::Port::null);
+
         bool found = false;
-        if(componentPort.getComponent() == connection->getComponentB())
+        if(componentPort.getComponent() == connection->getComponentPortB().getComponent())
         {
-            foundComponent = connection->getComponentA();
-            foundPort = connection->getPortA();
+            Component* foundComponent = connection->getComponentPortA().getComponent();
+            Component::Port foundPort = connection->getComponentPortA().getPort();
+            foundComponentPort = ComponentPort(foundComponent, foundPort);
             found = true;
         }
-        else if(componentPort.getComponent() == connection->getComponentA())
+        else if(componentPort.getComponent() == connection->getComponentPortA().getComponent())
         {
-            foundComponent = connection->getComponentB();
-            foundPort = connection->getPortB();
+            Component* foundComponent = connection->getComponentPortB().getComponent();
+            Component::Port foundPort = connection->getComponentPortB().getPort();
+            foundComponentPort = ComponentPort(foundComponent, foundPort);
             found = true;
         }
+
         if(found)
         {
-            ComponentPort foundComponentPort = ComponentPort(foundComponent, foundPort);
             if(!connectedComponents.contains(foundComponentPort))
             {
                 connectedComponents.append(foundComponentPort);

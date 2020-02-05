@@ -1,18 +1,16 @@
 #include "connection.h"
 
-Connection::Connection(Component* componentA, Component::Port componentAPort, Component* componentB,
-                       Component::Port componentBPort) :
+Connection::Connection(ComponentPort componentPortA, ComponentPort componentPortB) :
         QGraphicsItem(nullptr),
-        _componentA(componentA), _portA(componentAPort),
-        _componentB(componentB), _portB(componentBPort)
+        _componentPortA(componentPortA), _componentPortB(componentPortB)
 {
 }
 
 void Connection::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     //TODO: Funktion mit mehreren Rückgabewerten für xStart, xEnd, ...
-    QPointF start = _componentA->getPortPosition(_portA);
-    QPointF end = _componentB->getPortPosition(_portB);
+    QPointF start = _componentPortA.getComponent()->getPortPosition(_componentPortA.getPort());
+    QPointF end = _componentPortB.getComponent()->getPortPosition(_componentPortB.getPort());
     int xStart = start.x();
     int yStart = start.y();
     int xEnd = end.x();
@@ -31,8 +29,8 @@ void Connection::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 
 QRectF Connection::boundingRect(void) const
 {
-    QPointF start = _componentA->getPortPosition(_portA);
-    QPointF end = _componentB->getPortPosition(_portB);
+    QPointF start = _componentPortA.getComponent()->getPortPosition(_componentPortA.getPort());
+    QPointF end = _componentPortB.getComponent()->getPortPosition(_componentPortB.getPort());
     int xStart = start.x();
     int yStart = start.x();
     int xEnd = end.x();

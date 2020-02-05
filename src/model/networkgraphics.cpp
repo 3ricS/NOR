@@ -48,15 +48,16 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
             break;
         case MouseMode::ConnectionMode:
         {
-            if(_connectionStarted)
+            bool connectionStarted = (nullptr != _connectionStartComponentPort);
+            if(connectionStarted)
             {
                 ComponentPort* connectionComponentPortEnd = getComponentPortAtPosition(position);
                 if(connectionComponentPortEnd != nullptr)
                 {
                     Component* connectionComponentEnd = connectionComponentPortEnd->getComponent();
                     Component::Port connectionComponentEndPort = connectionComponentEnd->getPort(position);
-                    addConnection(_connectionComponentStart, _connectionComponentStartPort, connectionComponentEnd,
-                                  connectionComponentEndPort);
+                    ComponentPort connectionEndComponentPort = ComponentPort(connectionComponentEnd, connectionComponentEndPort);
+                    addConnection(*_connectionStartComponentPort, connectionEndComponentPort);
                 }
             }
         }
@@ -86,7 +87,8 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
     _componentIsGrabbed = isThereAComponent(memory);
     if(_mouseMode != ConnectionMode)
     {
-        _connectionStarted = false;
+        //Keine Verbindung begonnen: _connectionStartComponentPort muss auf Nullptr zeigen
+        _connectionStartComponentPort = nullptr;
     }
 
     switch (_mouseMode)
@@ -96,14 +98,7 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
             ComponentPort* foundComponentPort = getComponentPortAtPosition(position);
             if(foundComponentPort != nullptr)
             {
-                Component* foundComponent = foundComponentPort->getComponent();
-                _connectionStarted = true;
-                _connectionComponentStart = foundComponent;
-                _connectionComponentStartPort = foundComponent->getPort(position);
-            }
-            else
-            {
-                _connectionStarted = false;
+                _connectionStartComponentPort = foundComponentPort;
             }
         }
             break;
@@ -125,8 +120,8 @@ void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
         Component* foundComponent = getComponentAtPosition(position);
         if(foundComponent != nullptr)
         {
-            _editingView = new EditView(foundComponent);
-            _editingView->show();
+            EditView* editingView = new EditView(foundComponent);
+            editingView->show();
         }
     }
 }
@@ -193,10 +188,9 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
     }
 }
 
-void NetworkGraphics::addConnection(Component* componentA, Component::Port componentAPort, Component* componentB,
-                                    Component::Port componentBPort)
+void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
-    Connection* connection = new Connection(componentA, componentAPort, componentB, componentBPort);
+    Connection* connection = new Connection(componentPortA, componentPortB);
     _connectionList.append(connection);
     addItem(connection);
     update();

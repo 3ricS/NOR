@@ -34,7 +34,7 @@ public:
 private:
     static constexpr int _defaultSceneSize = 6000;
 
-    void addConnection(Component* componentA, Component::Port componentAPort, Component* componentB, Component::Port componentBPort);
+    void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void addObject(Component* component);
     Component* getComponentAtPosition(QPointF gridPosition);
     bool isThereAComponent(QPointF position);
@@ -47,9 +47,7 @@ private:
     bool _componentIsGrabbed = false;
 
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
-    bool _connectionStarted = false;
-    Component* _connectionComponentStart;
-    Component::Port _connectionComponentStartPort;
+    ComponentPort* _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
     QGraphicsItem* _previousRect = nullptr;
     Component* _selectedComponentToMove;
 
@@ -57,7 +55,6 @@ private:
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;
     QGraphicsScene* _graphics = nullptr;
-    EditView* _editingView = nullptr;
 };
 
 #endif // NETWORKGRAPHICS_H

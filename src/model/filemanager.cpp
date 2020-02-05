@@ -74,9 +74,9 @@ QJsonObject FileManager::saveConnection(Connection *connection)
     //TDO: Ports hinzufügen
     QJsonObject c;
     c.insert("type", "Connection");
-    c.insert("_componentA", connection->getComponentA()->getName());
-    c.insert("_componentB", connection->getComponentB()->getName());
-    c.insert("_portA", connection->getPortA());
-    c.insert("_portB", connection->getPortB());
+    c.insert("_componentPortA", connection->getComponentPortA().getComponent()->getName());
+    c.insert("_componentPortB", connection->getComponentPortB().getComponent()->getName());
+    c.insert("_portA", connection->getComponentPortA().getPort());
+    c.insert("_portB", connection->getComponentPortB().getPort());
     return c;
 }

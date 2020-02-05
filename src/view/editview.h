@@ -30,8 +30,6 @@ private:
 
     //Variablen
     Ui::EditView* _editViewUi;
-    QComboBox* _orientationBox = nullptr;
-    QLabel* _orientationTitle = nullptr;
     Component* _component = nullptr;
 };
 

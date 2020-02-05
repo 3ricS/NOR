@@ -1,3 +1,4 @@
+#include <view/editview.h>
 #include "component.h"
 
 Component::Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int countPorts)

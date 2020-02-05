@@ -10,3 +10,15 @@ bool ComponentPort::operator==(ComponentPort otherComponentPort)
     bool equalPort = (_port == otherComponentPort._port);
     return equalComponent && equalPort;
 }
+
+void ComponentPort::invertPort()
+{
+    if(_port == Component::Port::A)
+    {
+        _port = Component::Port::B;
+    }
+    else if(_port == Component::Port::B)
+    {
+        _port = Component::Port::A;
+    }
+}

@@ -19,7 +19,9 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
     connect(_ui->Calculate, SIGNAL(released()), this, SLOT(setCalculation()));
     connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
-    connect(_load,SIGNAL(triggered()), this, SLOT(setLoadFile()));
+    connect(_load, SIGNAL(triggered()), this, SLOT(setLoadFile()));
+    connect(_ui->ZoomIn, SIGNAL(released()), this, SLOT(setZoomIn()));
+    connect(_ui->ZoomOut, SIGNAL(released()), this, SLOT(setZoomOut()));
 
     // connect signals from model
 
@@ -78,6 +80,22 @@ void MainWindow::createUpperMenu(void)
 
     _load = new QAction("Laden");
     _ui->menuDatei->addAction(_load);
+}
+
+//Zoom in
+void MainWindow::setZoomIn()
+{
+    double scaleFactor = 1.1;
+    _ui->networkView->scale(scaleFactor, scaleFactor);
+    _model->update();
+}
+
+//Zoom out
+void MainWindow::setZoomOut()
+{
+    double scaleFactor = 0.9;
+    _ui->networkView->scale(scaleFactor, scaleFactor);
+    _model->update();
 }
 
 MainWindow::~MainWindow()

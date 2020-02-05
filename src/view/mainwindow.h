@@ -41,6 +41,8 @@ public slots:
     void setCalculation(void);
     void setSaveFile(void);
     void setLoadFile(void);
+    void setZoomIn(void);
+    void setZoomOut(void);
 
 private:
     void keyPressEvent(QKeyEvent *event) override;

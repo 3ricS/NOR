@@ -94,13 +94,14 @@ void Calculator::calculate()
     if(foundComponents.count() == 1)
     {
         rowAnalysis(foundComponents[0].getComponent(), actualImpedanz);
+        _resistanceValue = actualImpedanz;
     }
 
-    _resistanceValue = actualImpedanz;
 
-    QList<ComponentPort> connectedComponents;
-    connectedComponents = findConnectedComponents(ComponentPort(firstComponent, Component::Port::A),
-                                                  connectedComponents);
+
+   // QList<ComponentPort> connectedComponents;
+   // connectedComponents = findConnectedComponents(ComponentPort(firstComponent, Component::Port::A),
+                                                 // connectedComponents);
 }
 
 void Calculator::rowAnalysis(Component* comp, double& actualImpedanz, Component* lastComponent)

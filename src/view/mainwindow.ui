@@ -57,13 +57,27 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0">
         <property name="spacing">
          <number>7</number>
         </property>
         <property name="sizeConstraint">
          <enum>QLayout::SetMaximumSize</enum>
         </property>
+        <item>
+         <widget class="QPushButton" name="ZoomIn">
+          <property name="text">
+           <string>ZoomIn</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="ZoomOut">
+          <property name="text">
+           <string>ZoomOut</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QPushButton" name="PowerSupply">
           <property name="text">
@@ -104,7 +118,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

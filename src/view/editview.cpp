@@ -34,15 +34,14 @@ void EditView::setupView(void)
     _editViewUi->textEditName->setText(_component->getName());
     _editViewUi->textEditValue->setText(QString::number(_component->getValue()));
     _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
-    _editViewUi->comboBoxOrientation->addItem("Horizontal");
-    _editViewUi->comboBoxOrientation->addItem("Vertikal");
+
     if(_component->isVertical())
     {
-        _editViewUi->comboBoxOrientation->setCurrentIndex(1);
+        _editViewUi->verticalButton->setChecked(true);
     }
     else
     {
-        _editViewUi->comboBoxOrientation->setCurrentIndex(0);
+        _editViewUi->horizontalButton->setChecked(true);
     }
 }
 
@@ -60,7 +59,7 @@ void EditView::accept(void)
         QString newName = _editViewUi->textEditName->text();
         _component->setName(newName);
         _component->setValue(newValue);
-        bool isVerticalNew = !(_editViewUi->comboBoxOrientation->currentText() == "Horizontal");
+        bool isVerticalNew = !(_editViewUi->horizontalButton->isChecked());
         _component->setVertical(isVerticalNew);
 
         close();

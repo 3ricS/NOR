@@ -19,12 +19,12 @@ public:
     //getter
     Component* getComponent(void) const {return _component;}
     Component::Port getPort(void) const {return _port;}
-    Component::Port getOppisitePort(void){if(_port == Component::Port::A){return Component::B;}
-                                         else {return Component::A;}}
+    ComponentPort getOppisiteComponentPort(void);
 
 private:
     Component* _component;
     Component::Port _port;
+    Component::Port getOppisitePort(void);
 };
 
 

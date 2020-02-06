@@ -118,7 +118,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -126,7 +126,13 @@
      <string>Datei</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuAnsicht">
+    <property name="title">
+     <string>Ansicht</string>
+    </property>
+   </widget>
    <addaction name="menuDatei"/>
+   <addaction name="menuAnsicht"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

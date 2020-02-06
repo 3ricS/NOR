@@ -57,6 +57,8 @@ private:
     QAction* _saveAs = nullptr;
     QAction* _open = nullptr;
     QAction* _new = nullptr;
+    QAction* _zoomIn = nullptr;
+    QAction* _zoomOut = nullptr;
 };
 
 #endif // MAINWINDOW_H

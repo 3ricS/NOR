@@ -24,6 +24,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_open, SIGNAL(triggered()), this, SLOT(setOpenFile()));
     connect(_ui->ZoomIn, SIGNAL(released()), this, SLOT(setZoomIn()));
     connect(_ui->ZoomOut, SIGNAL(released()), this, SLOT(setZoomOut()));
+    connect(_zoomIn, SIGNAL(triggered()), this, SLOT(setZoomIn()));
+    connect(_zoomOut, SIGNAL(triggered()), this, SLOT(setZoomOut()));
 
 }
 
@@ -111,6 +113,16 @@ void MainWindow::createUpperMenu(void)
     _saveAs->setShortcut(QKeySequence::SaveAs);
     _saveAs->setStatusTip("Speichern unter neuem Dateipfad");
     _ui->menuDatei->addAction(_saveAs);
+
+    _zoomIn = new QAction("Zoom In");
+    _zoomIn->setShortcut(QKeySequence(tr("Ctrl+ +")));
+    _zoomIn->setStatusTip("Reinzoomen");
+    _ui->menuAnsicht->addAction(_zoomIn);
+
+    _zoomOut = new QAction("Zoom Out");
+    _zoomOut->setShortcut(QKeySequence(tr("Ctrl+ -")));
+    _zoomOut->setStatusTip("Rauszoomen");
+    _ui->menuAnsicht->addAction(_zoomOut);
 }
 
 //Zoom in

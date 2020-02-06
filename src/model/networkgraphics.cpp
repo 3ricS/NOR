@@ -67,6 +67,10 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             pointToGrid(&position);
             _selectedItem = getComponentAtPosition(position);
+            if(isThereAComponent(position))
+            {
+                highlightSelectedRect(&position);
+            }
             bool hasSelectedComponentToMove = (_selectedComponentToMove != nullptr);
             if(hasSelectedComponentToMove)
             {
@@ -195,6 +199,7 @@ void NetworkGraphics::deleteItem()
     {
         if(_selectedItem == component)
         {
+            removeItem(_selectedRect);
             _componentList.removeOne(component);
             delete component;
         }
@@ -248,11 +253,26 @@ void NetworkGraphics::highlightRect(QPointF* position, QColor* highlightColor)
     //TODO: Zoomfaktor einfügen
     int positionX = position->toPoint().x();
     int positionY = position->toPoint().y();
-    QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen,
-                                              *highlightColor);
-
+    QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, *highlightColor);
 
     _previousRect = highlightedRect;
+    update();
+}
+
+void NetworkGraphics::highlightSelectedRect(QPointF *position)
+{
+    if(nullptr != _selectedRect)
+    {
+        removeItem(_selectedRect);
+        delete _selectedRect;
+        _selectedRect = nullptr;
+    }
+    QColor highlightColor = QColor(255, 0, 0, 55);
+    int positionX = position->toPoint().x();
+    int positionY = position->toPoint().y();
+    QGraphicsItem* highlightSelectedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, highlightColor);
+
+    _selectedRect = highlightSelectedRect;
     update();
 }
 

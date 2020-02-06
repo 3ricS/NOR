@@ -44,6 +44,7 @@ private:
 
     void pointToGrid(QPointF* position);
     void highlightRect(QPointF* position, QColor* highlightColor);
+    void highlightSelectedRect(QPointF* position);
 
     bool _mousIsPressed = false;
     bool _componentIsGrabbed = false;
@@ -52,6 +53,7 @@ private:
     ComponentPort* _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
     QGraphicsItem* _previousRect = nullptr;
     QGraphicsItem* _selectedItem = nullptr;
+    QGraphicsItem* _selectedRect = nullptr;
     Component* _selectedComponentToMove;
 
     MouseMode _mouseMode = SelectionMode;

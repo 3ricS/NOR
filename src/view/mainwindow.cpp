@@ -115,12 +115,12 @@ void MainWindow::createUpperMenu(void)
     _ui->menuDatei->addAction(_saveAs);
 
     _zoomIn = new QAction("Zoom In");
-    _zoomIn->setShortcut(QKeySequence(tr("Ctrl+ +")));
+    _zoomIn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
     _zoomIn->setStatusTip("Reinzoomen");
     _ui->menuAnsicht->addAction(_zoomIn);
 
     _zoomOut = new QAction("Zoom Out");
-    _zoomOut->setShortcut(QKeySequence(tr("Ctrl+ -")));
+    _zoomOut->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus));
     _zoomOut->setStatusTip("Rauszoomen");
     _ui->menuAnsicht->addAction(_zoomOut);
 }

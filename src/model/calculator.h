@@ -2,6 +2,7 @@
 #define CALCULATOR_H
 
 #include <QtMath>
+#include <QMessageBox>
 
 #include <model/component.h>
 #include <model/connection.h>
@@ -28,7 +29,14 @@ private:
     void rowAnalysis(Component* comp, double& actualImpedanz, Component* lastComponent = nullptr);
     void parallelAnalysis(QList<ComponentPort> &foundComponents, double& actualImpedanz);
     QList<ComponentPort> findConnectedComponents(ComponentPort componentPort, QList<ComponentPort>& connectedComponents);
-    void lookingForNeighbours(QList<ComponentPort> &foundComponents);
+
+    //Suche nach Nachbarn, die nicht direkt mit dem aktuellen ComponentPort verbunden sind
+    void searchingForIndirectNeighbours(QList<ComponentPort> &foundComponents);
+
+    //Suche nach Nachbarn, die direkt mit dem aktuellen ComponentPort verbunden sind
+    void searchingForDirectNeighbours(ComponentPort actualComPort, QList<ComponentPort> foundCompPort, QList<ComponentPort> &newFoundCompPort);
+
+    void searchingPowerSupply(QList<ComponentPort>& foundComponents);
 
 };
 

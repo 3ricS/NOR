@@ -18,6 +18,7 @@ public:
     //Methoden
     ComponentPort getComponentPortA(void) const {return _componentPortA;}
     ComponentPort getComponentPortB(void) const {return _componentPortB;}
+    bool hasComponent(Component* searchedComponent);
 
 private:
     ComponentPort _componentPortA;

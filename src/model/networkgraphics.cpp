@@ -196,14 +196,23 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 
 void NetworkGraphics::deleteItem()
 {
-    for(Component* component : _componentList)
+    if(_selectedComponent != nullptr)
     {
-        if(_selectedComponent == component)
-        {
             removeItem(_selectedRect);
-            _componentList.removeOne(component);
-            delete component;
-        }
+            _componentList.removeOne(_selectedComponent);
+
+            //Lösche Verbindungen vom Component
+            for(Connection* connection : _connectionList)
+            {
+                if(connection->hasComponent(_selectedComponent))
+                {
+                    removeItem(connection);
+                    _connectionList.removeOne(connection);
+                    delete connection;
+                }
+            }
+
+            delete _selectedComponent;
     }
 }
 

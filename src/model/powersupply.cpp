@@ -6,6 +6,11 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical) :
     _powerSupplyCount++;
 }
 
+PowerSupply::~PowerSupply()
+{
+    _powerSupplyCount--;
+}
+
 void PowerSupply::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     paintInformations(painter);

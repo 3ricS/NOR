@@ -27,6 +27,19 @@ void Connection::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->drawLine(xEnd, yMiddle, xEnd, yEnd);
 }
 
+bool Connection::hasComponent(Component *searchedComponent)
+{
+    if(_componentPortA.getComponent() == searchedComponent)
+    {
+        return true;
+    }
+    else if(_componentPortB.getComponent() == searchedComponent)
+    {
+        return true;
+    }
+    return false;
+}
+
 QRectF Connection::boundingRect(void) const
 {
     QPointF start = _componentPortA.getComponent()->getPortPosition(_componentPortA.getPort());

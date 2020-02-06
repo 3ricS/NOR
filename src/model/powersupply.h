@@ -7,6 +7,7 @@ class PowerSupply : public Component
 {
 public:
     PowerSupply(QString name, int x, int y, bool isVertical);
+    ~PowerSupply();
 
     //Methoden
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;

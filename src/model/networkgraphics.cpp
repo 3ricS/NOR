@@ -66,7 +66,6 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         {
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             pointToGrid(&position);
-            _selectedItem = getComponentAtPosition(position);
             if(isThereAComponent(position))
             {
                 highlightSelectedRect(&position);
@@ -75,6 +74,8 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
             if(hasSelectedComponentToMove)
             {
                 _selectedComponentToMove->setPosition(position);
+                _isDragged = true;
+                highlightSelectedRect(&position);
                 update();
             }
         }
@@ -197,7 +198,7 @@ void NetworkGraphics::deleteItem()
 {
     for(Component* component : _componentList)
     {
-        if(_selectedItem == component)
+        if(_selectedComponent == component)
         {
             removeItem(_selectedRect);
             _componentList.removeOne(component);
@@ -248,7 +249,7 @@ void NetworkGraphics::pointToGrid(QPointF* position)
 }
 
 void NetworkGraphics::highlightRect(QPointF* position, QColor* highlightColor)
-{
+{   
     pointToGrid(position);
     //TODO: Zoomfaktor einfügen
     int positionX = position->toPoint().x();
@@ -261,6 +262,15 @@ void NetworkGraphics::highlightRect(QPointF* position, QColor* highlightColor)
 
 void NetworkGraphics::highlightSelectedRect(QPointF *position)
 {
+    int positionX;
+    int positionY;
+    if(_isDragged)
+    {
+        positionX = _selectedComponentToMove->getXPosition();
+        positionY = _selectedComponentToMove->getYPosition();
+        _isDragged = 0;
+    }
+    _selectedComponent = getComponentAtPosition(*position);
     if(nullptr != _selectedRect)
     {
         removeItem(_selectedRect);
@@ -268,8 +278,8 @@ void NetworkGraphics::highlightSelectedRect(QPointF *position)
         _selectedRect = nullptr;
     }
     QColor highlightColor = QColor(255, 0, 0, 55);
-    int positionX = position->toPoint().x();
-    int positionY = position->toPoint().y();
+    positionX = position->toPoint().x();
+    positionY = position->toPoint().y();
     QGraphicsItem* highlightSelectedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, highlightColor);
 
     _selectedRect = highlightSelectedRect;

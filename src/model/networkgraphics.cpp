@@ -66,6 +66,7 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         {
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             pointToGrid(&position);
+            _selectedItem = getComponentAtPosition(position);
             bool hasSelectedComponentToMove = (_selectedComponentToMove != nullptr);
             if(hasSelectedComponentToMove)
             {
@@ -185,6 +186,18 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
             }
         }
             break;
+    }
+}
+
+void NetworkGraphics::deleteItem()
+{
+    for(Component* component : _componentList)
+    {
+        if(_selectedItem == component)
+        {
+            _componentList.removeOne(component);
+            delete component;
+        }
     }
 }
 

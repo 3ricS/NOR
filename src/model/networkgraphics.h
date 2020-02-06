@@ -24,6 +24,8 @@ public:
     void mouseDoublePressInterpretation(QPointF position);
     void mouseMoveInterpretation(QPointF position);
 
+    void deleteItem(void);
+
     void calculate(void);
     void save(void);
     void load(void);
@@ -49,6 +51,7 @@ private:
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     ComponentPort* _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
     QGraphicsItem* _previousRect = nullptr;
+    QGraphicsItem* _selectedItem = nullptr;
     Component* _selectedComponentToMove;
 
     MouseMode _mouseMode = SelectionMode;

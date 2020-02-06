@@ -12,7 +12,7 @@ Component::Component(int x, int y, bool isVertical, QString name, int value, Com
 QRectF Component::boundingRect(void) const
 {
     //TODO: Zoomfaktor hier einfügen
-    return QRectF(_xPosition - 50, _yPosition - 50, 100, 100);
+    return QRectF(_xPosition - 100, _yPosition - 50, 150, 100);
 }
 
 int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const

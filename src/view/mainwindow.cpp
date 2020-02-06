@@ -84,6 +84,11 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
         _model->setMode(NetworkGraphics::MouseMode::SelectionMode);
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
     }
+    if(event->key() == Qt::Key_Delete)
+    {
+        _model->deleteItem();
+        update();
+    }
 }
 
 void MainWindow::createUpperMenu(void)

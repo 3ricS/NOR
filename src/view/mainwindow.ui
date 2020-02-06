@@ -160,9 +160,9 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QToolButton" name="PlusZoom">
+           <widget class="QToolButton" name="MinusZoom">
             <property name="text">
-             <string>+</string>
+             <string>-</string>
             </property>
            </widget>
           </item>
@@ -177,9 +177,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="MinusZoom">
+           <widget class="QToolButton" name="PlusZoom">
             <property name="text">
-             <string>-</string>
+             <string>+</string>
             </property>
            </widget>
           </item>
@@ -197,7 +197,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

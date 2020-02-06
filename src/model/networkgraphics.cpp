@@ -97,6 +97,16 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
         _connectionStartComponentPort = nullptr;
     }
 
+    if(!isThereAComponent(position))
+    {
+        if(nullptr != _selectedRect)
+        {
+            removeItem(_selectedRect);
+            delete _selectedRect;
+            _selectedRect = nullptr;
+        }
+    }
+
     switch (_mouseMode)
     {
         case ConnectionMode:
@@ -113,8 +123,7 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             pointToGrid(&position);
             _selectedComponentToMove = getComponentAtPosition(position);
-        }
-            break;
+        }            break;
     }
 }
 
@@ -213,6 +222,7 @@ void NetworkGraphics::deleteItem()
             }
 
             delete _selectedComponent;
+            _selectedComponent = nullptr;
     }
 }
 
@@ -294,7 +304,6 @@ void NetworkGraphics::highlightSelectedRect(QPointF *position)
     _selectedRect = highlightSelectedRect;
     update();
 }
-
 void NetworkGraphics::reloadAll(void)
 {
     for (Component* component : _componentList)

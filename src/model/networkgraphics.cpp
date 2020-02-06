@@ -37,7 +37,7 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
             if(PowerSupply::getCount() < 1)
             {
                 QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
-                Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false, 100);
+                Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false);
                 addObject(powerSupply);
             }
             else
@@ -276,6 +276,19 @@ void NetworkGraphics::highlightSelectedRect(QPointF *position)
     update();
 }
 
+void NetworkGraphics::reloadAll(void)
+{
+    for (Component* component : _componentList)
+    {
+        addItem(component);
+    }
+    for (Connection* connection : _connectionList)
+    {
+        addItem(connection);
+    }
+    update();
+}
+
 ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF position)
 {
     for (Component* component : _componentList)
@@ -293,19 +306,21 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF position)
 
 void NetworkGraphics::calculate(void)
 {
-    Calculator* calculator = new Calculator(_connectionList, _componentList);
-    calculator->calculate();
+    Calculator calculator = Calculator(_connectionList, _componentList);
+    calculator.calculate();
     QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                       QString::number(calculator->getResistanceValue()) + "Ω");
+                       QString::number(calculator.getResistanceValue()) + "Ω");
 }
 
 void NetworkGraphics::save(void)
 {
-    FileManager* manager = new FileManager(_componentList, _connectionList);
-    manager->saving();
+    FileManager manager(_componentList, _connectionList);
+    manager.saving();
 }
 
 void NetworkGraphics::load(void)
 {
-    //Moritz hier kannst du deine FileManager-Funktion aufrufen. :)
+    FileManager manager(_componentList, _connectionList);
+    manager.loading();
+    reloadAll();
 }

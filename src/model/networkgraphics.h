@@ -46,6 +46,8 @@ private:
     void highlightRect(QPointF* position, QColor* highlightColor);
     void highlightSelectedRect(QPointF* position);
 
+    void reloadAll(void);
+
     bool _mousIsPressed = false;
     bool _componentIsGrabbed = false;
 

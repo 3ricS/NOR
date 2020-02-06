@@ -1,6 +1,8 @@
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
 
+#include <QtMath>
+
 #include <model/component.h>
 #include <model/connection.h>
 #include <model/ComponentPort.h>

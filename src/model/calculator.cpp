@@ -12,7 +12,7 @@ void Calculator::calculate()
     QList<ComponentPort> foundComponents;
     for (Connection* connection : _connections)
     {
-        //Suche nach den ersten Widerständen
+        //Suche nach den ersten Widerständen und entfernen der Verbindungen zum Port A der PowerSupply
         if(((connection->getComponentPortA().getComponent()->getComponentType() == Component::PowerSupply) &&
             connection->getComponentPortA().getPort() == Component::A ) ||
                 ((connection->getComponentPortB().getComponent()->getComponentType() == Component::PowerSupply && connection->getComponentPortB().getPort() == Component::A)))
@@ -32,11 +32,6 @@ void Calculator::calculate()
     }
 
     lookingForNeighbours(foundComponents);
-
-    for(ComponentPort h : foundComponents)
-    {
-        qDebug() << h.getComponent()->getName();
-    }
 
     //Parallelschaltung wurde erkannt
     if(foundComponents.count() >= 2)
@@ -83,8 +78,9 @@ void Calculator::rowAnalysis(Component* comp, double& actualImpedanz, Component*
 void Calculator::parallelAnalysis(QList<ComponentPort>& foundComponents, double& actualImpedanz)
 {
     //ob gefunden wurde
-    bool gefunden = false;
-    //Analyse der einzelnen Pfade des vorher gefundenen
+   // bool isEndParallel = false;
+
+    //Analyse der einzelnen Pfade der vorher gefundenen Komponenten
     for(ComponentPort actualComponentPort : foundComponents)
     {
         //Möchte vom entgegengesetzten Port ausgehen
@@ -94,57 +90,93 @@ void Calculator::parallelAnalysis(QList<ComponentPort>& foundComponents, double&
         //Hinzufügen der gefundenen Objekte vom entgegengesetzten Port
         for(Connection* c : _connections)
         {
-            if(actualComponentPort == c->getComponentPortA() &&
-                    c->getComponentPortA().getComponent()->getComponentType() != Component::ComponentType::PowerSupply)
+            if(actualComponentPort == c->getComponentPortA())
             {
-                newFoundComps.append(c->getComponentPortA());
-            }
-            else if (actualComponentPort == c->getComponentPortB() &&
-                     c->getComponentPortB().getComponent()->getComponentType() != Component::ComponentType::PowerSupply) {
-                newFoundComps.append(c->getComponentPortB());
-            }
-        }
-        //Wenn soviele Componenten gefunden wurden wie in der Liste waren können wir sagen Schaltung wurde geschlossen
-        int i = 0;
-        for(ComponentPort cp : foundComponents)
-        {
-            for(ComponentPort ck : newFoundComps)
-            {
-                if(cp.getComponent() == ck.getComponent())
+                if(!newFoundComps.contains(c->getComponentPortB()))
                 {
-                    //   qDebug() << ck.getComponent()->getName();
-                    i++;
-                    break;
+                    newFoundComps.append(c->getComponentPortB());
 
+                    for(ComponentPort d : foundComponents)
+                    {
+                        if(c->getComponentPortB().getOppisiteComponentPort() == d)
+                        {
+                            _connections.removeOne(c);
+                        }
+                    }
                 }
             }
+            else if (actualComponentPort == c->getComponentPortB())
+            {
+                if(!newFoundComps.contains(c->getComponentPortA()))
+                {
+                    newFoundComps.append(c->getComponentPortA());
+
+                    for(ComponentPort d : foundComponents)
+                    {
+                        if(c->getComponentPortA().getOppisiteComponentPort() == d)
+                        {
+                            _connections.removeOne(c);
+                        }
+                    }
+                }
+            }
+
+            lookingForNeighbours(newFoundComps);
+           /* qDebug() << _connections.count();
+
+            for(ComponentPort a : newFoundComps)
+            {
+                qDebug() << a.getComponent()->getName() << "für Component" << d;
+            } */
+
+            for(ComponentPort q : newFoundComps)
+            {
+                if(q.getComponent()->getComponentType() == Component::PowerSupply)
+                {
+                    newFoundComps.removeOne(q);
+                }
+            }
+
+            qDebug() << "Gefunden:" << newFoundComps.count();
+            qDebug() << "Gehabt:" << foundComponents.count();
+
+            //Wenn soviele Componenten gefunden wurden wie in der Liste waren können wir sagen Schaltung wurde geschlossen
+            int i = 0;
+            for(ComponentPort cp : foundComponents)
+            {
+                for(ComponentPort ck : newFoundComps)
+                {
+                    if(cp.getComponent() == ck.getComponent())
+                    {
+                        //   qDebug() << ck.getComponent()->getName();
+                        i++;
+                        break;
+
+                    }
+                }
+            }
+            if(i == foundComponents.count())
+            {
+                //isEndParallel = true; Ende Parallelschaltung
+                break;
+            }
         }
-        if(i == foundComponents.count())
+        //Berechnung der Werte Addition der Leitwerte
+        double zaehler = 0;
+        for(int i = 0; i < foundComponents.count(); i++)
         {
-            gefunden = true;
+            zaehler += 1.0 / foundComponents[i].getComponent()->getValue();
         }
-        if(gefunden)
-        {
-            break;
-        }
+        //Kehrwert der Leitwerte = Widerstand
+        zaehler = qPow(zaehler, -1);
+        actualImpedanz = zaehler;
+        actualComponentPort.invertPort();
     }
-    //Berechnung der Werte
-    double zaehler = 1;
-    for(int i = 0; i < foundComponents.count(); i++)
-    {
-        zaehler *= foundComponents[i].getComponent()->getValue();
-    }
-    double nenner = 0;
-    for(int i = 0; i < foundComponents.count(); i++)
-    {
-        nenner += foundComponents[i].getComponent()->getValue();
-    }
-    actualImpedanz = zaehler / nenner;
 }
 
 QList<ComponentPort>Calculator::findConnectedComponents(ComponentPort componentPort, QList<ComponentPort>& connectedComponents)
 {
-    for (Connection* connection : _connections)
+    for(Connection* connection : _connections)
     {
         ComponentPort foundComponentPort = ComponentPort(nullptr, Component::Port::null);
 
@@ -177,26 +209,27 @@ QList<ComponentPort>Calculator::findConnectedComponents(ComponentPort componentP
     return connectedComponents;
 }
 
+//Rekursive Funktion zum finden aller Komponenten, newFound sind die neuen gefundenen ComponentPorts, diese werden am Ende zur foundComponents hinzugefügt
 void Calculator::lookingForNeighbours(QList<ComponentPort> &foundComponents)
 {
     QList<ComponentPort> newFound;
 
-        for(ComponentPort cp : foundComponents)
+    for(ComponentPort cp : foundComponents)
+    {
+        for(Connection* con : _connections)
         {
-            for(Connection* con : _connections)
+            if(cp == con->getComponentPortA() && !newFound.contains(con->getComponentPortB()))
             {
-                if(cp == con->getComponentPortA())
-                {
-                    newFound.append(con->getComponentPortB());
-                    _connections.removeOne(con);
-                }
-                else if(cp == con->getComponentPortB())
-                {
-                    newFound.append(con->getComponentPortA());
-                    _connections.removeOne(con);
-                }
+                newFound.append(con->getComponentPortB());
+                _connections.removeOne(con);
+            }
+            else if(cp == con->getComponentPortB() && !newFound.contains(con->getComponentPortA()))
+            {
+                newFound.append(con->getComponentPortA());
+                _connections.removeOne(con);
             }
         }
+    }
 
     if(newFound.count() != 0)
     {

@@ -22,3 +22,20 @@ void ComponentPort::invertPort()
         _port = Component::Port::A;
     }
 }
+
+ComponentPort ComponentPort::getOppisiteComponentPort()
+{
+    return ComponentPort (_component, getOppisitePort());
+}
+
+Component::Port ComponentPort::getOppisitePort()
+{
+    if(_port == Component::Port::A)
+    {
+        return Component::B;
+    }
+    else
+    {
+        return Component::A;
+    }
+}

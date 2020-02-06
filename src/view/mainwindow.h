@@ -59,6 +59,7 @@ private:
     QAction* _new = nullptr;
     QAction* _zoomIn = nullptr;
     QAction* _zoomOut = nullptr;
+    double _scalefactor = 1;
 };
 
 #endif // MAINWINDOW_H

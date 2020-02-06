@@ -22,11 +22,14 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_saveAs, SIGNAL(triggered()), this, SLOT(setSaveAsFile()));
     connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
     connect(_open, SIGNAL(triggered()), this, SLOT(setOpenFile()));
-    connect(_ui->ZoomIn, SIGNAL(released()), this, SLOT(setZoomIn()));
-    connect(_ui->ZoomOut, SIGNAL(released()), this, SLOT(setZoomOut()));
+    connect(_ui->PlusZoom, SIGNAL(released()), this, SLOT(setZoomIn()));
+    connect(_ui->MinusZoom, SIGNAL(released()), this, SLOT(setZoomOut()));
     connect(_zoomIn, SIGNAL(triggered()), this, SLOT(setZoomIn()));
     connect(_zoomOut, SIGNAL(triggered()), this, SLOT(setZoomOut()));
 
+    //
+    _ui->TitleLabel->setFont(QFont("Arial",14,QFont::Bold));
+    _ui->ZoomLabel->setFont(QFont("Arial",14,QFont::Bold));
 }
 
 // Setzen des Widerstands-Modus
@@ -71,7 +74,6 @@ void MainWindow::setNewFile(void)
     NetworkGraphics* _model = new NetworkGraphics();
     MainWindow* window = new MainWindow(_model);
     window->show();
-    qDebug() << "Show";
 }
 void MainWindow::setSaveAsFile()
 {
@@ -129,7 +131,10 @@ void MainWindow::createUpperMenu(void)
 void MainWindow::setZoomIn()
 {
     double scaleFactor = 1.1;
+    _scalefactor += 0.1;
+    _ui->PercentZoom->setText(QString::number(_scalefactor * 100) + "%");
     _ui->networkView->scale(scaleFactor, scaleFactor);
+
     _model->update();
 }
 
@@ -137,6 +142,8 @@ void MainWindow::setZoomIn()
 void MainWindow::setZoomOut()
 {
     double scaleFactor = 0.9;
+    _scalefactor -= 0.1;
+    _ui->PercentZoom->setText(QString::number(_scalefactor * 100) + "%");
     _ui->networkView->scale(scaleFactor, scaleFactor);
     _model->update();
 }

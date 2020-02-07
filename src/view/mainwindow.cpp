@@ -26,10 +26,6 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->MinusZoom, SIGNAL(released()), this, SLOT(setZoomOut()));
     connect(_zoomIn, SIGNAL(triggered()), this, SLOT(setZoomIn()));
     connect(_zoomOut, SIGNAL(triggered()), this, SLOT(setZoomOut()));
-
-    //
-    _ui->TitleLabel->setFont(QFont("Arial",14,QFont::Bold));
-    _ui->ZoomLabel->setFont(QFont("Arial",14,QFont::Bold));
 }
 
 // Setzen des Widerstands-Modus

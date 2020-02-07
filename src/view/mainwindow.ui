@@ -82,6 +82,13 @@
         </item>
         <item>
          <widget class="QLabel" name="TitleLabel">
+          <property name="font">
+           <font>
+            <pointsize>14</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Bauteile</string>
           </property>
@@ -149,6 +156,13 @@
         </item>
         <item>
          <widget class="QLabel" name="ZoomLabel">
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Zoom</string>
           </property>

@@ -29,17 +29,20 @@ public slots:
     void mirrorElement(void);
     void updateViewOnChangedOrientation(void);
 
+    void cancel(void);
+    void ok(void);
+
 private:
     //Methoden
     void setupView(void);
     void setupInitilizingView(void);
-    virtual void accept(void) override;
 
     //Variablen
     Ui::EditView* _editViewUi;
     Component* _component = nullptr;
     NetworkGraphics* _model = nullptr;
     bool _isVerticalAtStart = false;
+    bool _hasMirroredComponent = false;
 };
 
 #endif // EDITINGVIEW_H

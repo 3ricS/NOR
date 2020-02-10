@@ -10,7 +10,7 @@ EditView::EditView(Component* component, NetworkGraphics* model, bool isInitiali
     _component = component;
     setupView();
 
-    if(isInitializingWindow)
+    if (isInitializingWindow)
     {
         setupInitilizingView();
     }
@@ -21,6 +21,9 @@ void EditView::setupView(void)
     _editViewUi->setupUi(this);
     resize(400, 250);
     setWindowTitle("Eigenschaften");
+
+    connect(this, SIGNAL(accepted()), this, SLOT(ok()));
+    connect(this, SIGNAL(rejected()), this, SLOT(cancel()));
 
     connect(_editViewUi->buttonMirrorComponent, SIGNAL(released()), this, SLOT(mirrorElement()));
     connect(_editViewUi->horizontalButton, SIGNAL(clicked()), this, SLOT(updateViewOnChangedOrientation()));
@@ -40,9 +43,13 @@ void EditView::setupView(void)
         valuePlaceHolder = "Spannungswert hier eingeben";
     }
 
+    QRegExp regExp("[1-9][0-9]*$");
+    QRegExpValidator* validator = new QRegExpValidator(regExp, this);
+    _editViewUi->textEditValue->setValidator(validator);
+    _editViewUi->textEditValue->setFocus();
+
     _editViewUi->labelValue->setText(valueDescription);
     _editViewUi->textEditName->setText(_component->getName());
-    _editViewUi->textEditValue->setFocus();
     _editViewUi->textEditValue->setText(QString::number(_component->getValue()));
     _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
 
@@ -58,9 +65,8 @@ void EditView::setupView(void)
     }
 }
 
-void EditView::accept(void)
+void EditView::ok(void)
 {
-
     //Wert prüfen
     QString newValueString = _editViewUi->textEditValue->text();
     bool convertSuccsessful = false;
@@ -81,7 +87,6 @@ void EditView::accept(void)
     {
         QMessageBox::about(this, "Fehler", "Ungültiger Wert wurde eingeben.");
     }
-
 }
 
 void EditView::setupInitilizingView(void)
@@ -92,6 +97,7 @@ void EditView::setupInitilizingView(void)
 void EditView::mirrorElement(void)
 {
     _model->mirrorComponent(_component);
+    _hasMirroredComponent = !_hasMirroredComponent;
     _model->update();
 }
 
@@ -101,3 +107,16 @@ void EditView::updateViewOnChangedOrientation(void)
     _component->setVertical(isVerticalCurrent);
     _model->update();
 }
+
+void EditView::cancel(void)
+{
+    //Reset changed Settings
+    _component->setVertical(_isVerticalAtStart);
+    if(_hasMirroredComponent)
+    {
+        mirrorElement();
+    }
+
+    _model->update();
+}
+

@@ -1,6 +1,7 @@
 #include "view/mainwindow.h"
 
-MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow), _model(model)
+MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow),
+                                                                  _model(model)
 {
     _ui->setupUi(this);
     setWindowTitle("NOR - Network of Resistance");
@@ -71,6 +72,7 @@ void MainWindow::setNewFile(void)
     MainWindow* window = new MainWindow(_model);
     window->show();
 }
+
 void MainWindow::setSaveAsFile()
 {
 
@@ -79,12 +81,12 @@ void MainWindow::setSaveAsFile()
 //Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-    if(event->key() == Qt::Key_Escape)
+    if (event->key() == Qt::Key_Escape)
     {
         _model->setMode(NetworkGraphics::MouseMode::SelectionMode);
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
     }
-    if(event->key() == Qt::Key_Delete)
+    if (event->key() == Qt::Key_Delete)
     {
         _model->deleteItem();
     }

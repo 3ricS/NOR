@@ -11,11 +11,11 @@ PowerSupply::~PowerSupply()
     _powerSupplyCount--;
 }
 
-void PowerSupply::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void PowerSupply::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     paintInformations(painter);
 
-    if(_isVertical)
+    if (_isVertical)
     {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
         painter->drawLine(_xPosition, _yPosition + 50, _xPosition, _yPosition - 50);

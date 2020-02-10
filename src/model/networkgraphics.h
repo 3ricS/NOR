@@ -30,6 +30,8 @@ public:
     void save(void);
     void load(void);
 
+    void mirrorComponent(Component* component);
+
     //setter
     void setMode(MouseMode newMode) {_mouseMode = newMode;}
 

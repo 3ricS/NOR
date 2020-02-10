@@ -1,7 +1,7 @@
 #include "filemanager.h"
 
-FileManager::FileManager(QList<Component *>& components, QList<Connection *>& connections) :
-    _components(&components), _connections(&connections)
+FileManager::FileManager(QList<Component*>& components, QList<Connection*>& connections) :
+        _components(&components), _connections(&connections)
 {
 }
 
@@ -9,7 +9,8 @@ void FileManager::saving(void)
 {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     QFile _actualFile;
-    _actualFile.setFileName(QFileDialog::getSaveFileName  (nullptr,"Speichern", _dirFilePath.absolutePath(), "Json (*.json);;Text (*.txt)"));
+    _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath(),
+                                                         "Json (*.json);;Text (*.txt)"));
 
     if (_actualFile.open(QFile::WriteOnly | QFile::Truncate))
     {
@@ -44,19 +45,19 @@ QString FileManager::createSaveData(void)
     return json.toJson();
 }
 
-QJsonObject FileManager::saveResistor(Component *component)
+QJsonObject FileManager::saveResistor(Component* component)
 {
-    QJsonObject r ;
+    QJsonObject r;
     r.insert("type", "Resistor");
     r.insert("_name", component->getName());
     r.insert("_xPos", component->getXPosition());
     r.insert("_yPos", component->getYPosition());
     r.insert("_orientation", component->isVertical());
-    r.insert("_resistance",component->getValue());
+    r.insert("_resistance", component->getValue());
     return r;
 }
 
-QJsonObject FileManager::savePowerSupply(Component *component)
+QJsonObject FileManager::savePowerSupply(Component* component)
 {
     QJsonObject ps;
     ps.insert("type", "PowerSupply");
@@ -67,7 +68,7 @@ QJsonObject FileManager::savePowerSupply(Component *component)
     return ps;
 }
 
-QJsonObject FileManager::saveConnection(Connection *connection)
+QJsonObject FileManager::saveConnection(Connection* connection)
 {
     QJsonObject c;
     c.insert("type", "Connection");
@@ -80,9 +81,9 @@ QJsonObject FileManager::saveConnection(Connection *connection)
 
 Component* FileManager::getComponentByName(QString name)
 {
-    for(Component* component : *_components)
+    for (Component* component : *_components)
     {
-        if(component->getName() == name)
+        if (component->getName() == name)
         {
             return component;
         }
@@ -92,13 +93,16 @@ Component* FileManager::getComponentByName(QString name)
 
 Component::Port FileManager::toPort(int port)
 {
-    if(port == 0){
+    if (port == 0)
+    {
         return Component::Port::A;
     }
-    else if (port == 1) {
+    else if (port == 1)
+    {
         return Component::Port::B;
     }
-    else {
+    else
+    {
         return Component::Port::null;
     }
 }

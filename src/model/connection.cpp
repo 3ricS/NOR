@@ -27,13 +27,13 @@ void Connection::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->drawLine(xEnd, yMiddle, xEnd, yEnd);
 }
 
-bool Connection::hasComponent(Component *searchedComponent)
+bool Connection::hasComponent(Component* searchedComponent)
 {
-    if(_componentPortA.getComponent() == searchedComponent)
+    if (_componentPortA.getComponent() == searchedComponent)
     {
         return true;
     }
-    else if(_componentPortB.getComponent() == searchedComponent)
+    else if (_componentPortB.getComponent() == searchedComponent)
     {
         return true;
     }
@@ -50,4 +50,16 @@ QRectF Connection::boundingRect(void) const
     int yEnd = end.y();
 
     return QRectF(std::min(xStart, xEnd), std::min(yStart, yEnd), abs(xEnd - xStart), abs(yEnd - yStart));
+}
+
+void Connection::changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf)
+{
+    if(componentOfComponentPortToChangePortOf == _componentPortA.getComponent())
+    {
+        _componentPortA.invertPort();
+    }
+    else if (componentOfComponentPortToChangePortOf == _componentPortB.getComponent())
+    {
+        _componentPortB.invertPort();
+    }
 }

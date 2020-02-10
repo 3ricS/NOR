@@ -14,6 +14,7 @@ public:
     //TODO: boundingRect muss noch beschrieben werden
     QRectF boundingRect(void) const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);
 
     //Methoden
     ComponentPort getComponentPortA(void) const {return _componentPortA;}

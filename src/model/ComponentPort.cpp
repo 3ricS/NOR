@@ -13,11 +13,11 @@ bool ComponentPort::operator==(ComponentPort otherComponentPort)
 
 void ComponentPort::invertPort()
 {
-    if(_port == Component::Port::A)
+    if (_port == Component::Port::A)
     {
         _port = Component::Port::B;
     }
-    else if(_port == Component::Port::B)
+    else if (_port == Component::Port::B)
     {
         _port = Component::Port::A;
     }
@@ -25,12 +25,12 @@ void ComponentPort::invertPort()
 
 ComponentPort ComponentPort::getOppisiteComponentPort()
 {
-    return ComponentPort (_component, getOppisitePort());
+    return ComponentPort(_component, getOppisitePort());
 }
 
 Component::Port ComponentPort::getOppisitePort()
 {
-    if(_port == Component::Port::A)
+    if (_port == Component::Port::A)
     {
         return Component::B;
     }

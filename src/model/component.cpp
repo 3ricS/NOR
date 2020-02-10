@@ -29,7 +29,7 @@ int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
             break;
     }
 
-    if((_isVertical && !isX) || (!_isVertical && isX))
+    if ((_isVertical && !isX) || (!_isVertical && isX))
     {
         //TODO: Zoomfaktor einfügen
         return positionValue + factor * 50;
@@ -51,11 +51,11 @@ Component::Port Component::getPort(QPointF position) const
     bool yEqualPortB = (position.y() > getPortPositionXOrY(_yPosition, Port::B, false) - _hitBoxSize &&
                         position.y() < getPortPositionXOrY(_yPosition, Port::B, false) + _hitBoxSize);
 
-    if(xEqualPortA && yEqualPortA)
+    if (xEqualPortA && yEqualPortA)
     {
         return Port::A;
     }
-    else if(xEqualPortB && yEqualPortB)
+    else if (xEqualPortB && yEqualPortB)
     {
         return Port::B;
     }

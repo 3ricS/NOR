@@ -16,8 +16,6 @@ public:
     Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int countPorts);
 
     QRectF boundingRect(void) const;
-
-    bool isVertical(void) const {return _isVertical;}
     bool hasPortAtPosition(QPointF position) const;
 
     //getter
@@ -26,6 +24,7 @@ public:
     int getYPosition(void) const {return _yPosition;}
     QString getName(void) const {return _name;}
     int getValue(void) const {return _value;}
+    bool isVertical(void) const {return _isVertical;}
 
     Component::Port getPort(QPointF position) const;
     QPointF getPortPosition(Port port) const;
@@ -35,10 +34,6 @@ public:
     void setName(QString name) {_name = name;}
     void setValue(int newValue) {_value = newValue;}
     void setPosition(QPointF gridPosition);
-
-    //virtual Methoden
-    //virtual int getXStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
-    //virtual int getYStartPosition(void) = 0;    //TODO: Wenn Gitter dann, nicht mehr virtual direkt in Compononet.cpp implementiert
 
     static constexpr int _hitBoxSize = 20;
 

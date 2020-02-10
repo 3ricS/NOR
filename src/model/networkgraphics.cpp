@@ -16,7 +16,7 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         case MouseMode::ResistorMode:
         {
             pointToGrid(&position);
-            if(isThereAComponent(position))
+            if (isThereAComponent(position))
             {
                 return;
             }
@@ -29,12 +29,12 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         case MouseMode::PowerSupplyMode:
         {
             pointToGrid(&position);
-            if(isThereAComponent(position))
+            if (isThereAComponent(position))
             {
                 return;
             }
 
-            if(PowerSupply::getCount() < 1)
+            if (PowerSupply::getCount() < 1)
             {
                 QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
                 Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false);
@@ -49,14 +49,15 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         case MouseMode::ConnectionMode:
         {
             bool connectionStarted = (nullptr != _connectionStartComponentPort);
-            if(connectionStarted)
+            if (connectionStarted)
             {
                 ComponentPort* connectionComponentPortEnd = getComponentPortAtPosition(position);
-                if(connectionComponentPortEnd != nullptr)
+                if (connectionComponentPortEnd != nullptr)
                 {
                     Component* connectionComponentEnd = connectionComponentPortEnd->getComponent();
                     Component::Port connectionComponentEndPort = connectionComponentEnd->getPort(position);
-                    ComponentPort connectionEndComponentPort = ComponentPort(connectionComponentEnd, connectionComponentEndPort);
+                    ComponentPort connectionEndComponentPort = ComponentPort(connectionComponentEnd,
+                                                                             connectionComponentEndPort);
                     addConnection(*_connectionStartComponentPort, connectionEndComponentPort);
                 }
             }
@@ -66,12 +67,12 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         {
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
             pointToGrid(&position);
-            if(isThereAComponent(position))
+            if (isThereAComponent(position))
             {
                 highlightSelectedRect(&position);
             }
             bool hasSelectedComponentToMove = (_selectedComponentToMove != nullptr);
-            if(hasSelectedComponentToMove)
+            if (hasSelectedComponentToMove)
             {
                 _selectedComponentToMove->setPosition(position);
                 _isDragged = true;
@@ -91,15 +92,15 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
     QPointF memory = position;
     pointToGrid(&memory);
     _componentIsGrabbed = isThereAComponent(memory);
-    if(_mouseMode != ConnectionMode)
+    if (_mouseMode != ConnectionMode)
     {
         //Keine Verbindung begonnen: _connectionStartComponentPort muss auf Nullptr zeigen
         _connectionStartComponentPort = nullptr;
     }
 
-    if(!isThereAComponent(position))
+    if (!isThereAComponent(position))
     {
-        if(nullptr != _selectedRect)
+        if (nullptr != _selectedRect)
         {
             removeItem(_selectedRect);
             delete _selectedRect;
@@ -112,7 +113,7 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
         case ConnectionMode:
         {
             ComponentPort* foundComponentPort = getComponentPortAtPosition(position);
-            if(foundComponentPort != nullptr)
+            if (foundComponentPort != nullptr)
             {
                 _connectionStartComponentPort = foundComponentPort;
             }
@@ -123,20 +124,23 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             pointToGrid(&position);
             _selectedComponentToMove = getComponentAtPosition(position);
-        }            break;
+        }
+            break;
     }
 }
 
 void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
 {
-    if(_mouseMode == SelectionMode)
+    if (_mouseMode == SelectionMode)
     {
         pointToGrid(&position);
         Component* foundComponent = getComponentAtPosition(position);
-        if(foundComponent != nullptr)
+        if (foundComponent != nullptr)
         {
-            EditView* editingView = new EditView(foundComponent);
-            editingView->show();
+            _selectedComponent = foundComponent;
+            //TODO: emit foundComponent
+            EditView* editView = new EditView(foundComponent, this);
+            editView->show();
         }
     }
 }
@@ -145,7 +149,7 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 {
     QColor highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
 
-    if(nullptr != _previousRect)
+    if (nullptr != _previousRect)
     {
         removeItem(_previousRect);
         delete _previousRect;
@@ -160,30 +164,30 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
         {
             highlightRect(&position, &highlightColor);
         }
-        break;
+            break;
         case (PowerSupplyMode):
         {
-           highlightRect(&position, &highlightColor);
+            highlightRect(&position, &highlightColor);
         }
             break;
         case ConnectionMode:
         {
             QPointF gridPosition = position;
             pointToGrid(&gridPosition);
-            if(isThereAComponent(gridPosition))
+            if (isThereAComponent(gridPosition))
             {
                 ComponentPort* foundComponentPort = getComponentPortAtPosition(position);
-                if(foundComponentPort != nullptr)
+                if (foundComponentPort != nullptr)
                 {
                     Component* foundComponent = foundComponentPort->getComponent();
                     Component::Port port = foundComponentPort->getPort();
 
-                    //TODO: Zoomfaktor einfügen
                     int hitBoxHighlight = Component::_hitBoxSize / 1.5;
                     int positionX = foundComponent->getPortPosition(port).x() - hitBoxHighlight;
                     int positionY = foundComponent->getPortPosition(port).y() - hitBoxHighlight;
 
-                    QGraphicsItem* highlightedRect = addRect(positionX, positionY, 2 * hitBoxHighlight, 2 * hitBoxHighlight, Qt::NoPen,
+                    QGraphicsItem* highlightedRect = addRect(positionX, positionY, 2 * hitBoxHighlight,
+                                                             2 * hitBoxHighlight, Qt::NoPen,
                                                              highlightColor);
 
                     _previousRect = highlightedRect;
@@ -191,7 +195,7 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
                 }
             }
         }
-        break;
+            break;
         case (SelectionMode):
         {
             if (_mousIsPressed && _componentIsGrabbed)
@@ -205,24 +209,24 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 
 void NetworkGraphics::deleteItem()
 {
-    if(_selectedComponent != nullptr)
+    if (_selectedComponent != nullptr)
     {
-            removeItem(_selectedRect);
-            _componentList.removeOne(_selectedComponent);
+        removeItem(_selectedRect);
+        _componentList.removeOne(_selectedComponent);
 
-            //Lösche Verbindungen vom Component
-            for(Connection* connection : _connectionList)
+        //Lösche Verbindungen vom Component
+        for (Connection* connection : _connectionList)
+        {
+            if (connection->hasComponent(_selectedComponent))
             {
-                if(connection->hasComponent(_selectedComponent))
-                {
-                    removeItem(connection);
-                    _connectionList.removeOne(connection);
-                    delete connection;
-                }
+                removeItem(connection);
+                _connectionList.removeOne(connection);
+                delete connection;
             }
+        }
 
-            delete _selectedComponent;
-            _selectedComponent = nullptr;
+        delete _selectedComponent;
+        _selectedComponent = nullptr;
     }
 }
 
@@ -237,6 +241,10 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
 
 void NetworkGraphics::addObject(Component* component)
 {
+    _selectedComponent = component;
+    //TODO: emit newComponent
+    EditView* editView = new EditView(component, this, true);
+    editView->show();
     _componentList.append(component);
     addItem(component);
     update();
@@ -248,7 +256,7 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
     {
         bool equalX = (component->getXPosition() == gridPosition.toPoint().x());
         bool equalY = (component->getYPosition() == gridPosition.toPoint().y());
-        if(equalX && equalY)
+        if (equalX && equalY)
         {
             return component;
         }
@@ -268,7 +276,7 @@ void NetworkGraphics::pointToGrid(QPointF* position)
 }
 
 void NetworkGraphics::highlightRect(QPointF* position, QColor* highlightColor)
-{   
+{
     pointToGrid(position);
     //TODO: Zoomfaktor einfügen
     int positionX = position->toPoint().x();
@@ -279,18 +287,18 @@ void NetworkGraphics::highlightRect(QPointF* position, QColor* highlightColor)
     update();
 }
 
-void NetworkGraphics::highlightSelectedRect(QPointF *position)
+void NetworkGraphics::highlightSelectedRect(QPointF* position)
 {
     int positionX;
     int positionY;
-    if(_isDragged)
+    if (_isDragged)
     {
         positionX = _selectedComponentToMove->getXPosition();
         positionY = _selectedComponentToMove->getYPosition();
         _isDragged = 0;
     }
     _selectedComponent = getComponentAtPosition(*position);
-    if(nullptr != _selectedRect)
+    if (nullptr != _selectedRect)
     {
         removeItem(_selectedRect);
         delete _selectedRect;
@@ -304,6 +312,7 @@ void NetworkGraphics::highlightSelectedRect(QPointF *position)
     _selectedRect = highlightSelectedRect;
     update();
 }
+
 void NetworkGraphics::reloadAll(void)
 {
     for (Component* component : _componentList)
@@ -322,7 +331,7 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF position)
     for (Component* component : _componentList)
     {
         bool hasFoundPort = component->hasPortAtPosition(position);
-        if(hasFoundPort)
+        if (hasFoundPort)
         {
             Component::Port port = component->getPort(position);
             ComponentPort* cp = new ComponentPort(component, port);
@@ -337,7 +346,7 @@ void NetworkGraphics::calculate(void)
     Calculator calculator = Calculator(_connectionList, _componentList);
     calculator.calculate();
     QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                       QString::number(calculator.getResistanceValue()) + "Ω");
+                                              QString::number(calculator.getResistanceValue()) + "Ω");
 }
 
 void NetworkGraphics::save(void)
@@ -351,4 +360,15 @@ void NetworkGraphics::load(void)
     FileManager manager(_componentList, _connectionList);
     manager.loading();
     reloadAll();
+}
+
+void NetworkGraphics::mirrorComponent(Component* component)
+{
+    for (Connection* connection : _connectionList)
+    {
+        if (connection->hasComponent(component))
+        {
+            connection->changePortOfComponentPortWithComponent(component);
+        }
+    }
 }

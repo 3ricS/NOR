@@ -26,7 +26,7 @@ private:
     double _resistanceValue;
 
     //Methoden
-    void rowAnalysis(Component* comp, double& actualImpedanz, Component* lastComponent = nullptr);
+    void rowAnalysis(ComponentPort actualComPort, double& actualImpedanz);
     void parallelAnalysis(QList<ComponentPort> &foundComponents, double& actualImpedanz);
     QList<ComponentPort> findConnectedComponents(ComponentPort componentPort, QList<ComponentPort>& connectedComponents);
 
@@ -34,7 +34,8 @@ private:
     void searchingForIndirectNeighbours(QList<ComponentPort> &foundComponents);
 
     //Suche nach Nachbarn, die direkt mit dem aktuellen ComponentPort verbunden sind
-    void searchingForDirectNeighbours(ComponentPort actualComPort, QList<ComponentPort> foundCompPort, QList<ComponentPort> &newFoundCompPort);
+    void searchingForDirectParallelNeighbours(ComponentPort actualComPort, QList<ComponentPort> foundCompPort, QList<ComponentPort> &newFoundCompPort);
+    void searchingForDirectRowNeighbours(ComponentPort actualComPort, QList<ComponentPort> &foundCompPort);
 
     void searchingPowerSupply(QList<ComponentPort>& foundComponents);
 

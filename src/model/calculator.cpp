@@ -26,7 +26,7 @@ void Calculator::calculate()
     bool isRow = foundComponents.count() == 1;
     if(isRow)
     {
-        rowAnalysis(foundComponents[0].getComponent(), actualImpedanz);
+        rowAnalysis(foundComponents[0], actualImpedanz);
         QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
                            QString::number(actualImpedanz) + "Ω");
     }
@@ -43,29 +43,39 @@ void Calculator::calculate()
     // connectedComponents);
 }
 
-void Calculator::rowAnalysis(Component* comp, double& actualImpedanz, Component* lastComponent)
+void Calculator::rowAnalysis(ComponentPort actualComPort, double& actualImpedanz)
 {
-    int count = 0;
-    Component* nextComponent = nullptr;
-    for (Connection* connection : _connections)
+    actualImpedanz += actualComPort.getComponent()->getValue();
+
+    QList<ComponentPort> foundComponents;
+   // QList<ComponentPort> newFoundComponents;
+
+    ComponentPort oppisiteActualPort = actualComPort.getOppisiteComponentPort();
+
+    searchingForDirectRowNeighbours(oppisiteActualPort,foundComponents);
+  /*  for (Connection* connection : _connections)
     {
-        if(connection->getComponentPortA().getComponent() == comp && connection->getComponentPortB().getComponent() != lastComponent)
+        if(connection->getComponentPortA().getComponent() == actualComPort && connection->getComponentPortB().getComponent() != lastComponent)
         {
             count++;
             nextComponent = connection->getComponentPortB().getComponent();
         }
-        else if(connection->getComponentPortB().getComponent() == comp && connection->getComponentPortA().getComponent() != lastComponent)
+        else if(connection->getComponentPortB().getComponent() == actualComPort && connection->getComponentPortA().getComponent() != lastComponent)
         {
             count++;
             nextComponent = connection->getComponentPortA().getComponent();
         }
-    }
-    if(count == 1)
+    } */
+
+    if(foundComponents.count() == 1)
     {
-        actualImpedanz += comp->getValue();
-        rowAnalysis(nextComponent, actualImpedanz, comp);
+        rowAnalysis(foundComponents[0], actualImpedanz);
     }
-    qDebug() << actualImpedanz;
+
+    if(foundComponents.count() >= 2)
+    {
+        parallelAnalysis(foundComponents, actualImpedanz);
+    }
 }
 
 void Calculator::parallelAnalysis(QList<ComponentPort>& foundComponents, double& actualImpedanz)
@@ -81,7 +91,7 @@ void Calculator::parallelAnalysis(QList<ComponentPort>& foundComponents, double&
         QList<ComponentPort> newFoundComps;
 
         //Hinzufügen der gefundenen Objekte vom entgegengesetzten Port
-        searchingForDirectNeighbours(actualComponentPort, foundComponents, newFoundComps);
+        searchingForDirectParallelNeighbours(actualComponentPort, foundComponents, newFoundComps);
 
         //Entfernen der PowerSupply
         for(ComponentPort q : newFoundComps)
@@ -127,7 +137,7 @@ void Calculator::parallelAnalysis(QList<ComponentPort>& foundComponents, double&
     }
     //Kehrwert der Leitwerte = Widerstand
     zaehler = qPow(zaehler, -1);
-    actualImpedanz = zaehler;
+    actualImpedanz += zaehler;
 }
 
 
@@ -199,7 +209,7 @@ void Calculator::searchingForIndirectNeighbours(QList<ComponentPort> &foundCompo
     }
 }
 
-void Calculator::searchingForDirectNeighbours(ComponentPort actualComPort, QList<ComponentPort> foundCompPort, QList<ComponentPort> &newFoundCompPort)
+void Calculator::searchingForDirectParallelNeighbours(ComponentPort actualComPort, QList<ComponentPort> foundCompPort, QList<ComponentPort> &newFoundCompPort)
 {
     for(Connection* c : _connections)
     {
@@ -259,5 +269,24 @@ void Calculator::searchingPowerSupply(QList<ComponentPort> &foundComponents)
             }
 
         }
+    }
+}
+
+void Calculator::searchingForDirectRowNeighbours(ComponentPort actualComPort, QList<ComponentPort>& foundCompPort)
+{
+    for(Connection* c : _connections)
+    {
+        if(actualComPort == c->getComponentPortA())
+        {
+            foundCompPort.append(c->getComponentPortB());
+            _connections.removeOne(c);
+        }
+        else if (actualComPort == c->getComponentPortB())
+        {
+           foundCompPort.append(c->getComponentPortA());
+           _connections.removeOne(c);
+        }
+
+        searchingForIndirectNeighbours(foundCompPort);
     }
 }

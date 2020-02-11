@@ -19,53 +19,38 @@ class NetworkGraphics : public QGraphicsScene
 public:
     NetworkGraphics();
 
-    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode};
-    void mouseReleaseInterpretation(QPointF position, QMouseEvent* mouseEvent);
-    void mousePressInterpretation(QPointF position);
-    void mouseDoublePressInterpretation(QPointF position);
-    void mouseMoveInterpretation(QPointF position);
-
     void deleteItem(void);
 
     void calculate(void);
     void save(void);
     void load(void);
-
     void mirrorComponent(Component* component);
 
-    //setter
-    void setMode(MouseMode newMode) {_mouseMode = newMode;}
+    Component* createNewComponent(QMouseEvent* mouseEvent, QPointF gridPosition,
+                                  Component::ComponentType componentType, bool componentIsVertical);
+    void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
+
+    //getter
+    ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
+    Component* getComponentAtPosition(QPointF gridPosition);
+    bool isThereAComponent(QPointF gridPosition);
 
 private:
     static constexpr int _defaultSceneSize = 6000;
 
-    void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void addObject(Component* component);
-    Component* getComponentAtPosition(QPointF gridPosition);
-    bool isThereAComponent(QPointF position);
-    ComponentPort* getComponentPortAtPosition(QPointF position);
+
+
 
     QPointF pointToGrid(QPointF position);
-    void highlightRect(QPointF* position, QColor* highlightColor);
-    void highlightSelectedRect(QPointF* position);
 
     void reloadAll(void);
 
-    bool _mousIsPressed = false;
-    bool _isDragged = false;
-    bool _componentIsGrabbed = false;
-
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
-    ComponentPort* _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
-    QGraphicsItem* _previousRect = nullptr;
     QGraphicsItem* _selectedRect = nullptr;
     Component* _selectedComponent = nullptr;
     //TODO: _selectedComponentToMove durch _selectedComponent ersetzen
-    Component* _selectedComponentToMove = nullptr;
-    bool _isVerticalComponentDefault = true;
-    Component* _sampleComponentOnMoveEvent = nullptr;
 
-    MouseMode _mouseMode = SelectionMode;
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;
     QGraphicsScene* _graphics = nullptr;

@@ -6,21 +6,45 @@
 #include <QDebug>
 
 #include <model/networkgraphics.h>
+#include <view/editview.h>
 
 class NetworkView : public QGraphicsView
 {
 public:
+    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode};
     NetworkView(QWidget *parent);
     void setModel(NetworkGraphics* model) {_model = model;}
 
-private:
-   NetworkGraphics* _model  = nullptr;
+    void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
+
+private:
+
+    QPointF scenePositionToGrid(QPointF scenePosition);
+    void highlightSelectedRect(QPointF gridPosition);
+    void highlightRect(QPointF scenePosition, QColor highlightColor);
+
+    NetworkGraphics* _model  = nullptr;
+
+    bool _mouseIsPressed = false;
+    bool _isDragged = false;
+    bool _componentIsGrabbed = false;
+
+    //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
+    ComponentPort* _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
+    QGraphicsItem* _previousRect = nullptr;
+    QGraphicsItem* _selectedRect = nullptr;
+    Component* _selectedComponent = nullptr;
+    //TODO: _selectedComponentToMove durch _selectedComponent ersetzen
+    Component* _selectedComponentToMove = nullptr;
+    bool _isVerticalComponentDefault = true;
+    Component* _sampleComponentOnMoveEvent = nullptr;
+    MouseMode _mouseMode = SelectionMode;
 };
 
 #endif // NETWORKVIEW_H

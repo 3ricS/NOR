@@ -8,6 +8,9 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     resize(1080, 720);
 
     // setup ui
+
+    //TODO: Dopplung setScene entfernen
+    _networkView = _ui->networkView;
     _ui->networkView->setModel(_model);
     _ui->networkView->setScene(_model);
 
@@ -32,21 +35,21 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
 // Setzen des Widerstands-Modus
 void MainWindow::setResistorMode(void)
 {
-    _model->setMode(NetworkGraphics::MouseMode::ResistorMode);
+    _networkView->setMouseMode(NetworkView::MouseMode::ResistorMode);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 // Setzen des PowerSupply-Modus
 void MainWindow::setPowerSupplyMode(void)
 {
-    _model->setMode(NetworkGraphics::MouseMode::PowerSupplyMode);
+    _networkView->setMouseMode(NetworkView::MouseMode::PowerSupplyMode);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 //Setzen des Connection-Modus
 void MainWindow::setConnectionMode(void)
 {
-    _model->setMode(NetworkGraphics::MouseMode::ConnectionMode);
+    _networkView->setMouseMode(NetworkView::MouseMode::ConnectionMode);
     QApplication::setOverrideCursor(Qt::CrossCursor);
 }
 
@@ -83,7 +86,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Escape)
     {
-        _model->setMode(NetworkGraphics::MouseMode::SelectionMode);
+        _networkView->setMouseMode(NetworkView::MouseMode::SelectionMode);
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
     }
     if (event->key() == Qt::Key_Delete)

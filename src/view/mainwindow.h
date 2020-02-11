@@ -53,6 +53,7 @@ private:
 //Variables
     Ui::MainWindow*     _ui;
     NetworkGraphics*    _model = nullptr;
+    NetworkView*        _networkView = nullptr;
     QAction* _save = nullptr;
     QAction* _saveAs = nullptr;
     QAction* _open = nullptr;

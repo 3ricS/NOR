@@ -5,6 +5,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QMessageBox>
+#include <QMouseEvent>
 
 #include <model/calculator.h>
 #include <model/resistor.h>
@@ -19,7 +20,7 @@ public:
     NetworkGraphics();
 
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode};
-    void mouseReleaseInterpretation(QPointF position);
+    void mouseReleaseInterpretation(QPointF position, QMouseEvent* mouseEvent);
     void mousePressInterpretation(QPointF position);
     void mouseDoublePressInterpretation(QPointF position);
     void mouseMoveInterpretation(QPointF position);
@@ -44,7 +45,7 @@ private:
     bool isThereAComponent(QPointF position);
     ComponentPort* getComponentPortAtPosition(QPointF position);
 
-    void pointToGrid(QPointF* position);
+    QPointF pointToGrid(QPointF position);
     void highlightRect(QPointF* position, QColor* highlightColor);
     void highlightSelectedRect(QPointF* position);
 
@@ -59,7 +60,10 @@ private:
     QGraphicsItem* _previousRect = nullptr;
     QGraphicsItem* _selectedRect = nullptr;
     Component* _selectedComponent = nullptr;
-    Component* _selectedComponentToMove;
+    //TODO: _selectedComponentToMove durch _selectedComponent ersetzen
+    Component* _selectedComponentToMove = nullptr;
+    bool _isVerticalComponentDefault = true;
+    Component* _sampleComponentOnMoveEvent = nullptr;
 
     MouseMode _mouseMode = SelectionMode;
     QList<Component*> _componentList;

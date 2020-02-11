@@ -7,7 +7,7 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
     setSceneRect(-_defaultSceneSize, -_defaultSceneSize, _defaultSceneSize, _defaultSceneSize);
 }
 
-void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
+void NetworkGraphics::mouseReleaseInterpretation(QPointF position, QMouseEvent* mouseEvent)
 {
     _mousIsPressed = false;
     _componentIsGrabbed = false;
@@ -15,34 +15,49 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
     {
         case MouseMode::ResistorMode:
         {
-            pointToGrid(&position);
-            if (isThereAComponent(position))
+            if(Qt::LeftButton == mouseEvent->button())
             {
-                return;
-            }
+                position = pointToGrid(position);
+                if (isThereAComponent(position))
+                {
+                    return;
+                }
 
-            QString name = "R" + QString::number(Resistor::getCount() + 1);
-            Component* resistor = new Resistor(name, 756, position.x(), position.y(), true);
-            addObject(resistor);
+                QString name = "R" + QString::number(Resistor::getCount() + 1);
+                Component* resistor = new Resistor(name, 100, position.x(), position.y(), _isVerticalComponentDefault);
+                addObject(resistor);
+            }
+            else if (Qt::RightButton == mouseEvent->button())
+            {
+                _isVerticalComponentDefault = !_isVerticalComponentDefault;
+            }
         }
             break;
         case MouseMode::PowerSupplyMode:
         {
-            pointToGrid(&position);
-            if (isThereAComponent(position))
+            if(Qt::LeftButton == mouseEvent->button())
             {
-                return;
-            }
+                position = pointToGrid(position);
+                if (isThereAComponent(position))
+                {
+                    return;
+                }
 
-            if (PowerSupply::getCount() < 1)
-            {
-                QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
-                Component* powerSupply = new PowerSupply(name, position.x(), position.y(), false);
-                addObject(powerSupply);
+                if (PowerSupply::getCount() < 1)
+                {
+                    QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
+                    Component* powerSupply = new PowerSupply(name, position.x(), position.y(),
+                                                             _isVerticalComponentDefault);
+                    addObject(powerSupply);
+                }
+                else
+                {
+                    QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
+                }
             }
-            else
+            else if (Qt::RightButton == mouseEvent->button())
             {
-                QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
+                _isVerticalComponentDefault = !_isVerticalComponentDefault;
             }
         }
             break;
@@ -66,7 +81,7 @@ void NetworkGraphics::mouseReleaseInterpretation(QPointF position)
         case MouseMode::SelectionMode:
         {
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
-            pointToGrid(&position);
+            position = pointToGrid(position);
             if (isThereAComponent(position))
             {
                 highlightSelectedRect(&position);
@@ -90,7 +105,7 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
 {
     _mousIsPressed = true;
     QPointF memory = position;
-    pointToGrid(&memory);
+    memory = pointToGrid(memory);
     _componentIsGrabbed = isThereAComponent(memory);
     if (_mouseMode != ConnectionMode)
     {
@@ -122,7 +137,7 @@ void NetworkGraphics::mousePressInterpretation(QPointF position)
         case SelectionMode:
         {
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-            pointToGrid(&position);
+            position = pointToGrid(position);
             _selectedComponentToMove = getComponentAtPosition(position);
         }
             break;
@@ -133,8 +148,8 @@ void NetworkGraphics::mouseDoublePressInterpretation(QPointF position)
 {
     if (_mouseMode == SelectionMode)
     {
-        pointToGrid(&position);
-        Component* foundComponent = getComponentAtPosition(position);
+        QPointF gridPosition = pointToGrid(position);
+        Component* foundComponent = getComponentAtPosition(gridPosition);
         if (foundComponent != nullptr)
         {
             _selectedComponent = foundComponent;
@@ -157,23 +172,39 @@ void NetworkGraphics::mouseMoveInterpretation(QPointF position)
 
         update();
     }
+    if (nullptr != _sampleComponentOnMoveEvent)
+    {
+        removeItem(_sampleComponentOnMoveEvent);
+        delete _sampleComponentOnMoveEvent;
+        _sampleComponentOnMoveEvent = nullptr;
+
+        update();
+    }
 
     switch (_mouseMode)
     {
         case (ResistorMode):
         {
+            QPointF gridPosition = pointToGrid(position);
+            Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(), gridPosition.toPoint().y(), _isVerticalComponentDefault);
+            _sampleComponentOnMoveEvent = sampleResistor;
+            addItem(_sampleComponentOnMoveEvent);
             highlightRect(&position, &highlightColor);
         }
             break;
         case (PowerSupplyMode):
         {
+            QPointF gridPosition = pointToGrid(position);
+            Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(), gridPosition.toPoint().y(), _isVerticalComponentDefault);
+            _sampleComponentOnMoveEvent = sampleResistor;
+            addItem(_sampleComponentOnMoveEvent);
             highlightRect(&position, &highlightColor);
         }
             break;
         case ConnectionMode:
         {
             QPointF gridPosition = position;
-            pointToGrid(&gridPosition);
+            position = pointToGrid(gridPosition);
             if (isThereAComponent(gridPosition))
             {
                 ComponentPort* foundComponentPort = getComponentPortAtPosition(position);
@@ -269,18 +300,19 @@ bool NetworkGraphics::isThereAComponent(QPointF position)
     return getComponentAtPosition(position) != nullptr;
 }
 
-void NetworkGraphics::pointToGrid(QPointF* position)
+QPointF NetworkGraphics::pointToGrid(QPointF position)
 {
-    position->setX(position->toPoint().x() / 100 * 100 - 50);
-    position->setY(position->toPoint().y() / 100 * 100 - 50);
+    qreal xPos = position.toPoint().x() / 100 * 100 - 50;
+    qreal yPos = position.toPoint().y() / 100 * 100 - 50;
+    return QPointF(xPos, yPos);
 }
 
 void NetworkGraphics::highlightRect(QPointF* position, QColor* highlightColor)
 {
-    pointToGrid(position);
+    QPointF gridPosition = pointToGrid(*position);
     //TODO: Zoomfaktor einfügen
-    int positionX = position->toPoint().x();
-    int positionY = position->toPoint().y();
+    int positionX = gridPosition.toPoint().x();
+    int positionY = gridPosition.toPoint().y();
     QGraphicsItem* highlightedRect = addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen, *highlightColor);
 
     _previousRect = highlightedRect;

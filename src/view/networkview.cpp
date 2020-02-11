@@ -8,7 +8,7 @@ NetworkView::NetworkView(QWidget* parent) :
 void NetworkView::mouseReleaseEvent(QMouseEvent* event)
 {
     QPointF scenePoint = mapToScene(event->pos());
-    _model->mouseReleaseInterpretation(scenePoint);
+    _model->mouseReleaseInterpretation(scenePoint, event);
 }
 
 void NetworkView::mousePressEvent(QMouseEvent* event)

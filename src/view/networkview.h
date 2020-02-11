@@ -16,7 +16,7 @@ public:
     void setModel(NetworkGraphics* model) {_model = model;}
 
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
-
+    void deleteSelectedItem(void);
 protected:
     void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -28,16 +28,16 @@ private:
     QPointF scenePositionToGrid(QPointF scenePosition);
     void highlightSelectedRect(QPointF gridPosition);
     void highlightRect(QPointF scenePosition, QColor highlightColor);
+    void removeHighlightSelectedRect();
 
     NetworkGraphics* _model  = nullptr;
 
     bool _mouseIsPressed = false;
-    bool _isDragged = false;
     bool _componentIsGrabbed = false;
 
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     ComponentPort* _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
-    QGraphicsItem* _previousRect = nullptr;
+    QGraphicsItem* _previousHighlightedRect = nullptr;
     QGraphicsItem* _selectedRect = nullptr;
     Component* _selectedComponent = nullptr;
     //TODO: _selectedComponentToMove durch _selectedComponent ersetzen

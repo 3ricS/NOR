@@ -57,20 +57,18 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         case MouseMode::SelectionMode:
         {
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
-            bool isComponentAtPosition = _model->isThereAComponent(scenePosition);
-            bool hasSelectedComponentToMove = (_selectedComponentToMove != nullptr);
 
-            if (isComponentAtPosition)
+            if(nullptr != _selectedComponentToMove)
             {
-                highlightSelectedRect(gridPosition);
-            }
-            else if (hasSelectedComponentToMove)
+                _selectedComponentToMove = nullptr;
+            } else
             {
-                //TODO: alten Component entfernen
-                _selectedComponentToMove->setPosition(gridPosition);
-                _isDragged = true;
-                highlightSelectedRect(gridPosition);
-                _model->update();
+                bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
+                if(isComponentAtPosition)
+                {
+                    _selectedComponent = _model->getComponentAtPosition(gridPosition);
+                    highlightSelectedRect(gridPosition);
+                }
             }
         }
             break;
@@ -87,11 +85,9 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     QPointF gridPosition = scenePositionToGrid(scenePosition);
     _componentIsGrabbed = _model->isThereAComponent(gridPosition);
 
-    if (_mouseMode != ConnectionMode)
-    {
-        //Keine Verbindung begonnen: _connectionStartComponentPort muss auf Nullptr zeigen
-        _connectionStartComponentPort = nullptr;
-    }
+    //Keine Verbindung begonnen: _connectionStartComponentPort muss auf Nullptr zeigen
+    _connectionStartComponentPort = nullptr;
+    _selectedComponentToMove = nullptr;
 
     //MemoryLeak vermeiden
     if (!_model->isThereAComponent(scenePosition))
@@ -114,7 +110,13 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
         case SelectionMode:
         {
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-            _selectedComponentToMove = _model->getComponentAtPosition(gridPosition);
+            bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
+            if(isComponentAtPosition)
+            {
+                _selectedComponentToMove = _model->getComponentAtPosition(gridPosition);
+            } else {
+                _selectedComponentToMove = nullptr;
+            }
         }
             break;
     }
@@ -124,15 +126,16 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
 {
     setMouseTracking(true);
     QPointF scenePosition = mapToScene(event->pos());
+    QPointF gridPosition = scenePositionToGrid(scenePosition);
 
     QColor highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
 
     //MemoryLeak vermeiden
-    if (nullptr != _previousRect)
+    if (nullptr != _previousHighlightedRect)
     {
-        _model->removeItem(_previousRect);
-        delete _previousRect;
-        _previousRect = nullptr;
+        _model->removeItem(_previousHighlightedRect);
+        delete _previousHighlightedRect;
+        _previousHighlightedRect = nullptr;
 
         _model->update();
     }
@@ -149,7 +152,6 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
     {
         case (ResistorMode):
         {
-            QPointF gridPosition = scenePositionToGrid(scenePosition);
             Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
                                                      gridPosition.toPoint().y(), _isVerticalComponentDefault);
             _sampleComponentOnMoveEvent = sampleResistor;
@@ -159,7 +161,6 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
             break;
         case (PowerSupplyMode):
         {
-            QPointF gridPosition = scenePositionToGrid(scenePosition);
             Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
                                                         gridPosition.toPoint().y(), _isVerticalComponentDefault);
             _sampleComponentOnMoveEvent = sampleResistor;
@@ -170,7 +171,6 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         case ConnectionMode:
         {
             //TODO: nicht auf GridPosition beschränken, sondern Model fragen, ob an scenePosition ein Port in der Nähe ist
-            QPointF gridPosition = scenePositionToGrid(scenePosition);
             if (_model->isThereAComponent(gridPosition))
             {
                 ComponentPort* foundComponentPort = _model->getComponentPortAtPosition(scenePosition);
@@ -187,7 +187,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
                                                                      2 * hitBoxHighlight, Qt::NoPen,
                                                                      highlightColor);
 
-                    _previousRect = highlightedRect;
+                    _previousHighlightedRect = highlightedRect;
                     _model->update();
                 }
             }
@@ -198,6 +198,15 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
             if (_mouseIsPressed && _componentIsGrabbed)
             {
                 highlightRect(scenePosition, highlightColor);
+            }
+
+            bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
+            bool userIsMovingComponent = (nullptr != _selectedComponentToMove);
+            if (userIsMovingComponent && !isComponentAtPosition)
+            {
+                //Component verschieben
+                _selectedComponentToMove->setPosition(gridPosition);
+                highlightSelectedRect(gridPosition);
             }
         }
             break;
@@ -233,20 +242,12 @@ void NetworkView::highlightSelectedRect(QPointF gridPosition)
 {
     int positionX;
     int positionY;
-    if (_isDragged)
-    {
-        //_selectedComponentToMove darf nicht auf einen anderen Widerstand bewegt werden
-        positionX = _selectedComponentToMove->getXPosition();
-        positionY = _selectedComponentToMove->getYPosition();
-        _isDragged = 0;
-    }
+
+    //TODO: das Markieren des selectedComponent gehört nicht in die Methode für das Highlighting des Bereichs
     _selectedComponent = _model->getComponentAtPosition(gridPosition);
-    if (nullptr != _selectedRect)
-    {
-        _model->removeItem(_selectedRect);
-        delete _selectedRect;
-        _selectedRect = nullptr;
-    }
+
+    removeHighlightSelectedRect();
+
     QColor highlightColor = QColor(255, 0, 0, 55);
     positionX = gridPosition.toPoint().x();
     positionY = gridPosition.toPoint().y();
@@ -266,9 +267,25 @@ void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
     {
         QGraphicsItem* highlightedRect = _model->addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen,
                                                          highlightColor);
-        _previousRect = highlightedRect;
+        _previousHighlightedRect = highlightedRect;
 
         _model->update();
+    }
+}
+
+void NetworkView::deleteSelectedItem()
+{
+    removeHighlightSelectedRect();
+    _model->deleteComponent(_selectedComponent, _previousHighlightedRect);
+}
+
+void NetworkView::removeHighlightSelectedRect()
+{
+    if (nullptr != _selectedRect)
+    {
+        _model->removeItem(_selectedRect);
+        delete _selectedRect;
+        _selectedRect = nullptr;
     }
 }
 

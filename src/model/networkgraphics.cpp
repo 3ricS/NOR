@@ -7,29 +7,6 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
     setSceneRect(-_defaultSceneSize, -_defaultSceneSize, _defaultSceneSize, _defaultSceneSize);
 }
 
-void NetworkGraphics::deleteItem()
-{
-    if (_selectedComponent != nullptr)
-    {
-        removeItem(_selectedRect);
-        _componentList.removeOne(_selectedComponent);
-
-        //Lösche Verbindungen vom Component
-        for (Connection* connection : _connectionList)
-        {
-            if (connection->hasComponent(_selectedComponent))
-            {
-                removeItem(connection);
-                _connectionList.removeOne(connection);
-                delete connection;
-            }
-        }
-
-        delete _selectedComponent;
-        _selectedComponent = nullptr;
-    }
-}
-
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     Connection* connection = new Connection(componentPortA, componentPortB);
@@ -161,4 +138,34 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
     }
 
     return createdComponent;
+}
+
+void NetworkGraphics::deleteComponent(Component* component, QGraphicsItem* highlightedRect)
+{
+    if (component != nullptr)
+    {
+        removeItem(component);
+        _componentList.removeOne(component);
+
+        //Lösche Verbindungen vom Component
+        for (Connection* connection : _connectionList)
+        {
+            if (connection->hasComponent(component))
+            {
+                removeItem(connection);
+                _connectionList.removeOne(connection);
+                delete connection;
+            }
+        }
+
+        delete component;
+
+        //HighlightedRect entfernen
+        if(nullptr != highlightedRect)
+        {
+            removeItem(highlightedRect);
+            delete highlightedRect;
+            highlightedRect = nullptr;
+        }
+    }
 }

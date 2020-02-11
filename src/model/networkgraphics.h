@@ -19,8 +19,6 @@ class NetworkGraphics : public QGraphicsScene
 public:
     NetworkGraphics();
 
-    void deleteItem(void);
-
     void calculate(void);
     void save(void);
     void load(void);
@@ -29,6 +27,7 @@ public:
     Component* createNewComponent(QMouseEvent* mouseEvent, QPointF gridPosition,
                                   Component::ComponentType componentType, bool componentIsVertical);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
+    void deleteComponent(Component* component, QGraphicsItem* highlightedRect);
 
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
@@ -39,10 +38,6 @@ private:
     static constexpr int _defaultSceneSize = 6000;
 
     void addObject(Component* component);
-
-
-
-    QPointF pointToGrid(QPointF position);
 
     void reloadAll(void);
 

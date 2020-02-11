@@ -91,7 +91,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
     }
     if (event->key() == Qt::Key_Delete)
     {
-        _model->deleteItem();
+        _networkView->deleteSelectedItem();
     }
 }
 

@@ -7,11 +7,33 @@ FileManager::FileManager(QList<Component*>& components, QList<Connection*>& conn
 
 void FileManager::saving(void)
 {
+    if(!_isSaved)
+    {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-    QFile _actualFile;
     _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath(),
                                                          "Json (*.json);;Text (*.txt)"));
+    }
+    save();
+    _isSaved = true;
+}
 
+void FileManager::savingUnder()
+{
+    _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath(),
+                                                         "Json (*.json);;Text (*.txt)"));
+    save();
+    _isSaved = true;
+}
+
+void FileManager::setProperties(QList<Component *> &components, QList<Connection *> &connections)
+{
+    _connections = &connections;
+    _components = &components;
+}
+
+void FileManager::save()
+{
     if (_actualFile.open(QFile::WriteOnly | QFile::Truncate))
     {
         QTextStream out(&_actualFile);
@@ -109,7 +131,8 @@ Component::Port FileManager::toPort(int port)
 
 void FileManager::loading(void)
 {
-    _actualFile.setFileName(QFileDialog::getOpenFileName(nullptr, "Laden", _homePath.absolutePath(), _fileFilter));
+    _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    _actualFile.setFileName(QFileDialog::getOpenFileName(nullptr, "Laden", _dirFilePath.absolutePath(), _fileFilter));
     _homePath.setPath(_homePath.filePath(_actualFile.fileName()));
 
     QJsonDocument json;
@@ -184,4 +207,5 @@ void FileManager::loading(void)
         }
     }
     _actualFile.close();
+    _isSaved = true;
 }

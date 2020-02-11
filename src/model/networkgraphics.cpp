@@ -86,15 +86,45 @@ void NetworkGraphics::calculate(void)
 
 void NetworkGraphics::save(void)
 {
-    FileManager manager(_componentList, _connectionList);
-    manager.saving();
+    if(_manager == nullptr)
+    {
+        _manager = new FileManager(_componentList, _connectionList);
+    }
+    else
+    {
+        _manager->setProperties(_componentList, _connectionList);
+    }
+
+    _manager->saving();
 }
 
 void NetworkGraphics::load(void)
 {
-    FileManager manager(_componentList, _connectionList);
-    manager.loading();
+    if(_manager == nullptr)
+    {
+        _manager = new FileManager(_componentList, _connectionList);
+    }
+    else
+    {
+        _manager->setProperties(_componentList, _connectionList);
+    }
+
+    _manager->loading();
     reloadAll();
+}
+
+void NetworkGraphics::saveAs()
+{
+    if(_manager == nullptr)
+    {
+        _manager = new FileManager(_componentList, _connectionList);
+    }
+    else
+    {
+        _manager->setProperties(_componentList, _connectionList);
+    }
+
+    _manager->savingUnder();
 }
 
 void NetworkGraphics::mirrorComponent(Component* component)

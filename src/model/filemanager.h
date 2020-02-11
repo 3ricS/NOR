@@ -20,8 +20,11 @@ public:
 
     void saving(void);
     void loading(void);
+    void savingUnder(void);
+    void setProperties(QList<Component *> &components, QList<Connection *> &connections);
 
 private:
+    void save(void);
     QString createSaveData(void);
     QJsonObject saveResistor(Component* component);
     QJsonObject savePowerSupply(Component* component);
@@ -32,6 +35,7 @@ private:
     QFile _actualFile;
     QString  _fileFilter  = "Json (*.json);;Text (*.txt)";
     QDir     _homePath;
+    bool _isSaved = false;
 
     QList<Component*>* _components;
     QList<Connection*>* _connections;

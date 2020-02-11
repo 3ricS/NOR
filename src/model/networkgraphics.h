@@ -22,6 +22,7 @@ public:
     void calculate(void);
     void save(void);
     void load(void);
+    void saveAs(void);
     void mirrorComponent(Component* component);
 
     Component* createNewComponent(QMouseEvent* mouseEvent, QPointF gridPosition,
@@ -49,6 +50,7 @@ private:
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;
     QGraphicsScene* _graphics = nullptr;
+    FileManager* _manager = nullptr;
 };
 
 #endif // NETWORKGRAPHICS_H

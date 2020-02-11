@@ -78,7 +78,7 @@ void MainWindow::setNewFile(void)
 
 void MainWindow::setSaveAsFile()
 {
-
+    _model->saveAs();
 }
 
 //Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen

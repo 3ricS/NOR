@@ -52,7 +52,7 @@ protected:
 private:
     int getPortPositionXOrY(int positionValue, Port port, bool isX) const;
 
-    static int _count;
+    int _count = 0;
     const int _id;
 
     //_componentTyp gets the type of the object

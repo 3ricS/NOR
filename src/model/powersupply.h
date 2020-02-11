@@ -7,7 +7,6 @@ class PowerSupply : public Component
 {
 public:
     PowerSupply(QString name, int x, int y, bool isVertical);
-    ~PowerSupply();
 
     //Methoden
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
@@ -18,12 +17,10 @@ public:
     //setter
 
     //Klassenmethoden
-    static int getCount(void) {return _powerSupplyCount;}
 
 private:
 
     //Klassenvariablen
-    static int _powerSupplyCount;
 
     //Methodenn
     virtual void paintInformations(QPainter* painter) override;

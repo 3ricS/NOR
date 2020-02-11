@@ -3,12 +3,7 @@
 PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical) :
         Component(x, y, isVertical, name, 0, Component::ComponentType::PowerSupply, 2)
 {
-    _powerSupplyCount++;
-}
 
-PowerSupply::~PowerSupply()
-{
-    _powerSupplyCount--;
 }
 
 void PowerSupply::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

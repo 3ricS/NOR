@@ -23,7 +23,6 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
 
 void NetworkGraphics::addObject(Component* component)
 {
-    _selectedComponent = component;
     _componentList.append(component);
     connectComponentToNeighbours(component);
     addItem(component);
@@ -121,7 +120,8 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
 
     if (Component::ComponentType::Resistor == componentType)
     {
-        QString name = "R" + QString::number(Resistor::getCount() + 1);
+        _resistorCount++;
+        QString name = "R" + QString::number(_resistorCount);
         Component* resistor = new Resistor(name, 100, gridPosition.x(), gridPosition.y(),
                                            componentIsVertical);
         createdComponent = resistor;
@@ -129,9 +129,10 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
     }
     else if (Component::ComponentType::PowerSupply == componentType)
     {
-        if (PowerSupply::getCount() < 1)
+        _powerSupplyCount++;
+        if (_powerSupplyCount <= 1)
         {
-            QString name = "Q" + QString::number(PowerSupply::getCount() + 1);
+            QString name = "Q" + QString::number(_powerSupplyCount);
             Component* powerSupply = new PowerSupply(name, gridPosition.x(), gridPosition.y(),
                                                      componentIsVertical);
             createdComponent = powerSupply;
@@ -139,6 +140,7 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
         }
         else
         {
+            _powerSupplyCount--;
             QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
         }
     }
@@ -152,6 +154,15 @@ void NetworkGraphics::deleteComponent(Component* component, QGraphicsItem* highl
     {
         removeItem(component);
         _componentList.removeOne(component);
+
+        //ResistorCount und PowerSupplyCount setzen
+        if(Component::ComponentType::Resistor == component->getComponentType())
+        {
+            _resistorCount--;
+        } else if (Component::ComponentType::PowerSupply == component->getComponentType())
+        {
+            _powerSupplyCount--;
+        }
 
         //Lösche Verbindungen vom Component
         for (Connection* connection : _connectionList)

@@ -38,15 +38,13 @@ public:
 private:
     static constexpr int _defaultSceneSize = 6000;
 
+    int _resistorCount = 0;
+    int _powerSupplyCount = 0;
+
     void addObject(Component* component);
     void connectComponentToNeighbours(Component* componentToConnectWithNeighbours);
 
     void reloadAll(void);
-
-    //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
-    QGraphicsItem* _selectedRect = nullptr;
-    Component* _selectedComponent = nullptr;
-    //TODO: _selectedComponentToMove durch _selectedComponent ersetzen
 
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;

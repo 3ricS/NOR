@@ -4,13 +4,8 @@
 Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVertical)
         : Component(x, y, isVertical, name, valueResistance, Component::ComponentType::Resistor, 2)
 {
-    _resistorCount++;
 }
 
-Resistor::~Resistor()
-{
-    _resistorCount--;
-}
 
 void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {

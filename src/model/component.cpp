@@ -7,6 +7,7 @@ Component::Component(int x, int y, bool isVertical, QString name, int value, Com
           _name(name), _value(value),
           _componentType(componentTyp), _countPorts(countPorts)
 {
+    //TODO: id wird nicht genutzt
 }
 
 QRectF Component::boundingRect(void) const

@@ -28,3 +28,5 @@ View
 - Label für berechneten Widerstand
 - Button zum Drehen der Widerstände zum Einfügen
 - Spannungsquelle hat keinen Spannungswert
+- einzelne Connections löschen
+- keine static Vairablen

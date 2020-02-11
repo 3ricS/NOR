@@ -28,6 +28,7 @@ public:
                                   Component::ComponentType componentType, bool componentIsVertical);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void deleteComponent(Component* component, QGraphicsItem* highlightedRect);
+    void moveComponent(Component* componentToMove, QPointF gridPosition);
 
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
@@ -38,6 +39,7 @@ private:
     static constexpr int _defaultSceneSize = 6000;
 
     void addObject(Component* component);
+    void connectComponentToNeighbours(Component* componentToConnectWithNeighbours);
 
     void reloadAll(void);
 

@@ -30,6 +30,7 @@ private:
     void highlightRect(QPointF scenePosition, QColor highlightColor);
     void removeHighlightSelectedRect();
 
+
     NetworkGraphics* _model  = nullptr;
 
     bool _mouseIsPressed = false;

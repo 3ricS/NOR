@@ -199,15 +199,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
             {
                 highlightRect(scenePosition, highlightColor);
             }
-
-            bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
-            bool userIsMovingComponent = (nullptr != _selectedComponentToMove);
-            if (userIsMovingComponent && !isComponentAtPosition)
-            {
-                //Component verschieben
-                _selectedComponentToMove->setPosition(gridPosition);
-                highlightSelectedRect(gridPosition);
-            }
+            _model->moveComponent(_selectedComponentToMove, gridPosition);
         }
             break;
     }
@@ -288,4 +280,3 @@ void NetworkView::removeHighlightSelectedRect()
         _selectedRect = nullptr;
     }
 }
-

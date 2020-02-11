@@ -10,9 +10,14 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     Connection* connection = new Connection(componentPortA, componentPortB);
-    _connectionList.append(connection);
-    addItem(connection);
-    update();
+    if(!_connectionList.contains(connection))
+    {
+        _connectionList.append(connection);
+        addItem(connection);
+        update();
+    } else {
+        qDebug() << "NetworkGraphics: Connection bereits vorhanden!";
+    }
 }
 
 
@@ -20,6 +25,7 @@ void NetworkGraphics::addObject(Component* component)
 {
     _selectedComponent = component;
     _componentList.append(component);
+    connectComponentToNeighbours(component);
     addItem(component);
     update();
 }
@@ -161,11 +167,74 @@ void NetworkGraphics::deleteComponent(Component* component, QGraphicsItem* highl
         delete component;
 
         //HighlightedRect entfernen
-        if(nullptr != highlightedRect)
+        if (nullptr != highlightedRect)
         {
             removeItem(highlightedRect);
             delete highlightedRect;
             highlightedRect = nullptr;
+        }
+    }
+}
+
+void NetworkGraphics::moveComponent(Component* componentToMove, QPointF gridPosition)
+{
+    bool isComponentAtPosition = isThereAComponent(gridPosition);
+    bool userIsMovingComponent = (nullptr != componentToMove);
+    if (!userIsMovingComponent || isComponentAtPosition)
+    {
+        return;
+    }
+
+    componentToMove->setPosition(gridPosition);
+
+    connectComponentToNeighbours(componentToMove);
+}
+
+void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnectWithNeighbours)
+{
+    QPointF portPositionAOfComponent = componentToConnectWithNeighbours->getPortPosition(Component::Port::A);
+    QPointF portPositionBOfComponent = componentToConnectWithNeighbours->getPortPosition(Component::Port::B);
+
+    for (Component* anotherComponent : _componentList)
+    {
+        if (anotherComponent != componentToConnectWithNeighbours)
+        {
+            QPointF portPositionAOfanotherComponent = anotherComponent->getPortPosition(Component::Port::A);
+            QPointF portPositionBOfanotherComponent = anotherComponent->getPortPosition(Component::Port::B);
+
+            bool equalPortAtoA = (portPositionAOfComponent == portPositionAOfanotherComponent);
+            bool equalPortAtoB = (portPositionAOfComponent == portPositionBOfanotherComponent);
+            bool equalPortBtoA = (portPositionBOfComponent == portPositionAOfanotherComponent);
+            bool equalPortBtoB = (portPositionBOfComponent == portPositionBOfanotherComponent);
+
+            ComponentPort componentPortSelf(nullptr, Component::Port::null);
+            ComponentPort componentPortOther(nullptr, Component::Port::null);
+
+            if (equalPortAtoA)
+            {
+                componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::A);
+                componentPortOther = ComponentPort(anotherComponent, Component::Port::A);
+            }
+            else if (equalPortAtoB)
+            {
+                componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::A);
+                componentPortOther = ComponentPort(anotherComponent, Component::Port::B);
+            }else if (equalPortBtoA)
+            {
+                componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::B);
+                componentPortOther = ComponentPort(anotherComponent, Component::Port::A);
+            }else if (equalPortBtoB)
+            {
+                componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::B);
+                componentPortOther = ComponentPort(anotherComponent, Component::Port::B);
+            }
+
+            bool foundEqualPort = (equalPortAtoA || equalPortAtoB || equalPortBtoA || equalPortBtoB);
+            if(foundEqualPort)
+            {
+                addConnection(componentPortSelf, componentPortOther);
+            }
+
         }
     }
 }

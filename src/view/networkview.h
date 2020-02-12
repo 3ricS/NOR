@@ -30,6 +30,12 @@ private:
     void highlightRect(QPointF scenePosition, QColor highlightColor);
     void removeHighlightSelectedRect();
 
+protected:
+    void leaveEvent(QEvent* event) override;
+
+    void enterEvent(QEvent* event) override;
+
+private:
 
     NetworkGraphics* _model  = nullptr;
 

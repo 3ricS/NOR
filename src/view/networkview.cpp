@@ -56,15 +56,15 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             break;
         case MouseMode::SelectionMode:
         {
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
 
-            if(nullptr != _selectedComponentToMove)
+            if (nullptr != _selectedComponentToMove)
             {
                 _selectedComponentToMove = nullptr;
-            } else
+            }
+            else
             {
                 bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
-                if(isComponentAtPosition)
+                if (isComponentAtPosition)
                 {
                     _selectedComponent = _model->getComponentAtPosition(gridPosition);
                     highlightSelectedRect(gridPosition);
@@ -111,10 +111,12 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
         {
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
-            if(isComponentAtPosition)
+            if (isComponentAtPosition)
             {
                 _selectedComponentToMove = _model->getComponentAtPosition(gridPosition);
-            } else {
+            }
+            else
+            {
                 _selectedComponentToMove = nullptr;
             }
         }
@@ -279,4 +281,28 @@ void NetworkView::removeHighlightSelectedRect()
         delete _selectedRect;
         _selectedRect = nullptr;
     }
+}
+
+void NetworkView::enterEvent(QEvent* event)
+{
+    switch (_mouseMode)
+    {
+        case ConnectionMode:
+        {
+            QApplication::setOverrideCursor(Qt::ArrowCursor);
+        }
+            break;
+        case SelectionMode:
+        {
+            QApplication::setOverrideCursor(Qt::OpenHandCursor);
+        }
+            break;
+    }
+    QWidget::enterEvent(event);
+}
+
+void NetworkView::leaveEvent(QEvent* event)
+{
+    QApplication::setOverrideCursor(Qt::CustomCursor);
+    QWidget::leaveEvent(event);
 }

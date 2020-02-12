@@ -18,11 +18,9 @@ View
 -Bau einen Widgets in dem rechten ListView (PropertyView oder so vlt?)
 
 - anderer Cursor
-- Component Port A und B tauschen
 - highlithed Hitbox für Ports
 - strg + Mausrad = zoom
 - zoom 100 %
-- automatische Verbindungen zwischen zwei Widerständen, wenn sie sich berühren
 - Verbindungen rechtwinklig zeichnen
 - QGraphicsScene zum Auswählen der Components
 - Label für berechneten Widerstand

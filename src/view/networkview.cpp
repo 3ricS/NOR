@@ -267,7 +267,8 @@ void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
 void NetworkView::deleteSelectedItem()
 {
     removeHighlightSelectedRect();
-    _model->deleteComponent(_selectedComponent, _previousHighlightedRect);
+    _model->deleteComponent(_selectedComponent);
+    _selectedComponent = nullptr;
 }
 
 void NetworkView::removeHighlightSelectedRect()

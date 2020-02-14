@@ -56,16 +56,15 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             break;
         case MouseMode::SelectionMode:
         {
+            _selectedComponentToMove = nullptr;
 
-            if (nullptr != _selectedComponentToMove)
+            Component* foundComponent = _model->getComponentAtPosition(gridPosition);
+            bool hasFoundComponent = nullptr != foundComponent;
+
+            if (hasFoundComponent)
             {
-                bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
-                if (isComponentAtPosition)
-                {
-                    _selectedComponent = _model->getComponentAtPosition(gridPosition);
-                    highlightSelectedRect(gridPosition);
-                }
-                _selectedComponentToMove = nullptr;
+                _selectedComponent = foundComponent;
+                highlightSelectedRect(gridPosition);
             }
         }
             break;
@@ -269,8 +268,6 @@ void NetworkView::deleteSelectedItem()
 {
     removeHighlightSelectedRect();
     _model->deleteComponent(_selectedComponent, _previousHighlightedRect);
-    _selectedComponent = nullptr;
-    _previousHighlightedRect = nullptr;
 }
 
 void NetworkView::removeHighlightSelectedRect()
@@ -305,4 +302,18 @@ void NetworkView::leaveEvent(QEvent* event)
 {
     QApplication::setOverrideCursor(Qt::CustomCursor);
     QWidget::leaveEvent(event);
+}
+
+//Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen
+void NetworkView::keyReleaseEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Escape)
+    {
+        setMouseMode(NetworkView::MouseMode::SelectionMode);
+        QApplication::setOverrideCursor(Qt::OpenHandCursor);
+    }
+    if (event->key() == Qt::Key_Delete)
+    {
+        deleteSelectedItem();
+    }
 }

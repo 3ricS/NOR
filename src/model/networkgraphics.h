@@ -28,7 +28,7 @@ public:
     Component* createNewComponent(QMouseEvent* mouseEvent, QPointF gridPosition,
                                   Component::ComponentType componentType, bool componentIsVertical);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
-    void deleteComponent(Component* component, QGraphicsItem* highlightedRect);
+    void deleteComponent(Component* component);
     void moveComponent(Component* componentToMove, QPointF gridPosition);
 
     //getter

@@ -180,7 +180,7 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
     return createdComponent;
 }
 
-void NetworkGraphics::deleteComponent(Component* component, QGraphicsItem* highlightedRect)
+void NetworkGraphics::deleteComponent(Component* component)
 {
     if (component != nullptr)
     {
@@ -208,14 +208,6 @@ void NetworkGraphics::deleteComponent(Component* component, QGraphicsItem* highl
         }
 
         delete component;
-
-        //HighlightedRect entfernen
-        if (nullptr != highlightedRect)
-        {
-            removeItem(highlightedRect);
-            delete highlightedRect;
-            highlightedRect = nullptr;
-        }
     }
 }
 

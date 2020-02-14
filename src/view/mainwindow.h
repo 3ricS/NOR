@@ -47,7 +47,6 @@ public slots:
     void setSaveAsFile(void);
 
 private:
-    void keyPressEvent(QKeyEvent *event) override;
     void createUpperMenu(void);
 
 //Variables

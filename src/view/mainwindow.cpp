@@ -86,20 +86,6 @@ void MainWindow::setSaveAsFile()
     _model->saveAs();
 }
 
-//Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen
-void MainWindow::keyPressEvent(QKeyEvent* event)
-{
-    if (event->key() == Qt::Key_Escape)
-    {
-        _networkView->setMouseMode(NetworkView::MouseMode::SelectionMode);
-        QApplication::setOverrideCursor(Qt::OpenHandCursor);
-    }
-    if (event->key() == Qt::Key_Delete)
-    {
-        _networkView->deleteSelectedItem();
-    }
-}
-
 void MainWindow::createUpperMenu(void)
 {
     _new = new QAction("Neu");

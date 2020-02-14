@@ -32,8 +32,9 @@ private:
 
 protected:
     void leaveEvent(QEvent* event) override;
-
     void enterEvent(QEvent* event) override;
+
+    void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
 

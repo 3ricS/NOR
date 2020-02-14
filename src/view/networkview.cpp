@@ -285,7 +285,7 @@ void NetworkView::enterEvent(QEvent* event)
     {
         case ConnectionMode:
         {
-            QApplication::setOverrideCursor(Qt::ArrowCursor);
+            QApplication::setOverrideCursor(Qt::CrossCursor);
         }
             break;
         case SelectionMode:
@@ -301,6 +301,22 @@ void NetworkView::leaveEvent(QEvent* event)
 {
     QApplication::setOverrideCursor(Qt::CustomCursor);
     QWidget::leaveEvent(event);
+    if (nullptr != _previousHighlightedRect)
+    {
+        _model->removeItem(_previousHighlightedRect);
+        delete _previousHighlightedRect;
+        _previousHighlightedRect = nullptr;
+
+        _model->update();
+    }
+    if (nullptr != _sampleComponentOnMoveEvent)
+    {
+        _model->removeItem(_sampleComponentOnMoveEvent);
+        delete _sampleComponentOnMoveEvent;
+        _sampleComponentOnMoveEvent = nullptr;
+
+        _model->update();
+    }
 }
 
 //Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen

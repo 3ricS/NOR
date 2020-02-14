@@ -38,21 +38,18 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
 void MainWindow::setResistorMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ResistorMode);
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 // Setzen des PowerSupply-Modus
 void MainWindow::setPowerSupplyMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::PowerSupplyMode);
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 //Setzen des Connection-Modus
 void MainWindow::setConnectionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ConnectionMode);
-    QApplication::setOverrideCursor(Qt::CrossCursor);
 }
 
 void MainWindow::setCalculation(void)

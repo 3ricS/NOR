@@ -38,6 +38,21 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             else if (Qt::RightButton == mouseEvent->button())
             {
                 _isVerticalComponentDefault = !_isVerticalComponentDefault;
+                gridDisappears();
+                if(MouseMode::PowerSupplyMode == _mouseMode)
+                {
+                    Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
+                                                            gridPosition.toPoint().y(), _isVerticalComponentDefault);
+                    _sampleComponentOnMoveEvent = sampleResistor;
+                }
+                else if (MouseMode::ResistorMode == _mouseMode)
+                {
+                    Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
+                                                             gridPosition.toPoint().y(), _isVerticalComponentDefault);
+                    _sampleComponentOnMoveEvent = sampleResistor;
+                }
+                _model->addItem(_sampleComponentOnMoveEvent);
+                highlightRect(scenePosition, _highlightColor);
             }
         }
             break;
@@ -57,6 +72,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             break;
         case MouseMode::SelectionMode:
         {
+            QApplication::setOverrideCursor(Qt::OpenHandCursor);
             _selectedComponentToMove = nullptr;
 
             Component* foundComponent = _model->getComponentAtPosition(gridPosition);
@@ -72,7 +88,6 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         default:
             break;
     }
-  QApplication::setOverrideCursor(Qt::OpenHandCursor);
 }
 
 void NetworkView::mousePressEvent(QMouseEvent* event)
@@ -107,10 +122,10 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
             break;
         case SelectionMode:
         {
-            QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
             if (isComponentAtPosition)
             {
+                QApplication::setOverrideCursor(Qt::ClosedHandCursor);
                 _selectedComponentToMove = _model->getComponentAtPosition(gridPosition);
             }
             else
@@ -128,7 +143,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
     QPointF gridPosition = scenePositionToGrid(scenePosition);
 
     //MemoryLeak vermeiden
-   gridDisappears();
+    gridDisappears();
 
     switch (_mouseMode)
     {
@@ -318,6 +333,7 @@ void NetworkView::keyReleaseEvent(QKeyEvent* event)
     {
         setMouseMode(NetworkView::MouseMode::SelectionMode);
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
+        gridDisappears();
     }
     if (event->key() == Qt::Key_Delete)
     {

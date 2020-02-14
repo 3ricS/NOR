@@ -1,3 +1,10 @@
+/*!
+*\author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+*
+* \brief Übernimmt das Laden und Speichern von Netzwerken in Datein
+*
+*/
+
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 

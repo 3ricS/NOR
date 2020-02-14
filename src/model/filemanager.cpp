@@ -5,6 +5,15 @@ FileManager::FileManager(QList<Component*>& components, QList<Connection*>& conn
 {
 }
 
+/*!
+* \brief Speichert das Netzwerk ab.
+*
+* Die Methode speichert die vorhandene Schaltung ab.
+* Zu Beginn wird geprüft ob das Netzwerk bereits abgespeichert wurde.
+* Ist noch keine Datei vorher erstellt worden, wird diese zuerst neu erstellt.
+* Dazu wird mit Hilfe von QStandardPaths der Fad angegeben, wo die Datei abgelegt werden soll.
+* Mit QFileDialog wird der Name der Datei eingegeben.
+*/
 void FileManager::saving(void)
 {
     if(!_isSaved)
@@ -17,7 +26,14 @@ void FileManager::saving(void)
     _isSaved = true;
 }
 
-void FileManager::savingUnder()
+/*!
+* \brief Erzeugt eine neue Jsondatei, in der das Netzwerk abgespeichert wird.
+*
+* Es wird mit Hilfe von QStandardPaths der Fad angegeben, wo die Datei abgelegt werden soll.
+* Mit QFileDialog wird der Name der Datei eingegeben.
+* Darauf folgt das speichern.
+*/
+void FileManager::savingUnder(void)
 {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath(),
@@ -26,13 +42,19 @@ void FileManager::savingUnder()
     _isSaved = true;
 }
 
+//TODO: Doku fertigstellen in filemanager und überprüfen.
+/*!
+* \brief
+*
+*
+*/
 void FileManager::setProperties(QList<Component *> &components, QList<Connection *> &connections)
 {
     _connections = &connections;
     _components = &components;
 }
 
-void FileManager::save()
+void FileManager::save(void)
 {
     if (_actualFile.open(QFile::WriteOnly | QFile::Truncate))
     {
@@ -129,6 +151,15 @@ Component::Port FileManager::toPort(int port)
     }
 }
 
+/*!
+* \brief Lädt ein Netzwerk aus einer vorhandenen Jsondatei.
+*
+* Es wird mit Hilfe von QStandardPaths der Fad angegeben, aus welcher Datei geladen werden soll.
+* Mit QFileDialog wird .
+* Darauf folgt ob die Datei geöffnet wurde und ob in dieser Daten enthalten sind.
+* Zuerst werden die Components geladen.
+* Dann folgen die Connectionss, da dies die Connections zugreifen.
+*/
 void FileManager::loading(void)
 {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));

@@ -63,6 +63,11 @@ void EditView::setupView(void)
         _isVerticalAtStart = false;
         _editViewUi->horizontalButton->setChecked(true);
     }
+    if(_component->getComponentType() == Component::PowerSupply)
+    {
+        _editViewUi->labelValue->hide();
+        _editViewUi->textEditValue->hide();
+    }
 }
 
 void EditView::ok(void)

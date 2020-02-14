@@ -26,6 +26,7 @@ protected:
 private:
 
     QPointF scenePositionToGrid(QPointF scenePosition);
+    void gridDisappears(void);
     void highlightSelectedRect(QPointF gridPosition);
     void highlightRect(QPointF scenePosition, QColor _highlightColor);
     void removeHighlightSelectedRect();

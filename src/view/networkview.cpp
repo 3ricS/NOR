@@ -128,22 +128,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
     QPointF gridPosition = scenePositionToGrid(scenePosition);
 
     //MemoryLeak vermeiden
-    if (nullptr != _previousHighlightedRect)
-    {
-        _model->removeItem(_previousHighlightedRect);
-        delete _previousHighlightedRect;
-        _previousHighlightedRect = nullptr;
-
-        _model->update();
-    }
-    if (nullptr != _sampleComponentOnMoveEvent)
-    {
-        _model->removeItem(_sampleComponentOnMoveEvent);
-        delete _sampleComponentOnMoveEvent;
-        _sampleComponentOnMoveEvent = nullptr;
-
-        _model->update();
-    }
+   gridDisappears();
 
     switch (_mouseMode)
     {
@@ -227,6 +212,27 @@ QPointF NetworkView::scenePositionToGrid(QPointF scenePosition)
     return QPointF(xPos, yPos);
 }
 
+void NetworkView::gridDisappears()
+{
+    //Grid verschwindet
+    if (nullptr != _previousHighlightedRect)
+    {
+        _model->removeItem(_previousHighlightedRect);
+        delete _previousHighlightedRect;
+        _previousHighlightedRect = nullptr;
+
+        _model->update();
+    }
+    if (nullptr != _sampleComponentOnMoveEvent)
+    {
+        _model->removeItem(_sampleComponentOnMoveEvent);
+        delete _sampleComponentOnMoveEvent;
+        _sampleComponentOnMoveEvent = nullptr;
+
+        _model->update();
+    }
+}
+
 void NetworkView::highlightSelectedRect(QPointF gridPosition)
 {
     int positionX;
@@ -301,22 +307,8 @@ void NetworkView::leaveEvent(QEvent* event)
 {
     QApplication::setOverrideCursor(Qt::CustomCursor);
     QWidget::leaveEvent(event);
-    if (nullptr != _previousHighlightedRect)
-    {
-        _model->removeItem(_previousHighlightedRect);
-        delete _previousHighlightedRect;
-        _previousHighlightedRect = nullptr;
 
-        _model->update();
-    }
-    if (nullptr != _sampleComponentOnMoveEvent)
-    {
-        _model->removeItem(_sampleComponentOnMoveEvent);
-        delete _sampleComponentOnMoveEvent;
-        _sampleComponentOnMoveEvent = nullptr;
-
-        _model->update();
-    }
+    gridDisappears();
 }
 
 //Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen

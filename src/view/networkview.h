@@ -27,7 +27,7 @@ private:
 
     QPointF scenePositionToGrid(QPointF scenePosition);
     void highlightSelectedRect(QPointF gridPosition);
-    void highlightRect(QPointF scenePosition, QColor highlightColor);
+    void highlightRect(QPointF scenePosition, QColor _highlightColor);
     void removeHighlightSelectedRect();
 
 protected:
@@ -53,6 +53,7 @@ private:
     bool _isVerticalComponentDefault = true;
     Component* _sampleComponentOnMoveEvent = nullptr;
     MouseMode _mouseMode = SelectionMode;
+    QColor _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
 };
 
 #endif // NETWORKVIEW_H

@@ -3,6 +3,7 @@
 NetworkView::NetworkView(QWidget* parent) :
         QGraphicsView(parent)
 {
+    setMouseTracking(true);
 }
 
 void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
@@ -123,11 +124,8 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
 
 void NetworkView::mouseMoveEvent(QMouseEvent* event)
 {
-    setMouseTracking(true);
     QPointF scenePosition = mapToScene(event->pos());
     QPointF gridPosition = scenePositionToGrid(scenePosition);
-
-    QColor highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
 
     //MemoryLeak vermeiden
     if (nullptr != _previousHighlightedRect)
@@ -155,7 +153,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
                                                      gridPosition.toPoint().y(), _isVerticalComponentDefault);
             _sampleComponentOnMoveEvent = sampleResistor;
             _model->addItem(_sampleComponentOnMoveEvent);
-            highlightRect(scenePosition, highlightColor);
+            highlightRect(scenePosition, _highlightColor);
         }
             break;
         case (PowerSupplyMode):
@@ -164,7 +162,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
                                                         gridPosition.toPoint().y(), _isVerticalComponentDefault);
             _sampleComponentOnMoveEvent = sampleResistor;
             _model->addItem(_sampleComponentOnMoveEvent);
-            highlightRect(scenePosition, highlightColor);
+            highlightRect(scenePosition, _highlightColor);
         }
             break;
         case ConnectionMode:
@@ -184,7 +182,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
 
                     QGraphicsItem* highlightedRect = _model->addRect(positionX, positionY, 2 * hitBoxHighlight,
                                                                      2 * hitBoxHighlight, Qt::NoPen,
-                                                                     highlightColor);
+                                                                     _highlightColor);
 
                     _previousHighlightedRect = highlightedRect;
                     _model->update();
@@ -196,7 +194,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         {
             if (_mouseIsPressed && _componentIsGrabbed)
             {
-                highlightRect(scenePosition, highlightColor);
+                highlightRect(scenePosition, _highlightColor);
             }
             _model->moveComponent(_selectedComponentToMove, gridPosition);
         }

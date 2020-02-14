@@ -8,6 +8,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     resize(1080, 720);
 
     // setup ui
+    _ui->CalculatedValue->hide();
+    _ui->CalculateLabel->hide();
 
     //TODO: Dopplung setScene entfernen
     _networkView = _ui->networkView;
@@ -55,7 +57,10 @@ void MainWindow::setConnectionMode(void)
 
 void MainWindow::setCalculation(void)
 {
-    _model->calculate();
+    _ui->CalculateLabel->setHidden(false);
+    _ui->CalculatedValue->setHidden(false);
+    _ui->CalculatedValue->setText(QString::number(_model->calculate()) + "Ω");
+
 }
 
 void MainWindow::setSaveFile(void)

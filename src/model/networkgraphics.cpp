@@ -76,12 +76,14 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
     return nullptr;
 }
 
-void NetworkGraphics::calculate(void)
+double NetworkGraphics::calculate(void)
 {
     Calculator calculator = Calculator(_connectionList, _componentList);
     calculator.calculate();
+
     QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
                                               QString::number(calculator.getResistanceValue()) + "Ω");
+    return calculator.getResistanceValue();
 }
 
 void NetworkGraphics::save(void)

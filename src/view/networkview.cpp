@@ -59,22 +59,20 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
             if (nullptr != _selectedComponentToMove)
             {
-                _selectedComponentToMove = nullptr;
-            }
-            else
-            {
                 bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
                 if (isComponentAtPosition)
                 {
                     _selectedComponent = _model->getComponentAtPosition(gridPosition);
                     highlightSelectedRect(gridPosition);
                 }
+                _selectedComponentToMove = nullptr;
             }
         }
             break;
         default:
             break;
     }
+  QApplication::setOverrideCursor(Qt::OpenHandCursor);
 }
 
 void NetworkView::mousePressEvent(QMouseEvent* event)
@@ -271,6 +269,8 @@ void NetworkView::deleteSelectedItem()
 {
     removeHighlightSelectedRect();
     _model->deleteComponent(_selectedComponent, _previousHighlightedRect);
+    _selectedComponent = nullptr;
+    _previousHighlightedRect = nullptr;
 }
 
 void NetworkView::removeHighlightSelectedRect()

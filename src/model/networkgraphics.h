@@ -19,7 +19,7 @@ class NetworkGraphics : public QGraphicsScene
 public:
     NetworkGraphics();
 
-    void calculate(void);
+    double calculate(void);
     void save(void);
     void load(void);
     void saveAs(void);

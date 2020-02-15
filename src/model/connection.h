@@ -1,7 +1,7 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <model/componentport.h>
+#include <model/ComponentPort.h>
 
 #include <QPainter>
 #include <algorithm>
@@ -12,7 +12,7 @@ public:
     Connection(ComponentPort componentPortA, ComponentPort componentPortB);
 
     //TODO: boundingRect muss noch beschrieben werden
-    QRectF boundingRect(void) const;
+    QRectF boundingRect(void) const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);
 

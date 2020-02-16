@@ -15,15 +15,15 @@ Model
 
 
 View
--Bau einen Widgets in dem rechten ListView (PropertyView oder so vlt?)
+//-Bau einen Widgets in dem rechten ListView (PropertyView oder so vlt?)
 
-- anderer Cursor
-- highlithed Hitbox für Ports
 - strg + Mausrad = zoom
 - zoom 100 %
-- Verbindungen rechtwinklig zeichnen
-- QGraphicsScene zum Auswählen der Components
-- Label für berechneten Widerstand
-- Button zum Drehen der Widerstände zum Einfügen
+- Verbindungen rechtwinklig zeichnen!!!!!
+- Button zum Drehen der Widerstände beim Einfügen
 - einzelne Connections löschen
-- keine static Vairablen
+
+- bei Start des Programms muss bei "Speichern" nach dem Ort gefragt werden
+- beim Speichern muss es ein Standardname festgelegt sein
+- speichern und öffnen: Komponenten müssen codiert werden auf _id, nicht auf _name
+- _id beim Laden setzen

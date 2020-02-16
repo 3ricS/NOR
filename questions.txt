@@ -1,10 +1,1 @@
-Moritz
-
-Leonel
-
-Sören
-
-Eric
--Sollen alle Slots in der Klasse MainWindow entgegengenommen werden?
-- Muss break eingerückt sein
-
+- wie detalliert soll die Dokumentation sein?

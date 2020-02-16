@@ -1,3 +1,14 @@
+/*!
+ * \brief   Ein Component stellt eine Komponente in der Schaltung dar
+ *
+ * Ein Component ist eine Komponente der Schaltung, z.B. ein Widerstand oder eine Spannungsquelle.
+ * Ein Component ist ein QGraphicsItem, damit ein Element der QGraphicsScene und kann sich selbst in die QGraphicsScene
+ * zeichnen.
+ * Ein Component hat zwei Ports (Anschlüsse). Außerdem hat ein Component einen Wert und kennt seinen eigenen Typen (z.B. Widerstand oder Spannungsquelle).
+ * Darüber hinaus hat ein Component eine Position und einen Namen.
+ */
+//TODO: Doku vollenden
+
 #ifndef COMPONENT_H
 #define COMPONENT_H
 

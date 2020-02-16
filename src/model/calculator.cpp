@@ -60,10 +60,10 @@ void Calculator::rowAnalysis(ComponentPort actualComPort, double& actualImpedanz
             count++;
             nextComponent = connection->getComponentPortB().getComponent();
         }
-        else if(connection->getComponentPortB().getComponent() == actualComPort && connection->getComponentPortA().getComponent() != lastComponent)
+        else if(connection->getComponentPortTwo().getComponent() == actualComPort && connection->getComponentPortA().getComponent() != lastComponent)
         {
             count++;
-            nextComponent = connection->getComponentPortA().getComponent();
+            nextComponent = connection->getComponentPortOne().getComponent();
         }
     } */
 
@@ -143,22 +143,23 @@ void Calculator::parallelAnalysis(QList<ComponentPort>& foundComponents, double&
 
 QList<ComponentPort>Calculator::findConnectedComponents(ComponentPort componentPort, QList<ComponentPort>& connectedComponents)
 {
+    //TODO: dies gehört ins Model: networkgraphics.cpp
     for(Connection* connection : _connections)
     {
         ComponentPort foundComponentPort = ComponentPort(nullptr, Component::Port::null);
 
         bool found = false;
-        if(componentPort.getComponent() == connection->getComponentPortB().getComponent())
+        if(componentPort.getComponent() == connection->getComponentPortTwo().getComponent())
         {
-            Component* foundComponent = connection->getComponentPortA().getComponent();
-            Component::Port foundPort = connection->getComponentPortA().getPort();
+            Component* foundComponent = connection->getComponentPortOne().getComponent();
+            Component::Port foundPort = connection->getComponentPortOne().getPort();
             foundComponentPort = ComponentPort(foundComponent, foundPort);
             found = true;
         }
-        else if(componentPort.getComponent() == connection->getComponentPortA().getComponent())
+        else if(componentPort.getComponent() == connection->getComponentPortOne().getComponent())
         {
-            Component* foundComponent = connection->getComponentPortB().getComponent();
-            Component::Port foundPort = connection->getComponentPortB().getPort();
+            Component* foundComponent = connection->getComponentPortTwo().getComponent();
+            Component::Port foundPort = connection->getComponentPortTwo().getPort();
             foundComponentPort = ComponentPort(foundComponent, foundPort);
             found = true;
         }
@@ -179,20 +180,21 @@ QList<ComponentPort>Calculator::findConnectedComponents(ComponentPort componentP
 //Rekursive Funktion zum finden aller Komponenten, newFound sind die neuen gefundenen ComponentPorts, diese werden am Ende zur foundComponents hinzugefügt
 void Calculator::searchingForIndirectNeighbours(QList<ComponentPort> &foundComponents)
 {
+    //TODO: dies gehört ins Model: networkgraphics.cpp
     QList<ComponentPort> newFound;
 
     for(ComponentPort cp : foundComponents)
     {
         for(Connection* con : _connections)
         {
-            if(cp == con->getComponentPortA() && !newFound.contains(con->getComponentPortB()))
+            if(cp == con->getComponentPortOne() && !newFound.contains(con->getComponentPortTwo()))
             {
-                newFound.append(con->getComponentPortB());
+                newFound.append(con->getComponentPortTwo());
                 _connections.removeOne(con);
             }
-            else if(cp == con->getComponentPortB() && !newFound.contains(con->getComponentPortA()))
+            else if(cp == con->getComponentPortTwo() && !newFound.contains(con->getComponentPortOne()))
             {
-                newFound.append(con->getComponentPortA());
+                newFound.append(con->getComponentPortOne());
                 _connections.removeOne(con);
             }
         }
@@ -213,30 +215,30 @@ void Calculator::searchingForDirectParallelNeighbours(ComponentPort actualComPor
 {
     for(Connection* c : _connections)
     {
-        if(actualComPort == c->getComponentPortA())
+        if(actualComPort == c->getComponentPortOne())
         {
-            if(!newFoundCompPort.contains(c->getComponentPortB()))
+            if(!newFoundCompPort.contains(c->getComponentPortTwo()))
             {
-                newFoundCompPort.append(c->getComponentPortB());
+                newFoundCompPort.append(c->getComponentPortTwo());
 
                 for(ComponentPort d : foundCompPort)
                 {
-                    if(c->getComponentPortB().getOppisiteComponentPort() == d)
+                    if(c->getComponentPortTwo().getOppisiteComponentPort() == d)
                     {
                         _connections.removeOne(c);
                     }
                 }
             }
         }
-        else if (actualComPort == c->getComponentPortB())
+        else if (actualComPort == c->getComponentPortTwo())
         {
-            if(!newFoundCompPort.contains(c->getComponentPortA()))
+            if(!newFoundCompPort.contains(c->getComponentPortOne()))
             {
-                newFoundCompPort.append(c->getComponentPortA());
+                newFoundCompPort.append(c->getComponentPortOne());
 
                 for(ComponentPort d : foundCompPort)
                 {
-                    if(c->getComponentPortA().getOppisiteComponentPort() == d)
+                    if(c->getComponentPortOne().getOppisiteComponentPort() == d)
                     {
                         _connections.removeOne(c);
                     }
@@ -253,18 +255,19 @@ void Calculator::searchingPowerSupply(QList<ComponentPort> &foundComponents)
     for (Connection* connection : _connections)
     {
         //Suche nach den ersten Widerständen und entfernen der Verbindungen zum Port A der PowerSupply
-        if(((connection->getComponentPortA().getComponent()->getComponentType() == Component::PowerSupply) &&
-            connection->getComponentPortA().getPort() == Component::A ) ||
-                ((connection->getComponentPortB().getComponent()->getComponentType() == Component::PowerSupply && connection->getComponentPortB().getPort() == Component::A)))
+        if(((connection->getComponentPortOne().getComponent()->getComponentType() == Component::PowerSupply) &&
+                connection->getComponentPortOne().getPort() == Component::A ) ||
+           ((connection->getComponentPortTwo().getComponent()->getComponentType() == Component::PowerSupply &&
+                   connection->getComponentPortTwo().getPort() == Component::A)))
         {
-            if(connection->getComponentPortA().getComponent()->getComponentType() == Component::PowerSupply)
+            if(connection->getComponentPortOne().getComponent()->getComponentType() == Component::PowerSupply)
             {
-                foundComponents.append(connection->getComponentPortB());
+                foundComponents.append(connection->getComponentPortTwo());
                 _connections.removeOne(connection);
             }
-            if(connection->getComponentPortB().getComponent()->getComponentType() == Component::PowerSupply)
+            if(connection->getComponentPortTwo().getComponent()->getComponentType() == Component::PowerSupply)
             {
-                foundComponents.append(connection->getComponentPortA());
+                foundComponents.append(connection->getComponentPortOne());
                 _connections.removeOne(connection);
             }
 
@@ -276,14 +279,14 @@ void Calculator::searchingForDirectRowNeighbours(ComponentPort actualComPort, QL
 {
     for(Connection* c : _connections)
     {
-        if(actualComPort == c->getComponentPortA())
+        if(actualComPort == c->getComponentPortOne())
         {
-            foundCompPort.append(c->getComponentPortB());
+            foundCompPort.append(c->getComponentPortTwo());
             _connections.removeOne(c);
         }
-        else if (actualComPort == c->getComponentPortB())
+        else if (actualComPort == c->getComponentPortTwo())
         {
-           foundCompPort.append(c->getComponentPortA());
+           foundCompPort.append(c->getComponentPortOne());
            _connections.removeOne(c);
         }
 

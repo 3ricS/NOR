@@ -11,15 +11,6 @@ public:
     //Methoden
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-
-    //getter
-
-    //Klassenmethoden
-
-    //setter
-    void setResistance(int resistance) {_value = resistance;}
-
-
 private:
 
     //Klassenvariablen

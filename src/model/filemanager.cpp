@@ -116,10 +116,10 @@ QJsonObject FileManager::saveConnection(Connection* connection)
 {
     QJsonObject c;
     c.insert("type", "Connection");
-    c.insert("_componentPortA", connection->getComponentPortA().getComponent()->getName());
-    c.insert("_componentPortB", connection->getComponentPortB().getComponent()->getName());
-    c.insert("_portA", connection->getComponentPortA().getPort());
-    c.insert("_portB", connection->getComponentPortB().getPort());
+    c.insert("_componentPortOne", connection->getComponentPortOne().getComponent()->getName());
+    c.insert("_componentPortTwo", connection->getComponentPortTwo().getComponent()->getName());
+    c.insert("_portA", connection->getComponentPortOne().getPort());
+    c.insert("_portB", connection->getComponentPortTwo().getPort());
     return c;
 }
 
@@ -218,13 +218,13 @@ void FileManager::loading(void)
 
                     if (obj.value("type") == "Connection")
                     {
-                        QString nameA = obj.value("_componentPortA").toString();
+                        QString nameA = obj.value("_componentPortOne").toString();
                         Component* componentA = getComponentByName(nameA);
                         qDebug() << componentA->getName();
                         Component::Port portA = toPort(obj.value("_portA").toInt());
                         ComponentPort componentPortA(componentA, portA);
 
-                        QString nameB = obj.value("_componentPortB").toString();
+                        QString nameB = obj.value("_componentPortTwo").toString();
                         Component* componentB = getComponentByName(nameB);
                         qDebug() << componentB->getName();
                         Component::Port portB = toPort(obj.value("_portB").toInt());

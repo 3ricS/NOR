@@ -31,7 +31,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                                                                          _isVerticalComponentDefault);
                 if (createdComponent != nullptr)
                 {
-                    EditView* editView = new EditView(createdComponent, _model, true);
+                    EditView* editView = new EditView(createdComponent, _model, true, this);
                     editView->show();
                 }
             }
@@ -214,7 +214,7 @@ void NetworkView::mouseDoubleClickEvent(QMouseEvent* event)
         {
             _selectedComponent = foundComponent;
             //TODO: emit foundComponent
-            EditView* editView = new EditView(foundComponent, _model);
+            EditView* editView = new EditView(foundComponent, _model, false, this);
             editView->show();
         }
     }

@@ -5,6 +5,7 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 {
     // die Anfangsgröße wird initialisiert
     setSceneRect(-_defaultSceneSize, -_defaultSceneSize, _defaultSceneSize, _defaultSceneSize);
+    _manager = new FileManager(this);
 }
 
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
@@ -48,6 +49,7 @@ bool NetworkGraphics::isThereAComponent(QPointF gridPosition)
     return getComponentAtPosition(gridPosition) != nullptr;
 }
 
+
 void NetworkGraphics::reloadAll(void)
 {
     for (Component* component : _componentList)
@@ -88,45 +90,18 @@ double NetworkGraphics::calculate(void)
 
 void NetworkGraphics::save(void)
 {
-    if(_manager == nullptr)
-    {
-        _manager = new FileManager(_componentList, _connectionList);
-    }
-    else
-    {
-        _manager->setProperties(_componentList, _connectionList);
-    }
-
-    _manager->saving();
+    _manager->save();
 }
 
 void NetworkGraphics::load(void)
 {
-    if(_manager == nullptr)
-    {
-        _manager = new FileManager(_componentList, _connectionList);
-    }
-    else
-    {
-        _manager->setProperties(_componentList, _connectionList);
-    }
-
-    _manager->loading();
+    _manager->load();
     reloadAll();
 }
 
 void NetworkGraphics::saveAs()
 {
-    if(_manager == nullptr)
-    {
-        _manager = new FileManager(_componentList, _connectionList);
-    }
-    else
-    {
-        _manager->setProperties(_componentList, _connectionList);
-    }
-
-    _manager->savingUnder();
+    _manager->saveAs();
 }
 
 void NetworkGraphics::mirrorComponent(Component* component)
@@ -153,34 +128,46 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
     if (Component::ComponentType::Resistor == componentType)
     {
 
-        createdComponent = addResistor(100, gridPosition.x(), gridPosition.y(), componentIsVertical);
+        createdComponent = addResistor("", 100, gridPosition.x(), gridPosition.y(), componentIsVertical);
     }
     else if (Component::ComponentType::PowerSupply == componentType)
     {
-        createdComponent = addPowerSupply(gridPosition.x(), gridPosition.y(), componentIsVertical);
+        createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical);
     }
 
     return createdComponent;
 }
 
-Component* NetworkGraphics::addResistor(int valueResistance, int xPosition, int yPosition, bool isVertical)
+Component* NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, int yPosition, bool isVertical, int id)
 {
     _resistorCount++;
-    QString name = "R" + QString::number(_resistorCount);
+    if("" == name)
+    {
+        name = "R" + QString::number(_resistorCount);
+    }
+    if(0 == id)
+    {
+        id = _resistorCount;
+    }
+
     Component* resistor = new Resistor(name, valueResistance, xPosition, yPosition,
-                                       isVertical);
+                                       isVertical, id);
     addObject(resistor);
     return resistor;
 }
 
-Component* NetworkGraphics::addPowerSupply(int x, int y, bool isVertical)
+Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical, int id)
 {
     _powerSupplyCount++;
+    if("" == name)
+    {
+        name = "Q" + QString::number(_powerSupplyCount);
+    }
+
     if (_powerSupplyCount <= 1)
     {
-        QString name = "Q" + QString::number(_powerSupplyCount);
         Component* powerSupply = new PowerSupply(name, x, y,
-                                                 isVertical);
+                                                 isVertical, id);
         addObject(powerSupply);
         return powerSupply;
     }

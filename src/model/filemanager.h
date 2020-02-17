@@ -16,37 +16,36 @@
 #include <QString>
 #include <QStandardPaths>
 
-
+#include <model/networkgraphics.h>
 #include <model/connection.h>
 #include <model/powersupply.h>
 #include <model/resistor.h>
 
+class NetworkGraphics;
+
 class FileManager
 {
 public:
-    FileManager(QList<Component *> &components, QList<Connection *> &connections);
+    FileManager(NetworkGraphics* model);
 
-    void saving(void);
-    void loading(void);
-    void savingUnder(void);
-    void setProperties(QList<Component *> &components, QList<Connection *> &connections);
+    void save(void);
+    void load(void);
+    void saveAs(void);
 
 private:
-    void save(void);
-    QString createSaveData(void);
-    QJsonObject saveResistor(Component* component);
-    QJsonObject savePowerSupply(Component* component);
+    bool saveData(void);
+    QString createJson(void);
+    QJsonObject saveComponent(Component* component);
     QJsonObject saveConnection(Connection* connection);
-    Component* getComponentByName(QString name);
-    Component::Port toPort(int port);
+    Component* getComponentById(int id);
+    Component::Port toPort(int componentPort);
 
     QFile _actualFile;
     QString  _fileFilter  = "Json (*.json);;Text (*.txt)";
     QDir     _homePath;
     bool _isSaved = false;
 
-    QList<Component*>* _components;
-    QList<Connection*>* _connections;
+    NetworkGraphics* _model = nullptr;
     QDir _dirFilePath;
 
 

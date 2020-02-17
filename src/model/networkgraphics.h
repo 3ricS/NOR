@@ -14,6 +14,8 @@
 #include <model/filemanager.h>
 #include <view/editview.h>
 
+class FileManager;
+
 class NetworkGraphics : public QGraphicsScene
 {
 public:
@@ -27,8 +29,8 @@ public:
 
     Component* createNewComponent(QMouseEvent* mouseEvent, QPointF gridPosition,
                                   Component::ComponentType componentType, bool componentIsVertical);
-    Component* addResistor(int valueResistance, int _xPosition, int _yPosition, bool isVertical);
-    Component* addPowerSupply(int x, int y, bool isVertical);
+    Component* addResistor(QString name, int valueResistance, int _xPosition, int _yPosition, bool isVertical, int id = 0);
+    Component* addPowerSupply(QString name, int x, int y, bool isVertical, int id = 0);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void deleteComponent(Component* component);
     void moveComponent(Component* componentToMove, QPointF gridPosition);
@@ -37,6 +39,8 @@ public:
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
     Component* getComponentAtPosition(QPointF gridPosition);
     bool isThereAComponent(QPointF gridPosition);
+    QList<Component*> getComponents(void) {return _componentList;}
+    QList<Connection*> getConnections(void) {return _connectionList;}
 
 private:
     static constexpr int _defaultSceneSize = 6000;

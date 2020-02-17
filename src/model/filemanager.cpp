@@ -1,7 +1,7 @@
 #include "filemanager.h"
 
-FileManager::FileManager(QList<Component*>& components, QList<Connection*>& connections) :
-        _components(&components), _connections(&connections)
+FileManager::FileManager(NetworkGraphics *model) :
+    _model(model)
 {
 }
 
@@ -14,16 +14,15 @@ FileManager::FileManager(QList<Component*>& components, QList<Connection*>& conn
 * Dazu wird mit Hilfe von QStandardPaths der Fad angegeben, wo die Datei abgelegt werden soll.
 * Mit QFileDialog wird der Name der Datei eingegeben.
 */
-void FileManager::saving(void)
+void FileManager::save(void)
 {
     if(!_isSaved)
     {
-    _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-    _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath(),
-                                                         "Json (*.json);;Text (*.txt)"));
+        _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+        _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath(),
+                                                             "Json (*.json);;Text (*.txt)"));
     }
-    save();
-    _isSaved = true;
+    _isSaved = saveData();
 }
 
 /*!
@@ -33,54 +32,38 @@ void FileManager::saving(void)
 * Mit QFileDialog wird der Name der Datei eingegeben.
 * Darauf folgt das speichern.
 */
-void FileManager::savingUnder(void)
+void FileManager::saveAs(void)
 {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath(),
                                                          "Json (*.json);;Text (*.txt)"));
-    save();
-    _isSaved = true;
+    _isSaved = saveData();
 }
 
 //TODO: Doku fertigstellen in filemanager und überprüfen.
-/*!
-* \brief
-*
-*
-*/
-void FileManager::setProperties(QList<Component *> &components, QList<Connection *> &connections)
-{
-    _connections = &connections;
-    _components = &components;
-}
 
-void FileManager::save(void)
+bool FileManager::saveData(void)
 {
     if (_actualFile.open(QFile::WriteOnly | QFile::Truncate))
     {
         QTextStream out(&_actualFile);
-        out << createSaveData();
+        out << createJson();
         _actualFile.close();
+        return true;
     }
+    return false;
 }
 
-QString FileManager::createSaveData(void)
+QString FileManager::createJson(void)
 {
     QJsonDocument json;
     QJsonArray array;
-    for (Component* c : *_components)
+    for (Component* component : _model->getComponents())
     {
-        if (c->getComponentType() == Component::Resistor)
-        {
-            array.append(saveResistor(c));
-        }
-        else
-        {
-            array.append(savePowerSupply(c));
-        }
+        array.append(saveComponent(component));
     }
 
-    for (Connection* c : *_connections)
+    for (Connection* c : _model->getConnections())
     {
         array.append(saveConnection(c));
     }
@@ -89,45 +72,35 @@ QString FileManager::createSaveData(void)
     return json.toJson();
 }
 
-QJsonObject FileManager::saveResistor(Component* component)
+QJsonObject FileManager::saveComponent(Component* component)
 {
     QJsonObject r;
-    r.insert("type", "Resistor");
-    r.insert("_name", component->getName());
-    r.insert("_xPos", component->getXPosition());
-    r.insert("_yPos", component->getYPosition());
-    r.insert("_orientation", component->isVertical());
-    r.insert("_resistance", component->getValue());
+    r.insert("type", component->getComponentType());
+    r.insert("id", component->getId());
+    r.insert("name", component->getName());
+    r.insert("xPos", component->getXPosition());
+    r.insert("yPos", component->getYPosition());
+    r.insert("isVertical", component->isVertical());
+    r.insert("resistance", component->getValue());
     return r;
-}
-
-QJsonObject FileManager::savePowerSupply(Component* component)
-{
-    QJsonObject ps;
-    ps.insert("type", "PowerSupply");
-    ps.insert("_name", component->getName());
-    ps.insert("_xPos", component->getXPosition());
-    ps.insert("_yPos", component->getYPosition());
-    ps.insert("_orientation", component->isVertical());
-    return ps;
 }
 
 QJsonObject FileManager::saveConnection(Connection* connection)
 {
     QJsonObject c;
     c.insert("type", "Connection");
-    c.insert("_componentPortOne", connection->getComponentPortOne().getComponent()->getName());
-    c.insert("_componentPortTwo", connection->getComponentPortTwo().getComponent()->getName());
-    c.insert("_portA", connection->getComponentPortOne().getPort());
-    c.insert("_portB", connection->getComponentPortTwo().getPort());
+    c.insert("componentIdOne", connection->getComponentPortOne().getComponent()->getId());
+    c.insert("componentIdTwo", connection->getComponentPortTwo().getComponent()->getId());
+    c.insert("portA", connection->getComponentPortOne().getPort());
+    c.insert("portB", connection->getComponentPortTwo().getPort());
     return c;
 }
 
-Component* FileManager::getComponentByName(QString name)
+Component* FileManager::getComponentById(int id)
 {
-    for (Component* component : *_components)
+    for (Component* component : _model->getComponents())
     {
-        if (component->getName() == name)
+        if (component->getId() == id)
         {
             return component;
         }
@@ -135,18 +108,17 @@ Component* FileManager::getComponentByName(QString name)
     return nullptr;
 }
 
-Component::Port FileManager::toPort(int port)
+Component::Port FileManager::toPort(int componentPort)
 {
-    if (port == 0)
+    if(0 == componentPort)
     {
         return Component::Port::A;
     }
-    else if (port == 1)
+    else if (1 == componentPort)
     {
         return Component::Port::B;
     }
-    else
-    {
+    else if (2 == componentPort) {
         return Component::Port::null;
     }
 }
@@ -160,7 +132,7 @@ Component::Port FileManager::toPort(int port)
 * Zuerst werden die Components geladen.
 * Dann folgen die Connectionss, da dies die Connections zugreifen.
 */
-void FileManager::loading(void)
+void FileManager::load(void)
 {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     _actualFile.setFileName(QFileDialog::getOpenFileName(nullptr, "Laden", _dirFilePath.absolutePath(), _fileFilter));
@@ -185,26 +157,20 @@ void FileManager::loading(void)
                 if (array[i].isObject())
                 {
                     QJsonObject obj = array[i].toObject();
-
-
-                    if (obj.value("type") == "Resistor")
+                    QString name = obj.value("name").toString();
+                    int id = obj.value("id").toInt();
+                    int xPos = obj.value("xPos").toInt();
+                    int yPos = obj.value("yPos").toInt();
+                    bool isVertical = obj.value("isVertical").toBool();
+                    int resistance = obj.value("resistance").toInt();
+                    Component::ComponentType componentType = Component::integerToComponentType(obj.value("type").toInt());
+                    if(Component::ComponentType::Resistor == componentType)
                     {
-                        QString name = obj.value("_name").toString();
-                        int xPos = obj.value("_xPos").toInt();
-                        int yPos = obj.value("_yPos").toInt();
-                        bool orientation = obj.value("_orientation").toBool();
-                        int resistance = obj.value("_resistance").toInt();
-                        Component* resistor = new Resistor(name, resistance, xPos, yPos, orientation);
-                        _components->append(resistor);
+                        _model->addResistor(name, resistance, xPos, yPos, isVertical, id);
                     }
-                    else if (obj.value("type") == "PowerSupply")
+                    else if(Component::ComponentType::PowerSupply == componentType)
                     {
-                        QString name = obj.value("_name").toString();
-                        int xPos = obj.value("_xPos").toInt();
-                        int yPos = obj.value("_yPos").toInt();;
-                        bool orientation = obj.value("_orientation").toBool();
-                        Component* powerSupply = new PowerSupply(name, xPos, yPos, orientation);
-                        _components->append(powerSupply);
+                        _model->addPowerSupply(name, xPos, yPos, isVertical, id);
                     }
                 }
             }
@@ -218,20 +184,17 @@ void FileManager::loading(void)
 
                     if (obj.value("type") == "Connection")
                     {
-                        QString nameA = obj.value("_componentPortOne").toString();
-                        Component* componentA = getComponentByName(nameA);
-                        qDebug() << componentA->getName();
-                        Component::Port portA = toPort(obj.value("_portA").toInt());
+                        int idA = obj.value("componentIdOne").toInt();
+                        Component* componentA = getComponentById(idA);
+                        Component::Port portA = toPort(obj.value("portA").toInt());
                         ComponentPort componentPortA(componentA, portA);
 
-                        QString nameB = obj.value("_componentPortTwo").toString();
-                        Component* componentB = getComponentByName(nameB);
-                        qDebug() << componentB->getName();
-                        Component::Port portB = toPort(obj.value("_portB").toInt());
+                        int idB = obj.value("componentIdTwo").toInt();
+                        Component* componentB = getComponentById(idB);
+                        Component::Port portB = toPort(obj.value("portB").toInt());
                         ComponentPort componentPortB(componentB, portB);
 
-                        Connection* connection = new Connection(componentPortA, componentPortB);
-                        _connections->append(connection);
+                        _model->addConnection(componentPortA, componentPortB);
                     }
                 }
             }

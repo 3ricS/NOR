@@ -21,7 +21,6 @@ dauerhaftes Berechnen der Widerstände
 Dateiname in Überschrift
 Textfelder
 Multiselect der Bauteile
-Nach Laden interne ID´s anpassen
 Duplizieren (Strg + D)
 
 
@@ -33,5 +32,3 @@ View
 - Button zum Drehen der Widerstände beim Einfügen
 - einzelne Connections löschen
 - beim Speichern muss es ein Standardname festgelegt sein
-- speichern und öffnen: Komponenten müssen codiert werden auf _id, nicht auf _name
-- _id beim Laden setzen

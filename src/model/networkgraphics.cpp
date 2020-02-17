@@ -21,6 +21,8 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
     {
         qDebug() << "NetworkGraphics: Connection bereits vorhanden!";
     }
+
+    updateCalc();
 }
 
 
@@ -87,12 +89,11 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
 
 double NetworkGraphics::calculate(void)
 {
-    Calculator calculator = Calculator(_connectionList, _componentList);
-    calculator.calculate();
+    updateCalc();
 
     QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                                              QString::number(calculator.getResistanceValue()) + "Ω");
-    return calculator.getResistanceValue();
+                                              QString::number(_calculator.getResistanceValue()) + "Ω");
+    return _calculator.getResistanceValue();
 }
 
 void NetworkGraphics::save(void)
@@ -104,7 +105,8 @@ void NetworkGraphics::save(void)
 void NetworkGraphics::load(void)
 {
     _manager->load();
-    reloadAll();
+    //reloadAll();
+
 }
 
 void NetworkGraphics::saveAs()
@@ -143,6 +145,7 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
         createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical);
     }
 
+    updateCalc();
     return createdComponent;
 }
 
@@ -161,6 +164,8 @@ Component* NetworkGraphics::addResistor(QString name, int valueResistance, int x
     Component* resistor = new Resistor(name, valueResistance, xPosition, yPosition,
                                        isVertical, id);
     addObject(resistor);
+
+    updateCalc();
     return resistor;
 }
 
@@ -214,6 +219,7 @@ void NetworkGraphics::deleteComponent(Component* component)
             }
         }
 
+        updateCalc();
         delete component;
     }
 }
@@ -281,4 +287,59 @@ void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnect
 
         }
     }
+}
+
+void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
+{
+    // 3 mal rechts ist einmal links
+    for(int i = 0; i < 3; i++)
+    {
+        turnComponentRight(componentToTurn);
+    }
+}
+
+void NetworkGraphics::turnComponentRight(Component* componentToTurn)
+{
+    switch (componentToTurn->getOrientation())
+    {
+        case Component::Orientation::left:
+        {
+            componentToTurn->setOrientation(Component::Orientation::top);
+            //mirrorComponent(componentToTurn);
+        }
+        break;
+        case Component::Orientation::top:
+        {
+            componentToTurn->setOrientation(Component::Orientation::right);
+            mirrorComponent(componentToTurn);
+        }
+            break;
+        case Component::Orientation::right:
+        {
+            componentToTurn->setOrientation(Component::Orientation::bottom);
+        }
+        break;
+        case Component::Orientation::bottom:
+        {
+            componentToTurn->setOrientation(Component::Orientation::left);
+            mirrorComponent(componentToTurn);
+        }
+        break;
+    }
+}
+
+void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation)
+{
+    while(componentToTurn->getOrientation() != orientation)
+    {
+        turnComponentRight(componentToTurn);
+    }
+}
+
+void NetworkGraphics::updateCalc(void)
+{
+    _calculator.setLists(_connectionList, _componentList);
+    _calculator.calculate();
+    qDebug() << "Neuer Widerstandswert: " << _calculator.getResistanceValue();
+    //TODO: neuen Widerstandswert anzeigen
 }

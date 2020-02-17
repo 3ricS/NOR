@@ -25,7 +25,13 @@ public:
     void save(void);
     void load(void);
     void saveAs(void);
+
+    void updateCalc(void);
+
     void mirrorComponent(Component* component);
+    void turnComponentLeft(Component* componentToTurn);
+    void turnComponentRight(Component* componentToTurn);
+    void setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation);
 
     Component* createNewComponent(QMouseEvent* mouseEvent, QPointF gridPosition,
                                   Component::ComponentType componentType, bool componentIsVertical);
@@ -58,6 +64,7 @@ private:
     QList<Connection*> _connectionList;
     QGraphicsScene* _graphics = nullptr;
     FileManager* _manager = nullptr;
+    Calculator _calculator = Calculator(_connectionList, _componentList);
 };
 
 #endif // NETWORKGRAPHICS_H

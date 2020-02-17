@@ -39,16 +39,18 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             {
                 _isVerticalComponentDefault = !_isVerticalComponentDefault;
                 gridDisappears();
-                if(MouseMode::PowerSupplyMode == _mouseMode)
+                if (MouseMode::PowerSupplyMode == _mouseMode)
                 {
                     Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                            gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+                                                                gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                                0);
                     _sampleComponentOnMoveEvent = sampleResistor;
                 }
                 else if (MouseMode::ResistorMode == _mouseMode)
                 {
                     Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                             gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+                                                             gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                             0);
                     _sampleComponentOnMoveEvent = sampleResistor;
                 }
                 _model->addItem(_sampleComponentOnMoveEvent);

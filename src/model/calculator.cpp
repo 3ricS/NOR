@@ -19,22 +19,23 @@ void Calculator::calculate()
     if(isParallel)
     {
         parallelAnalysis(foundComponents, actualImpedanz);
-        QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                           QString::number(actualImpedanz) + "Ω");
+        //QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
+        //                   QString::number(actualImpedanz) + "Ω");
     }
 
     bool isRow = foundComponents.count() == 1;
     if(isRow)
     {
         rowAnalysis(foundComponents[0], actualImpedanz);
-        QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                           QString::number(actualImpedanz) + "Ω");
+        //QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
+        //                   QString::number(actualImpedanz) + "Ω");
     }
 
     bool isNotConnected = foundComponents.count() == 0;
     if(isNotConnected)
     {
-        QMessageBox::about(nullptr, "Fehler", "PowerSupply nicht verbunden.");
+        //QMessageBox::about(nullptr, "Fehler", "PowerSupply nicht verbunden.");
+        qDebug() << "Calculator.cpp: PowerSupply nicht verbunden";
     }
 
     _resistanceValue = actualImpedanz;
@@ -292,4 +293,10 @@ void Calculator::searchingForDirectRowNeighbours(ComponentPort actualComPort, QL
 
         searchingForIndirectNeighbours(foundCompPort);
     }
+}
+
+void Calculator::setLists(QList<Connection*> connections, QList<Component*> components)
+{
+    _connections = connections;
+    _components = components;
 }

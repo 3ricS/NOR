@@ -16,6 +16,8 @@ public:
     //Getter
     double getResistanceValue(void) const {return _resistanceValue;}
 
+    void setLists(QList<Connection*> connections, QList<Component*> components);
+
     //Methoden
     void calculate(void);
 

@@ -16,8 +16,6 @@ UNDO (oben links) QUNDOSTACK
 PowerSupply spiegeln momentan steht da noch Widerstand im EditView
 Linksrum drehen / rechtsrum drehen
 Linien redraw behandeln, verschwinden teils
-Escape direkt nach auswahl des Bauteils
-direkt auf 100% Zoom
 default Ansicht nach Laden
 Linien einzeln entfernen
 dauerhaftes Berechnen der Widerstände
@@ -33,12 +31,9 @@ View
 //-Bau einen Widgets in dem rechten ListView (PropertyView oder so vlt?)
 
 - strg + Mausrad = zoom
-- zoom 100 %
 - Verbindungen rechtwinklig zeichnen!!!!!
 - Button zum Drehen der Widerstände beim Einfügen
 - einzelne Connections löschen
-
-- bei Start des Programms muss bei "Speichern" nach dem Ort gefragt werden
 - beim Speichern muss es ein Standardname festgelegt sein
 - speichern und öffnen: Komponenten müssen codiert werden auf _id, nicht auf _name
 - _id beim Laden setzen

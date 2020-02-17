@@ -1,7 +1,7 @@
 #include "view/mainwindow.h"
 
 MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow),
-                                                                  _model(model)
+    _model(model)
 {
     _ui->setupUi(this);
     setWindowTitle("NOR - Network of Resistance");
@@ -20,6 +20,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     createUpperMenu();
 
     // set connections to model
+    connect(_ui->Selection, SIGNAL(released()), this, SLOT(setSelectionMode()));
     connect(_ui->Resistor, SIGNAL(released()), this, SLOT(setResistorMode()));
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
@@ -32,24 +33,47 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->MinusZoom, SIGNAL(released()), this, SLOT(setZoomOut()));
     connect(_zoomIn, SIGNAL(triggered()), this, SLOT(setZoomIn()));
     connect(_zoomOut, SIGNAL(triggered()), this, SLOT(setZoomOut()));
+    connect(_zoom100Percent, SIGNAL(triggered()), this, SLOT(setZoom100Percent()));
+}
+
+//Setzen des Selection Modes
+void MainWindow::setSelectionMode()
+{
+    _networkView->setMouseMode(NetworkView::MouseMode::SelectionMode);
+    _ui->Resistor->setDown(false);
+    _ui->Connection->setDown(false);
+    _ui->PowerSupply->setDown(false);
+    _ui->Selection->setDown(true);
 }
 
 // Setzen des Widerstands-Modus
 void MainWindow::setResistorMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ResistorMode);
+    _ui->Resistor->setDown(true);
+    _ui->Connection->setDown(false);
+    _ui->PowerSupply->setDown(false);
+    _ui->Selection->setDown(false);
 }
 
 // Setzen des PowerSupply-Modus
 void MainWindow::setPowerSupplyMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::PowerSupplyMode);
+    _ui->Resistor->setDown(false);
+    _ui->Connection->setDown(false);
+    _ui->PowerSupply->setDown(true);
+    _ui->Selection->setDown(false);
 }
 
 //Setzen des Connection-Modus
 void MainWindow::setConnectionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ConnectionMode);
+    _ui->Resistor->setDown(false);
+    _ui->Connection->setDown(true);
+    _ui->PowerSupply->setDown(false);
+    _ui->Selection->setDown(false);
 }
 
 void MainWindow::setCalculation(void)
@@ -83,6 +107,18 @@ void MainWindow::setSaveAsFile()
     _model->saveAs();
 }
 
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    _networkView->EscapeKeyPressed(event);
+    if(event->key() == Qt::Key::Key_Escape)
+    {
+        _ui->Resistor->setDown(false);
+        _ui->Connection->setDown(false);
+        _ui->PowerSupply->setDown(false);
+        _ui->Selection->setDown(false);
+    }
+}
+
 void MainWindow::createUpperMenu(void)
 {
     _new = new QAction("Neu");
@@ -114,6 +150,11 @@ void MainWindow::createUpperMenu(void)
     _zoomOut->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus));
     _zoomOut->setStatusTip("Rauszoomen");
     _ui->menuAnsicht->addAction(_zoomOut);
+
+
+    _zoom100Percent = new QAction("Zoom Normal");
+    _zoom100Percent->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_0));
+    _ui->menuAnsicht->addAction(_zoom100Percent);
 }
 
 //Zoom in
@@ -137,7 +178,24 @@ void MainWindow::setZoomOut()
     _model->update();
 }
 
+//Zoom 100%
+void MainWindow::setZoom100Percent()
+{
+    while (_scalefactor != 1.0)
+    {
+        if(_scalefactor > 1.0)
+        {
+            setZoomOut();
+        }
+        else if(_scalefactor < 1.0)
+        {
+            setZoomIn();
+        }
+    }
+}
+
 MainWindow::~MainWindow()
 {
     delete _ui;
 }
+

@@ -13,7 +13,6 @@ ___________________________________________________________________
 
 Model
 UNDO (oben links) QUNDOSTACK
-PowerSupply spiegeln momentan steht da noch Widerstand im EditView
 Linksrum drehen / rechtsrum drehen
 Linien redraw behandeln, verschwinden teils
 default Ansicht nach Laden
@@ -23,7 +22,6 @@ Dateiname in Überschrift
 Textfelder
 Multiselect der Bauteile
 Nach Laden interne ID´s anpassen
-Im editView die Überschriften neben das Eingabefeld
 Duplizieren (Strg + D)
 
 

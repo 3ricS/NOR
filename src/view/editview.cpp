@@ -41,6 +41,7 @@ void EditView::setupView(void)
     {
         valueDescription = "Spannung [V]:";
         valuePlaceHolder = "Spannungswert hier eingeben";
+        _editViewUi->buttonMirrorComponent->setText("Spannungsquelle spiegeln");
     }
 
     QRegExp regExp("[1-9][0-9]*$");

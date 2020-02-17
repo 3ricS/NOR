@@ -52,7 +52,6 @@ HEADERS += \
         model/ComponentPort.h
 
 FORMS += \
-        view/aboutview.ui \
         view/editview.ui \
         view/mainwindow.ui
 

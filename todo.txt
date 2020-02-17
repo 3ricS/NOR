@@ -1,4 +1,4 @@
-Moritz
+﻿Moritz
 
 Leonel
 
@@ -12,6 +12,21 @@ Eric
 ___________________________________________________________________
 
 Model
+UNDO (oben links) QUNDOSTACK
+PowerSupply spiegeln momentan steht da noch Widerstand im EditView
+Linksrum drehen / rechtsrum drehen
+Linien redraw behandeln, verschwinden teils
+Escape direkt nach auswahl des Bauteils
+direkt auf 100% Zoom
+default Ansicht nach Laden
+Linien einzeln entfernen
+dauerhaftes Berechnen der Widerstände
+Dateiname in Überschrift
+Textfelder
+Multiselect der Bauteile
+Nach Laden interne ID´s anpassen
+Im editView die Überschriften neben das Eingabefeld
+Duplizieren (Strg + D)
 
 
 View

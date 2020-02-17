@@ -1,0 +1,23 @@
+Protokoll 17.02.20
+
+Teilnehmer:
+Moritz Fichte, Leonel Fransen, Eric Schniedermeyer und Sören Köstler
+
+Start: 10:15 Ende: 10:45
+
+Inhalt: 
+-UNDO (oben links) QUNDOSTACK
+-PowerSupply spiegeln momentan steht da noch Widerstand im EditView
+-Linksrum drehen / rechtsrum drehen
+-Linien redraw behandeln, verschwinden teils
+-Escape direkt nach auswahl des Bauteils
+-direkt auf 100% Zoom
+-default Ansicht nach Laden
+-Linien einzeln entfernen
+-dauerhaftes Berechnen der Widerstände
+-Dateiname in Überschrift
+-Textfelder
+-Multiselect der Bauteile
+-Nach Laden interne ID´s anpassen
+-Im editView die Überschriften neben das Eingabefeld
+-Duplizieren (Strg + D)

@@ -16,7 +16,9 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
         _connectionList.append(connection);
         addItem(connection);
         update();
-    } else {
+    }
+    else
+    {
         qDebug() << "NetworkGraphics: Connection bereits vorhanden!";
     }
 }
@@ -253,11 +255,13 @@ void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnect
             {
                 componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::A);
                 componentPortOther = ComponentPort(anotherComponent, Component::Port::B);
-            }else if (equalPortBtoA)
+            }
+            else if (equalPortBtoA)
             {
                 componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::B);
                 componentPortOther = ComponentPort(anotherComponent, Component::Port::A);
-            }else if (equalPortBtoB)
+            }
+            else if (equalPortBtoB)
             {
                 componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::B);
                 componentPortOther = ComponentPort(anotherComponent, Component::Port::B);

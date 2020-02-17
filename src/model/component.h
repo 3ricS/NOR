@@ -24,10 +24,11 @@ public:
     //TODO: darf amn das groß schreiben?
     enum ComponentType{Resistor, PowerSupply};
     enum Port{A, B, null};
-    Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int countPorts);
+    Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int id);
 
     QRectF boundingRect(void) const;
     bool hasPortAtPosition(QPointF position) const;
+    static ComponentType integerToComponentType(int componentType);
 
     //getter
     int getComponentType(void) const {return _componentType;}
@@ -39,6 +40,7 @@ public:
 
     Component::Port getPort(QPointF position) const;
     QPointF getPortPosition(Port port) const;
+    int getId(void) {return _id;}
 
     //setter
     void setVertical(bool orientation) {_isVertical = orientation;}
@@ -63,12 +65,10 @@ protected:
 private:
     int getPortPositionXOrY(int positionValue, Port port, bool isX) const;
 
-    int _count = 0;
     const int _id;
 
     //_componentTyp gets the type of the object
     const ComponentType _componentType;
-    const int _countPorts;
 };
 
 #endif // COMPONENT_H

@@ -4,8 +4,8 @@
 #include <model/networkgraphics.h>
 
 EditView::EditView(Component* component, NetworkGraphics* model, bool isInitializingWindow, QWidget* parent) :
-        QDialog(parent),
-        _editViewUi(new Ui::EditView), _model(model)
+    QDialog(parent),
+    _editViewUi(new Ui::EditView), _model(model)
 {
     _component = component;
     setupView();
@@ -75,23 +75,28 @@ void EditView::ok(void)
 {
     //Wert prüfen
     QString newValueString = _editViewUi->textEditValue->text();
-    bool convertSuccsessful = false;
-    int newValue = newValueString.toInt(&convertSuccsessful);
-
-    //Werte übernehmen
-    if (convertSuccsessful)
+    if("" != newValueString)
     {
-        QString newName = _editViewUi->textEditName->text();
-        _component->setName(newName);
-        _component->setValue(newValue);
-        bool isVerticalNew = _editViewUi->verticalButton->isChecked();
-        _component->setVertical(isVerticalNew);
+        bool convertSuccsessful = false;
+        int newValue = newValueString.toInt(&convertSuccsessful);
 
-        close();
-    }
-    else
-    {
-        QMessageBox::about(this, "Fehler", "Ungültiger Wert wurde eingeben.");
+        //Werte übernehmen
+        if (convertSuccsessful)
+        {
+            QString newName = _editViewUi->textEditName->text();
+            _component->setName(newName);
+            _component->setValue(newValue);
+            bool isVerticalNew = _editViewUi->verticalButton->isChecked();
+            _component->setVertical(isVerticalNew);
+
+            close();
+        }
+        else
+        {
+            QMessageBox::about(this, "Üngültige Eingabe", "Ungültiger Wert wurde eingeben.");
+        }
+    } else {
+        QMessageBox::about(this, "Üngültige Eingabe", "Bitte Namen eingeben.");
     }
 }
 

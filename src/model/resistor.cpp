@@ -1,8 +1,8 @@
 #include "resistor.h"
 
 
-Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVertical)
-        : Component(x, y, isVertical, name, valueResistance, Component::ComponentType::Resistor, 2)
+Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVertical, int id)
+        : Component(x, y, isVertical, name, valueResistance, Component::ComponentType::Resistor, id)
 {
 }
 

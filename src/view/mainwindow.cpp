@@ -92,12 +92,14 @@ void MainWindow::setSaveFile(void)
 
 void MainWindow::setOpenFile(void)
 {
-    _model->load();
+    NetworkGraphics* model = new NetworkGraphics();
+    MainWindow* window = new MainWindow(model);
+    window->show();
+    model->load();
 }
 
 void MainWindow::setNewFile(void)
 {
-    //ToDo: Momentan werden noch Objekte mit weiterzählenden id's erzeugt die Statik sind, wenn jemand ne Idee hat immer man ändern
     NetworkGraphics* _model = new NetworkGraphics();
     MainWindow* window = new MainWindow(_model);
     window->show();

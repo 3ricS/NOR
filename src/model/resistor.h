@@ -6,7 +6,7 @@
 class Resistor : public Component
 {
 public:
-    Resistor(QString _name, int valueResistance, int _xPosition, int _yPosition, bool isVertical);
+    Resistor(QString _name, int valueResistance, int _xPosition, int _yPosition, bool isVertical, int id);
 
     //Methoden
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;

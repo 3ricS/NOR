@@ -42,13 +42,13 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                 if(MouseMode::PowerSupplyMode == _mouseMode)
                 {
                     Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                            gridPosition.toPoint().y(), _isVerticalComponentDefault);
+                                                            gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
                     _sampleComponentOnMoveEvent = sampleResistor;
                 }
                 else if (MouseMode::ResistorMode == _mouseMode)
                 {
                     Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                             gridPosition.toPoint().y(), _isVerticalComponentDefault);
+                                                             gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
                     _sampleComponentOnMoveEvent = sampleResistor;
                 }
                 _model->addItem(_sampleComponentOnMoveEvent);
@@ -150,7 +150,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         case (ResistorMode):
         {
             Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                     gridPosition.toPoint().y(), _isVerticalComponentDefault);
+                                                     gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
             _sampleComponentOnMoveEvent = sampleResistor;
             _model->addItem(_sampleComponentOnMoveEvent);
             highlightRect(scenePosition, _highlightColor);
@@ -159,7 +159,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         case (PowerSupplyMode):
         {
             Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                        gridPosition.toPoint().y(), _isVerticalComponentDefault);
+                                                        gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
             _sampleComponentOnMoveEvent = sampleResistor;
             _model->addItem(_sampleComponentOnMoveEvent);
             highlightRect(scenePosition, _highlightColor);

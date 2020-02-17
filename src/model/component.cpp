@@ -1,11 +1,11 @@
 #include <view/editview.h>
 #include "component.h"
 
-Component::Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int countPorts)
+Component::Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int id)
         : QGraphicsItem(nullptr),
-          _id(++_count), _xPosition(x), _yPosition(y), _isVertical(isVertical),
+          _id(id), _xPosition(x), _yPosition(y), _isVertical(isVertical),
           _name(name), _value(value),
-          _componentType(componentTyp), _countPorts(countPorts)
+          _componentType(componentTyp)
 {
     //TODO: id wird nicht genutzt
 }
@@ -70,6 +70,18 @@ bool Component::hasPortAtPosition(QPointF position) const
 {
     Port foundPort = getPort(position);
     return Port::null != foundPort;
+}
+
+Component::ComponentType Component::integerToComponentType(int componentType)
+{
+    if(0 == componentType)
+    {
+        return ComponentType::Resistor;
+    }
+    else if (1 == componentType)
+    {
+        return ComponentType::PowerSupply;
+    }
 }
 
 QPointF Component::getPortPosition(Component::Port port) const

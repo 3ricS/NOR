@@ -21,6 +21,8 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
     {
         qDebug() << "NetworkGraphics: Connection bereits vorhanden!";
     }
+
+    updateCalc();
 }
 
 
@@ -82,12 +84,11 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
 
 double NetworkGraphics::calculate(void)
 {
-    Calculator calculator = Calculator(_connectionList, _componentList);
-    calculator.calculate();
+    updateCalc();
 
     QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                                              QString::number(calculator.getResistanceValue()) + "Ω");
-    return calculator.getResistanceValue();
+                                              QString::number(_calculator.getResistanceValue()) + "Ω");
+    return _calculator.getResistanceValue();
 }
 
 void NetworkGraphics::save(void)
@@ -99,6 +100,7 @@ void NetworkGraphics::load(void)
 {
     _manager->load();
     reloadAll();
+
 }
 
 void NetworkGraphics::saveAs()
@@ -137,6 +139,7 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
         createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical);
     }
 
+    updateCalc();
     return createdComponent;
 }
 
@@ -155,6 +158,8 @@ Component* NetworkGraphics::addResistor(QString name, int valueResistance, int x
     Component* resistor = new Resistor(name, valueResistance, xPosition, yPosition,
                                        isVertical, id);
     addObject(resistor);
+
+    updateCalc();
     return resistor;
 }
 
@@ -208,6 +213,7 @@ void NetworkGraphics::deleteComponent(Component* component)
             }
         }
 
+        updateCalc();
         delete component;
     }
 }
@@ -322,4 +328,12 @@ void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Comp
     {
         turnComponentRight(componentToTurn);
     }
+}
+
+void NetworkGraphics::updateCalc(void)
+{
+    _calculator.setLists(_connectionList, _componentList);
+    _calculator.calculate();
+    qDebug() << "Neuer Widerstandswert: " << _calculator.getResistanceValue();
+    //TODO: neuen Widerstandswert anzeigen
 }

@@ -26,7 +26,7 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        model/calculator.cpp \
+        model/_calculator.cpp \
         model/component.cpp \
         model/connection.cpp \
         model/filemanager.cpp \
@@ -39,7 +39,7 @@ SOURCES += \
         model/ComponentPort.cpp
 
 HEADERS += \
-        model/calculator.h \
+        model/_calculator.h \
         model/component.h \
         model/connection.h \
         model/filemanager.h \

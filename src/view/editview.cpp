@@ -75,6 +75,7 @@ void EditView::ok(void)
             _component->setName(newName);
             _component->setValue(newValue);
 
+            _model->updateCalc();
             close();
         }
         else

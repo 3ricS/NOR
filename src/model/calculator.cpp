@@ -34,7 +34,8 @@ void Calculator::calculate()
     bool isNotConnected = foundComponents.count() == 0;
     if(isNotConnected)
     {
-        QMessageBox::about(nullptr, "Fehler", "PowerSupply nicht verbunden.");
+        //QMessageBox::about(nullptr, "Fehler", "PowerSupply nicht verbunden.");
+        qDebug() << "Calculator.cpp: PowerSupply nicht verbunden";
     }
 
     _resistanceValue = actualImpedanz;
@@ -292,4 +293,10 @@ void Calculator::searchingForDirectRowNeighbours(ComponentPort actualComPort, QL
 
         searchingForIndirectNeighbours(foundCompPort);
     }
+}
+
+void Calculator::setLists(QList<Connection*> connections, QList<Component*> components)
+{
+    _connections = connections;
+    _components = components;
 }

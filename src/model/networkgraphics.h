@@ -25,6 +25,9 @@ public:
     void save(void);
     void load(void);
     void saveAs(void);
+
+    void updateCalc(void);
+
     void mirrorComponent(Component* component);
     void turnComponentLeft(Component* componentToTurn);
     void turnComponentRight(Component* componentToTurn);
@@ -60,6 +63,7 @@ private:
     QList<Connection*> _connectionList;
     QGraphicsScene* _graphics = nullptr;
     FileManager* _manager = nullptr;
+    Calculator _calculator = Calculator(_connectionList, _componentList);
 };
 
 #endif // NETWORKGRAPHICS_H

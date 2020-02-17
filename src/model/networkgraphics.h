@@ -26,6 +26,9 @@ public:
     void load(void);
     void saveAs(void);
     void mirrorComponent(Component* component);
+    void turnComponentLeft(Component* componentToTurn);
+    void turnComponentRight(Component* componentToTurn);
+    void setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation);
 
     Component* createNewComponent(QMouseEvent* mouseEvent, QPointF gridPosition,
                                   Component::ComponentType componentType, bool componentIsVertical);

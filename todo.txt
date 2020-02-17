@@ -23,6 +23,9 @@ Textfelder
 Multiselect der Bauteile
 Duplizieren (Strg + D)
 
+Laden in gleichem Fenster!
+Keine Fehler bei Laden
+
 
 View
 //-Bau einen Widgets in dem rechten ListView (PropertyView oder so vlt?)

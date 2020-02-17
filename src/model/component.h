@@ -24,6 +24,7 @@ public:
     //TODO: darf amn das groß schreiben?
     enum ComponentType{Resistor, PowerSupply};
     enum Port{A, B, null};
+    enum Orientation{left, top, right, bottom};
     Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int id);
 
     QRectF boundingRect(void) const;
@@ -41,9 +42,11 @@ public:
     Component::Port getPort(QPointF position) const;
     QPointF getPortPosition(Port port) const;
     int getId(void) {return _id;}
+    Orientation getOrientation(void) {return _orientation;}
 
     //setter
     void setVertical(bool orientation) {_isVertical = orientation;}
+    void setOrientation(Component::Orientation newOrientation);
     void setName(QString name) {_name = name;}
     void setValue(int newValue) {_value = newValue;}
     void setPosition(QPointF gridPosition);
@@ -55,6 +58,7 @@ protected:
     int _xPosition;
     int _yPosition;
     bool _isVertical;
+    Orientation _orientation;
 
     QString _name;
     int _value;

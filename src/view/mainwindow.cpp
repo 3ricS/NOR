@@ -15,6 +15,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     _networkView = _ui->networkView;
     _ui->networkView->setModel(_model);
     _ui->networkView->setScene(_model);
+    setSelectionMode();
 
     //Menuleisten Action wird erzeugt
     createUpperMenu();
@@ -115,10 +116,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     _networkView->EscapeKeyPressed(event);
     if(event->key() == Qt::Key::Key_Escape)
     {
-        _ui->Resistor->setDown(false);
-        _ui->Connection->setDown(false);
-        _ui->PowerSupply->setDown(false);
-        _ui->Selection->setDown(false);
+        setSelectionMode();
     }
 }
 

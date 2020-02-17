@@ -7,7 +7,14 @@ Component::Component(int x, int y, bool isVertical, QString name, int value, Com
           _name(name), _value(value),
           _componentType(componentTyp)
 {
-    //TODO: id wird nicht genutzt
+    if (isVertical)
+    {
+        _orientation = Orientation::top;
+    }
+    else
+    {
+        _orientation = Orientation::left;
+    }
 }
 
 QRectF Component::boundingRect(void) const
@@ -74,7 +81,7 @@ bool Component::hasPortAtPosition(QPointF position) const
 
 Component::ComponentType Component::integerToComponentType(int componentType)
 {
-    if(0 == componentType)
+    if (0 == componentType)
     {
         return ComponentType::Resistor;
     }
@@ -94,4 +101,15 @@ void Component::setPosition(QPointF gridPosition)
 {
     _xPosition = gridPosition.toPoint().x();
     _yPosition = gridPosition.toPoint().y();
+}
+
+void Component::setOrientation(Component::Orientation newOrientation)
+{
+    _orientation = newOrientation;
+    if (Orientation::left == newOrientation || Orientation::right == newOrientation)
+    {
+        _isVertical = false;
+    } else {
+        _isVertical = true;
+    }
 }

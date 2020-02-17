@@ -276,3 +276,50 @@ void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnect
         }
     }
 }
+
+void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
+{
+    // 3 mal rechts ist einmal links
+    for(int i = 0; i < 3; i++)
+    {
+        turnComponentRight(componentToTurn);
+    }
+}
+
+void NetworkGraphics::turnComponentRight(Component* componentToTurn)
+{
+    switch (componentToTurn->getOrientation())
+    {
+        case Component::Orientation::left:
+        {
+            componentToTurn->setOrientation(Component::Orientation::top);
+            //mirrorComponent(componentToTurn);
+        }
+        break;
+        case Component::Orientation::top:
+        {
+            componentToTurn->setOrientation(Component::Orientation::right);
+            mirrorComponent(componentToTurn);
+        }
+            break;
+        case Component::Orientation::right:
+        {
+            componentToTurn->setOrientation(Component::Orientation::bottom);
+        }
+        break;
+        case Component::Orientation::bottom:
+        {
+            componentToTurn->setOrientation(Component::Orientation::left);
+            mirrorComponent(componentToTurn);
+        }
+        break;
+    }
+}
+
+void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation)
+{
+    while(componentToTurn->getOrientation() != orientation)
+    {
+        turnComponentRight(componentToTurn);
+    }
+}

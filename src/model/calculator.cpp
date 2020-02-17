@@ -19,16 +19,16 @@ void Calculator::calculate()
     if(isParallel)
     {
         parallelAnalysis(foundComponents, actualImpedanz);
-        QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                           QString::number(actualImpedanz) + "Ω");
+        //QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
+        //                   QString::number(actualImpedanz) + "Ω");
     }
 
     bool isRow = foundComponents.count() == 1;
     if(isRow)
     {
         rowAnalysis(foundComponents[0], actualImpedanz);
-        QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                           QString::number(actualImpedanz) + "Ω");
+        //QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
+        //                   QString::number(actualImpedanz) + "Ω");
     }
 
     bool isNotConnected = foundComponents.count() == 0;

@@ -26,8 +26,8 @@ public:
                       QWidget* parent = nullptr);
 
 public slots:
-    void mirrorElement(void);
-    void updateViewOnChangedOrientation(void);
+    void turnLeft(void);
+    void turnRight(void);
 
     void cancel(void);
     void ok(void);
@@ -41,8 +41,7 @@ private:
     Ui::EditView* _editViewUi;
     Component* _component = nullptr;
     NetworkGraphics* _model = nullptr;
-    bool _isVerticalAtStart = false;
-    bool _hasMirroredComponent = false;
+    Component::Orientation _orientationAtStart;
 };
 
 #endif // EDITINGVIEW_H

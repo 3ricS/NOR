@@ -99,7 +99,7 @@ void NetworkGraphics::save(void)
 void NetworkGraphics::load(void)
 {
     _manager->load();
-    reloadAll();
+    //reloadAll();
 
 }
 

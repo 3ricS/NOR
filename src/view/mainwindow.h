@@ -7,6 +7,7 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QAction>
+#include <QMouseEvent>
 
 #include <QToolBar>
 #include <QListView>
@@ -51,6 +52,7 @@ public slots:
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
+    void wheelEvent(QWheelEvent *event) override;
 
 private:
     void createUpperMenu(void);

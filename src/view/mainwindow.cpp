@@ -122,6 +122,19 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
+void MainWindow::wheelEvent(QWheelEvent *event)
+{
+    //TODO: Irgendwie mit Steuerung verknüfen
+    if(event->delta() > 0)
+    {
+       setZoomIn();
+    }
+    if(event->delta() < 0)
+    {
+       setZoomOut();
+    }
+}
+
 void MainWindow::createUpperMenu(void)
 {
     _new = new QAction("Neu");

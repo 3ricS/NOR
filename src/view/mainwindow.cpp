@@ -34,6 +34,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_zoomIn, SIGNAL(triggered()), this, SLOT(setZoomIn()));
     connect(_zoomOut, SIGNAL(triggered()), this, SLOT(setZoomOut()));
     connect(_zoom100Percent, SIGNAL(triggered()), this, SLOT(setZoom100Percent()));
+    connect(_about,SIGNAL(triggered()), this, SLOT(openAboutWindow()));
 }
 
 //Setzen des Selection Modes
@@ -157,6 +158,26 @@ void MainWindow::createUpperMenu(void)
     _zoom100Percent = new QAction("Zoom Normal");
     _zoom100Percent->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_0));
     _ui->menuAnsicht->addAction(_zoom100Percent);
+
+    _about = new QAction("Über");
+    _ui->menuExtras->addAction(_about);
+
+}
+
+void MainWindow::openAboutWindow()
+{
+    QMessageBox::about(this, ("About Application"),
+                       ("Das Programm <b>NOR - Network of Resistance</b> berechnet den Gesamtwiderstand von Netzwerken "
+                        "<br> "
+                        "<br> Dieses Programm wurde von folgenden Personen, im Rahmen von Software Engineering 1, geschrieben:"
+                        "<br>"
+                        "<br> Eric Schniedermeyer"
+                        "<br> Leonel Fransen"
+                        "<br> Moritz Fichte"
+                        "<br> Sören Köstler"
+                        "<br>"
+                        "<br> Version: 1.0")
+                       );
 }
 
 //Zoom in

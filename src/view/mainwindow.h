@@ -47,6 +47,7 @@ public slots:
     void setZoom100Percent(void);
     void setNewFile(void);
     void setSaveAsFile(void);
+    void openAboutWindow(void);
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
@@ -65,6 +66,7 @@ private:
     QAction* _zoomIn = nullptr;
     QAction* _zoomOut = nullptr;
     QAction* _zoom100Percent = nullptr;
+    QAction* _about = nullptr;
     double _scalefactor = 1;
 };
 

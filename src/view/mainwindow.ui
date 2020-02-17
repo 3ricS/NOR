@@ -270,8 +270,14 @@
      <string>Ansicht</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuExtras">
+    <property name="title">
+     <string>Extras</string>
+    </property>
+   </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuAnsicht"/>
+   <addaction name="menuExtras"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

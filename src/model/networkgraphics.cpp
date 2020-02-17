@@ -152,32 +152,44 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
 
     if (Component::ComponentType::Resistor == componentType)
     {
-        _resistorCount++;
-        QString name = "R" + QString::number(_resistorCount);
-        Component* resistor = new Resistor(name, 100, gridPosition.x(), gridPosition.y(),
-                                           componentIsVertical);
-        createdComponent = resistor;
-        addObject(resistor);
+
+        createdComponent = addResistor(100, gridPosition.x(), gridPosition.y(), componentIsVertical);
     }
     else if (Component::ComponentType::PowerSupply == componentType)
     {
-        _powerSupplyCount++;
-        if (_powerSupplyCount <= 1)
-        {
-            QString name = "Q" + QString::number(_powerSupplyCount);
-            Component* powerSupply = new PowerSupply(name, gridPosition.x(), gridPosition.y(),
-                                                     componentIsVertical);
-            createdComponent = powerSupply;
-            addObject(powerSupply);
-        }
-        else
-        {
-            _powerSupplyCount--;
-            QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
-        }
+        createdComponent = addPowerSupply(gridPosition.x(), gridPosition.y(), componentIsVertical);
     }
 
     return createdComponent;
+}
+
+Component* NetworkGraphics::addResistor(int valueResistance, int xPosition, int yPosition, bool isVertical)
+{
+    _resistorCount++;
+    QString name = "R" + QString::number(_resistorCount);
+    Component* resistor = new Resistor(name, valueResistance, xPosition, yPosition,
+                                       isVertical);
+    addObject(resistor);
+    return resistor;
+}
+
+Component* NetworkGraphics::addPowerSupply(int x, int y, bool isVertical)
+{
+    _powerSupplyCount++;
+    if (_powerSupplyCount <= 1)
+    {
+        QString name = "Q" + QString::number(_powerSupplyCount);
+        Component* powerSupply = new PowerSupply(name, x, y,
+                                                 isVertical);
+        addObject(powerSupply);
+        return powerSupply;
+    }
+    else
+    {
+        _powerSupplyCount--;
+        QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
+    }
+    return nullptr;
 }
 
 void NetworkGraphics::deleteComponent(Component* component)

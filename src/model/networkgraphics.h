@@ -27,6 +27,8 @@ public:
 
     Component* createNewComponent(QMouseEvent* mouseEvent, QPointF gridPosition,
                                   Component::ComponentType componentType, bool componentIsVertical);
+    Component* addResistor(int valueResistance, int _xPosition, int _yPosition, bool isVertical);
+    Component* addPowerSupply(int x, int y, bool isVertical);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void deleteComponent(Component* component);
     void moveComponent(Component* componentToMove, QPointF gridPosition);

@@ -17,6 +17,7 @@ public:
 
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
     void deleteSelectedItem(void);
+    void EscapeKeyPressed(QKeyEvent* event);
 protected:
     void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -34,8 +35,6 @@ private:
 protected:
     void leaveEvent(QEvent* event) override;
     void enterEvent(QEvent* event) override;
-
-    void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
 

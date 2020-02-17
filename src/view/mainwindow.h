@@ -35,6 +35,7 @@ public:
 
 public slots:
     //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüpft welches im Model emitted wird)
+    void setSelectionMode(void);
     void setResistorMode(void);
     void setPowerSupplyMode(void);
     void setConnectionMode(void);
@@ -43,8 +44,12 @@ public slots:
     void setOpenFile(void);
     void setZoomIn(void);
     void setZoomOut(void);
+    void setZoom100Percent(void);
     void setNewFile(void);
     void setSaveAsFile(void);
+
+protected:
+    void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
     void createUpperMenu(void);
@@ -59,6 +64,7 @@ private:
     QAction* _new = nullptr;
     QAction* _zoomIn = nullptr;
     QAction* _zoomOut = nullptr;
+    QAction* _zoom100Percent = nullptr;
     double _scalefactor = 1;
 };
 

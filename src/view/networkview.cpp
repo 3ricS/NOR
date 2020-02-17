@@ -290,6 +290,21 @@ void NetworkView::deleteSelectedItem()
     _selectedComponent = nullptr;
 }
 
+//Wenn ESC gedrückt wird, wird der Mouse Modus aud Selection geändert
+void NetworkView::EscapeKeyPressed(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Escape)
+    {
+        setMouseMode(NetworkView::MouseMode::SelectionMode);
+        QApplication::setOverrideCursor(Qt::OpenHandCursor);
+        gridDisappears();
+    }
+    if (event->key() == Qt::Key_Delete)
+    {
+        deleteSelectedItem();
+    }
+}
+
 void NetworkView::removeHighlightSelectedRect()
 {
     if (nullptr != _selectedRect)
@@ -326,17 +341,3 @@ void NetworkView::leaveEvent(QEvent* event)
     gridDisappears();
 }
 
-//Wenn ESC gedrückt wird, soll es sofort in den SelectionMode Modus gehen
-void NetworkView::keyReleaseEvent(QKeyEvent* event)
-{
-    if (event->key() == Qt::Key_Escape)
-    {
-        setMouseMode(NetworkView::MouseMode::SelectionMode);
-        QApplication::setOverrideCursor(Qt::OpenHandCursor);
-        gridDisappears();
-    }
-    if (event->key() == Qt::Key_Delete)
-    {
-        deleteSelectedItem();
-    }
-}

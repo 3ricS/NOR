@@ -49,6 +49,7 @@ public slots:
     void setNewFile(void);
     void setSaveAsFile(void);
     void openAboutWindow(void);
+    void setDuplicate(void);
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
@@ -69,6 +70,7 @@ private:
     QAction* _zoomOut = nullptr;
     QAction* _zoom100Percent = nullptr;
     QAction* _about = nullptr;
+    QAction* _edit = nullptr;
     double _scalefactor = 1;
 };
 

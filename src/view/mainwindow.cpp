@@ -113,6 +113,7 @@ void MainWindow::setSaveAsFile()
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
+    _ctrlIsPressed = false;
     _networkView->EscapeKeyPressed(event);
     if(event->key() == Qt::Key::Key_Escape)
     {
@@ -120,16 +121,27 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key::Key_Control)
+    {
+        _ctrlIsPressed = true;
+    }
+}
+
 void MainWindow::wheelEvent(QWheelEvent *event)
 {
     //TODO: Irgendwie mit Steuerung verknüfen
-    if(event->delta() > 0)
+    if(_ctrlIsPressed)
     {
-       setZoomIn();
-    }
-    if(event->delta() < 0)
-    {
-       setZoomOut();
+        if(event->delta() > 0)
+        {
+        setZoomIn();
+        }
+        if(event->delta() < 0)
+        {
+        setZoomOut();
+        }
     }
 }
 

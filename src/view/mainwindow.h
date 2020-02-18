@@ -52,6 +52,7 @@ public slots:
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
     void wheelEvent(QWheelEvent *event) override;
 
 private:
@@ -70,6 +71,7 @@ private:
     QAction* _zoom100Percent = nullptr;
     QAction* _about = nullptr;
     double _scalefactor = 1;
+    bool _ctrlIsPressed = false;
 };
 
 #endif // MAINWINDOW_H

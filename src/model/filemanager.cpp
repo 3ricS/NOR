@@ -40,6 +40,13 @@ void FileManager::saveAs(void)
     _isSaved = saveData();
 }
 
+//Filepath wird gesplittet beim Slash und das letzte Element ist der eigentliche Name
+QString FileManager::getFileName()
+{
+  QStringList list = _actualFile.fileName().split('/');
+  return list.last();
+}
+
 //TODO: Doku fertigstellen in filemanager und überprüfen.
 
 bool FileManager::saveData(void)
@@ -110,17 +117,19 @@ Component* FileManager::getComponentById(int id)
 
 Component::Port FileManager::toPort(int componentPort)
 {
+    Component::Port port = Component::null;
     if(0 == componentPort)
     {
-        return Component::Port::A;
+        port = Component::Port::A;
     }
     else if (1 == componentPort)
     {
-        return Component::Port::B;
+        port = Component::Port::B;
     }
     else if (2 == componentPort) {
-        return Component::Port::null;
+        port = Component::Port::null;
     }
+    return port;
 }
 
 /*!

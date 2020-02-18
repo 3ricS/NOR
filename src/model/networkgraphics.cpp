@@ -53,6 +53,11 @@ bool NetworkGraphics::isThereAComponent(QPointF gridPosition)
     return getComponentAtPosition(gridPosition) != nullptr;
 }
 
+QString NetworkGraphics::getFileName()
+{
+    return _manager->getFileName();
+}
+
 
 void NetworkGraphics::reloadAll(void)
 {
@@ -94,6 +99,7 @@ double NetworkGraphics::calculate(void)
 void NetworkGraphics::save(void)
 {
     _manager->save();
+
 }
 
 void NetworkGraphics::load(void)

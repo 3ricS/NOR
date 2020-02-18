@@ -54,8 +54,8 @@ void EditView::setupView(void)
 
     if (_component->getComponentType() == Component::PowerSupply)
     {
-        _editViewUi->labelValue->hide();
-        _editViewUi->textEditValue->hide();
+        _editViewUi->labelValue->close();
+        _editViewUi->textEditValue->close();
     }
 }
 

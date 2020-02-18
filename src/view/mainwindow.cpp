@@ -36,6 +36,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_zoomOut, SIGNAL(triggered()), this, SLOT(setZoomOut()));
     connect(_zoom100Percent, SIGNAL(triggered()), this, SLOT(setZoom100Percent()));
     connect(_about,SIGNAL(triggered()), this, SLOT(openAboutWindow()));
+    connect(_about,SIGNAL(triggered()), this, SLOT(setDuplicate()));
 }
 
 //Setzen des Selection Modes
@@ -89,6 +90,7 @@ void MainWindow::setCalculation(void)
 void MainWindow::setSaveFile(void)
 {
     _model->save();
+    setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
 }
 
 void MainWindow::setOpenFile(void)
@@ -97,6 +99,7 @@ void MainWindow::setOpenFile(void)
     MainWindow* window = new MainWindow(model);
     window->show();
     model->load();
+    setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
 }
 
 void MainWindow::setNewFile(void)
@@ -109,6 +112,7 @@ void MainWindow::setNewFile(void)
 void MainWindow::setSaveAsFile()
 {
     _model->saveAs();
+    setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
@@ -185,6 +189,10 @@ void MainWindow::createUpperMenu(void)
     _about = new QAction("Über");
     _ui->menuExtras->addAction(_about);
 
+    _edit = new QAction("Duplizieren");
+    _edit->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    _ui->menuBearbeiten->addAction(_edit);
+
 }
 
 void MainWindow::openAboutWindow()
@@ -201,6 +209,11 @@ void MainWindow::openAboutWindow()
                         "<br>"
                         "<br> Version: 1.0")
                        );
+}
+
+void MainWindow::setDuplicate()
+{
+
 }
 
 //Zoom in

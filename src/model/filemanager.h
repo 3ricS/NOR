@@ -32,6 +32,9 @@ public:
     void load(void);
     void saveAs(void);
 
+    //Getter
+    QString getFileName(void);
+
 private:
     bool saveData(void);
     QString createJson(void);

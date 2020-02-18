@@ -257,7 +257,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -275,9 +275,15 @@
      <string>Extras</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuBearbeiten">
+    <property name="title">
+     <string>Bearbeiten</string>
+    </property>
+   </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuAnsicht"/>
    <addaction name="menuExtras"/>
+   <addaction name="menuBearbeiten"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

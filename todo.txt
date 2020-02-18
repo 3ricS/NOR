@@ -1,4 +1,4 @@
-﻿Moritz
+Moritz
 
 Leonel
 
@@ -18,10 +18,9 @@ Linien redraw behandeln, verschwinden teils
 default Ansicht nach Laden
 Linien einzeln entfernen
 dauerhaftes Berechnen der Widerstände
-Dateiname in Überschrift
 Textfelder
 Multiselect der Bauteile
-Duplizieren (Strg + D)
+Duplizieren (Strg + D) angefangen eigentliches duplizieren fehlt noch
 
 Laden in gleichem Fenster!
 Keine Fehler bei Laden

@@ -6,6 +6,12 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, int id) :
 
 }
 
+/*!
+* \brief Zeichnet die Umrisse und die Informationen einer Spannungsquelle im Netzwerk.
+*
+*
+* Die Methode zeichnet abhängig von der räumlichen Ausrichtung die Spannungsquelle auf zwei Weisen.
+*/
 void PowerSupply::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     paintInformations(painter);

@@ -1,5 +1,7 @@
 /*!
  * \copyright   PHWT
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
  * \brief       Mithilfe Objekte dieser Klasse werden zwei Komponenten der Schaltung miteinander verbunden
  *
  * Die Klasse Connection besitzt zwei ComponentPorts, welche miteinander verbunden werden. Jeder ComponentPort

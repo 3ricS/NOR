@@ -1,3 +1,11 @@
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Eine PowerSupply ist eine Komponente der Schaltung
+ *
+ * Die Klasse PowerSupply ist ein Component, damit eine konkretere Beschreibung der Klasse Component
+ * Eine PowerSupply besitz einen Namen, X- und Y- Koordinaten, ein räumliche Ausrichtung und eine Id.
+ */
 #ifndef POWERSUPPLY_H
 #define POWERSUPPLY_H
 

@@ -1,3 +1,11 @@
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Ein Resistor ist eine Komponente der Schaltung
+ *
+ * Die Klasse Resistor ist ein Component, damit eine konkretere Beschreibung der Klasse Component
+ * Ein Resistor besitz einen Namen, einen Widerstandswert, X- und Y- Koordinaten, ein räumliche Ausrichtung und eine Id.
+ */
 #ifndef RESISTOR_H
 #define RESISTOR_H
 

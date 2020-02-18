@@ -1,4 +1,6 @@
 /*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
  * \brief   Ein ComponentPort zeigt auf einen Component und gibt dabei gleichzeitig einen Port an
  *
  * Mithilfe eines ComponentPorts kann auf einen bestimmten Port bei einem bestimmten Component gezeigt werden.

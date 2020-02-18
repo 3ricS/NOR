@@ -1,4 +1,6 @@
 /*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
  * \brief   Ein Component stellt eine Komponente in der Schaltung dar
  *
  * Ein Component ist eine Komponente der Schaltung, z.B. ein Widerstand oder eine Spannungsquelle.

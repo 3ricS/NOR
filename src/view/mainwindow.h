@@ -71,7 +71,7 @@ private:
     QAction* _zoomOut = nullptr;
     QAction* _zoom100Percent = nullptr;
     QAction* _about = nullptr;
-    QAction* _edit = nullptr;
+    QAction* _duplicate = nullptr;
     double _scalefactor = 1;
     bool _ctrlIsPressed = false;
 };

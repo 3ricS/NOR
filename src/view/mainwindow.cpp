@@ -35,8 +35,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_zoomIn, SIGNAL(triggered()), this, SLOT(setZoomIn()));
     connect(_zoomOut, SIGNAL(triggered()), this, SLOT(setZoomOut()));
     connect(_zoom100Percent, SIGNAL(triggered()), this, SLOT(setZoom100Percent()));
-    connect(_about,SIGNAL(triggered()), this, SLOT(openAboutWindow()));
-    connect(_about,SIGNAL(triggered()), this, SLOT(setDuplicate()));
+    connect(_about, SIGNAL(triggered()), this, SLOT(openAboutWindow()));
+    connect(_duplicate, SIGNAL(triggered()), this, SLOT(setDuplicate()));
 }
 
 //Setzen des Selection Modes
@@ -189,9 +189,9 @@ void MainWindow::createUpperMenu(void)
     _about = new QAction("Über");
     _ui->menuExtras->addAction(_about);
 
-    _edit = new QAction("Duplizieren");
-    _edit->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
-    _ui->menuBearbeiten->addAction(_edit);
+    _duplicate = new QAction("Duplizieren");
+    _duplicate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    _ui->menuBearbeiten->addAction(_duplicate);
 
 }
 
@@ -213,7 +213,7 @@ void MainWindow::openAboutWindow()
 
 void MainWindow::setDuplicate()
 {
-
+    _networkView->duplicate();
 }
 
 //Zoom in

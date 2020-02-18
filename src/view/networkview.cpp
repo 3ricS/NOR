@@ -27,8 +27,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         {
             if (Qt::LeftButton == mouseEvent->button())
             {
-                Component* createdComponent = _model->createNewComponent(mouseEvent, gridPosition, componentType,
-                                                                         _isVerticalComponentDefault);
+                Component* createdComponent = _model->createNewComponent(gridPosition, componentType, _isVerticalComponentDefault);
                 if (createdComponent != nullptr)
                 {
                     EditView* editView = new EditView(createdComponent, _model, true, this);
@@ -134,6 +133,14 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
             {
                 _selectedComponentToMove = nullptr;
             }
+        }
+            break;
+        case ResistorMode:
+        {
+        }
+            break;
+        case PowerSupplyMode:
+        {
         }
             break;
     }
@@ -317,6 +324,33 @@ void NetworkView::removeHighlightSelectedRect()
     }
 }
 
+void NetworkView::duplicate()
+{
+    // Verschiebt so lange nach rechts, bis er auf eine Grid-Position gestoßen ist, die unbelegt ist
+    int xWaytoTheRight = 100;
+    bool created = false;
+    while (!created)
+    {
+        if(!_model->isThereAComponent(QPointF(_selectedComponent->getXPosition() + xWaytoTheRight, _selectedComponent->getYPosition())))
+        {
+            if(_selectedComponent->getComponentType() == Component::PowerSupply)
+            {
+                _model->createSameComponent(_selectedComponent->getName(), 0, _selectedComponent->getXPosition(), _selectedComponent->getYPosition(),
+                                            Component::ComponentType::PowerSupply, _selectedComponent->getOrientation());
+            }
+            else if(_selectedComponent->getComponentType() == Component::Resistor)
+            {
+                _model->createSameComponent(_selectedComponent->getName(), _selectedComponent->getValue(), _selectedComponent->getXPosition(),
+                                            _selectedComponent->getYPosition(),Component::ComponentType::Resistor, _selectedComponent->getOrientation());
+            }
+
+            created = true;
+        }
+
+        xWaytoTheRight += 100;
+    }
+}
+
 void NetworkView::enterEvent(QEvent* event)
 {
     switch (_mouseMode)
@@ -329,6 +363,14 @@ void NetworkView::enterEvent(QEvent* event)
         case SelectionMode:
         {
             QApplication::setOverrideCursor(Qt::OpenHandCursor);
+        }
+            break;
+        case PowerSupplyMode:
+        {
+        }
+            break;
+        case ResistorMode:
+        {
         }
             break;
     }

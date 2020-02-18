@@ -125,8 +125,7 @@ void NetworkGraphics::mirrorComponent(Component* component)
     }
 }
 
-Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF gridPosition,
-                                               Component::ComponentType componentType, bool componentIsVertical)
+Component* NetworkGraphics::createNewComponent(QPointF gridPosition,Component::ComponentType componentType, bool componentIsVertical)
 {
     Component* createdComponent = nullptr;
 
@@ -147,6 +146,24 @@ Component* NetworkGraphics::createNewComponent(QMouseEvent* mouseEvent, QPointF 
 
     updateCalc();
     return createdComponent;
+}
+
+Component *NetworkGraphics::createSameComponent(QString name, int value, int xPosition, int yPosition, Component::ComponentType componentType, bool componentIsVertical)
+{
+    Component* duplicatedComponent = nullptr;
+
+    if (Component::ComponentType::Resistor == componentType)
+    {
+
+        duplicatedComponent = addResistor(name, value, xPosition + 100, yPosition, componentIsVertical);
+    }
+    else if (Component::ComponentType::PowerSupply == componentType)
+    {
+        duplicatedComponent = addPowerSupply(name, xPosition + 100, yPosition, componentIsVertical);
+    }
+
+    updateCalc();
+    return duplicatedComponent;
 }
 
 Component* NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, int yPosition, bool isVertical, int id)

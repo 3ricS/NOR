@@ -20,8 +20,6 @@ Linien einzeln entfernen
 dauerhaftes Berechnen der Widerstände
 Textfelder
 Multiselect der Bauteile
-Duplizieren (Strg + D) angefangen eigentliches duplizieren fehlt noch
-
 Laden in gleichem Fenster!
 Keine Fehler bei Laden
 

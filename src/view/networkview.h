@@ -14,6 +14,7 @@ public:
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode};
     NetworkView(QWidget *parent);
     void setModel(NetworkGraphics* model) {_model = model;}
+    void duplicate(void);
 
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
     void deleteSelectedItem(void);
@@ -30,7 +31,7 @@ private:
     void gridDisappears(void);
     void highlightSelectedRect(QPointF gridPosition);
     void highlightRect(QPointF scenePosition, QColor _highlightColor);
-    void removeHighlightSelectedRect();
+    void removeHighlightSelectedRect(void);
 
 protected:
     void leaveEvent(QEvent* event) override;

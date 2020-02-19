@@ -371,7 +371,7 @@ void NetworkView::copy()
 
 void NetworkView::paste()
 {
-    if(_copiedComponent != nullptr)
+    if(_copiedComponent != nullptr && !_model->isThereAComponent(_lastClickedPositionGrid))
     {
         if(_copiedComponent->getComponentType() == Component::PowerSupply)
         {

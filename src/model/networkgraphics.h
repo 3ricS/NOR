@@ -34,7 +34,7 @@ public:
     void setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation);
 
     Component* createNewComponent( QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
-    Component *createSameComponent(QString name, int value, int xPosition, int yPosition, Component::ComponentType componentType, bool componentIsVertical);
+    Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
     Component* addResistor(QString name, int valueResistance, int _xPosition, int _yPosition, bool isVertical, int id = 0);
     Component* addPowerSupply(QString name, int x, int y, bool isVertical, int id = 0);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
@@ -65,6 +65,8 @@ private:
     QGraphicsScene* _graphics = nullptr;
     FileManager* _manager = nullptr;
     Calculator _calculator = Calculator(_connectionList, _componentList);
+
+    bool _isLoading = false;
 };
 
 #endif // NETWORKGRAPHICS_H

@@ -1,7 +1,7 @@
 #include "networkview.h"
 
 NetworkView::NetworkView(QWidget* parent) :
-    QGraphicsView(parent)
+        QGraphicsView(parent)
 {
     setMouseTracking(true);
 }
@@ -21,76 +21,77 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
     switch (_mouseMode)
     {
-    case MouseMode::ResistorMode:
-    {
-        componentType = Component::ComponentType::Resistor;
-        //Durchfallen zum nächsten Case, da in beiden Fällen das Gleiche passiert
-    }
-    case MouseMode::PowerSupplyMode:
-    {
-        if (Qt::LeftButton == mouseEvent->button())
+        case MouseMode::ResistorMode:
         {
-            Component* createdComponent = _model->createNewComponent(gridPosition, componentType, _isVerticalComponentDefault);
-            if (createdComponent != nullptr)
+            componentType = Component::ComponentType::Resistor;
+            //Durchfallen zum nächsten Case, da in beiden Fällen das Gleiche passiert
+        }
+        case MouseMode::PowerSupplyMode:
+        {
+            if (Qt::LeftButton == mouseEvent->button())
             {
-                EditView* editView = new EditView(createdComponent, _model, true, this);
-                editView->show();
+                Component* createdComponent = _model->createNewComponent(gridPosition, componentType,
+                                                                         _isVerticalComponentDefault);
+                if (createdComponent != nullptr)
+                {
+                    EditView* editView = new EditView(createdComponent, _model, true, this);
+                    editView->show();
+                }
+            }
+            else if (Qt::RightButton == mouseEvent->button())
+            {
+                _isVerticalComponentDefault = !_isVerticalComponentDefault;
+                gridDisappears();
+                if (MouseMode::PowerSupplyMode == _mouseMode)
+                {
+                    Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
+                                                                gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                                0);
+                    _sampleComponentOnMoveEvent = sampleResistor;
+                }
+                else if (MouseMode::ResistorMode == _mouseMode)
+                {
+                    Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
+                                                             gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                             0);
+                    _sampleComponentOnMoveEvent = sampleResistor;
+                }
+                _model->addItem(_sampleComponentOnMoveEvent);
+                highlightRect(scenePosition, _highlightColor);
             }
         }
-        else if (Qt::RightButton == mouseEvent->button())
+            break;
+        case MouseMode::ConnectionMode:
         {
-            _isVerticalComponentDefault = !_isVerticalComponentDefault;
-            gridDisappears();
-            if (MouseMode::PowerSupplyMode == _mouseMode)
+            bool connectionStarted = (nullptr != _connectionStartComponentPort);
+            if (connectionStarted)
             {
-                Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                            gridPosition.toPoint().y(), _isVerticalComponentDefault,
-                                                            0);
-                _sampleComponentOnMoveEvent = sampleResistor;
-            }
-            else if (MouseMode::ResistorMode == _mouseMode)
-            {
-                Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                         gridPosition.toPoint().y(), _isVerticalComponentDefault,
-                                                         0);
-                _sampleComponentOnMoveEvent = sampleResistor;
-            }
-            _model->addItem(_sampleComponentOnMoveEvent);
-            highlightRect(scenePosition, _highlightColor);
-        }
-    }
-        break;
-    case MouseMode::ConnectionMode:
-    {
-        bool connectionStarted = (nullptr != _connectionStartComponentPort);
-        if (connectionStarted)
-        {
-            ComponentPort* connectionComponentPortEnd = _model->getComponentPortAtPosition(scenePosition);
-            if (connectionComponentPortEnd != nullptr)
-            {
-                _model->addConnection(*_connectionStartComponentPort, *connectionComponentPortEnd);
-                _connectionStartComponentPort = nullptr;
+                ComponentPort* connectionComponentPortEnd = _model->getComponentPortAtPosition(scenePosition);
+                if (connectionComponentPortEnd != nullptr)
+                {
+                    _model->addConnection(*_connectionStartComponentPort, *connectionComponentPortEnd);
+                    _connectionStartComponentPort = nullptr;
+                }
             }
         }
-    }
-        break;
-    case MouseMode::SelectionMode:
-    {
-        QApplication::setOverrideCursor(Qt::OpenHandCursor);
-        _selectedComponentToMove = nullptr;
+            break;
+        case MouseMode::SelectionMode:
+        {
+            QApplication::setOverrideCursor(Qt::OpenHandCursor);
+            _selectedComponentToMove = nullptr;
 
-        Component* foundComponent = _model->getComponentAtPosition(gridPosition);
-        bool hasFoundComponent = nullptr != foundComponent;
+            Component* foundComponent = _model->getComponentAtPosition(gridPosition);
+            bool hasFoundComponent = nullptr != foundComponent;
 
-        if (hasFoundComponent)
-        {
-            _selectedComponent = foundComponent;
-            highlightSelectedRect(gridPosition);
+            if (hasFoundComponent)
+            {
+                _selectedComponent = foundComponent;
+                highlightSelectedRect(gridPosition);
+            }
         }
-    }
-        break;
-    default:
-        break;
+            break;
+        default:
+            break;
     }
 }
 
@@ -119,33 +120,33 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
 
     switch (_mouseMode)
     {
-    case ConnectionMode:
-    {
-        _connectionStartComponentPort = _model->getComponentPortAtPosition(scenePosition);
-    }
-        break;
-    case SelectionMode:
-    {
-        bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
-        if (isComponentAtPosition)
+        case ConnectionMode:
         {
-            QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-            _selectedComponentToMove = _model->getComponentAtPosition(gridPosition);
+            _connectionStartComponentPort = _model->getComponentPortAtPosition(scenePosition);
         }
-        else
+            break;
+        case SelectionMode:
         {
-            _selectedComponentToMove = nullptr;
+            bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
+            if (isComponentAtPosition)
+            {
+                QApplication::setOverrideCursor(Qt::ClosedHandCursor);
+                _selectedComponentToMove = _model->getComponentAtPosition(gridPosition);
+            }
+            else
+            {
+                _selectedComponentToMove = nullptr;
+            }
         }
-    }
-        break;
-    case ResistorMode:
-    {
-    }
-        break;
-    case PowerSupplyMode:
-    {
-    }
-        break;
+            break;
+        case ResistorMode:
+        {
+        }
+            break;
+        case PowerSupplyMode:
+        {
+        }
+            break;
     }
 }
 
@@ -159,58 +160,58 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
 
     switch (_mouseMode)
     {
-    case (ResistorMode):
-    {
-        Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                 gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
-        _sampleComponentOnMoveEvent = sampleResistor;
-        _model->addItem(_sampleComponentOnMoveEvent);
-        highlightRect(scenePosition, _highlightColor);
-    }
-        break;
-    case (PowerSupplyMode):
-    {
-        Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                    gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
-        _sampleComponentOnMoveEvent = sampleResistor;
-        _model->addItem(_sampleComponentOnMoveEvent);
-        highlightRect(scenePosition, _highlightColor);
-    }
-        break;
-    case ConnectionMode:
-    {
-        //TODO: nicht auf GridPosition beschränken, sondern Model fragen, ob an scenePosition ein Port in der Nähe ist
-        if (_model->isThereAComponent(gridPosition))
+        case (ResistorMode):
         {
-            ComponentPort* foundComponentPort = _model->getComponentPortAtPosition(scenePosition);
-            if (foundComponentPort != nullptr)
-            {
-                Component* foundComponent = foundComponentPort->getComponent();
-                Component::Port port = foundComponentPort->getPort();
-
-                int hitBoxHighlight = Component::_hitBoxSize / 1.5;
-                int positionX = foundComponent->getPortPosition(port).x() - hitBoxHighlight;
-                int positionY = foundComponent->getPortPosition(port).y() - hitBoxHighlight;
-
-                QGraphicsItem* highlightedRect = _model->addRect(positionX, positionY, 2 * hitBoxHighlight,
-                                                                 2 * hitBoxHighlight, Qt::NoPen,
-                                                                 _highlightColor);
-
-                _previousHighlightedRect = highlightedRect;
-                _model->update();
-            }
-        }
-    }
-        break;
-    case (SelectionMode):
-    {
-        if (_mouseIsPressed && _componentIsGrabbed)
-        {
+            Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
+                                                     gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+            _sampleComponentOnMoveEvent = sampleResistor;
+            _model->addItem(_sampleComponentOnMoveEvent);
             highlightRect(scenePosition, _highlightColor);
         }
-        _model->moveComponent(_selectedComponentToMove, gridPosition);
-    }
-        break;
+            break;
+        case (PowerSupplyMode):
+        {
+            Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
+                                                        gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+            _sampleComponentOnMoveEvent = sampleResistor;
+            _model->addItem(_sampleComponentOnMoveEvent);
+            highlightRect(scenePosition, _highlightColor);
+        }
+            break;
+        case ConnectionMode:
+        {
+            //TODO: nicht auf GridPosition beschränken, sondern Model fragen, ob an scenePosition ein Port in der Nähe ist
+            if (_model->isThereAComponent(gridPosition))
+            {
+                ComponentPort* foundComponentPort = _model->getComponentPortAtPosition(scenePosition);
+                if (foundComponentPort != nullptr)
+                {
+                    Component* foundComponent = foundComponentPort->getComponent();
+                    Component::Port port = foundComponentPort->getPort();
+
+                    int hitBoxHighlight = Component::_hitBoxSize / 1.5;
+                    int positionX = foundComponent->getPortPosition(port).x() - hitBoxHighlight;
+                    int positionY = foundComponent->getPortPosition(port).y() - hitBoxHighlight;
+
+                    QGraphicsItem* highlightedRect = _model->addRect(positionX, positionY, 2 * hitBoxHighlight,
+                                                                     2 * hitBoxHighlight, Qt::NoPen,
+                                                                     _highlightColor);
+
+                    _previousHighlightedRect = highlightedRect;
+                    _model->update();
+                }
+            }
+        }
+            break;
+        case (SelectionMode):
+        {
+            if (_mouseIsPressed && _componentIsGrabbed)
+            {
+                highlightRect(scenePosition, _highlightColor);
+            }
+            _model->moveComponent(_selectedComponentToMove, gridPosition);
+        }
+            break;
     }
 }
 
@@ -300,7 +301,7 @@ void NetworkView::deleteSelectedItem()
     removeHighlightSelectedRect();
     _model->deleteComponent(_selectedComponent);
 
-    if(_copiedComponent == _selectedComponent)
+    if (_copiedComponent == _selectedComponent)
     {
         _copiedComponent = nullptr;
     }
@@ -337,25 +338,17 @@ void NetworkView::removeHighlightSelectedRect()
 void NetworkView::duplicate()
 {
     // Verschiebt so lange nach rechts, bis er auf eine Grid-Position gestoßen ist, die unbelegt ist
-    if(_selectedComponent != nullptr)
+    if (_selectedComponent != nullptr)
     {
         int xWaytoTheRight = 100;
         bool created = false;
         while (!created)
         {
-            if(!_model->isThereAComponent(QPointF(_selectedComponent->getXPosition() + xWaytoTheRight, _selectedComponent->getYPosition())))
+            if (!_model->isThereAComponent(
+                    QPointF(_selectedComponent->getXPosition() + xWaytoTheRight, _selectedComponent->getYPosition())))
             {
-                if(_selectedComponent->getComponentType() == Component::PowerSupply)
-                {
-                    _model->createSameComponent(_selectedComponent->getName(), 0, _selectedComponent->getXPosition() + xWaytoTheRight, _selectedComponent->getYPosition(),
-                                                Component::ComponentType::PowerSupply, _selectedComponent->getOrientation());
-                }
-                else if(_selectedComponent->getComponentType() == Component::Resistor)
-                {
-                    _model->createSameComponent(_selectedComponent->getName(), _selectedComponent->getValue(), _selectedComponent->getXPosition() + xWaytoTheRight,
-                                                _selectedComponent->getYPosition(),Component::ComponentType::Resistor, _selectedComponent->getOrientation());
-                }
-
+                _model->duplicateComponent(_selectedComponent, _selectedComponent->getXPosition() + xWaytoTheRight,
+                                           _selectedComponent->getYPosition());
                 created = true;
             }
 
@@ -371,18 +364,9 @@ void NetworkView::copy()
 
 void NetworkView::paste()
 {
-    if(_copiedComponent != nullptr)
+    if (_copiedComponent != nullptr && !_model->isThereAComponent(_lastClickedPositionGrid))
     {
-        if(_copiedComponent->getComponentType() == Component::PowerSupply)
-        {
-            _model->createSameComponent(_copiedComponent->getName(), 0, _lastClickedPositionGrid.x(), _lastClickedPositionGrid.y(),
-                                        Component::ComponentType::PowerSupply, _copiedComponent->getOrientation());
-        }
-        else if(_copiedComponent->getComponentType() == Component::Resistor)
-        {
-            _model->createSameComponent(_copiedComponent->getName(), _copiedComponent->getValue(), _lastClickedPositionGrid.x(),
-                                        _lastClickedPositionGrid.y(),Component::ComponentType::Resistor, _copiedComponent->getOrientation());
-        }
+        _model->duplicateComponent(_copiedComponent, _lastClickedPositionGrid.x(), _lastClickedPositionGrid.y());
     }
 }
 
@@ -390,24 +374,24 @@ void NetworkView::enterEvent(QEvent* event)
 {
     switch (_mouseMode)
     {
-    case ConnectionMode:
-    {
-        QApplication::setOverrideCursor(Qt::CrossCursor);
-    }
-        break;
-    case SelectionMode:
-    {
-        QApplication::setOverrideCursor(Qt::OpenHandCursor);
-    }
-        break;
-    case PowerSupplyMode:
-    {
-    }
-        break;
-    case ResistorMode:
-    {
-    }
-        break;
+        case ConnectionMode:
+        {
+            QApplication::setOverrideCursor(Qt::CrossCursor);
+        }
+            break;
+        case SelectionMode:
+        {
+            QApplication::setOverrideCursor(Qt::OpenHandCursor);
+        }
+            break;
+        case PowerSupplyMode:
+        {
+        }
+            break;
+        case ResistorMode:
+        {
+        }
+            break;
     }
     QWidget::enterEvent(event);
 }

@@ -103,7 +103,8 @@ void MainWindow::setOpenFile(void)
             MainWindow* window = new MainWindow(model);
             window->show();
             model->load();
-            setWindowTitle("NOR - Network of Resistance ~ " + model->getFileName());
+            window->setWindowTitle("NOR - Network of Resistance ~ " + model->getFileName());
+            setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
         }
         else
         {

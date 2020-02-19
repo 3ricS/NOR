@@ -11,7 +11,7 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     Connection* connection = new Connection(componentPortA, componentPortB);
-    if(!_connectionList.contains(connection))
+    if (!_connectionList.contains(connection))
     {
         _connectionList.append(connection);
         addItem(connection);
@@ -22,7 +22,10 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
         qDebug() << "NetworkGraphics: Connection bereits vorhanden!";
     }
 
-    updateCalc();
+    if (!_isLoading)
+    {
+        updateCalc();
+    }
 }
 
 
@@ -32,6 +35,11 @@ void NetworkGraphics::addObject(Component* component)
     connectComponentToNeighbours(component);
     addItem(component);
     update();
+
+    if(!_isLoading)
+    {
+        updateCalc();
+    }
 }
 
 Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
@@ -111,8 +119,9 @@ void NetworkGraphics::save(void)
 
 void NetworkGraphics::load(void)
 {
+    _isLoading = true;
     _manager->load();
-    //reloadAll();
+    _isLoading = false;
 
 }
 
@@ -143,7 +152,7 @@ void NetworkGraphics::mirrorComponent(Component* component)
 * Zu Beginn wird geprüft ob sich an der ausgewählten Position bereits eine Komponente befindet.
 * Anschließend wird anhand des ausgewählten Typen die jeweils ein Widerstand oder eine Spannungsquelle erzeugt.
 */
-Component* NetworkGraphics::createNewComponent( QPointF gridPosition,
+Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
                                                Component::ComponentType componentType, bool componentIsVertical)
 {
     Component* createdComponent = nullptr;
@@ -163,21 +172,27 @@ Component* NetworkGraphics::createNewComponent( QPointF gridPosition,
         createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical);
     }
 
-    updateCalc();
+    if(!_isLoading)
+    {
+        updateCalc();
+    }
     return createdComponent;
 }
 
 
-Component *NetworkGraphics::createSameComponent(QString name, int value, int xPosition, int yPosition, Component::ComponentType componentType, bool componentIsVertical)
+Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition)
 {
     Component* duplicatedComponent = nullptr;
 
-    if (Component::ComponentType::Resistor == componentType)
-    {
+    QString name = componentToDuplicate->getName();
+    int value = componentToDuplicate->getValue();
+    bool componentIsVertical = componentToDuplicate->isVertical();
 
+    if (Component::ComponentType::Resistor == componentToDuplicate->getComponentType())
+    {
         duplicatedComponent = addResistor(name, value, xPosition, yPosition, componentIsVertical);
     }
-    else if (Component::ComponentType::PowerSupply == componentType)
+    else if (Component::ComponentType::PowerSupply == componentToDuplicate->getComponentType())
     {
         duplicatedComponent = addPowerSupply(name, xPosition, yPosition, componentIsVertical);
     }
@@ -203,14 +218,15 @@ Component *NetworkGraphics::createSameComponent(QString name, int value, int xPo
 * Es wird nach dem hinzufügen der Widerstandswert neu berechnet.
 */
 
-Component* NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, int yPosition, bool isVertical, int id)
+Component*
+NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, int yPosition, bool isVertical, int id)
 {
     _resistorCount++;
-    if("" == name)
+    if ("" == name)
     {
         name = "R" + QString::number(_resistorCount);
     }
-    if(0 == id)
+    if (0 == id)
     {
         id = _resistorCount;
     }
@@ -218,8 +234,6 @@ Component* NetworkGraphics::addResistor(QString name, int valueResistance, int x
     Component* resistor = new Resistor(name, valueResistance, xPosition, yPosition,
                                        isVertical, id);
     addObject(resistor);
-
-    updateCalc();
     return resistor;
 }
 
@@ -240,7 +254,7 @@ Component* NetworkGraphics::addResistor(QString name, int valueResistance, int x
 Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical, int id)
 {
     _powerSupplyCount++;
-    if("" == name)
+    if ("" == name)
     {
         name = "Q" + QString::number(_powerSupplyCount);
     }
@@ -268,10 +282,11 @@ void NetworkGraphics::deleteComponent(Component* component)
         _componentList.removeOne(component);
 
         //ResistorCount und PowerSupplyCount setzen
-        if(Component::ComponentType::Resistor == component->getComponentType())
+        if (Component::ComponentType::Resistor == component->getComponentType())
         {
             _resistorCount--;
-        } else if (Component::ComponentType::PowerSupply == component->getComponentType())
+        }
+        else if (Component::ComponentType::PowerSupply == component->getComponentType())
         {
             _powerSupplyCount--;
         }
@@ -348,7 +363,7 @@ void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnect
             }
 
             bool foundEqualPort = (equalPortAtoA || equalPortAtoB || equalPortBtoA || equalPortBtoB);
-            if(foundEqualPort)
+            if (foundEqualPort)
             {
                 addConnection(componentPortSelf, componentPortOther);
             }
@@ -368,7 +383,7 @@ void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnect
 void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
 {
     // 3 mal rechts ist einmal links
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         turnComponentRight(componentToTurn);
     }
@@ -391,7 +406,7 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
             componentToTurn->setOrientation(Component::Orientation::top);
             //mirrorComponent(componentToTurn);
         }
-        break;
+            break;
         case Component::Orientation::top:
         {
             componentToTurn->setOrientation(Component::Orientation::right);
@@ -402,19 +417,19 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
         {
             componentToTurn->setOrientation(Component::Orientation::bottom);
         }
-        break;
+            break;
         case Component::Orientation::bottom:
         {
             componentToTurn->setOrientation(Component::Orientation::left);
             mirrorComponent(componentToTurn);
         }
-        break;
+            break;
     }
 }
 
 void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation)
 {
-    while(componentToTurn->getOrientation() != orientation)
+    while (componentToTurn->getOrientation() != orientation)
     {
         turnComponentRight(componentToTurn);
     }

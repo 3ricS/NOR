@@ -50,6 +50,8 @@ public slots:
     void setSaveAsFile(void);
     void openAboutWindow(void);
     void setDuplicate(void);
+    void setCopy(void);
+    void setPaste(void);
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
@@ -72,6 +74,8 @@ private:
     QAction* _zoom100Percent = nullptr;
     QAction* _about = nullptr;
     QAction* _duplicate = nullptr;
+    QAction* _copy = nullptr;
+    QAction* _paste = nullptr;
     double _scalefactor = 1;
     bool _ctrlIsPressed = false;
 };

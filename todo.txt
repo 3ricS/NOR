@@ -13,7 +13,6 @@ ___________________________________________________________________
 
 Model
 UNDO (oben links) QUNDOSTACK
-Linksrum drehen / rechtsrum drehen
 Linien redraw behandeln, verschwinden teils
 default Ansicht nach Laden
 Linien einzeln entfernen

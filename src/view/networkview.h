@@ -15,6 +15,8 @@ public:
     NetworkView(QWidget *parent);
     void setModel(NetworkGraphics* model) {_model = model;}
     void duplicate(void);
+    void copy(void);
+    void paste(void);
 
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
     void deleteSelectedItem(void);
@@ -53,6 +55,8 @@ private:
     Component* _selectedComponentToMove = nullptr;
     bool _isVerticalComponentDefault = true;
     Component* _sampleComponentOnMoveEvent = nullptr;
+    Component* _copiedComponent = nullptr;
+    QPointF _lastClickedPositionGrid;
     MouseMode _mouseMode = SelectionMode;
     QColor _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
 };

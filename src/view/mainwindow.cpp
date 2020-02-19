@@ -37,6 +37,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_zoom100Percent, SIGNAL(triggered()), this, SLOT(setZoom100Percent()));
     connect(_about, SIGNAL(triggered()), this, SLOT(openAboutWindow()));
     connect(_duplicate, SIGNAL(triggered()), this, SLOT(setDuplicate()));
+    connect(_copy, SIGNAL(triggered()), this, SLOT(setCopy()));
+    connect(_paste, SIGNAL(triggered()), this, SLOT(setPaste()));
 }
 
 //Setzen des Selection Modes
@@ -193,6 +195,14 @@ void MainWindow::createUpperMenu(void)
     _duplicate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
     _ui->menuBearbeiten->addAction(_duplicate);
 
+    _copy = new QAction("Kopieren");
+    _copy->setShortcut(QKeySequence::Copy);
+    _ui->menuBearbeiten->addAction(_copy);
+
+    _paste = new QAction("Einfügen");
+    _paste->setShortcut(QKeySequence::Paste);
+    _ui->menuBearbeiten->addAction(_paste);
+
 }
 
 void MainWindow::openAboutWindow()
@@ -200,7 +210,7 @@ void MainWindow::openAboutWindow()
     QMessageBox::about(this, ("About Application"),
                        ("Das Programm <b>NOR - Network of Resistance</b> berechnet den Gesamtwiderstand von Netzwerken "
                         "<br> "
-                        "<br> Dieses Programm wurde von folgenden Personen, im Rahmen von Software Engineering 1, geschrieben:"
+                        "<br> Dieses Programm wurde von folgenden Personen im Rahmen von Software Engineering 1 geschrieben:"
                         "<br>"
                         "<br> Eric Schniedermeyer"
                         "<br> Leonel Fransen"
@@ -214,6 +224,16 @@ void MainWindow::openAboutWindow()
 void MainWindow::setDuplicate()
 {
     _networkView->duplicate();
+}
+
+void MainWindow::setCopy()
+{
+    _networkView->copy();
+}
+
+void MainWindow::setPaste()
+{
+    _networkView->paste();
 }
 
 //Zoom in

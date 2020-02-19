@@ -90,7 +90,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Bauteile</string>
+           <string>Modus</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

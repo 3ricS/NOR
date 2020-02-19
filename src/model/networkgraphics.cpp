@@ -170,11 +170,11 @@ Component *NetworkGraphics::createSameComponent(QString name, int value, int xPo
     if (Component::ComponentType::Resistor == componentType)
     {
 
-        duplicatedComponent = addResistor(name, value, xPosition + 100, yPosition, componentIsVertical);
+        duplicatedComponent = addResistor(name, value, xPosition, yPosition, componentIsVertical);
     }
     else if (Component::ComponentType::PowerSupply == componentType)
     {
-        duplicatedComponent = addPowerSupply(name, xPosition + 100, yPosition, componentIsVertical);
+        duplicatedComponent = addPowerSupply(name, xPosition, yPosition, componentIsVertical);
     }
 
     updateCalc();

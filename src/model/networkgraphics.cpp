@@ -90,7 +90,9 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
 /*!
 * \brief Gibt den Widerstandswert aus.
 *
-* Die Methode sucht nach einem verfügbaren Widerstandswert und gibt diesen als Double zurück.
+* \return   gibt den Widerstandswert als double zurück
+*
+* Die Methode sucht, ob ein neuer Widerstandswert verfügbar ist.
 */
 double NetworkGraphics::calculate(void)
 {
@@ -133,10 +135,13 @@ void NetworkGraphics::mirrorComponent(Component* component)
 /*!
 * \brief Erzeugt eine neue Komponente im Netzwerk.
 *
-* Die Methode bekommt die Position innerhalb des Gitters, den Typ der zu erzeugenden Komponente  und die Ausrichtung übergeben.
+* \param[in]    gridPosition
+* \param[in]    componentType
+* \param[in]    componentIsVertical
+* \return
+*
 * Zu Beginn wird geprüft ob sich an der ausgewählten Position bereits eine Komponente befindet.
 * Anschließend wird anhand des ausgewählten Typen die jeweils ein Widerstand oder eine Spannungsquelle erzeugt.
-*
 */
 Component* NetworkGraphics::createNewComponent( QPointF gridPosition,
                                                Component::ComponentType componentType, bool componentIsVertical)
@@ -185,11 +190,17 @@ Component *NetworkGraphics::createSameComponent(QString name, int value, int xPo
 /*!
 * \brief Fügt einen Widerstand dem Netzwerk hinzu.
 *
-* Die Methode bekommt den Namen, Wert, die X- und Y-Koordinate, die räumliche Ausrichtung und die Id des Widerstandes übergeben.
+* \param[in]    name            ist der Name des Widerstandsobjektes
+* \param[in]    valueResistance ist der zugewiesene Widerstandswertes
+* \param[in]    x               ist die X-Koordinate der zugewiesenen Position
+* \param[in]    y               ist die Y-Koordinate der zugewiesenen Position
+* \param[in]    isVertical      ist die räumliche Ausrichtung im Netzwerk
+* \param[in]    id              ist die intern zugewiesene Id des Widerstandes
+* \return
+*
 * Falls noch kein Name vorhanden ist, wird dieser neu erzeugt.
 * Anschließend wird ein neues Widerstandsobjekt erzeugt.
 * Es wird nach dem hinzufügen der Widerstandswert neu berechnet.
-* Die Methode gibt den erzeugten Widerstand zurück.
 */
 
 Component* NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, int yPosition, bool isVertical, int id)
@@ -215,11 +226,16 @@ Component* NetworkGraphics::addResistor(QString name, int valueResistance, int x
 /*!
 * \brief Fügt eine Spannungsquelle dem Netzwerk hinzu.
 *
-* Die Methode bekommt den Namen, die X- und Y-Koordinate, die räumliche Ausrichtung und die Id der Spannungsquelle übergeben.
+* \param[in]    name            ist der Name des Spannungsquellenobjektes
+* \param[in]    x               ist die X-Koordinate der zugewiesenen Position
+* \param[in]    y               ist die Y-Koordinate der zugewiesenen Position
+* \param[in]    isVertical      ist die räumliche Ausrichtung im Netzwerk
+* \param[in]    id              ist die intern zugewiesene Id der Spannungsquelle
+* \return
+*
 * Falls noch kein Name vorhanden ist, wird dieser neu erzeugt.
 * Befindet sich im Netzwerk bereits eine Spannungsquelle, kann keine weitere erzeugt werden.
 * Anschließend wird ein neues Spannungsquellenobjekt erzeugt.
-* Die Methode gibt den erzeugten Widerstand zurück.
 */
 Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical, int id)
 {
@@ -344,8 +360,9 @@ void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnect
 /*!
 * \brief Dreht die Komponente linksrum.
 *
-* Die Methode bekommt die zu drehende Komponente übergeben.
-* Es wird die Methode turnComponentRicht drei Mal aufgerufen, da dies einmal linksrum Drehen entspricht.
+* \param[in]    componentToTurn ist die zu drehende Komponente
+*
+* Es wird die Methode turnComponentRight drei Mal aufgerufen, da dies einmal linksrum Drehen entspricht.
 *
 */
 void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
@@ -360,7 +377,9 @@ void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
 /*!
 * \brief Dreht die Komponente rechtsrum.
 *
-* Die Methode bekommt die zu drehende Komponente übergeben.
+* \param[in]    componentToTurn ist die zu drehende Komponente
+*
+*
 *
 */
 void NetworkGraphics::turnComponentRight(Component* componentToTurn)

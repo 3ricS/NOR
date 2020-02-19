@@ -41,7 +41,7 @@ void FileManager::saveAs(void)
 }
 
 //Filepath wird gesplittet beim Slash und das letzte Element ist der eigentliche Name
-QString FileManager::getFileName()
+QString FileManager::getFileName(void)
 {
   QStringList list = _actualFile.fileName().split('/');
   return list.last();

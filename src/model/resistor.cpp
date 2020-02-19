@@ -1,6 +1,15 @@
 #include "resistor.h"
-
-
+/*!
+* \brief Erzeugt ein neues Widerstandsobjekt
+*
+* \param[in]    name            ist der Name des Widerstandsobjektes
+* \param[in]    valueResistance ist der zugewiesene Widerstandswertes
+* \param[in]    x               ist die X-Koordinate der zugewiesenen Position
+* \param[in]    y               ist die Y-Koordinate der zugewiesenen Position
+* \param[in]    isVertical      ist die räumliche Ausrichtung im Netzwerk
+* \param[in]    id              ist die intern zugewiesene Id
+*
+*/
 Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVertical, int id)
         : Component(x, y, isVertical, name, valueResistance, Component::ComponentType::Resistor, id)
 {
@@ -10,8 +19,11 @@ Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVerti
 /*!
 * \brief Zeichnet die Umrisse und Informationen eines Widerstandes im Netzwerk.
 *
-* Die Methode zeichnet abhängig von der räumlichen Ausrichtung den Widerstand au zwei unterschiedliche Weisen.
+* \param[in]    painter
+* \param[in]    option
+* \param[in]    widget
 *
+* Die Methode zeichnet abhängig von der räumlichen Ausrichtung den Widerstand au zwei unterschiedliche Weisen.
 */
 void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {

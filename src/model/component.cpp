@@ -74,10 +74,10 @@ Component::Port Component::getPort(QPointF position) const
 }
 
 /*!
-* \brief Prüft ob an der ausgewählten Position ein Port befindet
+* \brief Prüft ob sich an der ausgewählten Position ein Port befindet
 *
-* Die Methode kriegt die zu prüfende Position übergeben.
-*
+* \param[in]    position ist die zu prüfende Position
+* \return       Liefert einen bool zurück, ob sich an der zu prüfenden Position ein Port befindet
 *
 */
 bool Component::hasPortAtPosition(QPointF position) const
@@ -89,9 +89,10 @@ bool Component::hasPortAtPosition(QPointF position) const
 /*!
 * \brief Wandelt den Integer in einen Komponententyp
 *
-* Die Methode bekommt einen Integer componentType übergeben.
+* \param[in]    componentType ist ein int, der für einen Komponententyp steht
+* \return       gibt den ComponentType der zu prüfenden Komponente zurück
+*
 * Es wird geprüft ob es sich bei dem componentType um einen Widerstand oder eine Spannungsquelle handelt.
-* Die Methode gibt den weweiligen ComponentType des zu prüfenden Integer zurück.
 */
 Component::ComponentType Component::integerToComponentType(int componentType)
 {

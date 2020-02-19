@@ -8,6 +8,15 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
     _manager = new FileManager(this);
 }
 
+/*!
+* \brief Fügt eine Verbindung dem Netzwerk hinzu.
+*
+* \param[in]    componentPortA  Port der Komponente 1
+* \param[in]    componentPortB  Port der Komponente 2
+*
+* Zuerst wird geprüft, ob die Verbindung bereits der connectionList hinzugefügt wurde.
+* Ist noch keine Verbindung vorhanden, wird diese hinzugefügt.
+*/
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     Connection* connection = new Connection(componentPortA, componentPortB);
@@ -274,6 +283,18 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
     return nullptr;
 }
 
+/*!
+* \brief Entfernt Komponenten aus dem Netzwerk.
+*
+* \param[in]    component ist die zu entfernende Komponente
+*
+* Wenn die ausgewählte Komponente vorhanden ist, wird diese entfernt.
+* Nach dem entfernen aus dem Netzwerk wird die Komponente aus dem componentList entfernt.
+* Wenn es sich bei der Komponente um einen Widerstand handelt wird der resistorCount um 1 reduziert.
+* Wenn es sich um eine Spannungsquellle handelt geschieht dies analog zum Widerstand.
+* Anschließend werden die Verbindungen, die sich an der Komponente befinden entfernt.
+* Zum Schluss wird der Widerstandswert neu berechnet.
+*/
 void NetworkGraphics::deleteComponent(Component* component)
 {
     if (component != nullptr)
@@ -307,6 +328,15 @@ void NetworkGraphics::deleteComponent(Component* component)
     }
 }
 
+/*!
+* \brief Verschiebt eine Komponente im Netzwerk.
+*
+* \param[in]    componentToMove ist die zu verschiebende Komponente
+* \param[in]    gridPosition    ist die Position, an die die Komponente verschoben werden soll
+*
+* Es wird geprüft ob sich berteits an der neuen Position eine Komponente befindet.
+*
+*/
 void NetworkGraphics::moveComponent(Component* componentToMove, QPointF gridPosition)
 {
     bool isComponentAtPosition = isThereAComponent(gridPosition);

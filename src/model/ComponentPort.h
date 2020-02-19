@@ -20,7 +20,7 @@ public:
 
     bool operator==(ComponentPort otherComponentPort);
 
-    void invertPort();
+    void invertPort(void);
 
     //getter
     Component* getComponent(void) const {return _component;}

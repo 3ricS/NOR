@@ -16,7 +16,7 @@ bool ComponentPort::operator==(ComponentPort otherComponentPort)
  *
  * Zeigt der ComponentPort auf Port A, so zeigt er anschließend auf Port B und umgekehrt.
  */
-void ComponentPort::invertPort()
+void ComponentPort::invertPort(void)
 {
     if (_port == Component::Port::A)
     {

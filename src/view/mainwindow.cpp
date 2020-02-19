@@ -97,11 +97,19 @@ void MainWindow::setSaveFile(void)
 
 void MainWindow::setOpenFile(void)
 {
-    NetworkGraphics* model = new NetworkGraphics();
-    MainWindow* window = new MainWindow(model);
-    window->show();
-    model->load();
-    setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
+        if(_model->getComponents().count() != 0)
+        {
+            NetworkGraphics* model = new NetworkGraphics();
+            MainWindow* window = new MainWindow(model);
+            window->show();
+            model->load();
+            setWindowTitle("NOR - Network of Resistance ~ " + model->getFileName());
+        }
+        else
+        {
+            _model->load();
+            setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
+        }
 }
 
 void MainWindow::setNewFile(void)

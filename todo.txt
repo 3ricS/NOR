@@ -19,8 +19,7 @@ Linien einzeln entfernen
 dauerhaftes Berechnen der Widerstände
 Textfelder
 Multiselect der Bauteile
-Laden in gleichem Fenster!
-Keine Fehler bei Laden
+
 
 
 View

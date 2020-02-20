@@ -8,23 +8,23 @@ Connection::Connection(ComponentPort componentPortA, ComponentPort componentPort
 
 /*!
  * \brief   Zeichnet die Verbindung in QGraphicsScene
- * @param painter[inout]    Objekt, das die einzelnen Elemente zeichnet
- * @param option
- * @param widget
+ * \param[inout]    painter Objekt, das die einzelnen Elemente zeichnet
+ * \param[]         option
+ * \param[]         widget
  */
 void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
 {
     //TODO: Funktion mit mehreren Rückgabewerten für xStart, xEnd, ...
     QPointF start = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
     QPointF end = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
-    int xStart = start.x();
-    int yStart = start.y();
-    int xEnd = end.x();
-    int yEnd = end.y();
+    int xStart = static_cast<int>(start.x());
+    int yStart = static_cast<int>(start.y());
+    int xEnd = static_cast<int>(end.x());
+    int yEnd = static_cast<int>(end.y());
 
     //first calculate the coordinates of the middle
-    int xMiddle = xStart + 0.5 * (xEnd - xStart);
-    int yMiddle = yStart + 0.5 * (yEnd - yStart);
+    int xMiddle = static_cast<int>(xStart + 0.5 * (xEnd - xStart));
+    int yMiddle = static_cast<int>(yStart + 0.5 * (yEnd - yStart));
 
     //draw the four lines to make the connection square
     painter->drawLine(xStart, yStart, xStart, yMiddle);
@@ -35,8 +35,9 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
 
 /*!
  * \brief   Gibt an, ob die Connection den übergebenen Komponenten der Schaltung enthält
- * @param searchedComponent[in]     Component, der in der Verbindung gesucht wird.
- * @return Gibt einen boolschen Wert zurück, ob der übergebene Component in der Verbindung enthalten ist
+ *
+ * \param[in]   searchedComponent ist eine Komponente, die in der Verbindung gesucht wird.
+ * \return      Gibt einen boolschen Wert zurück, ob der übergebene Component in der Verbindung enthalten ist
  *
  * Ist die übergebene Komponente der Schatlung einer der Verbindungspartner dieser Verbindung, gibt die Methode true zurück, sonst false.
  */
@@ -54,17 +55,18 @@ QRectF Connection::boundingRect(void) const
 {
     QPointF start = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
     QPointF end = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
-    int xStart = start.x();
-    int yStart = start.x();
-    int xEnd = end.x();
-    int yEnd = end.y();
+    int xStart = static_cast<int>(start.x());
+    int yStart = static_cast<int>(start.x());
+    int xEnd = static_cast<int>(end.x());
+    int yEnd = static_cast<int>(end.y());
 
     return QRectF(std::min(xStart, xEnd), std::min(yStart, yEnd), abs(xEnd - xStart), abs(yEnd - yStart));
 }
 
 /*!
- * \brief   Wechselt den Port, mit welchem die Verbindung verbunden ist, bei dem übergebenen Component
- * @param componentOfComponentPortToChangePortOf[inout]     Komponente der Schaltung, an dem der Port der Verbindung getauscht werden soll
+ * \brief   Wechselt den Port, mit welchem die Verbindung verbunden ist, bei dem übergebenen Component.
+ *
+ * \param[inout]   componentOfComponentPortToChangePortOf Komponente der Schaltung, an dem der Port der Verbindung getauscht werden soll
  *
  * Die Verbindung zeigt jeweils auf eine Component und einen Port des Components, mit dem es verbunden ist.
  * Soll der Port bei einem Component getauscht werden, wird diese Methode aufgerufen. Ist der übergebene Component

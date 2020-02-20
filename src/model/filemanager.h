@@ -50,6 +50,7 @@ private:
 
     NetworkGraphics* _model = nullptr;
     QDir _dirFilePath;
+    QString const _defaultFileName = "/Netzwerk_1";
 
 
 };

@@ -28,4 +28,3 @@ View
 - strg + Mausrad = zoom
 - Verbindungen rechtwinklig zeichnen!!!!!
 - einzelne Connections löschen
-- beim Speichern muss es ein Standardname festgelegt sein

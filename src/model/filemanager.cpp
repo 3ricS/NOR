@@ -19,7 +19,7 @@ void FileManager::save(void)
     if(!_isSaved)
     {
         _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-        _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath(),
+        _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath() + _defaultFileName,
                                                              "Json (*.json);;Text (*.txt)"));
     }
     _isSaved = saveData();
@@ -35,7 +35,7 @@ void FileManager::save(void)
 void FileManager::saveAs(void)
 {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-    _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath(),
+    _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern",_dirFilePath.absolutePath() + _defaultFileName,
                                                          "Json (*.json);;Text (*.txt)"));
     _isSaved = saveData();
 }

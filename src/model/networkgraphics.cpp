@@ -43,6 +43,7 @@ void NetworkGraphics::addObject(Component* component)
     _componentList.append(component);
     connectComponentToNeighbours(component);
     addItem(component);
+
     update();
 
     if(!_isLoading)

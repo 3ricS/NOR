@@ -12,7 +12,7 @@ Connection::Connection(ComponentPort componentPortA, ComponentPort componentPort
  * @param option
  * @param widget
  */
-void Connection::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
 {
     //TODO: Funktion mit mehreren Rückgabewerten für xStart, xEnd, ...
     QPointF start = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());

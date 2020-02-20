@@ -17,6 +17,7 @@ public:
     void duplicate(void);
     void copy(void);
     void paste(void);
+    void rotateComponentByShortcut(void);
 
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
     void deleteSelectedItem(void);
@@ -34,6 +35,7 @@ private:
     void highlightSelectedRect(QPointF gridPosition);
     void highlightRect(QPointF scenePosition, QColor _highlightColor);
     void removeHighlightSelectedRect(void);
+    void rotateComponent(QPointF gridPosition, QPointF scenePosition);
 
 protected:
     void leaveEvent(QEvent* event) override;
@@ -59,6 +61,7 @@ private:
     QPointF _lastClickedPositionGrid;
     MouseMode _mouseMode = SelectionMode;
     QColor _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
+    QPointF _actualMoveScenePosition;
 };
 
 #endif // NETWORKVIEW_H

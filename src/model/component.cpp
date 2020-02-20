@@ -3,8 +3,8 @@
 
 Component::Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int id)
         : QGraphicsItem(nullptr),
-          _id(id), _xPosition(x), _yPosition(y), _isVertical(isVertical),
-          _name(name), _value(value),
+          _xPosition(x), _yPosition(y), _isVertical(isVertical),
+          _name(name), _value(value), _id(id),
           _componentType(componentTyp)
 {
     if (isVertical)
@@ -34,6 +34,10 @@ int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
             break;
         case B:
             factor = 1;
+            break;
+        case null:
+        {
+        }
             break;
     }
 
@@ -96,14 +100,13 @@ bool Component::hasPortAtPosition(QPointF position) const
 */
 Component::ComponentType Component::integerToComponentType(int componentType)
 {
+    Component::ComponentType type = ComponentType::PowerSupply;
     if (0 == componentType)
     {
-        return ComponentType::Resistor;
+        type = ComponentType::Resistor;
     }
-    else if (1 == componentType)
-    {
-        return ComponentType::PowerSupply;
-    }
+
+    return type;
 }
 
 QPointF Component::getPortPosition(Component::Port port) const

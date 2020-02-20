@@ -27,6 +27,5 @@ View
 
 - strg + Mausrad = zoom
 - Verbindungen rechtwinklig zeichnen!!!!!
-- Button zum Drehen der Widerstände beim Einfügen
 - einzelne Connections löschen
 - beim Speichern muss es ein Standardname festgelegt sein

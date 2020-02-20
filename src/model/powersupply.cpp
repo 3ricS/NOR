@@ -23,7 +23,7 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, int id) :
 *
 * Die Methode zeichnet abhängig von der räumlichen Ausrichtung die Spannungsquelle auf zwei Weisen.
 */
-void PowerSupply::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
 {
     paintInformations(painter);
 

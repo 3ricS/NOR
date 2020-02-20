@@ -11,7 +11,7 @@
 #ifndef NOR_COMPONENTPORT_H
 #define NOR_COMPONENTPORT_H
 
-#include "model/Component.h"
+#include "model/component.h"
 
 class ComponentPort
 {

@@ -52,6 +52,7 @@ public slots:
     void setDuplicate(void);
     void setCopy(void);
     void setPaste(void);
+    void setRotate(void);
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
@@ -76,6 +77,7 @@ private:
     QAction* _duplicate = nullptr;
     QAction* _copy = nullptr;
     QAction* _paste = nullptr;
+    QAction* _rotateComponent = nullptr;
     double _scalefactor = 1;
     bool _ctrlIsPressed = false;
 };

@@ -40,24 +40,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             }
             else if (Qt::RightButton == mouseEvent->button())
             {
-                _isVerticalComponentDefault = !_isVerticalComponentDefault;
-                gridDisappears();
-                if (MouseMode::PowerSupplyMode == _mouseMode)
-                {
-                    Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                                gridPosition.toPoint().y(), _isVerticalComponentDefault,
-                                                                0);
-                    _sampleComponentOnMoveEvent = sampleResistor;
-                }
-                else if (MouseMode::ResistorMode == _mouseMode)
-                {
-                    Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                             gridPosition.toPoint().y(), _isVerticalComponentDefault,
-                                                             0);
-                    _sampleComponentOnMoveEvent = sampleResistor;
-                }
-                _model->addItem(_sampleComponentOnMoveEvent);
-                highlightRect(scenePosition, _highlightColor);
+                rotateComponent(gridPosition, scenePosition);
             }
         }
             break;
@@ -155,6 +138,8 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
     QPointF scenePosition = mapToScene(event->pos());
     QPointF gridPosition = scenePositionToGrid(scenePosition);
 
+    //Notwendig für den Rechtsklick per Shortcut
+    _actualMoveScenePosition = scenePosition;
     //MemoryLeak vermeiden
     gridDisappears();
 
@@ -333,6 +318,35 @@ void NetworkView::removeHighlightSelectedRect()
         delete _selectedRect;
         _selectedRect = nullptr;
     }
+}
+
+void NetworkView::rotateComponent(QPointF gridPosition, QPointF scenePosition)
+{
+    _isVerticalComponentDefault = !_isVerticalComponentDefault;
+    gridDisappears();
+    if (MouseMode::PowerSupplyMode == _mouseMode)
+    {
+        Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
+                                                    gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                    0);
+        _sampleComponentOnMoveEvent = sampleResistor;
+    }
+    else if (MouseMode::ResistorMode == _mouseMode)
+    {
+        Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
+                                                 gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                 0);
+        _sampleComponentOnMoveEvent = sampleResistor;
+    }
+    _model->addItem(_sampleComponentOnMoveEvent);
+    highlightRect(scenePosition, _highlightColor);
+}
+
+//Bereitet die Scene und GridPosition für das Rotieren per Shortcut auf
+void NetworkView::rotateComponentByShortcut()
+{
+    QPointF gridPosition = scenePositionToGrid(_actualMoveScenePosition);
+    rotateComponent(gridPosition, _actualMoveScenePosition);
 }
 
 void NetworkView::duplicate()

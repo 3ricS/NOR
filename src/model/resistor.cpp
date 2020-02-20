@@ -25,7 +25,7 @@ Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVerti
 *
 * Die Methode zeichnet abhängig von der räumlichen Ausrichtung den Widerstand au zwei unterschiedliche Weisen.
 */
-void Resistor::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
 {
     //Zeichnen der Informationen (Name und Wert) in Abhängigkeit ob vertikal oder horizontal
     paintInformations(painter);

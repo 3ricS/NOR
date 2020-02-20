@@ -39,6 +39,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_duplicate, SIGNAL(triggered()), this, SLOT(setDuplicate()));
     connect(_copy, SIGNAL(triggered()), this, SLOT(setCopy()));
     connect(_paste, SIGNAL(triggered()), this, SLOT(setPaste()));
+    connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(setRotate()));
 }
 
 //Setzen des Selection Modes
@@ -162,6 +163,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 
 void MainWindow::createUpperMenu(void)
 {
+    //Datei Menu
     _new = new QAction("Neu");
     _new->setShortcut(QKeySequence::New);
     _new->setStatusTip("Neue Datei erstellen");
@@ -182,6 +184,7 @@ void MainWindow::createUpperMenu(void)
     _saveAs->setStatusTip("Speichern unter neuem Dateipfad");
     _ui->menuDatei->addAction(_saveAs);
 
+    //Ansichts Menu
     _zoomIn = new QAction("Zoom In");
     _zoomIn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
     _zoomIn->setStatusTip("Reinzoomen");
@@ -197,13 +200,11 @@ void MainWindow::createUpperMenu(void)
     _zoom100Percent->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_0));
     _ui->menuAnsicht->addAction(_zoom100Percent);
 
+    //About Menu
     _about = new QAction("Über");
     _ui->menuExtras->addAction(_about);
 
-    _duplicate = new QAction("Duplizieren");
-    _duplicate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
-    _ui->menuBearbeiten->addAction(_duplicate);
-
+    //Bearbeiten Menu
     _copy = new QAction("Kopieren");
     _copy->setShortcut(QKeySequence::Copy);
     _ui->menuBearbeiten->addAction(_copy);
@@ -212,6 +213,13 @@ void MainWindow::createUpperMenu(void)
     _paste->setShortcut(QKeySequence::Paste);
     _ui->menuBearbeiten->addAction(_paste);
 
+    _duplicate = new QAction("Duplizieren");
+    _duplicate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    _ui->menuBearbeiten->addAction(_duplicate);
+
+    _rotateComponent = new QAction("Rotieren");
+    _rotateComponent->setShortcut(QKeySequence(Qt::CTRL + Qt::Key::Key_R));
+    _ui->menuBearbeiten->addAction(_rotateComponent);
 }
 
 void MainWindow::openAboutWindow()
@@ -243,6 +251,11 @@ void MainWindow::setCopy()
 void MainWindow::setPaste()
 {
     _networkView->paste();
+}
+
+void MainWindow::setRotate()
+{
+    _networkView->rotateComponentByShortcut();
 }
 
 //Zoom in

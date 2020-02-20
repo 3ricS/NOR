@@ -191,6 +191,7 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
 
 Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition)
 {
+    qDebug() << "angekommen";
     Component* duplicatedComponent = nullptr;
 
     QString name = componentToDuplicate->getName();

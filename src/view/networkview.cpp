@@ -73,6 +73,14 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             }
         }
             break;
+        case MouseMode::DescriptionMode:
+        {
+            if(mouseEvent->button() == Qt::LeftButton)
+            {
+                DescriptionField * createdDescription = _model->createDescriptionField(gridPosition);
+            }
+        }
+            break;
         default:
             break;
     }

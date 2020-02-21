@@ -6,8 +6,12 @@ DescriptionField::DescriptionField(int x, int y, int id)
 {
 }
 
+QRectF DescriptionField::boundingRect() const
+{
+    return QRectF();
+}
 
-void DescriptionField::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)
 {
     painter->drawText(_xPosition, _yPosition, _text);
 }

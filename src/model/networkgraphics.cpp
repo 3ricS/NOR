@@ -285,6 +285,18 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
     return nullptr;
 }
 
+DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition)
+{
+    int id = _descriptionCount;
+    DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id);
+    _descriptions.append(description);
+    addItem(description);
+    update();
+
+    _descriptionCount++;
+    return description;
+}
+
 /*!
 * \brief Entfernt Komponenten aus dem Netzwerk.
 *

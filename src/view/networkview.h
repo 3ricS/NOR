@@ -11,7 +11,7 @@
 class NetworkView : public QGraphicsView
 {
 public:
-    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode};
+    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode, DescriptionMode};
     NetworkView(QWidget *parent);
     void setModel(NetworkGraphics* model) {_model = model;}
     void duplicate(void);

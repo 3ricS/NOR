@@ -50,6 +50,7 @@ void MainWindow::setSelectionMode()
     _ui->Connection->setDown(false);
     _ui->PowerSupply->setDown(false);
     _ui->Selection->setDown(true);
+    _ui->TextButton->setDown(false);
 }
 
 // Setzen des Widerstands-Modus
@@ -60,6 +61,7 @@ void MainWindow::setResistorMode(void)
     _ui->Connection->setDown(false);
     _ui->PowerSupply->setDown(false);
     _ui->Selection->setDown(false);
+    _ui->TextButton->setDown(false);
 }
 
 // Setzen des PowerSupply-Modus
@@ -69,6 +71,18 @@ void MainWindow::setPowerSupplyMode(void)
     _ui->Resistor->setDown(false);
     _ui->Connection->setDown(false);
     _ui->PowerSupply->setDown(true);
+    _ui->Selection->setDown(false);
+    _ui->TextButton->setDown(false);
+}
+
+// Setzen des Discriptionfield-Modus
+void MainWindow::setDescriptionMode(void)
+{
+    _networkView->setMouseMode(NetworkView::MouseMode::DescriptionMode);
+    _ui->TextButton->setDown(true);
+    _ui->Resistor->setDown(false);
+    _ui->Connection->setDown(false);
+    _ui->PowerSupply->setDown(false);
     _ui->Selection->setDown(false);
 }
 
@@ -80,6 +94,7 @@ void MainWindow::setConnectionMode(void)
     _ui->Connection->setDown(true);
     _ui->PowerSupply->setDown(false);
     _ui->Selection->setDown(false);
+    _ui->TextButton->setDown(false);
 }
 
 void MainWindow::setCalculation(void)

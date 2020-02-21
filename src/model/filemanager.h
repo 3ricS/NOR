@@ -41,6 +41,7 @@ private:
     QString createJson(void);
     QJsonObject saveComponent(Component* component);
     QJsonObject saveConnection(Connection* connection);
+    QJsonObject saveDescription(DescriptionField* description);
     Component* getComponentById(int id);
     Component::Port toPort(int componentPort);
 

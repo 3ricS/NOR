@@ -75,6 +75,11 @@ QString FileManager::createJson(void)
         array.append(saveConnection(c));
     }
 
+    for (DescriptionField* description : _model->getDescriptions())
+    {
+        array.append(saveDescription(description));
+    }
+
     json.setArray(array);
     return json.toJson();
 }
@@ -101,6 +106,17 @@ QJsonObject FileManager::saveConnection(Connection* connection)
     c.insert("portA", connection->getComponentPortOne().getPort());
     c.insert("portB", connection->getComponentPortTwo().getPort());
     return c;
+}
+
+QJsonObject FileManager::saveDescription(DescriptionField *description)
+{
+    QJsonObject df;
+    df.insert("type", "DescriptionField");
+    df.insert("id", description->getId());
+    df.insert("xPos", description->getXPos());
+    df.insert("yPos", description->getYPos());
+    df.insert("text", description->getText());
+    return df;
 }
 
 Component* FileManager::getComponentById(int id)

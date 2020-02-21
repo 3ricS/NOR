@@ -23,7 +23,7 @@
 class Connection : public QGraphicsItem
 {
 public:
-    Connection(ComponentPort componentPortA, ComponentPort componentPortB);
+    Connection(ComponentPort componentPortA, ComponentPort componentPortB, QList<Component*> componentList);
 
     //TODO: boundingRect muss noch beschrieben werden
     QRectF boundingRect(void) const override;
@@ -36,8 +36,32 @@ public:
     bool hasComponent(Component* searchedComponent);
 
 private:
+
+    Component* getComponentAtPosition(int x, int y);
+    bool isThereAComponent(int x, int y);
+
+    void horizontalRoutine(void);
+    void verticalRoutine(void);
+    void dodgeRoutine(void);
+    bool isStartComponentVertical(void);
+
+    int _difX = 0;
+    int _difY = 0;
+
     ComponentPort _componentPortOne;
     ComponentPort _componentPortTwo;
+
+    QPainter* _painter = nullptr;
+
+    int _startX = 0;
+    int _startY = 0;
+    int _endX = 0;
+    int _endY = 0;
+
+    int _currentPosX = 0;
+    int _currentPosY = 0;
+
+    QList<Component*> _componentList;
 };
 
 #endif // CONNECTION_H

@@ -19,7 +19,7 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 */
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
-    Connection* connection = new Connection(componentPortA, componentPortB);
+    Connection* connection = new Connection(componentPortA, componentPortB, _componentList);
     if (!_connectionList.contains(connection))
     {
         _connectionList.append(connection);

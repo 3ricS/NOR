@@ -1,8 +1,8 @@
 #include "connection.h"
 
-Connection::Connection(ComponentPort componentPortA, ComponentPort componentPortB) :
+Connection::Connection(ComponentPort componentPortA, ComponentPort componentPortB, QList<Component*> componentList) :
         QGraphicsItem(nullptr),
-        _componentPortOne(componentPortA), _componentPortTwo(componentPortB)
+        _componentPortOne(componentPortA), _componentPortTwo(componentPortB), _componentList(componentList)
 {
 }
 
@@ -17,20 +17,18 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     //TODO: Funktion mit mehreren Rückgabewerten für xStart, xEnd, ...
     QPointF start = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
     QPointF end = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
-    int xStart = static_cast<int>(start.x());
-    int yStart = static_cast<int>(start.y());
-    int xEnd = static_cast<int>(end.x());
-    int yEnd = static_cast<int>(end.y());
+    _painter = painter;
+    _startX = start.toPoint().x();
+    _startY = start.toPoint().y();
+    _endX = end.toPoint().x();
+    _endY = end.toPoint().y();
+    _currentPosX = start.toPoint().x();
+    _currentPosY = start.toPoint().y();
 
-    //first calculate the coordinates of the middle
-    int xMiddle = static_cast<int>(xStart + 0.5 * (xEnd - xStart));
-    int yMiddle = static_cast<int>(yStart + 0.5 * (yEnd - yStart));
-
-    //draw the four lines to make the connection square
-    painter->drawLine(xStart, yStart, xStart, yMiddle);
-    painter->drawLine(xStart, yMiddle, xMiddle, yMiddle);
-    painter->drawLine(xMiddle, yMiddle, xEnd, yMiddle);
-    painter->drawLine(xEnd, yMiddle, xEnd, yEnd);
+    _difX = _endX - _startX;;
+    _difY = _endY - _startY;
+    qDebug() << _difX << " , " << _difY;
+    horizontalRoutine();
 }
 
 /*!
@@ -82,3 +80,143 @@ void Connection::changePortOfComponentPortWithComponent(Component* componentOfCo
         _componentPortTwo.invertPort();
     }
 }
+
+Component* Connection::getComponentAtPosition(int x, int y)
+{
+    for (Component* component : _componentList)
+    {
+        bool equalX = (component->getXPosition() == x);
+        bool equalY = (component->getYPosition() == y);
+        if (equalX && equalY)
+        {
+            return component;
+        }
+    }
+    return nullptr;
+}
+
+bool Connection::isThereAComponent(int x, int y)
+{
+    return getComponentAtPosition(x, y) != nullptr;
+}
+
+void Connection::horizontalRoutine()
+{
+    if(_difX > 0)
+    {
+        while(_difX != 0)
+        {
+            if(isStartComponentVertical() || !isThereAComponent(_currentPosX + 50, _currentPosY) || _difX == 100)
+            {
+                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX + 50, _currentPosY);
+                _currentPosX += 50;
+                _difX -= 50;
+            }
+            else
+            {
+                if(_difY == 0)
+                {
+                    dodgeRoutine();
+                }
+                else
+                {
+                    verticalRoutine();
+                }
+            }
+        }
+    }
+    else if (_difX < 0)
+    {
+        while(_difX != 0)
+        {
+            if(isStartComponentVertical() || !isThereAComponent(_currentPosX - 50, _currentPosY) || _difX == 100)
+            {
+                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 50, _currentPosY);
+                _currentPosX -= 50;
+                _difX += 50;
+            }
+            else
+            {
+                if(_difY == 0)
+                {
+                    dodgeRoutine();
+                }
+                else
+                {
+                    verticalRoutine();
+                }
+            }
+        }
+    }
+    verticalRoutine();
+}
+
+void Connection::verticalRoutine()
+{
+    if(_difY > 0)
+    {
+        while(_difY != 0)
+        {
+            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY + 50) || _difY == 100)
+            {
+                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY + 50);
+                _currentPosY += 50;
+                _difY -= 50;
+            }
+            else
+            {
+                _difY = 0;
+                if(_difX == 0)
+                {
+                    dodgeRoutine();
+                }
+                else
+                {
+                    horizontalRoutine();
+                }
+            }
+        }
+    }
+    else if (_difY < 0)
+    {
+        while(_difY != 0)
+        {
+            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY + 50) || _difY == 100)
+            {
+                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 50);
+                _currentPosY -= 50;
+                _difY += 50;
+            }
+            else
+            {
+                _difY = 0;
+                if(_difX == 0)
+                {
+                    dodgeRoutine();
+                }
+                else
+                {
+                    horizontalRoutine();
+                }
+            }
+        }
+    }
+}
+
+void Connection::dodgeRoutine()
+{
+
+}
+
+bool Connection::isStartComponentVertical()
+{
+    if(_startY % 100 == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+

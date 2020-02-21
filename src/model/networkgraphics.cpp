@@ -289,8 +289,10 @@ DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition)
 {
     int id = _descriptionCount;
     DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id);
+
     _descriptions.append(description);
     addItem(description);
+
     update();
 
     _descriptionCount++;

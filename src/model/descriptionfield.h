@@ -3,16 +3,18 @@
 
 #include <QGraphicsItem>
 #include <QPainter>
-
+#include <QDebug>
 
 
 class DescriptionField : public QGraphicsItem
 {
 public:
     DescriptionField(int x, int y, int id);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    QString text(void) const {return _text;}
+    //Getter
+    QString getText(void) const {return _text;}
+
+    //Setter
     void setText(const QString text) {_text = text;}
 
 private:
@@ -20,12 +22,14 @@ private:
     int _xPosition;
     int _yPosition;
     int _id;
-    QString _text = "Hallo";
+    QRectF* _rect;
+    QString _text = "Ich bin ein Descriptionfield";
 
 
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    QRectF boundingRect() const override;
     // QGraphicsItem interface
 public:
-    QRectF boundingRect() const override;
 };
 
 #endif // DESCRIPTIONFIELD_H

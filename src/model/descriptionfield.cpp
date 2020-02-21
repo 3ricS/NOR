@@ -8,7 +8,7 @@ DescriptionField::DescriptionField(int x, int y, int id)
 
 QRectF DescriptionField::boundingRect() const
 {
-    return QRectF();
+    return QRectF (_xPosition - 100, _yPosition - 50, 150, 100);
 }
 
 void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)

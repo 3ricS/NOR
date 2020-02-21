@@ -50,6 +50,7 @@ public:
     bool isThereAComponent(QPointF gridPosition);
     QList<Component*> getComponents(void) {return _componentList;}
     QList<Connection*> getConnections(void) {return _connectionList;}
+    QList<DescriptionField*> getDescriptions(void) {return _descriptions;}
     QString getFileName(void);
 
 private:

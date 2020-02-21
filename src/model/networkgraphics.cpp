@@ -149,11 +149,17 @@ void NetworkGraphics::load(void)
 
 }
 
-void NetworkGraphics::saveAs()
+void NetworkGraphics::saveAs(void)
 {
     _manager->saveAs();
 }
 
+/*!
+* \brief
+*
+* \param[in]    component  Port der Komponente 1
+*
+*/
 void NetworkGraphics::mirrorComponent(Component* component)
 {
     for (Connection* connection : _connectionList)
@@ -203,7 +209,15 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
     return createdComponent;
 }
 
-
+/*!
+* \brief Dupliziert eine ausgewählte Komponente.
+*
+* \param[in]    componentToDuplicate ist die zu duplizierende Komponente
+* \param[in]    xPosition ist die X-Koordinate der übergebenden Komponente
+* \param[in]    yPosition ist die Y-Koordinate der übergebenden Komponente
+*
+*
+*/
 Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition)
 {
     qDebug() << "angekommen";
@@ -299,6 +313,15 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
     return nullptr;
 }
 
+/*!
+* \brief Erzeugt ein neues Textfeld.
+*
+* \param[in]    gridPosition    ist die Gitterposition innerhalb im Netzwerk
+* \return
+*
+* Es wird zuerst geprüft ob sich an der Gitterposition bereits eine Komponente oder ein Textfeld befindet.
+* Wenn sich nichts an der position befindet, wird ein neues Textfeld erzeugt.
+*/
 DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition)
 {
     if(isThereAComponentOrADescription(gridPosition))
@@ -458,8 +481,6 @@ void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
 *
 * \param[in]    componentToTurn ist die zu drehende Komponente
 *
-*
-*
 */
 void NetworkGraphics::turnComponentRight(Component* componentToTurn)
 {
@@ -491,6 +512,14 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
     }
 }
 
+/*!
+* \brief Setzt die Orientierung einer ausgewählten Komponente.
+*
+* \param[in]    componentToTurn ist die zu drehende Komponente
+* \param[in]    orientation     ist die Orientierung der zu drehenden Komponente
+*
+* Die Komponente wird so lange rechtsrum gedreht, bis die neue Orientierung der übergebenen Orientierung ist.
+*/
 void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation)
 {
     while (componentToTurn->getOrientation() != orientation)

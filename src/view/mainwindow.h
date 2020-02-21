@@ -40,6 +40,7 @@ public slots:
     void setResistorMode(void);
     void setPowerSupplyMode(void);
     void setConnectionMode(void);
+    void setDescriptionMode(void);
     void setCalculation(void);
     void setSaveFile(void);
     void setOpenFile(void);

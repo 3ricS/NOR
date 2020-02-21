@@ -75,6 +75,11 @@ QString FileManager::createJson(void)
         array.append(saveConnection(c));
     }
 
+    for (DescriptionField* description : _model->getDescriptions())
+    {
+        array.append(saveDescription(description));
+    }
+
     json.setArray(array);
     return json.toJson();
 }
@@ -101,6 +106,17 @@ QJsonObject FileManager::saveConnection(Connection* connection)
     c.insert("portA", connection->getComponentPortOne().getPort());
     c.insert("portB", connection->getComponentPortTwo().getPort());
     return c;
+}
+
+QJsonObject FileManager::saveDescription(DescriptionField *description)
+{
+    QJsonObject df;
+    df.insert("type", "DescriptionField");
+    df.insert("id", description->getId());
+    df.insert("xPos", description->getXPos());
+    df.insert("yPos", description->getYPos());
+    df.insert("text", description->getText());
+    return df;
 }
 
 Component* FileManager::getComponentById(int id)
@@ -161,54 +177,87 @@ void FileManager::load(void)
             array = json.array();
 
             //Zuerst Components laden, da die Connections auf diese zugreifen / zeigen
-            for (int i = 0; i < array.size(); i++)
-            {
-                if (array[i].isObject())
-                {
-                    QJsonObject obj = array[i].toObject();
-                    QString name = obj.value("name").toString();
-                    int id = obj.value("id").toInt();
-                    int xPos = obj.value("xPos").toInt();
-                    int yPos = obj.value("yPos").toInt();
-                    bool isVertical = obj.value("isVertical").toBool();
-                    int resistance = obj.value("resistance").toInt();
-                    Component::ComponentType componentType = Component::integerToComponentType(obj.value("type").toInt());
-                    if(Component::ComponentType::Resistor == componentType)
-                    {
-                        _model->addResistor(name, resistance, xPos, yPos, isVertical, id);
-                    }
-                    else if(Component::ComponentType::PowerSupply == componentType)
-                    {
-                        _model->addPowerSupply(name, xPos, yPos, isVertical, id);
-                    }
-                }
-            }
-
+            loadComponent(array);
             //Jetzt Connections zeichnen
-            for (int i = 0; i < array.size(); i++)
-            {
-                if (array[i].isObject())
-                {
-                    QJsonObject obj = array[i].toObject();
-
-                    if (obj.value("type") == "Connection")
-                    {
-                        int idA = obj.value("componentIdOne").toInt();
-                        Component* componentA = getComponentById(idA);
-                        Component::Port portA = toPort(obj.value("portA").toInt());
-                        ComponentPort componentPortA(componentA, portA);
-
-                        int idB = obj.value("componentIdTwo").toInt();
-                        Component* componentB = getComponentById(idB);
-                        Component::Port portB = toPort(obj.value("portB").toInt());
-                        ComponentPort componentPortB(componentB, portB);
-
-                        _model->addConnection(componentPortA, componentPortB);
-                    }
-                }
-            }
+            loadConnection(array);
+            //Jetzt die Textfelder Laden
+            loadDescription(array);
         }
     }
     _actualFile.close();
     _isSaved = true;
+}
+
+void FileManager::loadComponent(QJsonArray array)
+{
+    for (int i = 0; i < array.size(); i++)
+    {
+        if (array[i].isObject())
+        {
+            QJsonObject obj = array[i].toObject();
+            QString name = obj.value("name").toString();
+            int id = obj.value("id").toInt();
+            int xPos = obj.value("xPos").toInt();
+            int yPos = obj.value("yPos").toInt();
+            bool isVertical = obj.value("isVertical").toBool();
+            int resistance = obj.value("resistance").toInt();
+            Component::ComponentType componentType = Component::integerToComponentType(obj.value("type").toInt());
+            if(Component::ComponentType::Resistor == componentType)
+            {
+                _model->addResistor(name, resistance, xPos, yPos, isVertical, id);
+            }
+            else if(Component::ComponentType::PowerSupply == componentType)
+            {
+                _model->addPowerSupply(name, xPos, yPos, isVertical, id);
+            }
+        }
+    }
+}
+
+void FileManager::loadConnection(QJsonArray array)
+{
+    for (int i = 0; i < array.size(); i++)
+    {
+        if (array[i].isObject())
+        {
+            QJsonObject obj = array[i].toObject();
+
+            if (obj.value("type") == "Connection")
+            {
+                int idA = obj.value("componentIdOne").toInt();
+                Component* componentA = getComponentById(idA);
+                Component::Port portA = toPort(obj.value("portA").toInt());
+                ComponentPort componentPortA(componentA, portA);
+
+                int idB = obj.value("componentIdTwo").toInt();
+                Component* componentB = getComponentById(idB);
+                Component::Port portB = toPort(obj.value("portB").toInt());
+                ComponentPort componentPortB(componentB, portB);
+
+                _model->addConnection(componentPortA, componentPortB);
+            }
+        }
+    }
+}
+
+void FileManager::loadDescription(QJsonArray array)
+{
+    for (int i = 0; i < array.size(); i++)
+    {
+        if (array[i].isObject())
+        {
+            QJsonObject obj = array[i].toObject();
+
+            if (obj.value("type") == "DescriptionField")
+            {
+                int id = obj.value("id").toInt();
+                int xPos = obj.value("xPos").toInt();
+                int yPos = obj.value("yPos").toInt();
+                QString text = obj.value("text").toString();
+
+ //TODO: benötigt add Descriptionfield in Networkgraphics
+                //_model->addDescriptionfield(xPos, yPos, id, text);
+            }
+        }
+    }
 }

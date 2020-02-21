@@ -8,6 +8,7 @@
 #include <QMouseEvent>
 
 #include <model/calculator.h>
+#include <model/descriptionfield.h>
 #include <model/resistor.h>
 #include <model/powersupply.h>
 #include <model/connection.h>
@@ -37,6 +38,8 @@ public:
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
     Component* addResistor(QString name, int valueResistance, int _xPosition, int _yPosition, bool isVertical, int id = 0);
     Component* addPowerSupply(QString name, int x, int y, bool isVertical, int id = 0);
+    DescriptionField* createDescriptionField(QPointF gridPosition);
+
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void deleteComponent(Component* component);
     void moveComponent(Component* componentToMove, QPointF gridPosition);
@@ -44,9 +47,11 @@ public:
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
     Component* getComponentAtPosition(QPointF gridPosition);
-    bool isThereAComponent(QPointF gridPosition);
+    DescriptionField* getDescriptionAtPosition(QPointF gridPosition);
+    bool isThereAComponentOrADescription(QPointF gridPosition);
     QList<Component*> getComponents(void) {return _componentList;}
     QList<Connection*> getConnections(void) {return _connectionList;}
+    QList<DescriptionField*> getDescriptions(void) {return _descriptions;}
     QString getFileName(void);
 
 private:
@@ -54,6 +59,7 @@ private:
 
     int _resistorCount = 0;
     int _powerSupplyCount = 0;
+    int _descriptionCount = 0;
 
     void addObject(Component* component);
     void connectComponentToNeighbours(Component* componentToConnectWithNeighbours);
@@ -62,6 +68,7 @@ private:
 
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;
+    QList<DescriptionField*> _descriptions;
     QGraphicsScene* _graphics = nullptr;
     FileManager* _manager = nullptr;
     Calculator _calculator = Calculator(_connectionList, _componentList);

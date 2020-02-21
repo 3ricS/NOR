@@ -1,5 +1,7 @@
 #include "networkview.h"
 
+#include <QInputDialog>
+
 NetworkView::NetworkView(QWidget* parent) :
         QGraphicsView(parent)
 {
@@ -73,6 +75,24 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             }
         }
             break;
+        case MouseMode::DescriptionMode:
+        {
+            if(mouseEvent->button() == Qt::LeftButton)
+            {
+                bool ok;
+                DescriptionField * createdDescription = _model->createDescriptionField(gridPosition);
+                if(createdDescription != nullptr)
+                {
+                   QString text = QInputDialog::getText(this, "text", "Text",QLineEdit::EchoMode::Normal, "Beschreibung", &ok);
+
+                   if(ok && !text.isEmpty())
+                   {
+                       createdDescription->setText(text);
+                   }
+                }
+            }
+        }
+            break;
         default:
             break;
     }
@@ -84,14 +104,14 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
 
     _mouseIsPressed = true;
     QPointF gridPosition = scenePositionToGrid(scenePosition);
-    _componentIsGrabbed = _model->isThereAComponent(gridPosition);
+    _componentIsGrabbed = _model->isThereAComponentOrADescription(gridPosition);
 
     //Keine Verbindung begonnen: _connectionStartComponentPort muss auf Nullptr zeigen
     _connectionStartComponentPort = nullptr;
     _selectedComponentToMove = nullptr;
 
     //MemoryLeak vermeiden
-    if (!_model->isThereAComponent(scenePosition))
+    if (!_model->isThereAComponentOrADescription(scenePosition))
     {
         if (nullptr != _selectedRect)
         {
@@ -110,7 +130,7 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
             break;
         case SelectionMode:
         {
-            bool isComponentAtPosition = _model->isThereAComponent(gridPosition);
+            bool isComponentAtPosition = _model->isThereAComponentOrADescription(gridPosition);
             if (isComponentAtPosition)
             {
                 QApplication::setOverrideCursor(Qt::ClosedHandCursor);
@@ -127,6 +147,10 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
         }
             break;
         case PowerSupplyMode:
+        {
+        }
+            break;
+        case DescriptionMode:
         {
         }
             break;
@@ -166,7 +190,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         case ConnectionMode:
         {
             //TODO: nicht auf GridPosition beschränken, sondern Model fragen, ob an scenePosition ein Port in der Nähe ist
-            if (_model->isThereAComponent(gridPosition))
+            if (_model->isThereAComponentOrADescription(gridPosition))
             {
                 ComponentPort* foundComponentPort = _model->getComponentPortAtPosition(scenePosition);
                 if (foundComponentPort != nullptr)
@@ -197,6 +221,13 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
             _model->moveComponent(_selectedComponentToMove, gridPosition);
         }
             break;
+    case DescriptionMode:
+    {
+        _sampleDescriptionOnMoveEvent = new DescriptionField(gridPosition.x(), gridPosition.y(),0);
+        _model->addItem(_sampleDescriptionOnMoveEvent);
+        highlightRect(scenePosition, _highlightColor);
+    }
+        break;
     }
 }
 
@@ -214,6 +245,17 @@ void NetworkView::mouseDoubleClickEvent(QMouseEvent* event)
             //TODO: emit foundComponent
             EditView* editView = new EditView(foundComponent, _model, false, this);
             editView->show();
+        }
+
+        DescriptionField* description = _model->getDescriptionAtPosition(gridPosition);
+        if(description != nullptr)
+        {
+            bool ok = false;
+            QString text = QInputDialog::getText(this, "text", "Text",QLineEdit::EchoMode::Normal, description->getText(), &ok);
+            if(ok)
+            {
+                description->setText(text);
+            }
         }
     }
 }
@@ -236,9 +278,19 @@ void NetworkView::gridDisappears()
 
         _model->update();
     }
+
     if (nullptr != _sampleComponentOnMoveEvent)
     {
         _model->removeItem(_sampleComponentOnMoveEvent);
+        delete _sampleComponentOnMoveEvent;
+        _sampleComponentOnMoveEvent = nullptr;
+
+        _model->update();
+    }
+
+    if(nullptr != _sampleDescriptionOnMoveEvent)
+    {
+        _model->removeItem(_sampleDescriptionOnMoveEvent);
         delete _sampleComponentOnMoveEvent;
         _sampleComponentOnMoveEvent = nullptr;
 
@@ -271,7 +323,7 @@ void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
     QPointF gridPosition = scenePositionToGrid(scenePosition);
     int positionX = gridPosition.toPoint().x();
     int positionY = gridPosition.toPoint().y();
-    if (!_model->isThereAComponent(gridPosition))
+    if (!_model->isThereAComponentOrADescription(gridPosition))
     {
         QGraphicsItem* highlightedRect = _model->addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen,
                                                          highlightColor);
@@ -358,7 +410,7 @@ void NetworkView::duplicate()
         bool created = false;
         while (!created)
         {
-            if (!_model->isThereAComponent(
+            if (!_model->isThereAComponentOrADescription(
                     QPointF(_selectedComponent->getXPosition() + xWaytoTheRight, _selectedComponent->getYPosition())))
             {
                 _model->duplicateComponent(_selectedComponent, _selectedComponent->getXPosition() + xWaytoTheRight,
@@ -378,7 +430,7 @@ void NetworkView::copy()
 
 void NetworkView::paste()
 {
-    if (_copiedComponent != nullptr && !_model->isThereAComponent(_lastClickedPositionGrid))
+    if (_copiedComponent != nullptr && !_model->isThereAComponentOrADescription(_lastClickedPositionGrid))
     {
         _model->duplicateComponent(_copiedComponent, _lastClickedPositionGrid.x(), _lastClickedPositionGrid.y());
     }
@@ -403,6 +455,10 @@ void NetworkView::enterEvent(QEvent* event)
         }
             break;
         case ResistorMode:
+        {
+        }
+            break;
+        case DescriptionMode:
         {
         }
             break;

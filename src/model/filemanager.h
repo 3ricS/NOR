@@ -20,6 +20,7 @@
 #include <model/connection.h>
 #include <model/powersupply.h>
 #include <model/resistor.h>
+#include <model/descriptionfield.h>
 
 class NetworkGraphics;
 
@@ -40,6 +41,10 @@ private:
     QString createJson(void);
     QJsonObject saveComponent(Component* component);
     QJsonObject saveConnection(Connection* connection);
+    QJsonObject saveDescription(DescriptionField* description);
+    void loadComponent(QJsonArray array);
+    void loadConnection(QJsonArray array);
+    void loadDescription(QJsonArray array);
     Component* getComponentById(int id);
     Component::Port toPort(int componentPort);
 

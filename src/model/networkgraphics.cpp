@@ -66,9 +66,23 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
     return nullptr;
 }
 
-bool NetworkGraphics::isThereAComponent(QPointF gridPosition)
+DescriptionField *NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition)
 {
-    return getComponentAtPosition(gridPosition) != nullptr;
+    for(DescriptionField* description : _descriptions)
+    {
+        bool equalX = (description->getXPos() == gridPosition.toPoint().x());
+        bool equalY = (description->getYPos() == gridPosition.toPoint().y());
+        if(equalX && equalY)
+        {
+            return description;
+        }
+    }
+    return nullptr;
+}
+
+bool NetworkGraphics::isThereAComponentOrADescription(QPointF gridPosition)
+{
+    return getComponentAtPosition(gridPosition) != nullptr || getDescriptionAtPosition(gridPosition) != nullptr;
 }
 
 QString NetworkGraphics::getFileName()
@@ -135,11 +149,17 @@ void NetworkGraphics::load(void)
 
 }
 
-void NetworkGraphics::saveAs()
+void NetworkGraphics::saveAs(void)
 {
     _manager->saveAs();
 }
 
+/*!
+* \brief
+*
+* \param[in]    component  Port der Komponente 1
+*
+*/
 void NetworkGraphics::mirrorComponent(Component* component)
 {
     for (Connection* connection : _connectionList)
@@ -167,7 +187,7 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
 {
     Component* createdComponent = nullptr;
 
-    if (isThereAComponent(gridPosition))
+    if (isThereAComponentOrADescription(gridPosition))
     {
         return nullptr;
     }
@@ -189,7 +209,15 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
     return createdComponent;
 }
 
-
+/*!
+* \brief Dupliziert eine ausgewählte Komponente.
+*
+* \param[in]    componentToDuplicate ist die zu duplizierende Komponente
+* \param[in]    xPosition ist die X-Koordinate der übergebenden Komponente
+* \param[in]    yPosition ist die Y-Koordinate der übergebenden Komponente
+*
+*
+*/
 Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition)
 {
     qDebug() << "angekommen";
@@ -286,6 +314,33 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
 }
 
 /*!
+* \brief Erzeugt ein neues Textfeld.
+*
+* \param[in]    gridPosition    ist die Gitterposition innerhalb im Netzwerk
+* \return
+*
+* Es wird zuerst geprüft ob sich an der Gitterposition bereits eine Komponente oder ein Textfeld befindet.
+* Wenn sich nichts an der position befindet, wird ein neues Textfeld erzeugt.
+*/
+DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition)
+{
+    if(isThereAComponentOrADescription(gridPosition))
+    {
+        return nullptr;
+    }
+    int id = _descriptionCount;
+    DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id);
+
+    _descriptions.append(description);
+    addItem(description);
+
+    update();
+
+    _descriptionCount++;
+    return description;
+}
+
+/*!
 * \brief Entfernt Komponenten aus dem Netzwerk.
 *
 * \param[in]    component ist die zu entfernende Komponente
@@ -341,7 +396,7 @@ void NetworkGraphics::deleteComponent(Component* component)
 */
 void NetworkGraphics::moveComponent(Component* componentToMove, QPointF gridPosition)
 {
-    bool isComponentAtPosition = isThereAComponent(gridPosition);
+    bool isComponentAtPosition = isThereAComponentOrADescription(gridPosition);
     bool userIsMovingComponent = (nullptr != componentToMove);
     if (!userIsMovingComponent || isComponentAtPosition)
     {
@@ -426,8 +481,6 @@ void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
 *
 * \param[in]    componentToTurn ist die zu drehende Komponente
 *
-*
-*
 */
 void NetworkGraphics::turnComponentRight(Component* componentToTurn)
 {
@@ -459,6 +512,14 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
     }
 }
 
+/*!
+* \brief Setzt die Orientierung einer ausgewählten Komponente.
+*
+* \param[in]    componentToTurn ist die zu drehende Komponente
+* \param[in]    orientation     ist die Orientierung der zu drehenden Komponente
+*
+* Die Komponente wird so lange rechtsrum gedreht, bis die neue Orientierung der übergebenen Orientierung ist.
+*/
 void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation)
 {
     while (componentToTurn->getOrientation() != orientation)

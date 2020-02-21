@@ -11,7 +11,7 @@
 class NetworkView : public QGraphicsView
 {
 public:
-    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode};
+    enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode, DescriptionMode};
     NetworkView(QWidget *parent);
     void setModel(NetworkGraphics* model) {_model = model;}
     void duplicate(void);
@@ -57,6 +57,7 @@ private:
     Component* _selectedComponentToMove = nullptr;
     bool _isVerticalComponentDefault = true;
     Component* _sampleComponentOnMoveEvent = nullptr;
+    DescriptionField* _sampleDescriptionOnMoveEvent = nullptr;
     Component* _copiedComponent = nullptr;
     QPointF _lastClickedPositionGrid;
     MouseMode _mouseMode = SelectionMode;

@@ -26,6 +26,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
     connect(_ui->Calculate, SIGNAL(released()), this, SLOT(setCalculation()));
+    connect(_ui->TextButton, SIGNAL(released()), this, SLOT(setDescriptionMode()));
     connect(_new, SIGNAL(triggered()), this, SLOT(setNewFile()));
     connect(_saveAs, SIGNAL(triggered()), this, SLOT(setSaveAsFile()));
     connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
@@ -50,6 +51,7 @@ void MainWindow::setSelectionMode()
     _ui->Connection->setDown(false);
     _ui->PowerSupply->setDown(false);
     _ui->Selection->setDown(true);
+    _ui->TextButton->setDown(false);
 }
 
 // Setzen des Widerstands-Modus
@@ -60,6 +62,7 @@ void MainWindow::setResistorMode(void)
     _ui->Connection->setDown(false);
     _ui->PowerSupply->setDown(false);
     _ui->Selection->setDown(false);
+    _ui->TextButton->setDown(false);
 }
 
 // Setzen des PowerSupply-Modus
@@ -69,6 +72,18 @@ void MainWindow::setPowerSupplyMode(void)
     _ui->Resistor->setDown(false);
     _ui->Connection->setDown(false);
     _ui->PowerSupply->setDown(true);
+    _ui->Selection->setDown(false);
+    _ui->TextButton->setDown(false);
+}
+
+// Setzen des Discriptionfield-Modus
+void MainWindow::setDescriptionMode(void)
+{
+    _networkView->setMouseMode(NetworkView::MouseMode::DescriptionMode);
+    _ui->TextButton->setDown(true);
+    _ui->Resistor->setDown(false);
+    _ui->Connection->setDown(false);
+    _ui->PowerSupply->setDown(false);
     _ui->Selection->setDown(false);
 }
 
@@ -80,6 +95,7 @@ void MainWindow::setConnectionMode(void)
     _ui->Connection->setDown(true);
     _ui->PowerSupply->setDown(false);
     _ui->Selection->setDown(false);
+    _ui->TextButton->setDown(false);
 }
 
 void MainWindow::setCalculation(void)

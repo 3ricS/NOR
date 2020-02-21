@@ -13,5 +13,5 @@ QRectF DescriptionField::boundingRect() const
 
 void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)
 {
-    painter->drawText(QRectF (_xPosition - 50, _yPosition - 50, 150, 100), _text);
+    painter->drawText(QRectF (_xPosition - 50, _yPosition - 50, 100, 100), _text);
 }

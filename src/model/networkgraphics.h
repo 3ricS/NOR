@@ -47,7 +47,8 @@ public:
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
     Component* getComponentAtPosition(QPointF gridPosition);
-    bool isThereAComponent(QPointF gridPosition);
+    DescriptionField* getDescriptionAtPosition(QPointF gridPosition);
+    bool isThereAComponentOrADescription(QPointF gridPosition);
     QList<Component*> getComponents(void) {return _componentList;}
     QList<Connection*> getConnections(void) {return _connectionList;}
     QList<DescriptionField*> getDescriptions(void) {return _descriptions;}

@@ -66,9 +66,23 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
     return nullptr;
 }
 
-bool NetworkGraphics::isThereAComponent(QPointF gridPosition)
+DescriptionField *NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition)
 {
-    return getComponentAtPosition(gridPosition) != nullptr;
+    for(DescriptionField* description : _descriptions)
+    {
+        bool equalX = (description->getXPos() == gridPosition.toPoint().x());
+        bool equalY = (description->getYPos() == gridPosition.toPoint().y());
+        if(equalX && equalY)
+        {
+            return description;
+        }
+    }
+    return nullptr;
+}
+
+bool NetworkGraphics::isThereAComponentOrADescription(QPointF gridPosition)
+{
+    return getComponentAtPosition(gridPosition) != nullptr || getDescriptionAtPosition(gridPosition) != nullptr;
 }
 
 QString NetworkGraphics::getFileName()
@@ -167,7 +181,7 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
 {
     Component* createdComponent = nullptr;
 
-    if (isThereAComponent(gridPosition))
+    if (isThereAComponentOrADescription(gridPosition))
     {
         return nullptr;
     }
@@ -287,6 +301,10 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
 
 DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition)
 {
+    if(isThereAComponentOrADescription(gridPosition))
+    {
+        return nullptr;
+    }
     int id = _descriptionCount;
     DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id);
 
@@ -355,7 +373,7 @@ void NetworkGraphics::deleteComponent(Component* component)
 */
 void NetworkGraphics::moveComponent(Component* componentToMove, QPointF gridPosition)
 {
-    bool isComponentAtPosition = isThereAComponent(gridPosition);
+    bool isComponentAtPosition = isThereAComponentOrADescription(gridPosition);
     bool userIsMovingComponent = (nullptr != componentToMove);
     if (!userIsMovingComponent || isComponentAtPosition)
     {

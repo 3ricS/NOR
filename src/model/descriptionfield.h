@@ -26,8 +26,7 @@ private:
     int _xPosition;
     int _yPosition;
     int _id;
-    QRectF* _rect;
-    QString _text = "Ich bin ein Descriptionfield";
+    QString _text = "Hier könnte dein Text stehen!";
 
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;

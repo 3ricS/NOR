@@ -12,8 +12,11 @@ public:
     DescriptionField(int x, int y, int id);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    QString text(void) const {return _text;}
+    QString gettext(void) const {return _text;}
     void setText(const QString text) {_text = text;}
+    int getId(void) {return _id;}
+    int getXPos(void) {return _xPosition;}
+    int getYPos(void) {return _yPosition;}
 
 private:
 

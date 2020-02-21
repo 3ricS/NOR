@@ -57,6 +57,7 @@ private:
     Component* _selectedComponentToMove = nullptr;
     bool _isVerticalComponentDefault = true;
     Component* _sampleComponentOnMoveEvent = nullptr;
+    DescriptionField* _sampleDescriptionOnMoveEvent = nullptr;
     Component* _copiedComponent = nullptr;
     QPointF _lastClickedPositionGrid;
     MouseMode _mouseMode = SelectionMode;

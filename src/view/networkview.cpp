@@ -205,6 +205,13 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
             _model->moveComponent(_selectedComponentToMove, gridPosition);
         }
             break;
+    case DescriptionMode:
+    {
+        _sampleDescriptionOnMoveEvent = new DescriptionField(gridPosition.x(), gridPosition.y(),0);
+        _model->addItem(_sampleDescriptionOnMoveEvent);
+        highlightRect(scenePosition, _highlightColor);
+    }
+        break;
     }
 }
 
@@ -244,9 +251,19 @@ void NetworkView::gridDisappears()
 
         _model->update();
     }
+
     if (nullptr != _sampleComponentOnMoveEvent)
     {
         _model->removeItem(_sampleComponentOnMoveEvent);
+        delete _sampleComponentOnMoveEvent;
+        _sampleComponentOnMoveEvent = nullptr;
+
+        _model->update();
+    }
+
+    if(nullptr != _sampleDescriptionOnMoveEvent)
+    {
+        _model->removeItem(_sampleDescriptionOnMoveEvent);
         delete _sampleComponentOnMoveEvent;
         _sampleComponentOnMoveEvent = nullptr;
 

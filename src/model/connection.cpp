@@ -111,6 +111,7 @@ void Connection::horizontalRoutine()
                 _painter->drawLine(_currentPosX, _currentPosY, _currentPosX + 50, _currentPosY);
                 _currentPosX += 50;
                 _difX -= 50;
+                _isDodgedBefore = false;
             }
             else
             {
@@ -134,6 +135,7 @@ void Connection::horizontalRoutine()
                 _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 50, _currentPosY);
                 _currentPosX -= 50;
                 _difX += 50;
+                _isDodgedBefore = false;
             }
             else
             {
@@ -162,10 +164,10 @@ void Connection::verticalRoutine()
                 _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY + 50);
                 _currentPosY += 50;
                 _difY -= 50;
+                _isDodgedBefore = false;
             }
             else
             {
-                _difY = 0;
                 if(_difX == 0)
                 {
                     dodgeRoutine();
@@ -181,15 +183,15 @@ void Connection::verticalRoutine()
     {
         while(_difY != 0)
         {
-            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY + 50) || _difY == 100)
+            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY - 50) || _difY == 100)
             {
                 _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 50);
                 _currentPosY -= 50;
                 _difY += 50;
+                _isDodgedBefore = false;
             }
             else
             {
-                _difY = 0;
                 if(_difX == 0)
                 {
                     dodgeRoutine();
@@ -205,7 +207,84 @@ void Connection::verticalRoutine()
 
 void Connection::dodgeRoutine()
 {
-
+    if(_difX == 0)
+    {
+        if(!_isDodgedBefore)
+        {
+            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX + 55, _currentPosY);
+            _currentPosX += 55;
+            _isDodgedBefore = true;
+        }
+        if(_difY < 0)
+        {
+            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 100);
+            _currentPosY -= 100;
+            _difY += 100;
+            if(!isThereAComponent(_currentPosX - 55, _currentPosY - 50))
+            {
+                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 55, _currentPosY);
+                _currentPosX -= 55;
+            }
+            else
+            {
+                dodgeRoutine();
+            }
+        }
+        if(_difY > 0)
+        {
+            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY + 100);
+            _currentPosY += 100;
+            _difY -= 100;
+            if(!isThereAComponent(_currentPosX - 55, _currentPosY + 50))
+            {
+                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 55, _currentPosY);
+                _currentPosX -= 55;
+            }
+            else
+            {
+                dodgeRoutine();
+            }
+        }
+    }
+    if(_difY == 0)
+    {
+        if(!_isDodgedBefore)
+        {
+            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY + 55);
+            _currentPosY += 55;
+            _isDodgedBefore = true;
+        }
+        if(_difX < 0)
+        {
+            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 100, _currentPosY);
+            _currentPosX -= 100;
+            _difX += 100;
+            if(!isThereAComponent(_currentPosX - 50, _currentPosY - 55))
+            {
+                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 55);
+                _currentPosY -= 55;
+            }
+            else
+            {
+                dodgeRoutine();
+            }
+        }
+        if(_difX > 0)
+        {
+            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX + 100, _currentPosY);
+            _currentPosX += 100;
+            _difX -= 100;
+            if(!isThereAComponent(_currentPosX + 50, _currentPosY - 55))
+            {
+                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 55);
+                _currentPosY -= 55;
+            }
+            else
+            {
+                dodgeRoutine();
+            }
+        }
+    }
 }
 
 bool Connection::isStartComponentVertical()

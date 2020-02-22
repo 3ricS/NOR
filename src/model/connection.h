@@ -58,6 +58,8 @@ private:
     int _endX = 0;
     int _endY = 0;
 
+    bool _isDodgedBefore = false;
+
     int _currentPosX = 0;
     int _currentPosY = 0;
 

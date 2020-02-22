@@ -89,7 +89,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         if(mouseEvent->button() == Qt::LeftButton)
         {
             bool ok;
-            DescriptionField * createdDescription = _model->createDescriptionField(gridPosition);
+            DescriptionField * createdDescription = _model->createDescriptionField(gridPosition, false);
             if(createdDescription != nullptr)
             {
                 QString text = QInputDialog::getText(this, "text", "Text",QLineEdit::EchoMode::Normal, "Beschreibung", &ok);

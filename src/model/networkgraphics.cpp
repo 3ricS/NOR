@@ -52,6 +52,15 @@ void NetworkGraphics::addObject(Component* component)
     }
 }
 
+/*!
+* \brief Gibt ein Component aus der ComponentList aus, welches an den Soll-Koordinaten x und y ist.
+*
+* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einem Component aus der Liste
+* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einem Component aus der Liste
+*
+* Es werden nacheinander Components aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
+* Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
+*/
 Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
 {
     for (Component* component : _componentList)
@@ -66,6 +75,15 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
     return nullptr;
 }
 
+/*!
+* \brief Gibt eine Describtion aus der Liste aus Descriptions aus, welches an den Soll-Koordinaten x und y ist.
+*
+* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einer Description aus der Liste
+* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einer Description aus der Liste
+*
+* Es werden nacheinander Description aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
+* Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
+*/
 DescriptionField *NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition)
 {
     for(DescriptionField* description : _descriptions)
@@ -80,6 +98,11 @@ DescriptionField *NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition
     return nullptr;
 }
 
+/*!
+* \brief Prüft ob sich an einer bestimmten Koordinate, ein Bauteil befindet.
+*
+* Es wird getComponentAtPosition aufgerufen und wenn ein Bauteil zurückgegeben wird, gibt isThereAComponent true zurück.
+*/
 bool NetworkGraphics::isThereAComponentOrADescription(QPointF gridPosition)
 {
     return getComponentAtPosition(gridPosition) != nullptr || getDescriptionAtPosition(gridPosition) != nullptr;

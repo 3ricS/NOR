@@ -81,6 +81,15 @@ void Connection::changePortOfComponentPortWithComponent(Component* componentOfCo
     }
 }
 
+/*!
+* \brief Gibt ein Component aus der ComponentList aus, welches an den Soll-Koordinaten x und y ist.
+*
+* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einem Component aus der Liste
+* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einem Component aus der Liste
+*
+* Es werden nacheinander Components aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
+* Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
+*/
 Component* Connection::getComponentAtPosition(int x, int y)
 {
     for (Component* component : _componentList)
@@ -95,6 +104,11 @@ Component* Connection::getComponentAtPosition(int x, int y)
     return nullptr;
 }
 
+/*!
+* \brief Prüft ob sich an einer bestimmten Koordinate, ein Bauteil befindet.
+*
+* Es wird getComponentAtPosition aufgerufen und wenn ein Bauteil zurückgegeben wird, gibt isThereAComponent true zurück.
+*/
 bool Connection::isThereAComponent(int x, int y)
 {
     return getComponentAtPosition(x, y) != nullptr;

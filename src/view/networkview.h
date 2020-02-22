@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <QGraphicsView>
 #include <QDebug>
+#include <QInputDialog>
 
 #include <model/networkgraphics.h>
 #include <view/editview.h>
@@ -36,6 +37,7 @@ private:
     void highlightRect(QPointF scenePosition, QColor _highlightColor);
     void removeHighlightSelectedRect(void);
     void rotateComponent(QPointF gridPosition, QPointF scenePosition);
+    bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
 
 protected:
     void leaveEvent(QEvent* event) override;
@@ -46,19 +48,22 @@ private:
     NetworkGraphics* _model  = nullptr;
 
     bool _mouseIsPressed = false;
-    bool _componentIsGrabbed = false;
+    bool _componentOrDescriptionIsGrabbed = false;
 
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
     ComponentPort* _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
     QGraphicsItem* _previousHighlightedRect = nullptr;
     QGraphicsItem* _selectedRect = nullptr;
     Component* _selectedComponent = nullptr;
+    DescriptionField* _selectedDescription = nullptr;
     //TODO: _selectedComponentToMove durch _selectedComponent ersetzen
     Component* _selectedComponentToMove = nullptr;
+    DescriptionField* _selectedDescriptionToMove = nullptr;
     bool _isVerticalComponentDefault = true;
     Component* _sampleComponentOnMoveEvent = nullptr;
     DescriptionField* _sampleDescriptionOnMoveEvent = nullptr;
     Component* _copiedComponent = nullptr;
+    DescriptionField* _copiedDescription = nullptr;
     QPointF _lastClickedPositionGrid;
     MouseMode _mouseMode = SelectionMode;
     QColor _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz

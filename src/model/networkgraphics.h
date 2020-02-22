@@ -36,13 +36,15 @@ public:
 
     Component* createNewComponent( QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
+    DescriptionField* duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
     Component* addResistor(QString name, int valueResistance, int _xPosition, int _yPosition, bool isVertical, int id = 0);
     Component* addPowerSupply(QString name, int x, int y, bool isVertical, int id = 0);
-    DescriptionField* createDescriptionField(QPointF gridPosition);
+    DescriptionField* createDescriptionField(QPointF gridPosition, QString text = 0);
 
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void deleteComponent(Component* component);
-    void moveComponent(Component* componentToMove, QPointF gridPosition);
+    void deleteDescription(DescriptionField* description);
+    void moveComponent(Component* componentToMove,DescriptionField* descriptionToMove ,QPointF gridPosition);
 
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);

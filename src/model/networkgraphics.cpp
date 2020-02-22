@@ -220,7 +220,6 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
 */
 Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition)
 {
-    qDebug() << "angekommen";
     Component* duplicatedComponent = nullptr;
 
     QString name = componentToDuplicate->getName();
@@ -238,6 +237,11 @@ Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, 
 
     updateCalc();
     return duplicatedComponent;
+}
+
+DescriptionField *NetworkGraphics::duplicateDescription(DescriptionField *descriptionToDuplicate, int xPosition, int yPosition)
+{
+    return  createDescriptionField(QPointF(xPosition,yPosition), descriptionToDuplicate->getText());
 }
 
 
@@ -322,14 +326,14 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
 * Es wird zuerst geprüft ob sich an der Gitterposition bereits eine Komponente oder ein Textfeld befindet.
 * Wenn sich nichts an der position befindet, wird ein neues Textfeld erzeugt.
 */
-DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition)
+DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition, [[maybe_unused]] QString text)
 {
     if(isThereAComponentOrADescription(gridPosition))
     {
         return nullptr;
     }
     int id = _descriptionCount;
-    DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id);
+    DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id, text);
 
     _descriptions.append(description);
     addItem(description);
@@ -385,27 +389,45 @@ void NetworkGraphics::deleteComponent(Component* component)
     }
 }
 
+void NetworkGraphics::deleteDescription(DescriptionField *description)
+{
+    if(description != nullptr)
+    {
+        removeItem(description);
+        _descriptions.removeOne(description);
+        _descriptionCount--;
+
+        delete description;
+    }
+}
+
 /*!
 * \brief Verschiebt eine Komponente im Netzwerk.
 *
 * \param[in]    componentToMove ist die zu verschiebende Komponente
+* \param[in]    descriptionToMove ist die zu verschiebende Beschreibung
 * \param[in]    gridPosition    ist die Position, an die die Komponente verschoben werden soll
 *
-* Es wird geprüft ob sich berteits an der neuen Position eine Komponente befindet.
+* Es wird das zu verschiebende Objekt verschoben.
 *
 */
-void NetworkGraphics::moveComponent(Component* componentToMove, QPointF gridPosition)
+void NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField *descriptionToMove, QPointF gridPosition)
 {
     bool isComponentAtPosition = isThereAComponentOrADescription(gridPosition);
-    bool userIsMovingComponent = (nullptr != componentToMove);
-    if (!userIsMovingComponent || isComponentAtPosition)
+    if (isComponentAtPosition)
     {
         return;
     }
+    if(componentToMove != nullptr)
+    {
+        componentToMove->setPosition(gridPosition);
+        connectComponentToNeighbours(componentToMove);
+    }
+    else if(descriptionToMove != nullptr)
+    {
+        descriptionToMove->setPosition(gridPosition);
+    }
 
-    componentToMove->setPosition(gridPosition);
-
-    connectComponentToNeighbours(componentToMove);
 }
 
 void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnectWithNeighbours)

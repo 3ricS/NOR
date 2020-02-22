@@ -9,7 +9,7 @@
 class DescriptionField : public QGraphicsItem
 {
 public:
-    DescriptionField(int x, int y, int id);
+    DescriptionField(int x, int y, int id, QString text = 0);
 
 
     //Getter
@@ -20,6 +20,7 @@ public:
 
     //Setter
     void setText(const QString text) {_text = text;}
+    void setPosition(QPointF gridPosition);
 
 private:
 

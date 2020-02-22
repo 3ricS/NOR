@@ -131,7 +131,7 @@ double NetworkGraphics::calculate(void)
     updateCalc();
 
     QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                                              QString::number(_calculator.getResistanceValue()) + "Ω");
+                       QString::number(_calculator.getResistanceValue()) + "Ω");
     return _calculator.getResistanceValue();
 }
 
@@ -241,7 +241,7 @@ Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, 
 
 DescriptionField *NetworkGraphics::duplicateDescription(DescriptionField *descriptionToDuplicate, int xPosition, int yPosition)
 {
-    return  createDescriptionField(QPointF(xPosition,yPosition), descriptionToDuplicate->getText());
+    return  createDescriptionField(QPointF(xPosition,yPosition), false, descriptionToDuplicate->getText());
 }
 
 
@@ -326,13 +326,17 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
 * Es wird zuerst geprüft ob sich an der Gitterposition bereits eine Komponente oder ein Textfeld befindet.
 * Wenn sich nichts an der position befindet, wird ein neues Textfeld erzeugt.
 */
-DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition, [[maybe_unused]] QString text)
+DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[maybe_unused]] QString text, [[maybe_unused]] int id)
 {
-    if(isThereAComponentOrADescription(gridPosition))
+    if(!isLoad)
     {
-        return nullptr;
+        if(isThereAComponentOrADescription(gridPosition))
+        {
+            return nullptr;
+        }
+        id = _descriptionCount;
     }
-    int id = _descriptionCount;
+
     DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id, text);
 
     _descriptions.append(description);
@@ -508,29 +512,29 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
 {
     switch (componentToTurn->getOrientation())
     {
-        case Component::Orientation::left:
-        {
-            componentToTurn->setOrientation(Component::Orientation::top);
-            //mirrorComponent(componentToTurn);
-        }
-            break;
-        case Component::Orientation::top:
-        {
-            componentToTurn->setOrientation(Component::Orientation::right);
-            mirrorComponent(componentToTurn);
-        }
-            break;
-        case Component::Orientation::right:
-        {
-            componentToTurn->setOrientation(Component::Orientation::bottom);
-        }
-            break;
-        case Component::Orientation::bottom:
-        {
-            componentToTurn->setOrientation(Component::Orientation::left);
-            mirrorComponent(componentToTurn);
-        }
-            break;
+    case Component::Orientation::left:
+    {
+        componentToTurn->setOrientation(Component::Orientation::top);
+        //mirrorComponent(componentToTurn);
+    }
+        break;
+    case Component::Orientation::top:
+    {
+        componentToTurn->setOrientation(Component::Orientation::right);
+        mirrorComponent(componentToTurn);
+    }
+        break;
+    case Component::Orientation::right:
+    {
+        componentToTurn->setOrientation(Component::Orientation::bottom);
+    }
+        break;
+    case Component::Orientation::bottom:
+    {
+        componentToTurn->setOrientation(Component::Orientation::left);
+        mirrorComponent(componentToTurn);
+    }
+        break;
     }
 }
 

@@ -255,8 +255,7 @@ void FileManager::loadDescription(QJsonArray array)
                 int yPos = obj.value("yPos").toInt();
                 QString text = obj.value("text").toString();
 
- //TODO: benötigt add Descriptionfield in Networkgraphics
-                //_model->addDescriptionfield(xPos, yPos, id, text);
+                _model->createDescriptionField(QPointF(xPos, yPos), true, text, id);
             }
         }
     }

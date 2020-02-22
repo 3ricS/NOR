@@ -39,7 +39,7 @@ public:
     DescriptionField* duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
     Component* addResistor(QString name, int valueResistance, int _xPosition, int _yPosition, bool isVertical, int id = 0);
     Component* addPowerSupply(QString name, int x, int y, bool isVertical, int id = 0);
-    DescriptionField* createDescriptionField(QPointF gridPosition, QString text = 0);
+    DescriptionField* createDescriptionField(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
 
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void deleteComponent(Component* component);

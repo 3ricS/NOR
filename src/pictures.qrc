@@ -4,5 +4,7 @@
         <file>img/Zf_Logo.icns</file>
         <file>img/NOR.icns</file>
         <file>img/NOR_win.jpeg</file>
+        <file>img/redo.png</file>
+        <file>img/undo.png</file>
     </qresource>
 </RCC>

@@ -79,8 +79,8 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
 /*!
 * \brief Gibt eine Describtion aus der Liste aus Descriptions aus, welches an den Soll-Koordinaten x und y ist.
 *
-* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einer Description aus der Liste.
-* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einer Description aus der Liste.
+* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einer Description aus der Liste
+* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einer Description aus der Liste
 * \return
 *
 * Es werden nacheinander Description aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
@@ -101,11 +101,11 @@ DescriptionField *NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition
 }
 
 /*!
-* \brief Prüft ob sich an einer bestimmten Koordinate, ein Bauteil befindet.
+* \brief Prüft ob sich an einer bestimmten Koordinate, eine Komponente oder Textfeld befindet.
 *
-* \param[in]    gridPosition
-*
-* Es wird getComponentAtPosition aufgerufen und wenn ein Bauteil zurückgegeben wird, gibt isThereAComponent true zurück.
+* \param[in]    gridPosition    ist die zu überprüfende GitterPositon
+* \return Gibt zurück, ob sich an der Gitterposition eine Komponente oder Textfeld befindet.
+* 
 */
 bool NetworkGraphics::isThereAComponentOrADescription(QPointF gridPosition)
 {

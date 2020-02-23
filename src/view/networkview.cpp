@@ -305,7 +305,7 @@ QPointF NetworkView::scenePositionToGrid(QPointF scenePosition)
     return QPointF(xPos, yPos);
 }
 
-void NetworkView::gridDisappears()
+void NetworkView::gridDisappears(void)
 {
     //Grid verschwindet
     if (nullptr != _previousHighlightedRect)
@@ -371,7 +371,7 @@ void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
     }
 }
 
-void NetworkView::deleteSelectedItem()
+void NetworkView::deleteSelectedItem(void)
 {
     removeHighlightSelectedRect();
 
@@ -419,7 +419,7 @@ void NetworkView::EscapeKeyPressed(QKeyEvent* event)
     }
 }
 
-void NetworkView::removeHighlightSelectedRect()
+void NetworkView::removeHighlightSelectedRect(void)
 {
     if (nullptr != _selectedRect)
     {
@@ -478,7 +478,7 @@ void NetworkView::rotateComponentByShortcut()
     rotateComponent(gridPosition, _actualMoveScenePosition);
 }
 
-void NetworkView::duplicate()
+void NetworkView::duplicate(void)
 {
     // Verschiebt so lange nach rechts, bis er auf eine Grid-Position gestoßen ist, die unbelegt ist
     if (_selectedComponent != nullptr)
@@ -499,7 +499,7 @@ void NetworkView::duplicate()
     }
 }
 
-void NetworkView::copy()
+void NetworkView::copy(void)
 {
     if(_selectedComponent != nullptr)
     {
@@ -513,7 +513,7 @@ void NetworkView::copy()
     }
 }
 
-void NetworkView::paste()
+void NetworkView::paste(void)
 {
     if (!_model->isThereAComponentOrADescription(_lastClickedPositionGrid))
     {

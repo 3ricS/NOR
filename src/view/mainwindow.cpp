@@ -43,8 +43,10 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(setRotate()));
 }
 
-//Setzen des Selection Modes
-void MainWindow::setSelectionMode()
+/*!
+* \brief Setzen des Selection-Modus
+*/
+void MainWindow::setSelectionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::SelectionMode);
     _ui->Resistor->setDown(false);
@@ -54,7 +56,9 @@ void MainWindow::setSelectionMode()
     _ui->TextButton->setDown(false);
 }
 
-// Setzen des Widerstands-Modus
+/*!
+* \brief Setzen des Widerstands-Modus
+*/
 void MainWindow::setResistorMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ResistorMode);
@@ -65,7 +69,9 @@ void MainWindow::setResistorMode(void)
     _ui->TextButton->setDown(false);
 }
 
-// Setzen des PowerSupply-Modus
+/*!
+* \brief Setzen des PowerSupply-Modus
+*/
 void MainWindow::setPowerSupplyMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::PowerSupplyMode);
@@ -76,7 +82,9 @@ void MainWindow::setPowerSupplyMode(void)
     _ui->TextButton->setDown(false);
 }
 
-// Setzen des Discriptionfield-Modus
+/*!
+* \brief Setzen des DiscriptionField-Modus
+*/
 void MainWindow::setDescriptionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::DescriptionMode);
@@ -87,7 +95,9 @@ void MainWindow::setDescriptionMode(void)
     _ui->Selection->setDown(false);
 }
 
-//Setzen des Connection-Modus
+/*!
+* \brief Setzen des Connection-Modus
+*/
 void MainWindow::setConnectionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ConnectionMode);

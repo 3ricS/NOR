@@ -66,7 +66,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
         Component* foundComponent = _model->getComponentAtPosition(gridPosition);
         DescriptionField* foundDescription = _model->getDescriptionAtPosition(gridPosition);
-        Connection* foundConnection = _model->getConnectionAtPosition(mouseEvent->pos());
+        Connection* foundConnection = _model->getConnectionAtPosition(scenePosition);
 
         bool hasFoundComponent = nullptr != foundComponent;
         bool hasFoundDescription = nullptr != foundDescription;
@@ -203,7 +203,6 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
     {
         if(!_model->isThereAComponentOrADescription(gridPosition))
         {
-            qDebug() << "hallo";
             Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
                                                     gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
             _sampleComponentOnMoveEvent = sampleResistor;

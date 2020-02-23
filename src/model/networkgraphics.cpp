@@ -118,8 +118,8 @@ Connection* NetworkGraphics::getConnectionAtPosition(QPointF gridposition)
     {
         for(QRect* hitBox : connection->getHitboxList())
         {
-            bool equalX = (gridposition.toPoint().x() > hitBox->x() || gridposition.toPoint().x() < (hitBox->x() + hitBox->width()));
-            bool equalY = (gridposition.toPoint().y() > hitBox->y() || gridposition.toPoint().y() < (hitBox->y() + hitBox->height()));
+            bool equalX = ((gridposition.toPoint().x() >= hitBox->x()) && (gridposition.toPoint().x() <= (hitBox->x() + hitBox->width())));
+            bool equalY = ((gridposition.toPoint().y() >= hitBox->y()) && (gridposition.toPoint().y() <= (hitBox->y() + hitBox->height())));
             if(equalX && equalY)
             {
                 return connection;

@@ -13,7 +13,6 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 *
 * \param[in]    componentPortA  Port der Komponente 1.
 * \param[in]    componentPortB  Port der Komponente 2.
-* \return
 *
 * Zuerst wird geprüft, ob die Verbindung bereits der connectionList hinzugefügt wurde.
 * Ist noch keine Verbindung vorhanden, wird diese hinzugefügt.
@@ -104,6 +103,8 @@ DescriptionField *NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition
 /*!
 * \brief Prüft ob sich an einer bestimmten Koordinate, ein Bauteil befindet.
 *
+* \param[in]    gridPosition
+*
 * Es wird getComponentAtPosition aufgerufen und wenn ein Bauteil zurückgegeben wird, gibt isThereAComponent true zurück.
 */
 bool NetworkGraphics::isThereAComponentOrADescription(QPointF gridPosition)
@@ -153,7 +154,7 @@ void NetworkGraphics::reloadAll(void)
 * \param[in]    hasFoundPort    gibt an, ob es in der ComponentList ein Component gibt, der an der Sceneposition einen Port hat .
 * \param[in]    port            kriegt vom gefundenem Component einen Port zugewiesen.
 * \param[in]    cp              ist der Componentport der an der Sceneposiotion gefunden wurde und auch zurückgegeben wird.
-* \return
+* \return Gibt den ComponentPort an der Position zurück.
 *
 * Es wird in der Componentlist nach einem Port an der Sceneposition gesucht.
 * Wenn ein Port gefunden wurde, wird dann ein Componentport erstellt und zurückgegeben.
@@ -177,9 +178,10 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
 /*!
 * \brief Gibt den Widerstandswert aus.
 *
-* \return   gibt den Widerstandswert als double zurück
+* \return   Gibt den Widerstandswert als double zurück
 *
-* Die Methode sucht, ob ein neuer Widerstandswert verfügbar ist.
+* Die Methode sucht, ob ein neuer Gesamtwiderstandswert verfügbar ist.
+* Anschließend wird der Wert ausgegeben.
 */
 double NetworkGraphics::calculate(void)
 {
@@ -232,10 +234,10 @@ void NetworkGraphics::mirrorComponent(Component* component)
 * \param[in]    gridPosition
 * \param[in]    componentType
 * \param[in]    componentIsVertical
-* \return
+* \return Gibt eine neue Komponente zurück.
 *
 * Zu Beginn wird geprüft ob sich an der ausgewählten Position bereits eine Komponente befindet.
-* Anschließend wird anhand des ausgewählten Typen die jeweils ein Widerstand oder eine Spannungsquelle erzeugt.
+* Anschließend wird anhand des ausgewählten Typs, jeweils ein Widerstand oder eine Spannungsquelle erzeugt.
 */
 Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
                                                Component::ComponentType componentType, bool componentIsVertical)
@@ -270,8 +272,11 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
 * \param[in]    componentToDuplicate ist die zu duplizierende Komponente
 * \param[in]    xPosition ist die X-Koordinate der übergebenden Komponente
 * \param[in]    yPosition ist die Y-Koordinate der übergebenden Komponente
+* \return Gibt die duplizierte Komponente zurück.
 *
-*
+* Zuerst wird der Name, Wert und die räumliche Ausrichtung der zu kopierenden Komponente erfragt.
+* Anschließend wird abhängig vom Typ der Komponente ein Widerstand oder ein Spannungsquelle erzeugt.
+* Dann wird der Gesamtwiderstand aktualisiert.
 */
 Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition)
 {
@@ -294,6 +299,14 @@ Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, 
     return duplicatedComponent;
 }
 
+/*!
+* \brief Verdoppelt ein Textfeld.
+*
+* \param[in]    descriptionToDuplicate  ist das zu verdoppelde Textfeld
+* \param[in]    xPosition               ist die X-Koordinate, an der das Textfeld erzeugt werden soll
+* \param[in]    yPosition               ist die Y-Koordinate, an der das Textfeld erzeugt werden soll
+* \return Gibt ein neues Textfeld zurück.
+*/
 DescriptionField *NetworkGraphics::duplicateDescription(DescriptionField *descriptionToDuplicate, int xPosition, int yPosition)
 {
     return  createDescriptionField(QPointF(xPosition,yPosition), false, descriptionToDuplicate->getText());
@@ -309,10 +322,10 @@ DescriptionField *NetworkGraphics::duplicateDescription(DescriptionField *descri
 * \param[in]    y               ist die Y-Koordinate der zugewiesenen Position
 * \param[in]    isVertical      ist die räumliche Ausrichtung im Netzwerk
 * \param[in]    id              ist die intern zugewiesene Id des Widerstandes
-* \return
+* \return Gibt einen neuen Widerstand zurück.
 *
 * Falls noch kein Name vorhanden ist, wird dieser neu erzeugt.
-* Anschließend wird ein neues Widerstandsobjekt erzeugt.
+* Anschließend wird ein neuer Widerstand erzeugt.
 * Es wird nach dem hinzufügen der Widerstandswert neu berechnet.
 */
 
@@ -338,16 +351,16 @@ NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, i
 /*!
 * \brief Fügt eine Spannungsquelle dem Netzwerk hinzu.
 *
-* \param[in]    name            ist der Name des Spannungsquellenobjektes
-* \param[in]    x               ist die X-Koordinate der zugewiesenen Position
-* \param[in]    y               ist die Y-Koordinate der zugewiesenen Position
-* \param[in]    isVertical      ist die räumliche Ausrichtung im Netzwerk
-* \param[in]    id              ist die intern zugewiesene Id der Spannungsquelle
-* \return
+* \param[inout]    name            ist der Name des Spannungsquellenobjektes
+* \param[inout]    x               ist die X-Koordinate der zugewiesenen Position
+* \param[inout]    y               ist die Y-Koordinate der zugewiesenen Position
+* \param[inout]    isVertical      ist die räumliche Ausrichtung im Netzwerk
+* \param[inout]    id              ist die intern zugewiesene Id der Spannungsquelle
+* \return Gibt eine neue Spannungsquelle zurück.
 *
 * Falls noch kein Name vorhanden ist, wird dieser neu erzeugt.
 * Befindet sich im Netzwerk bereits eine Spannungsquelle, kann keine weitere erzeugt werden.
-* Anschließend wird ein neues Spannungsquellenobjekt erzeugt.
+* Anschließend wird eine neue Spannungsquelle erzeugt.
 */
 Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical, int id)
 {
@@ -375,11 +388,17 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
 /*!
 * \brief Erzeugt ein neues Textfeld.
 *
-* \param[in]    gridPosition    ist die Gitterposition innerhalb im Netzwerk
-* \return
+* \param[inout]     gridPosition    ist die Gitterposition innerhalb im Netzwerk
+* \param[in]        isLoad          ist ein bool der angibt, ob das Textfeld bereits geladen wurde
+* \param[inout]     text            ist der Text des Textfeldes
+* \param[inout]     id              ist die Id des Textfeldes
+* \return Gibt ein neues Textfeld zurück.
 *
-* Es wird zuerst geprüft ob sich an der Gitterposition bereits eine Komponente oder ein Textfeld befindet.
-* Wenn sich nichts an der position befindet, wird ein neues Textfeld erzeugt.
+* Es wird zuerst geprüft ob das Textfeld bereits geladen wurde.
+* Wenn das Textfeld noch nicht geladen wurde, wird geprüft, ob sich an der Gitterposition bereits eine Komponente oder ein Textfeld befindet.
+* Dann wird die Id des Textfeldes gesetzt.
+* Wenn das Textfeld bereits geladen wurde entfallen die beiden oberen Schritte.
+* Anschließend wird ein neues Textfeld erzeugt und der descriptionCount um eins erhöht.
 */
 DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[maybe_unused]] QString text, [[maybe_unused]] int id)
 {
@@ -448,6 +467,15 @@ void NetworkGraphics::deleteComponent(Component* component)
     }
 }
 
+/*!
+* \brief Entfernt ein Textfeld aus dem Netzwerk.
+*
+* \param[in]    description ist das zu entfernende Textfeld
+*
+* Wenn das ausgewählte Textfeld vorhanden ist, wird diese entfernt.
+* Dannach wird das Textfeld aus der Liste descriptions entfernt.
+* Der descriptionCount wird um eins reduziert.
+*/
 void NetworkGraphics::deleteDescription(DescriptionField *description)
 {
     if(description != nullptr)
@@ -460,6 +488,14 @@ void NetworkGraphics::deleteDescription(DescriptionField *description)
     }
 }
 
+/*!
+* \brief Entfernt eine Verbindung aus dem Netzwerk.
+*
+* \param[in]    connecton ist die zu entfernende Verbindung
+*
+* Wenn die ausgewählte Verbindung vorhanden ist, wird diese entfernt.
+* Nach dem entfernen aus dem Netzwerk wird die Verbindung aus der connectionList entfernt.
+*/
 void NetworkGraphics::deleteConnection(Connection *connection)
 {
     if(connection != nullptr)
@@ -475,10 +511,10 @@ void NetworkGraphics::deleteConnection(Connection *connection)
 *
 * \param[in]    componentToMove ist die zu verschiebende Komponente
 * \param[in]    descriptionToMove ist die zu verschiebende Beschreibung
-* \param[in]    gridPosition    ist die Position, an die die Komponente verschoben werden soll
+* \param[in]    gridPosition ist die Position, an die die Komponente verschoben werden soll
 *
-* Es wird das zu verschiebende Objekt verschoben.
-*
+* Es wird zuerst geprüft ob sich an der neuen Gitterposition bereits eine Komponente oder ein Textfeld befindet.
+* Befindet sich an der Position nichts, wird die ausgewählte Komponente an die neu Position verschoben.
 */
 void NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField *descriptionToMove, QPointF gridPosition)
 {
@@ -496,7 +532,6 @@ void NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField
     {
         descriptionToMove->setPosition(gridPosition);
     }
-
 }
 
 void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnectWithNeighbours)
@@ -545,7 +580,6 @@ void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnect
             {
                 addConnection(componentPortSelf, componentPortOther);
             }
-
         }
     }
 }
@@ -555,8 +589,7 @@ void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnect
 *
 * \param[in]    componentToTurn ist die zu drehende Komponente
 *
-* Es wird die Methode turnComponentRight drei Mal aufgerufen, da dies einmal linksrum Drehen entspricht.
-*
+* Es wird die Methode turnComponentRight drei Mal aufgerufen, da dies einmal linksrum drehen entspricht.
 */
 void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
 {
@@ -619,7 +652,10 @@ void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Comp
     }
 }
 
-
+/*!
+* \brief Aktualisiert den Widerstandswert.
+*
+*/
 void NetworkGraphics::updateCalc(void)
 {
     _calculator.setLists(_connectionList, _componentList);

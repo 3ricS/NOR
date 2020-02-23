@@ -1,3 +1,9 @@
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Ein DescriptionField ist ein Textfeld um Notizen und Information zum Netzwerk an die Schaltung zu schreiben.
+ *
+ */
 #ifndef DESCRIPTIONFIELD_H
 #define DESCRIPTIONFIELD_H
 

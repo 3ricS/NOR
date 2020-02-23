@@ -1,3 +1,9 @@
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Der Calculator berechnet den Gesamtwiderstand des erstellten Netzwerkes
+ *
+ */
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
 

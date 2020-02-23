@@ -18,8 +18,8 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, int id) :
 * \brief Zeichnet die Umrisse und die Informationen einer Spannungsquelle im Netzwerk.
 *
 * \param[in]    painter
-* \param[in]    option
-* \param[in]    widget
+* \param[]      option
+* \param[]  	widget
 *
 * Die Methode zeichnet abhängig von der räumlichen Ausrichtung die Spannungsquelle auf zwei Weisen.
 */

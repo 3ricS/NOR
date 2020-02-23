@@ -4,7 +4,6 @@
 * \brief Übernimmt das Laden und Speichern von Netzwerken in Datein
 *
 */
-
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 

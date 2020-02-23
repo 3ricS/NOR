@@ -20,8 +20,8 @@ Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVerti
 * \brief Zeichnet die Umrisse und Informationen eines Widerstandes im Netzwerk.
 *
 * \param[in]    painter
-* \param[in]    option
-* \param[in]    widget
+* \param[]      option
+* \param[]      widget
 *
 * Die Methode zeichnet abhängig von der räumlichen Ausrichtung den Widerstand au zwei unterschiedliche Weisen.
 */

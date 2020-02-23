@@ -12,7 +12,7 @@ bool ComponentPort::operator==(ComponentPort otherComponentPort)
 }
 
 /*!
- * \brief   Tauscht den Port des ComponentPorts
+ * \brief   Tauscht den Port des ComponentPorts.
  *
  * Zeigt der ComponentPort auf Port A, so zeigt er anschließend auf Port B und umgekehrt.
  */
@@ -29,8 +29,9 @@ void ComponentPort::invertPort(void)
 }
 
 /*!
- * \brief   Erzeugt ComponentPort des mit invertiertem Port
- * @return  Gibt einen ComponentPort mit gleichem Zeiger auf einen Component, aber dem invertiertem Port zurück.
+ * \brief   Erzeugt ComponentPort des mit invertiertem Port.
+ *
+ * \return  Gibt einen ComponentPort mit gleichem Zeiger auf einen Component, aber dem invertiertem Port zurück.
  */
 ComponentPort ComponentPort::getOppisiteComponentPort()
 {

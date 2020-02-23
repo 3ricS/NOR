@@ -56,6 +56,7 @@ private:
     QGraphicsItem* _selectedRect = nullptr;
     Component* _selectedComponent = nullptr;
     DescriptionField* _selectedDescription = nullptr;
+    Connection* _selectedConnection = nullptr;
     //TODO: _selectedComponentToMove durch _selectedComponent ersetzen
     Component* _selectedComponentToMove = nullptr;
     DescriptionField* _selectedDescriptionToMove = nullptr;

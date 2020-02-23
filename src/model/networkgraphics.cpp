@@ -111,6 +111,23 @@ bool NetworkGraphics::isThereAComponentOrADescription(QPointF gridPosition)
     return getComponentAtPosition(gridPosition) != nullptr || getDescriptionAtPosition(gridPosition) != nullptr;
 }
 
+Connection* NetworkGraphics::getConnectionAtPosition(QPointF gridposition)
+{
+    for(Connection* connection : _connectionList)
+    {
+        for(QRect* hitBox : connection->getHitboxList())
+        {
+            bool equalX = (gridposition.toPoint().x() > hitBox->x() || gridposition.toPoint().x() < (hitBox->x() + hitBox->width()));
+            bool equalY = (gridposition.toPoint().y() > hitBox->y() || gridposition.toPoint().y() < (hitBox->y() + hitBox->height()));
+            if(equalX && equalY)
+            {
+                return connection;
+            }
+        }
+    }
+    return  nullptr;
+}
+
 QString NetworkGraphics::getFileName()
 {
     return _manager->getFileName();
@@ -440,6 +457,16 @@ void NetworkGraphics::deleteDescription(DescriptionField *description)
         _descriptionCount--;
 
         delete description;
+    }
+}
+
+void NetworkGraphics::deleteConnection(Connection *connection)
+{
+    if(connection != nullptr)
+    {
+        removeItem(connection);
+        _connectionList.removeOne(connection);
+        delete connection;
     }
 }
 

@@ -66,21 +66,31 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
         Component* foundComponent = _model->getComponentAtPosition(gridPosition);
         DescriptionField* foundDescription = _model->getDescriptionAtPosition(gridPosition);
+        Connection* foundConnection = _model->getConnectionAtPosition(mouseEvent->pos());
 
         bool hasFoundComponent = nullptr != foundComponent;
         bool hasFoundDescription = nullptr != foundDescription;
+        bool hasFoundConnection = nullptr != foundConnection;
 
         if (hasFoundComponent)
         {
             _selectedComponent = foundComponent;
             highlightSelectedRect(gridPosition);
             _selectedDescription = nullptr;
+            _selectedConnection = nullptr;
         }
         else if(hasFoundDescription)
         {
             _selectedDescription = foundDescription;
             highlightSelectedRect(gridPosition);
             _selectedComponent = nullptr;
+            _selectedConnection = nullptr;
+        }
+        else if (hasFoundConnection)
+        {
+            _selectedConnection = foundConnection;
+            _selectedComponent = nullptr;
+            _selectedDescription = nullptr;
         }
     }
         break;
@@ -385,6 +395,11 @@ void NetworkView::deleteSelectedItem()
             _copiedDescription = nullptr;
         }
         _selectedDescription = nullptr;
+    }
+    else if (_selectedConnection != nullptr)
+    {
+        _model->deleteConnection(_selectedConnection);
+        _selectedConnection = nullptr;
     }
 }
 

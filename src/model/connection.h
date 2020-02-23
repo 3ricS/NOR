@@ -31,6 +31,7 @@ public:
     void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);
 
     //Methoden
+    QList<QRect*> getHitboxList(void) const {return _connectionHitbox;}
     ComponentPort getComponentPortOne(void) const {return _componentPortOne;}
     ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}
     bool hasComponent(Component* searchedComponent);
@@ -64,6 +65,7 @@ private:
     int _currentPosY = 0;
 
     QList<Component*> _componentList;
+    QList<QRect*> _connectionHitbox;
 };
 
 #endif // CONNECTION_H

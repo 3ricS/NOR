@@ -44,6 +44,7 @@ public:
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void deleteComponent(Component* component);
     void deleteDescription(DescriptionField* description);
+    void deleteConnection(Connection* connection);
     void moveComponent(Component* componentToMove,DescriptionField* descriptionToMove ,QPointF gridPosition);
 
     //getter
@@ -51,6 +52,7 @@ public:
     Component* getComponentAtPosition(QPointF gridPosition);
     DescriptionField* getDescriptionAtPosition(QPointF gridPosition);
     bool isThereAComponentOrADescription(QPointF gridPosition);
+    Connection* getConnectionAtPosition(QPointF gridposition);
     QList<Component*> getComponents(void) {return _componentList;}
     QList<Connection*> getConnections(void) {return _connectionList;}
     QList<DescriptionField*> getDescriptions(void) {return _descriptions;}

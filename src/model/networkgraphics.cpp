@@ -11,8 +11,9 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 /*!
 * \brief Fügt eine Verbindung dem Netzwerk hinzu.
 *
-* \param[in]    componentPortA  Port der Komponente 1
-* \param[in]    componentPortB  Port der Komponente 2
+* \param[in]    componentPortA  Port der Komponente 1.
+* \param[in]    componentPortB  Port der Komponente 2.
+* \return
 *
 * Zuerst wird geprüft, ob die Verbindung bereits der connectionList hinzugefügt wurde.
 * Ist noch keine Verbindung vorhanden, wird diese hinzugefügt.
@@ -55,8 +56,9 @@ void NetworkGraphics::addObject(Component* component)
 /*!
 * \brief Gibt ein Component aus der ComponentList aus, welches an den Soll-Koordinaten x und y ist.
 *
-* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einem Component aus der Liste
-* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einem Component aus der Liste
+* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einem Component aus der Liste.
+* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einem Component aus der Liste.
+* \return
 *
 * Es werden nacheinander Components aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
 * Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
@@ -78,8 +80,9 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
 /*!
 * \brief Gibt eine Describtion aus der Liste aus Descriptions aus, welches an den Soll-Koordinaten x und y ist.
 *
-* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einer Description aus der Liste
-* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einer Description aus der Liste
+* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einer Description aus der Liste.
+* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einer Description aus der Liste.
+* \return
 *
 * Es werden nacheinander Description aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
 * Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
@@ -127,6 +130,18 @@ void NetworkGraphics::reloadAll(void)
     update();
 }
 
+/*!
+* \brief Gibt einen Componentport aus der ComponentList aus, welcher sich an den Soll-Position in der Scene befinden.
+*
+* \param[in]    hasFoundPort    gibt an, ob es in der ComponentList ein Component gibt, der an der Sceneposition einen Port hat .
+* \param[in]    port            kriegt vom gefundenem Component einen Port zugewiesen.
+* \param[in]    cp              ist der Componentport der an der Sceneposiotion gefunden wurde und auch zurückgegeben wird.
+* \return
+*
+* Es wird in der Componentlist nach einem Port an der Sceneposition gesucht.
+* Wenn ein Port gefunden wurde, wird dann ein Componentport erstellt und zurückgegeben.
+* Wenn kein Port gefunden wurde, wird der Nullpointer zurückgegeben
+*/
 ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition)
 {
     for (Component* component : _componentList)

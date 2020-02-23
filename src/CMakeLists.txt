@@ -31,6 +31,8 @@ set(MOC_HEADERS
         model/networkgraphics.h
         model/calculator.h
         model/filemanager.h
+        model/descriptionfield.h
+        model/ComponentPort.h
 
 
         view/mainwindow.h
@@ -48,11 +50,12 @@ set (SOURCES
         model/networkgraphics.cpp
         model/calculator.cpp
         model/filemanager.cpp
+        model/descriptionfield.cpp
 
         view/mainwindow.cpp
         view/NetworkView.cpp
         view/editview.cpp
-        model/ComponentPort.cpp model/ComponentPort.h)
+        model/ComponentPort.cpp)
 
 # set .ui files
 set(UIS

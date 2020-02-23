@@ -17,6 +17,12 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     //TODO: Funktion mit mehreren Rückgabewerten für xStart, xEnd, ...
     QPointF start = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
     QPointF end = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
+
+    //Punkte an Enden zeichnen
+    painter->setBrush(QBrush(Qt::black));
+    painter->drawEllipse(start.toPoint(), _circleRadius, _circleRadius);
+    painter->drawEllipse(end.toPoint(), _circleRadius, _circleRadius);
+
     _painter = painter;
     _startX = start.toPoint().x();
     _startY = start.toPoint().y();
@@ -25,9 +31,9 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     _currentPosX = start.toPoint().x();
     _currentPosY = start.toPoint().y();
 
-    _difX = _endX - _startX;;
-    _difY = _endY - _startY;
-    qDebug() << _difX << " , " << _difY;
+    _diffX = _endX - _startX;;
+    _diffY = _endY - _startY;
+    //qDebug() << _diffX << " , " << _diffY;
     horizontalRoutine();
 }
 
@@ -53,10 +59,30 @@ QRectF Connection::boundingRect(void) const
 {
     QPointF start = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
     QPointF end = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
-    int xStart = static_cast<int>(start.x());
-    int yStart = static_cast<int>(start.x());
-    int xEnd = static_cast<int>(end.x());
-    int yEnd = static_cast<int>(end.y());
+    int xStart = start.toPoint().x();
+    int yStart = start.toPoint().y();
+    int xEnd = end.toPoint().x();
+    int yEnd = end.toPoint().y();
+
+    if(xStart < xEnd)
+    {
+        xStart = xStart - _circleRadius;
+        xEnd = xEnd + _circleRadius;
+    } else
+    {
+        xStart = xStart + _circleRadius;
+        xEnd = xEnd - _circleRadius;
+    }
+
+    if(yStart < yEnd)
+    {
+        yStart -= _circleRadius;
+        yEnd += _circleRadius;
+    } else
+    {
+        yStart += _circleRadius;
+        yEnd -= _circleRadius;
+    }
 
     return QRectF(std::min(xStart, xEnd), std::min(yStart, yEnd), abs(xEnd - xStart), abs(yEnd - yStart));
 }
@@ -116,23 +142,23 @@ bool Connection::isThereAComponent(int x, int y)
 
 void Connection::horizontalRoutine()
 {
-    if(_difX > 0)
+    if(_diffX > 0)
     {
-        while(_difX != 0)
+        while(_diffX != 0)
         {
-            if(isStartComponentVertical() || !isThereAComponent(_currentPosX + 50, _currentPosY) || _difX == 50)
+            if(isStartComponentVertical() || !isThereAComponent(_currentPosX + 50, _currentPosY) || _diffX == 50)
             {
                 QRect* hitbox = new QRect(_currentPosX, _currentPosY - 5, 50, 10);
                 _connectionHitbox.append(hitbox);
 
                 _painter->drawLine(_currentPosX, _currentPosY, _currentPosX + 50, _currentPosY);
                 _currentPosX += 50;
-                _difX -= 50;
+                _diffX -= 50;
                 _isDodgedBefore = false;
             }
             else
             {
-                if(_difY == 0)
+                if(_diffY == 0)
                 {
                     dodgeRoutine();
                 }
@@ -143,23 +169,23 @@ void Connection::horizontalRoutine()
             }
         }
     }
-    else if (_difX < 0)
+    else if (_diffX < 0)
     {
-        while(_difX != 0)
+        while(_diffX != 0)
         {
-            if(isStartComponentVertical() || !isThereAComponent(_currentPosX - 50, _currentPosY) || _difX == 50)
+            if(isStartComponentVertical() || !isThereAComponent(_currentPosX - 50, _currentPosY) || _diffX == 50)
             {
                 QRect* hitbox = new QRect(_currentPosX - 50, _currentPosY - 5, 50, 10);
                 _connectionHitbox.append(hitbox);
 
                 _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 50, _currentPosY);
                 _currentPosX -= 50;
-                _difX += 50;
+                _diffX += 50;
                 _isDodgedBefore = false;
             }
             else
             {
-                if(_difY == 0)
+                if(_diffY == 0)
                 {
                     dodgeRoutine();
                 }
@@ -175,23 +201,23 @@ void Connection::horizontalRoutine()
 
 void Connection::verticalRoutine()
 {
-    if(_difY > 0)
+    if(_diffY > 0)
     {
-        while(_difY != 0)
+        while(_diffY != 0)
         {
-            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY + 50) || _difY == 50)
+            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY + 50) || _diffY == 50)
             {
                 QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY, 10, 50);
                 _connectionHitbox.append(hitbox);
 
                 _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY + 50);
                 _currentPosY += 50;
-                _difY -= 50;
+                _diffY -= 50;
                 _isDodgedBefore = false;
             }
             else
             {
-                if(_difX == 0)
+                if(_diffX == 0)
                 {
                     dodgeRoutine();
                 }
@@ -202,23 +228,23 @@ void Connection::verticalRoutine()
             }
         }
     }
-    else if (_difY < 0)
+    else if (_diffY < 0)
     {
-        while(_difY != 0)
+        while(_diffY != 0)
         {
-            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY - 50) || _difY == 50)
+            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY - 50) || _diffY == 50)
             {
                 QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY - 50, 10, 50);
                 _connectionHitbox.append(hitbox);
 
                 _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 50);
                 _currentPosY -= 50;
-                _difY += 50;
+                _diffY += 50;
                 _isDodgedBefore = false;
             }
             else
             {
-                if(_difX == 0)
+                if(_diffX == 0)
                 {
                     dodgeRoutine();
                 }
@@ -233,7 +259,7 @@ void Connection::verticalRoutine()
 
 void Connection::dodgeRoutine()
 {
-    if(_difX == 0)
+    if(_diffX == 0)
     {
         if(!_isDodgedBefore)
         {
@@ -244,15 +270,15 @@ void Connection::dodgeRoutine()
             _currentPosX += 55;
             _isDodgedBefore = true;
         }
-        if(_difY < 0)
+        if(_diffY < 0)
         {
             QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY - 100, 10, 100);
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 100);
             _currentPosY -= 100;
-            _difY += 100;
-            if(!isThereAComponent(_currentPosX - 55, _currentPosY - 50) || _difY == 0)
+            _diffY += 100;
+            if(!isThereAComponent(_currentPosX - 55, _currentPosY - 50) || _diffY == 0)
             {
                 QRect* hitbox = new QRect(_currentPosX- 55, _currentPosY - 5, 55, 10);
                 _connectionHitbox.append(hitbox);
@@ -265,15 +291,15 @@ void Connection::dodgeRoutine()
                 dodgeRoutine();
             }
         }
-        if(_difY > 0)
+        if(_diffY > 0)
         {
             QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY, 10, 100);
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY + 100);
             _currentPosY += 100;
-            _difY -= 100;
-            if(!isThereAComponent(_currentPosX - 55, _currentPosY + 50) || _difY == 0)
+            _diffY -= 100;
+            if(!isThereAComponent(_currentPosX - 55, _currentPosY + 50) || _diffY == 0)
             {
                 QRect* hitbox = new QRect(_currentPosX - 55, _currentPosY - 5, 55, 10);
                 _connectionHitbox.append(hitbox);
@@ -287,7 +313,7 @@ void Connection::dodgeRoutine()
             }
         }
     }
-    if(_difY == 0)
+    if(_diffY == 0)
     {
         if(!_isDodgedBefore)
         {
@@ -298,15 +324,15 @@ void Connection::dodgeRoutine()
             _currentPosY += 55;
             _isDodgedBefore = true;
         }
-        if(_difX < 0)
+        if(_diffX < 0)
         {
             QRect* hitbox = new QRect(_currentPosX - 100, _currentPosY - 5, 100, 10);
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 100, _currentPosY);
             _currentPosX -= 100;
-            _difX += 100;
-            if(!isThereAComponent(_currentPosX - 50, _currentPosY - 55) || _difX == 0)
+            _diffX += 100;
+            if(!isThereAComponent(_currentPosX - 50, _currentPosY - 55) || _diffX == 0)
             {
                 QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY - 55, 10, 55);
                 _connectionHitbox.append(hitbox);
@@ -319,15 +345,15 @@ void Connection::dodgeRoutine()
                 dodgeRoutine();
             }
         }
-        if(_difX > 0)
+        if(_diffX > 0)
         {
             QRect* hitbox = new QRect(_currentPosX, _currentPosY - 5, 100, 10);
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPosX, _currentPosY, _currentPosX + 100, _currentPosY);
             _currentPosX += 100;
-            _difX -= 100;
-            if(!isThereAComponent(_currentPosX + 50, _currentPosY - 55) || _difX == 0)
+            _diffX -= 100;
+            if(!isThereAComponent(_currentPosX + 50, _currentPosY - 55) || _diffX == 0)
             {
                 QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY - 55, 10, 55);
                 _connectionHitbox.append(hitbox);

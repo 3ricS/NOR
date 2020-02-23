@@ -35,6 +35,7 @@ public:
     ComponentPort getComponentPortOne(void) const {return _componentPortOne;}
     ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}
     bool hasComponent(Component* searchedComponent);
+    static constexpr int _circleRadius = 3;
 
 private:
 
@@ -46,8 +47,8 @@ private:
     void dodgeRoutine(void);
     bool isStartComponentVertical(void);
 
-    int _difX = 0;
-    int _difY = 0;
+    int _diffX = 0;
+    int _diffY = 0;
 
     ComponentPort _componentPortOne;
     ComponentPort _componentPortTwo;

@@ -4,7 +4,7 @@
 #include <model/networkgraphics.h>
 
 EditView::EditView(Component* component, NetworkGraphics* model, bool isInitializingWindow, QWidget* parent) :
-        QDialog(parent),
+        QDialog(parent, Qt::WindowCloseButtonHint),
         _editViewUi(new Ui::EditView), _model(model)
 {
     _component = component;

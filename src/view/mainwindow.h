@@ -36,6 +36,7 @@ public:
 
 public slots:
     //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüpft welches im Model emitted wird)
+    //TODO: warum ist hier überall ein set vor?
     void setSelectionMode(void);
     void setResistorMode(void);
     void setPowerSupplyMode(void);
@@ -54,6 +55,8 @@ public slots:
     void setCopy(void);
     void setPaste(void);
     void setRotate(void);
+
+    void updateResistanceValue(void);
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;

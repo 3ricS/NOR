@@ -191,20 +191,27 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
     {
     case (ResistorMode):
     {
-        Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                 gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
-        _sampleComponentOnMoveEvent = sampleResistor;
-        _model->addItem(_sampleComponentOnMoveEvent);
-        highlightRect(scenePosition, _highlightColor);
+        if(!_model->isThereAComponentOrADescription(gridPosition))
+        {
+            qDebug() << "hallo";
+            Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
+                                                    gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+            _sampleComponentOnMoveEvent = sampleResistor;
+            _model->addItem(_sampleComponentOnMoveEvent);
+            highlightRect(scenePosition, _highlightColor);
+        }
     }
         break;
     case (PowerSupplyMode):
     {
-        Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                    gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
-        _sampleComponentOnMoveEvent = sampleResistor;
-        _model->addItem(_sampleComponentOnMoveEvent);
-        highlightRect(scenePosition, _highlightColor);
+        if(!_model->isThereAComponentOrADescription(gridPosition))
+        {
+            Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
+                                                     gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+            _sampleComponentOnMoveEvent = sampleResistor;
+            _model->addItem(_sampleComponentOnMoveEvent);
+            highlightRect(scenePosition, _highlightColor);
+        }
     }
         break;
     case ConnectionMode:
@@ -411,6 +418,8 @@ void NetworkView::rotateComponent(QPointF gridPosition, QPointF scenePosition)
 {
     _isVerticalComponentDefault = !_isVerticalComponentDefault;
     gridDisappears();
+    if(!_model->isThereAComponentOrADescription(gridPosition))
+    {
     if (MouseMode::PowerSupplyMode == _mouseMode)
     {
         Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
@@ -424,6 +433,7 @@ void NetworkView::rotateComponent(QPointF gridPosition, QPointF scenePosition)
                                                  gridPosition.toPoint().y(), _isVerticalComponentDefault,
                                                  0);
         _sampleComponentOnMoveEvent = sampleResistor;
+    }
     }
     _model->addItem(_sampleComponentOnMoveEvent);
     highlightRect(scenePosition, _highlightColor);

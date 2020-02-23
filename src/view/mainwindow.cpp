@@ -7,10 +7,6 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     setWindowTitle("NOR - Network of Resistance");
     resize(1080, 720);
 
-    // setup ui
-    _ui->CalculatedValue->hide();
-    _ui->CalculateLabel->hide();
-
     //TODO: Dopplung setScene entfernen
     _networkView = _ui->networkView;
     _ui->networkView->setModel(_model);
@@ -41,6 +37,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_copy, SIGNAL(triggered()), this, SLOT(setCopy()));
     connect(_paste, SIGNAL(triggered()), this, SLOT(setPaste()));
     connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(setRotate()));
+
+    connect(_model, SIGNAL(resistanceValueChanged(void)), this, SLOT(updateResistanceValue(void)));
 }
 
 //Setzen des Selection Modes
@@ -100,10 +98,7 @@ void MainWindow::setConnectionMode(void)
 
 void MainWindow::setCalculation(void)
 {
-    _ui->CalculateLabel->setHidden(false);
-    _ui->CalculatedValue->setHidden(false);
     _ui->CalculatedValue->setText(QString::number(_model->calculate()) + "Ω");
-
 }
 
 void MainWindow::setSaveFile(void)
@@ -314,5 +309,10 @@ void MainWindow::setZoom100Percent()
 MainWindow::~MainWindow()
 {
     delete _ui;
+}
+
+void MainWindow::updateResistanceValue(void)
+{
+    _ui->CalculatedValue->setText(QString::number(_model->getResistanceValue()) + "Ω");
 }
 

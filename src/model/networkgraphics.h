@@ -19,6 +19,8 @@ class FileManager;
 
 class NetworkGraphics : public QGraphicsScene
 {
+    Q_OBJECT
+
 public:
     NetworkGraphics();
 
@@ -57,6 +59,10 @@ public:
     QList<Connection*> getConnections(void) {return _connectionList;}
     QList<DescriptionField*> getDescriptions(void) {return _descriptions;}
     QString getFileName(void);
+    double getResistanceValue(void) {return _calculator.getResistanceValue();}
+
+signals:
+    void resistanceValueChanged(void);
 
 private:
     static constexpr int _defaultSceneSize = 6000;
@@ -67,8 +73,6 @@ private:
 
     void addObject(Component* component);
     void connectComponentToNeighbours(Component* componentToConnectWithNeighbours);
-
-    void reloadAll(void);
 
     QList<Component*> _componentList;
     QList<Connection*> _connectionList;

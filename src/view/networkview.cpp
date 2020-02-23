@@ -102,7 +102,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             DescriptionField * createdDescription = _model->createDescriptionField(gridPosition, false);
             if(createdDescription != nullptr)
             {
-                QString text = QInputDialog::getText(this, "text", "Text",QLineEdit::EchoMode::Normal, "Beschreibung", &ok);
+                QString text = QInputDialog::getText(this, "Textfeld bearbeiten", "Text eingeben:",QLineEdit::EchoMode::Normal, "", &ok, Qt::WindowCloseButtonHint);
 
                 if(ok && !text.isEmpty())
                 {
@@ -249,7 +249,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         }
     }
         break;
-    case (SelectionMode):
+    case SelectionMode:
     {
         if (_mouseIsPressed && _componentOrDescriptionIsGrabbed)
         {
@@ -289,7 +289,7 @@ void NetworkView::mouseDoubleClickEvent(QMouseEvent* event)
         if(description != nullptr)
         {
             bool ok = false;
-            QString text = QInputDialog::getText(this, "text", "Text",QLineEdit::EchoMode::Normal, description->getText(), &ok);
+            QString text = QInputDialog::getText(this, "Textfeld bearbeiten", "Text eingeben:",QLineEdit::EchoMode::Normal, description->getText(), &ok, Qt::WindowCloseButtonHint);
             if(ok)
             {
                 description->setText(text);

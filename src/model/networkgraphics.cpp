@@ -134,20 +134,6 @@ QString NetworkGraphics::getFileName()
     return _manager->getFileName();
 }
 
-
-void NetworkGraphics::reloadAll(void)
-{
-    for (Component* component : _componentList)
-    {
-        addItem(component);
-    }
-    for (Connection* connection : _connectionList)
-    {
-        addItem(connection);
-    }
-    update();
-}
-
 /*!
 * \brief Gibt einen Componentport aus der ComponentList aus, welcher sich an den Soll-Position in der Scene befinden.
 *
@@ -186,9 +172,6 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
 double NetworkGraphics::calculate(void)
 {
     updateCalc();
-
-    QMessageBox::about(nullptr, "Berechnung", "Der Gesamtwiderstand des Netzwerkes beträgt : " +
-                       QString::number(_calculator.getResistanceValue()) + "Ω");
     return _calculator.getResistanceValue();
 }
 
@@ -204,6 +187,8 @@ void NetworkGraphics::load(void)
     _manager->load();
     _isLoading = false;
 
+    updateCalc();
+    emit resistanceValueChanged();
 }
 
 void NetworkGraphics::saveAs(void)
@@ -465,6 +450,7 @@ void NetworkGraphics::deleteComponent(Component* component)
         updateCalc();
         delete component;
     }
+    update();
 }
 
 /*!
@@ -526,6 +512,7 @@ void NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField
     if(componentToMove != nullptr)
     {
         componentToMove->setPosition(gridPosition);
+        //Beim Bewegen kann ein Component direkt mit seinen Nachbarn verbunden werden
         connectComponentToNeighbours(componentToMove);
     }
     else if(descriptionToMove != nullptr)
@@ -660,6 +647,6 @@ void NetworkGraphics::updateCalc(void)
 {
     _calculator.setLists(_connectionList, _componentList);
     _calculator.calculate();
-    qDebug() << "Neuer Widerstandswert: " << _calculator.getResistanceValue();
-    //TODO: neuen Widerstandswert anzeigen
+
+    emit resistanceValueChanged();
 }

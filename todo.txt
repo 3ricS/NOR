@@ -30,3 +30,5 @@ View
 - Bauteile löschen über Button oder Menü
 - Bug beim Verschieben des Textfeldes: QGraphicsScene::removeItem: item 0x67ce970's scene (0x0) is different from this scene (0x354fa30)
 - keine doppelten Verbindungen
+- selected Connection in Punkten markieren
+- strg + mausrad funktioniert nicht

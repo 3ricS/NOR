@@ -371,13 +371,14 @@ void Connection::dodgeRoutine()
 
 bool Connection::isStartComponentVertical()
 {
-    if(_startY % 100 == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return _startY % 100 == 0;
+}
+
+bool Connection::operator==(Connection otherConnection)
+{
+    return (_componentPortOne == otherConnection.getComponentPortOne() &&
+            _componentPortTwo == otherConnection.getComponentPortTwo()) ||
+           (_componentPortTwo == otherConnection.getComponentPortOne() &&
+            _componentPortOne == otherConnection.getComponentPortTwo());
 }
 

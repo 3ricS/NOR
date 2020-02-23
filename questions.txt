@@ -1,2 +1,1 @@
-- wie detalliert soll die Dokumentation sein?
-	so das kurz die Funktion erleutert wird. @Eric die Doku die du geschrieben hast psst schon ganz gut.
+- warum kann das Model nicht in die connection eingebunden werden?

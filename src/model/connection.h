@@ -25,7 +25,8 @@ class Connection : public QGraphicsItem
 public:
     Connection(ComponentPort componentPortA, ComponentPort componentPortB, QList<Component*> componentList);
 
-    //TODO: boundingRect muss noch beschrieben werden
+    bool operator==(Connection otherConnection);
+
     QRectF boundingRect(void) const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);

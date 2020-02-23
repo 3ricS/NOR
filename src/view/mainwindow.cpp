@@ -37,6 +37,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_copy, SIGNAL(triggered()), this, SLOT(setCopy()));
     connect(_paste, SIGNAL(triggered()), this, SLOT(setPaste()));
     connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(setRotate()));
+    connect(_deleteComponent, SIGNAL(triggered()), this, SLOT(deleteItem()));
 
     connect(_model, SIGNAL(resistanceValueChanged(void)), this, SLOT(updateResistanceValue(void)));
 }
@@ -151,7 +152,6 @@ void MainWindow::setSaveAsFile()
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     _ctrlIsPressed = false;
-    _networkView->EscapeKeyPressed(event);
     if(event->key() == Qt::Key::Key_Escape)
     {
         setSelectionMode();
@@ -241,6 +241,10 @@ void MainWindow::createUpperMenu(void)
     _rotateComponent = new QAction("Rotieren");
     _rotateComponent->setShortcut(QKeySequence(Qt::CTRL + Qt::Key::Key_R));
     _ui->menuBearbeiten->addAction(_rotateComponent);
+
+    _deleteComponent = new QAction("Entfernen");
+    _deleteComponent->setShortcut(QKeySequence(Qt::Key_Delete));
+    _ui->menuBearbeiten->addAction(_deleteComponent);
 }
 
 void MainWindow::openAboutWindow()
@@ -324,5 +328,10 @@ MainWindow::~MainWindow()
 void MainWindow::updateResistanceValue(void)
 {
     _ui->CalculatedValue->setText(QString::number(_model->getResistanceValue()) + "Ω");
+}
+
+void MainWindow::deleteItem(void)
+{
+    _networkView->deleteSelectedItem();
 }
 

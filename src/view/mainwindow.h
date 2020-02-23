@@ -55,6 +55,7 @@ public slots:
     void setCopy(void);
     void setPaste(void);
     void setRotate(void);
+    void deleteItem(void);
 
     void updateResistanceValue(void);
 
@@ -82,6 +83,8 @@ private:
     QAction* _copy = nullptr;
     QAction* _paste = nullptr;
     QAction* _rotateComponent = nullptr;
+    QAction* _deleteComponent = nullptr;
+
     double _scalefactor = 1;
     bool _ctrlIsPressed = false;
 };

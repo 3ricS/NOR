@@ -29,7 +29,7 @@ public:
     ComponentPort getOppisiteComponentPort(void);
 
 private:
-    Component* _component;
+    Component*      _component;
     Component::Port _port;
     Component::Port getOppisitePort(void);
 };

@@ -136,17 +136,6 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     _connectionStartComponentPort = nullptr;
     _selectedComponentToMove = nullptr;
 
-    //MemoryLeak vermeiden
-    if (!_model->isThereAComponentOrADescription(scenePosition))
-    {
-        if (nullptr != _selectedRect)
-        {
-            _model->removeItem(_selectedRect);
-            delete _selectedRect;
-            _selectedRect = nullptr;
-        }
-    }
-
     switch (_mouseMode)
     {
     case ConnectionMode:

@@ -38,9 +38,9 @@ private:
     void setupInitilizingView(void);
 
     //Variablen
-    Ui::EditView* _editViewUi;
-    Component* _component = nullptr;
-    NetworkGraphics* _model = nullptr;
+    Ui::EditView*          _editViewUi;
+    Component*             _component = nullptr;
+    NetworkGraphics*       _model = nullptr;
     Component::Orientation _orientationAtStart;
 };
 

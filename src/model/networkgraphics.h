@@ -76,13 +76,13 @@ private:
     void addObject(Component* component);
     void connectComponentToNeighbours(Component* componentToConnectWithNeighbours);
 
-    QList<Component*> _componentList;
-    QList<Connection*> _connectionList;
+    QList<Component*>        _componentList;
+    QList<Connection*>       _connectionList;
     QList<DescriptionField*> _descriptions;
-    QGraphicsScene* _graphics = nullptr;
-    FileManager* _manager = nullptr;
-    Calculator _calculator = Calculator(_connectionList, _componentList);
-    PuzzleCalculator _puzzleCalculator = PuzzleCalculator(_connectionList, _componentList);
+    QGraphicsScene*          _graphics = nullptr;
+    FileManager*             _manager = nullptr;
+    Calculator               _calculator = Calculator(_connectionList, _componentList);
+    PuzzleCalculator         _puzzleCalculator = PuzzleCalculator(_connectionList, _componentList);
 
     bool _isLoading = false;
 };

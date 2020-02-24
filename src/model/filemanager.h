@@ -47,14 +47,14 @@ private:
     Component* getComponentById(int id);
     Component::Port toPort(int componentPort);
 
-    QFile _actualFile;
+    QFile    _actualFile;
     QString  _fileFilter  = "Json (*.json);;Text (*.txt)";
     QDir     _homePath;
-    bool _isSaved = false;
+    bool     _isSaved = false;
 
     NetworkGraphics* _model = nullptr;
-    QDir _dirFilePath;
-    QString const _defaultFileName = "/Widerstandsnetzwerk";
+    QDir             _dirFilePath;
+    QString const    _defaultFileName = "/Widerstandsnetzwerk";
 
 
 };

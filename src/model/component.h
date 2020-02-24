@@ -60,14 +60,14 @@ public:
 
 protected:
     //Variables
-    int _xPosition;
-    int _yPosition;
+    int  _xPosition;
+    int  _yPosition;
     bool _isVertical;
     bool _isSelected = false;
     Orientation _orientation;
 
     QString _name;
-    int _value;
+    int     _value;
 
     //virtuelle Methoden
     virtual void paintInformations(QPainter* painter) = 0;

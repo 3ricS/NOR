@@ -109,6 +109,15 @@ Component::ComponentType Component::integerToComponentType(int componentType)
     return type;
 }
 
+void Component::paintHighlightRect(QPainter *painter)
+{
+    QBrush brush;
+    brush.setColor(QColor(255, 0, 0, 55));
+    brush.setStyle(Qt::BrushStyle::SolidPattern);
+    painter->setBrush(brush);
+    painter->drawRect(_xPosition - 50, _yPosition -50, 100, 100);
+}
+
 QPointF Component::getPortPosition(Component::Port port) const
 {
     //TODO: Zoomfaktor einfügen
@@ -119,6 +128,12 @@ void Component::setPosition(QPointF gridPosition)
 {
     _xPosition = gridPosition.toPoint().x();
     _yPosition = gridPosition.toPoint().y();
+}
+
+void Component::set_isSelected(bool isSelected)
+{
+    _isSelected = isSelected;
+
 }
 
 void Component::setOrientation(Component::Orientation newOrientation)

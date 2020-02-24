@@ -37,6 +37,10 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
         painter->drawLine(_xPosition - 50, _yPosition, _xPosition + 50, _yPosition);
     }
+    if(_isSelected)
+    {
+        paintHighlightRect(painter);
+    }
 }
 
 void PowerSupply::paintInformations(QPainter* painter)

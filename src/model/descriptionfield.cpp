@@ -24,4 +24,24 @@ QRectF DescriptionField::boundingRect() const
 void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)
 {
     painter->drawText(QRectF (_xPosition - 40, _yPosition - 40, 80, 80), _text);
+
+    if(_isSelected)
+    {
+        paintHighlightRect(painter);
+    }
+}
+
+void DescriptionField::paintHighlightRect(QPainter *painter)
+{
+    QBrush brush;
+    brush.setColor(QColor(255, 0, 0, 55));
+    brush.setStyle(Qt::BrushStyle::SolidPattern);
+    painter->setBrush(brush);
+    painter->drawRect(_xPosition - 50, _yPosition -50, 100, 100);
+}
+
+void DescriptionField::set_isSelected(bool isSelected)
+{
+    _isSelected = isSelected;
+
 }

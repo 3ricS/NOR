@@ -45,6 +45,10 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
         painter->drawLine(_xPosition - 30, _yPosition + 0, _xPosition - 50 + Connection::_circleRadius, _yPosition + 0);
         painter->drawLine(_xPosition + 30, _yPosition + 0, _xPosition + 50 - Connection::_circleRadius, _yPosition + 0);
     }
+    if(_isSelected)
+    {
+        paintHighlightRect(painter);
+    }
 }
 
 void Resistor::paintInformations(QPainter* painter)

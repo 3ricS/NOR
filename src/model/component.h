@@ -33,6 +33,8 @@ public:
     bool hasPortAtPosition(QPointF position) const;
     static ComponentType integerToComponentType(int componentType);
 
+    void paintHighlightRect(QPainter* painter);
+
     //getter
     int getComponentType(void) const {return _componentType;}
     int getXPosition(void) const {return _xPosition;}
@@ -52,6 +54,7 @@ public:
     void setName(QString name) {_name = name;}
     void setValue(int newValue) {_value = newValue;}
     void setPosition(QPointF gridPosition);
+    void set_isSelected(bool isSelected);
 
     static constexpr int _hitBoxSize = 20;
 
@@ -60,6 +63,7 @@ protected:
     int _xPosition;
     int _yPosition;
     bool _isVertical;
+    bool _isSelected = false;
     Orientation _orientation;
 
     QString _name;

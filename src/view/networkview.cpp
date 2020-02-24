@@ -66,6 +66,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         break;
     case MouseMode::SelectionMode:
     {
+        removeHighlightSelectedRect();
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
         _selectedComponentToMove = nullptr;
         _selectedDescriptionToMove = nullptr;
@@ -343,7 +344,33 @@ void NetworkView::gridDisappears(void)
 
 void NetworkView::highlightSelectedRect(QPointF gridPosition)
 {
-    int positionX;
+    for(Component* component : _model->getComponents())
+    {
+        component->set_isSelected(false);
+    }
+
+    for(DescriptionField* descriptionfield : _model->getDescriptions())
+    {
+        descriptionfield->set_isSelected(false);
+    }
+
+    if(_model->isThereAComponentOrADescription(gridPosition))
+    {
+    if(_model->getDescriptionAtPosition(gridPosition) != nullptr)
+    {
+    _model->getDescriptionAtPosition(gridPosition)->set_isSelected(true);
+    }
+    else
+    {
+        _model->getComponentAtPosition(gridPosition)->set_isSelected(true);
+    }
+    _model->update();
+    }
+    else
+    {
+        removeHighlightSelectedRect();
+    }
+   /* int positionX;
     int positionY;
 
     //TODO: das Markieren des selectedComponent gehört nicht in die Methode für das Highlighting des Bereichs
@@ -358,7 +385,7 @@ void NetworkView::highlightSelectedRect(QPointF gridPosition)
                                                            highlightColor);
 
     _selectedRect = highlightSelectedRect;
-    _model->update();
+    _model->update();*/
 }
 
 void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
@@ -416,12 +443,23 @@ void NetworkView::focus()
 
 void NetworkView::removeHighlightSelectedRect(void)
 {
-    if (nullptr != _selectedRect)
+    for(Component* component : _model->getComponents())
+    {
+        component->set_isSelected(false);
+    }
+
+    for(DescriptionField* descriptionfield : _model->getDescriptions())
+    {
+        descriptionfield->set_isSelected(false);
+    }
+
+    _model->update();
+    /*if (nullptr != _selectedRect)
     {
         _model->removeItem(_selectedRect);
         delete _selectedRect;
         _selectedRect = nullptr;
-    }
+    }*/
 }
 
 void NetworkView::rotateComponent(QPointF gridPosition, QPointF scenePosition)

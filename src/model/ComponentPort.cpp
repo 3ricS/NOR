@@ -2,7 +2,7 @@
 // Created by erics on 003, 03, Februar.
 //
 
-#include "ComponentPort.h"
+#include "componentport.h"
 
 /*!
  * \brief   Tauscht den Port des ComponentPorts.

@@ -39,6 +39,7 @@ SOURCES += \
         model/networkgraphics.cpp \
         view/networkview.cpp \
         model/componentport.cpp \
+        model/node.cpp \
         model/puzzlecalculator.cpp \
         model/rowpiece.cpp
 

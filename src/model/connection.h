@@ -20,12 +20,14 @@
 #include <QPainter>
 #include <algorithm>
 
+class NetworkGraphics;
+class DescriptionField;
 class ComponentPort;
 
 class Connection : public QGraphicsItem
 {
 public:
-    Connection(ComponentPort componentPortA, ComponentPort componentPortB, QList<Component*> componentList);
+    Connection(ComponentPort componentPortA, ComponentPort componentPortB, NetworkGraphics* model);
 
     bool operator==(const Connection& rhs);
     bool operator!=(const Connection& rhs);
@@ -35,6 +37,9 @@ public:
     void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);
 
     //Methoden
+    bool isThereAComponentOrADescription(int x, int y);
+    Component* getComponentAtPosition(int x, int y);
+    DescriptionField* getDescriptionAtPosition(int x, int y);
     QList<QRect*> getHitboxList(void) const {return _connectionHitbox;}
     ComponentPort getComponentPortOne(void) const {return _componentPortOne;}
     ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}
@@ -42,10 +47,6 @@ public:
     static constexpr int _circleRadius = 5;
 
 private:
-
-    Component* getComponentAtPosition(int x, int y);
-    bool isThereAComponent(int x, int y);
-
     void horizontalRoutine(void);
     void verticalRoutine(void);
     void dodgeRoutine(void);
@@ -59,17 +60,20 @@ private:
 
     QPainter* _painter = nullptr;
 
-    int _startX = 0;
+    QPointF _currentPoint;
+    QPointF _startPoint;
+    QPointF _endPoint;
+    /*int _startX = 0;
     int _startY = 0;
     int _endX = 0;
-    int _endY = 0;
+    int _endY = 0;*/
 
     bool _isDodgedBefore = false;
 
-    int _currentPosX = 0;
-    int _currentPosY = 0;
+    /*int _currentPosX = 0;
+    int _currentPosY = 0;*/
 
-    QList<Component*> _componentList;
+    NetworkGraphics* _model = nullptr;
     QList<QRect*> _connectionHitbox;
 };
 

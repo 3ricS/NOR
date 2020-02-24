@@ -1,8 +1,9 @@
 #include "connection.h"
+#include "model/networkgraphics.h"
 
-Connection::Connection(ComponentPort componentPortA, ComponentPort componentPortB, QList<Component*> componentList) :
+Connection::Connection(ComponentPort componentPortA, ComponentPort componentPortB, NetworkGraphics* model) :
         QGraphicsItem(nullptr),
-        _componentPortOne(componentPortA), _componentPortTwo(componentPortB), _componentList(componentList)
+        _componentPortOne(componentPortA), _componentPortTwo(componentPortB), _model(model)
 {
 }
 
@@ -15,24 +16,26 @@ Connection::Connection(ComponentPort componentPortA, ComponentPort componentPort
 void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
 {
     //TODO: Funktion mit mehreren Rückgabewerten für xStart, xEnd, ...
-    QPointF start = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
-    QPointF end = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
+    _startPoint = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
+    _currentPoint = _startPoint;
+    _endPoint = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
 
     //Punkte an Enden zeichnen
     painter->setBrush(QBrush(Qt::black));
-    painter->drawEllipse(start.toPoint(), _circleRadius, _circleRadius);
-    painter->drawEllipse(end.toPoint(), _circleRadius, _circleRadius);
+    painter->drawEllipse(_startPoint.toPoint(), _circleRadius, _circleRadius);
+    painter->drawEllipse(_endPoint.toPoint(), _circleRadius, _circleRadius);
 
     _painter = painter;
-    _startX = start.toPoint().x();
+    /*_startX = start.toPoint().x();
     _startY = start.toPoint().y();
     _endX = end.toPoint().x();
     _endY = end.toPoint().y();
     _currentPosX = start.toPoint().x();
-    _currentPosY = start.toPoint().y();
+    _currentPosY = start.toPoint().y();*/
 
-    _diffX = _endX - _startX;;
-    _diffY = _endY - _startY;
+
+    _diffX = _endPoint.x() - _startPoint.x();
+    _diffY = _endPoint.y() - _startPoint.y();
     //qDebug() << _diffX << " , " << _diffY;
     horizontalRoutine();
 }
@@ -107,18 +110,14 @@ void Connection::changePortOfComponentPortWithComponent(Component* componentOfCo
     }
 }
 
-/*!
-* \brief Gibt ein Component aus der ComponentList aus, welches an den Soll-Koordinaten x und y ist.
-*
-* \param[in]    equalX Vergleicht die Soll-X-Koordinate mit einem Component aus der Liste
-* \param[in]    equalY Vergleicht die Soll-Y-Koordinate mit einem Component aus der Liste
-*
-* Es werden nacheinander Components aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
-* Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
-*/
-Component* Connection::getComponentAtPosition(int x, int y)
+bool Connection::isThereAComponentOrADescription(int x, int y)
 {
-    for (Component* component : _componentList)
+    return getComponentAtPosition(x, y) != nullptr || getDescriptionAtPosition(x, y) != nullptr;
+}
+
+Component *Connection::getComponentAtPosition(int x, int y)
+{
+    for (Component* component : _model->getComponents())
     {
         bool equalX = (component->getXPosition() == x);
         bool equalY = (component->getYPosition() == y);
@@ -130,14 +129,18 @@ Component* Connection::getComponentAtPosition(int x, int y)
     return nullptr;
 }
 
-/*!
-* \brief Prüft ob sich an einer bestimmten Koordinate, ein Bauteil befindet.
-*
-* Es wird getComponentAtPosition aufgerufen und wenn ein Bauteil zurückgegeben wird, gibt isThereAComponent true zurück.
-*/
-bool Connection::isThereAComponent(int x, int y)
+DescriptionField *Connection::getDescriptionAtPosition(int x, int y)
 {
-    return getComponentAtPosition(x, y) != nullptr;
+    for (DescriptionField* description : _model->getDescriptions())
+    {
+        bool equalX = (description->getXPos() == x);
+        bool equalY = (description->getYPos() == y);
+        if (equalX && equalY)
+        {
+            return description;
+        }
+    }
+    return nullptr;
 }
 
 void Connection::horizontalRoutine()
@@ -146,13 +149,13 @@ void Connection::horizontalRoutine()
     {
         while(_diffX != 0)
         {
-            if(isStartComponentVertical() || !isThereAComponent(_currentPosX + 50, _currentPosY) || _diffX == 50)
+            if(isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y()) || _diffX == 50)
             {
-                QRect* hitbox = new QRect(_currentPosX, _currentPosY - 5, 50, 10);
+                QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, 50, 10);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX + 50, _currentPosY);
-                _currentPosX += 50;
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() + 50, _currentPoint.y());
+                _currentPoint.setX(_currentPoint.x() + 50);
                 _diffX -= 50;
                 _isDodgedBefore = false;
             }
@@ -173,13 +176,13 @@ void Connection::horizontalRoutine()
     {
         while(_diffX != 0)
         {
-            if(isStartComponentVertical() || !isThereAComponent(_currentPosX - 50, _currentPosY) || _diffX == 50)
+            if(isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y()) || _diffX == 50)
             {
-                QRect* hitbox = new QRect(_currentPosX - 50, _currentPosY - 5, 50, 10);
+                QRect* hitbox = new QRect(_currentPoint.x() - 50, _currentPoint.y() - 5, 50, 10);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 50, _currentPosY);
-                _currentPosX -= 50;
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - 50, _currentPoint.y());
+                _currentPoint.setX(_currentPoint.x() - 50);
                 _diffX += 50;
                 _isDodgedBefore = false;
             }
@@ -205,13 +208,13 @@ void Connection::verticalRoutine()
     {
         while(_diffY != 0)
         {
-            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY + 50) || _diffY == 50)
+            if(!isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50) || _diffY == 50)
             {
-                QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY, 10, 50);
+                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, 50);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY + 50);
-                _currentPosY += 50;
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() + 50);
+                _currentPoint.setY(_currentPoint.y() + 50);
                 _diffY -= 50;
                 _isDodgedBefore = false;
             }
@@ -232,13 +235,13 @@ void Connection::verticalRoutine()
     {
         while(_diffY != 0)
         {
-            if(!isStartComponentVertical() || !isThereAComponent(_currentPosX, _currentPosY - 50) || _diffY == 50)
+            if(!isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() - 50) || _diffY == 50)
             {
-                QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY - 50, 10, 50);
+                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - 50, 10, 50);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 50);
-                _currentPosY -= 50;
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - 50);
+                _currentPoint.setY(_currentPoint.y() - 50);
                 _diffY += 50;
                 _isDodgedBefore = false;
             }
@@ -263,28 +266,28 @@ void Connection::dodgeRoutine()
     {
         if(!_isDodgedBefore)
         {
-            QRect* hitbox = new QRect(_currentPosX, _currentPosY - 5, 55, 10);
+            QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, 55, 10);
             _connectionHitbox.append(hitbox);
 
-            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX + 55, _currentPosY);
-            _currentPosX += 55;
+            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() + 55, _currentPoint.y());
+            _currentPoint.setX(_currentPoint.x() + 55);
             _isDodgedBefore = true;
         }
         if(_diffY < 0)
         {
-            QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY - 100, 10, 100);
+            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - 100, 10, 100);
             _connectionHitbox.append(hitbox);
 
-            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 100);
-            _currentPosY -= 100;
+            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - 100);
+            _currentPoint.setY(_currentPoint.y() - 100);
             _diffY += 100;
-            if(!isThereAComponent(_currentPosX - 55, _currentPosY - 50) || _diffY == 0)
+            if(!isThereAComponentOrADescription(_currentPoint.x() - 55, _currentPoint.y() - 50) || _diffY == 0)
             {
-                QRect* hitbox = new QRect(_currentPosX- 55, _currentPosY - 5, 55, 10);
+                QRect* hitbox = new QRect(_currentPoint.x()- 55, _currentPoint.y() - 5, 55, 10);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 55, _currentPosY);
-                _currentPosX -= 55;
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - 55, _currentPoint.y());
+                _currentPoint.setX(_currentPoint.x() - 55);
             }
             else
             {
@@ -293,19 +296,19 @@ void Connection::dodgeRoutine()
         }
         if(_diffY > 0)
         {
-            QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY, 10, 100);
+            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, 100);
             _connectionHitbox.append(hitbox);
 
-            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY + 100);
-            _currentPosY += 100;
+            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() + 100);
+            _currentPoint.setY(_currentPoint.y() + 100);
             _diffY -= 100;
-            if(!isThereAComponent(_currentPosX - 55, _currentPosY + 50) || _diffY == 0)
+            if(!isThereAComponentOrADescription(_currentPoint.x() - 55, _currentPoint.y() + 50) || _diffY == 0)
             {
-                QRect* hitbox = new QRect(_currentPosX - 55, _currentPosY - 5, 55, 10);
+                QRect* hitbox = new QRect(_currentPoint.x() - 55, _currentPoint.y() - 5, 55, 10);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 55, _currentPosY);
-                _currentPosX -= 55;
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - 55, _currentPoint.y());
+                _currentPoint.setX(_currentPoint.x() - 55);
             }
             else
             {
@@ -317,28 +320,28 @@ void Connection::dodgeRoutine()
     {
         if(!_isDodgedBefore)
         {
-            QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY, 10, 55);
+            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, 55);
             _connectionHitbox.append(hitbox);
 
-            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY + 55);
-            _currentPosY += 55;
+            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() + 55);
+            _currentPoint.setY(_currentPoint.y() + 55);
             _isDodgedBefore = true;
         }
         if(_diffX < 0)
         {
-            QRect* hitbox = new QRect(_currentPosX - 100, _currentPosY - 5, 100, 10);
+            QRect* hitbox = new QRect(_currentPoint.x() - 100, _currentPoint.y() - 5, 100, 10);
             _connectionHitbox.append(hitbox);
 
-            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX - 100, _currentPosY);
-            _currentPosX -= 100;
+            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - 100, _currentPoint.y());
+            _currentPoint.setX(_currentPoint.x() - 100);
             _diffX += 100;
-            if(!isThereAComponent(_currentPosX - 50, _currentPosY - 55) || _diffX == 0)
+            if(!isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() - 55) || _diffX == 0)
             {
-                QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY - 55, 10, 55);
+                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - 55, 10, 55);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 55);
-                _currentPosY -= 55;
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - 55);
+                _currentPoint.setY(_currentPoint.y() - 55);
             }
             else
             {
@@ -347,19 +350,19 @@ void Connection::dodgeRoutine()
         }
         if(_diffX > 0)
         {
-            QRect* hitbox = new QRect(_currentPosX, _currentPosY - 5, 100, 10);
+            QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, 100, 10);
             _connectionHitbox.append(hitbox);
 
-            _painter->drawLine(_currentPosX, _currentPosY, _currentPosX + 100, _currentPosY);
-            _currentPosX += 100;
+            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() + 100, _currentPoint.y());
+            _currentPoint.setX(_currentPoint.x() + 100);
             _diffX -= 100;
-            if(!isThereAComponent(_currentPosX + 50, _currentPosY - 55) || _diffX == 0)
+            if(!isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() - 55) || _diffX == 0)
             {
-                QRect* hitbox = new QRect(_currentPosX - 5, _currentPosY - 55, 10, 55);
+                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - 55, 10, 55);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPosX, _currentPosY, _currentPosX, _currentPosY - 55);
-                _currentPosY -= 55;
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - 55);
+                _currentPoint.setY(_currentPoint.y() - 55);
             }
             else
             {
@@ -371,7 +374,7 @@ void Connection::dodgeRoutine()
 
 bool Connection::isStartComponentVertical()
 {
-    return _startY % 100 == 0;
+    return _startPoint.toPoint().y() % 100 == 0;
 }
 
 bool Connection::operator==(const Connection& rhs)

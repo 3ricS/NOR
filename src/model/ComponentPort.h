@@ -18,7 +18,8 @@ class ComponentPort
 public:
     ComponentPort(Component* component, Component::Port port) : _component(component), _port(port) {}
 
-    bool operator==(ComponentPort otherComponentPort);
+    bool operator==(const ComponentPort& rhs);
+    bool operator!=(const ComponentPort& rhs);
 
     void invertPort(void);
 

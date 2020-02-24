@@ -374,11 +374,17 @@ bool Connection::isStartComponentVertical()
     return _startY % 100 == 0;
 }
 
-bool Connection::operator==(Connection otherConnection)
+bool Connection::operator==(const Connection& rhs)
 {
-    return (_componentPortOne == otherConnection.getComponentPortOne() &&
-            _componentPortTwo == otherConnection.getComponentPortTwo()) ||
-           (_componentPortTwo == otherConnection.getComponentPortOne() &&
-            _componentPortOne == otherConnection.getComponentPortTwo());
+    bool equalInEqualDirection = (_componentPortOne == rhs.getComponentPortOne() &&
+                                  _componentPortTwo == rhs.getComponentPortTwo());
+    bool equalInOtherDirection = (_componentPortOne == rhs.getComponentPortTwo() &&
+                                  _componentPortTwo == rhs.getComponentPortOne());
+    return equalInEqualDirection || equalInOtherDirection;
+}
+
+bool Connection::operator!=(const Connection& rhs)
+{
+    return !(operator==(rhs));
 }
 

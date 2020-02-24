@@ -22,12 +22,9 @@ public:
 
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
     void deleteSelectedItem(void);
-    void KeyPressed(QKeyEvent* event);
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
-
-protected:
     void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

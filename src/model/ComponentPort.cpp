@@ -4,13 +4,6 @@
 
 #include "ComponentPort.h"
 
-bool ComponentPort::operator==(ComponentPort otherComponentPort)
-{
-    bool equalComponent = (_component == otherComponentPort._component);
-    bool equalPort = (_port == otherComponentPort._port);
-    return equalComponent && equalPort;
-}
-
 /*!
  * \brief   Tauscht den Port des ComponentPorts.
  *
@@ -48,4 +41,16 @@ Component::Port ComponentPort::getOppisitePort()
     {
         return Component::A;
     }
+}
+
+bool ComponentPort::operator==(const ComponentPort& rhs)
+{
+    bool equalComponent = (_component == rhs._component);
+    bool equalPort = (_port == rhs._port);
+    return equalComponent && equalPort;
+}
+
+bool ComponentPort::operator!=(const ComponentPort& rhs)
+{
+    return !(operator==(rhs));
 }

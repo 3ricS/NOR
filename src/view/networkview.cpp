@@ -551,6 +551,7 @@ void NetworkView::leaveEvent(QEvent* event)
 
 void NetworkView::keyPressEvent(QKeyEvent* event)
 {
+    //TODO: Dies muss ins Mainwindow
     if (event->key() == Qt::Key_Escape)
     {
         setMouseMode(NetworkView::MouseMode::SelectionMode);

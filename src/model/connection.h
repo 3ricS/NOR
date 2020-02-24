@@ -20,12 +20,15 @@
 #include <QPainter>
 #include <algorithm>
 
+class ComponentPort;
+
 class Connection : public QGraphicsItem
 {
 public:
     Connection(ComponentPort componentPortA, ComponentPort componentPortB, QList<Component*> componentList);
 
-    bool operator==(Connection otherConnection);
+    bool operator==(const Connection& rhs);
+    bool operator!=(const Connection& rhs);
 
     QRectF boundingRect(void) const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
@@ -36,7 +39,7 @@ public:
     ComponentPort getComponentPortOne(void) const {return _componentPortOne;}
     ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}
     bool hasComponent(Component* searchedComponent);
-    static constexpr int _circleRadius = 3;
+    static constexpr int _circleRadius = 5;
 
 private:
 

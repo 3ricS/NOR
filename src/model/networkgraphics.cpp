@@ -20,15 +20,20 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     Connection* connection = new Connection(componentPortA, componentPortB, _componentList);
-    if (!_connectionList.contains(connection))
+    bool isAlreadyExisting = false;
+    for (Connection* otherConnection : _connectionList)
+    {
+        if (*otherConnection == *connection)
+        {
+            isAlreadyExisting = true;
+            break;
+        }
+    }
+    if (!isAlreadyExisting)
     {
         _connectionList.append(connection);
         addItem(connection);
         update();
-    }
-    else
-    {
-        qDebug() << "NetworkGraphics: Connection bereits vorhanden!";
     }
 
     if (!_isLoading)
@@ -46,7 +51,7 @@ void NetworkGraphics::addObject(Component* component)
 
     update();
 
-    if(!_isLoading)
+    if (!_isLoading)
     {
         updateCalc();
     }
@@ -86,13 +91,13 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
 * Es werden nacheinander Description aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
 * Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
 */
-DescriptionField *NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition)
+DescriptionField* NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition)
 {
-    for(DescriptionField* description : _descriptions)
+    for (DescriptionField* description : _descriptions)
     {
         bool equalX = (description->getXPos() == gridPosition.toPoint().x());
         bool equalY = (description->getYPos() == gridPosition.toPoint().y());
-        if(equalX && equalY)
+        if (equalX && equalY)
         {
             return description;
         }
@@ -114,19 +119,21 @@ bool NetworkGraphics::isThereAComponentOrADescription(QPointF gridPosition)
 
 Connection* NetworkGraphics::getConnectionAtPosition(QPointF gridposition)
 {
-    for(Connection* connection : _connectionList)
+    for (Connection* connection : _connectionList)
     {
-        for(QRect* hitBox : connection->getHitboxList())
+        for (QRect* hitBox : connection->getHitboxList())
         {
-            bool equalX = ((gridposition.toPoint().x() >= hitBox->x()) && (gridposition.toPoint().x() <= (hitBox->x() + hitBox->width())));
-            bool equalY = ((gridposition.toPoint().y() >= hitBox->y()) && (gridposition.toPoint().y() <= (hitBox->y() + hitBox->height())));
-            if(equalX && equalY)
+            bool equalX = ((gridposition.toPoint().x() >= hitBox->x()) &&
+                           (gridposition.toPoint().x() <= (hitBox->x() + hitBox->width())));
+            bool equalY = ((gridposition.toPoint().y() >= hitBox->y()) &&
+                           (gridposition.toPoint().y() <= (hitBox->y() + hitBox->height())));
+            if (equalX && equalY)
             {
                 return connection;
             }
         }
     }
-    return  nullptr;
+    return nullptr;
 }
 
 QString NetworkGraphics::getFileName()
@@ -244,7 +251,7 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
         createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical);
     }
 
-    if(!_isLoading)
+    if (!_isLoading)
     {
         updateCalc();
     }
@@ -292,9 +299,10 @@ Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, 
 * \param[in]    yPosition               ist die Y-Koordinate, an der das Textfeld erzeugt werden soll
 * \return Gibt ein neues Textfeld zurück.
 */
-DescriptionField *NetworkGraphics::duplicateDescription(DescriptionField *descriptionToDuplicate, int xPosition, int yPosition)
+DescriptionField*
+NetworkGraphics::duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition)
 {
-    return  createDescriptionField(QPointF(xPosition,yPosition), false, descriptionToDuplicate->getText());
+    return createDescriptionField(QPointF(xPosition, yPosition), false, descriptionToDuplicate->getText());
 }
 
 
@@ -385,11 +393,13 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
 * Wenn das Textfeld bereits geladen wurde entfallen die beiden oberen Schritte.
 * Anschließend wird ein neues Textfeld erzeugt und der descriptionCount um eins erhöht.
 */
-DescriptionField *NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[maybe_unused]] QString text, [[maybe_unused]] int id)
+DescriptionField*
+NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[maybe_unused]] QString text,
+                                        [[maybe_unused]] int id)
 {
-    if(!isLoad)
+    if (!isLoad)
     {
-        if(isThereAComponentOrADescription(gridPosition))
+        if (isThereAComponentOrADescription(gridPosition))
         {
             return nullptr;
         }
@@ -462,9 +472,9 @@ void NetworkGraphics::deleteComponent(Component* component)
 * Dannach wird das Textfeld aus der Liste descriptions entfernt.
 * Der descriptionCount wird um eins reduziert.
 */
-void NetworkGraphics::deleteDescription(DescriptionField *description)
+void NetworkGraphics::deleteDescription(DescriptionField* description)
 {
-    if(description != nullptr)
+    if (description != nullptr)
     {
         removeItem(description);
         _descriptions.removeOne(description);
@@ -482,9 +492,9 @@ void NetworkGraphics::deleteDescription(DescriptionField *description)
 * Wenn die ausgewählte Verbindung vorhanden ist, wird diese entfernt.
 * Nach dem entfernen aus dem Netzwerk wird die Verbindung aus der connectionList entfernt.
 */
-void NetworkGraphics::deleteConnection(Connection *connection)
+void NetworkGraphics::deleteConnection(Connection* connection)
 {
-    if(connection != nullptr)
+    if (connection != nullptr)
     {
         removeItem(connection);
         _connectionList.removeOne(connection);
@@ -502,20 +512,21 @@ void NetworkGraphics::deleteConnection(Connection *connection)
 * Es wird zuerst geprüft ob sich an der neuen Gitterposition bereits eine Komponente oder ein Textfeld befindet.
 * Befindet sich an der Position nichts, wird die ausgewählte Komponente an die neu Position verschoben.
 */
-void NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField *descriptionToMove, QPointF gridPosition)
+void
+NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* descriptionToMove, QPointF gridPosition)
 {
     bool isComponentAtPosition = isThereAComponentOrADescription(gridPosition);
     if (isComponentAtPosition)
     {
         return;
     }
-    if(componentToMove != nullptr)
+    if (componentToMove != nullptr)
     {
         componentToMove->setPosition(gridPosition);
         //Beim Bewegen kann ein Component direkt mit seinen Nachbarn verbunden werden
         connectComponentToNeighbours(componentToMove);
     }
-    else if(descriptionToMove != nullptr)
+    else if (descriptionToMove != nullptr)
     {
         descriptionToMove->setPosition(gridPosition);
     }
@@ -597,29 +608,29 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
 {
     switch (componentToTurn->getOrientation())
     {
-    case Component::Orientation::left:
-    {
-        componentToTurn->setOrientation(Component::Orientation::top);
-        //mirrorComponent(componentToTurn);
-    }
-        break;
-    case Component::Orientation::top:
-    {
-        componentToTurn->setOrientation(Component::Orientation::right);
-        mirrorComponent(componentToTurn);
-    }
-        break;
-    case Component::Orientation::right:
-    {
-        componentToTurn->setOrientation(Component::Orientation::bottom);
-    }
-        break;
-    case Component::Orientation::bottom:
-    {
-        componentToTurn->setOrientation(Component::Orientation::left);
-        mirrorComponent(componentToTurn);
-    }
-        break;
+        case Component::Orientation::left:
+        {
+            componentToTurn->setOrientation(Component::Orientation::top);
+            //mirrorComponent(componentToTurn);
+        }
+            break;
+        case Component::Orientation::top:
+        {
+            componentToTurn->setOrientation(Component::Orientation::right);
+            mirrorComponent(componentToTurn);
+        }
+            break;
+        case Component::Orientation::right:
+        {
+            componentToTurn->setOrientation(Component::Orientation::bottom);
+        }
+            break;
+        case Component::Orientation::bottom:
+        {
+            componentToTurn->setOrientation(Component::Orientation::left);
+            mirrorComponent(componentToTurn);
+        }
+            break;
     }
 }
 

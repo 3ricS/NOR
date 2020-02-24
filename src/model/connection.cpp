@@ -26,17 +26,10 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     painter->drawEllipse(_endPoint.toPoint(), _circleRadius, _circleRadius);
 
     _painter = painter;
-    /*_startX = start.toPoint().x();
-    _startY = start.toPoint().y();
-    _endX = end.toPoint().x();
-    _endY = end.toPoint().y();
-    _currentPosX = start.toPoint().x();
-    _currentPosY = start.toPoint().y();*/
-
 
     _diffX = _endPoint.x() - _startPoint.x();
     _diffY = _endPoint.y() - _startPoint.y();
-    //qDebug() << _diffX << " , " << _diffY;
+
     horizontalRoutine();
 }
 

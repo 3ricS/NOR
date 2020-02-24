@@ -63,15 +63,8 @@ private:
     QPointF _currentPoint;
     QPointF _startPoint;
     QPointF _endPoint;
-    /*int _startX = 0;
-    int _startY = 0;
-    int _endX = 0;
-    int _endY = 0;*/
 
     bool _isDodgedBefore = false;
-
-    /*int _currentPosX = 0;
-    int _currentPosY = 0;*/
 
     NetworkGraphics* _model = nullptr;
     QList<QRect*> _connectionHitbox;

@@ -57,6 +57,7 @@ private:
     bool _componentOrDescriptionIsGrabbed = false;
 
     //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
+    QList<Component*>  _tempComponentListForConnections;
     ComponentPort*    _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
     QGraphicsItem*    _previousHighlightedRect = nullptr;
     Component*        _selectedComponent = nullptr;

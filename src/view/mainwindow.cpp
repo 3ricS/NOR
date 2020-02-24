@@ -297,6 +297,7 @@ void MainWindow::setZoomIn()
 //Zoom out
 void MainWindow::setZoomOut()
 {
+    //_ui->networkView->showNormal()
     double scaleFactor = 0.9;
     _scalefactor -= 0.1;
     _ui->PercentZoom->setText(QString::number(_scalefactor * 100) + "%");

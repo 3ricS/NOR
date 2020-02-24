@@ -11,10 +11,11 @@
 
 class NetworkView : public QGraphicsView
 {
+    Q_OBJECT
 public:
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode, DescriptionMode};
     NetworkView(QWidget *parent);
-    void setModel(NetworkGraphics* model) {_model = model;}
+    void setModel(NetworkGraphics* model);
     void duplicate(void);
     void copy(void);
     void paste(void);
@@ -22,6 +23,9 @@ public:
 
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
     void deleteSelectedItem(void);
+
+public slots:
+    void focus();
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
@@ -39,6 +43,7 @@ private:
     void removeHighlightSelectedRect(void);
     void rotateComponent(QPointF gridPosition, QPointF scenePosition);
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
+    QPointF findScrollPosition(void);
 
 protected:
     void leaveEvent(QEvent* event) override;

@@ -196,6 +196,11 @@ void NetworkGraphics::load(void)
 
     updateCalc();
     emit resistanceValueChanged();
+    if(_componentList.count() != 0)
+    {
+        qDebug() << "List != 0";
+        emit newNetworkIsLoad();
+    }
 }
 
 void NetworkGraphics::saveAs(void)

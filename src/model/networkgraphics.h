@@ -63,6 +63,7 @@ public:
 
 signals:
     void resistanceValueChanged(void);
+    void newNetworkIsLoad();
 
 private:
     static constexpr int _defaultSceneSize = 6000;

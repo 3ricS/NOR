@@ -6,6 +6,12 @@ NetworkView::NetworkView(QWidget* parent) :
     setMouseTracking(true);
 }
 
+void NetworkView::setModel(NetworkGraphics *model)
+{
+    _model = model;
+    connect(_model, SIGNAL(newNetworkIsLoad()), this, SLOT(focus()));
+}
+
 void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 {
     QPointF scenePosition = mapToScene(mouseEvent->pos());
@@ -402,6 +408,12 @@ void NetworkView::deleteSelectedItem(void)
     }
 }
 
+//Fokussiert auf das geladene Netzwerk
+void NetworkView::focus()
+{
+    centerOn(findScrollPosition());
+}
+
 void NetworkView::removeHighlightSelectedRect(void)
 {
     if (nullptr != _selectedRect)
@@ -452,6 +464,32 @@ bool NetworkView::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWayto
         xWaytoTheRight += 100;
     }
     return created;
+}
+
+//Sucht nach der DurchschnittsXPosition und der DurchschnittsYPosition
+QPointF NetworkView::findScrollPosition()
+{
+    int averageX = 0;
+    int averageY = 0;
+    if(_model->getComponents().count() != 0)
+    {
+        for(Component* c : _model->getComponents())
+        {
+            averageX += c->getXPosition();
+            averageY += c->getYPosition();
+        }
+        averageX /= _model->getComponents().count();
+        averageY /= _model->getComponents().count();
+    }
+    if(_model->getDescriptions().count() != 0)
+    {
+        for(DescriptionField* c : _model->getDescriptions())
+        {
+            averageX += c->getXPos();
+            averageY += c->getYPos();
+        }
+    }
+    return QPointF(averageX, averageY);
 }
 
 //Bereitet die Scene und GridPosition für das Rotieren per Shortcut auf

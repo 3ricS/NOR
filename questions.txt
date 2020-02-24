@@ -1,1 +1,1 @@
-- warum kann das Model nicht in die connection eingebunden werden?
+

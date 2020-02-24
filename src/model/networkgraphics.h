@@ -14,6 +14,7 @@
 #include <model/connection.h>
 #include <model/filemanager.h>
 #include <view/editview.h>
+#include <model/puzzlecalculator.h>
 
 class FileManager;
 
@@ -81,6 +82,7 @@ private:
     QGraphicsScene* _graphics = nullptr;
     FileManager* _manager = nullptr;
     Calculator _calculator = Calculator(_connectionList, _componentList);
+    PuzzleCalculator _puzzleCalculator = PuzzleCalculator(_connectionList, _componentList);
 
     bool _isLoading = false;
 };

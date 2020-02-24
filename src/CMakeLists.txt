@@ -32,7 +32,10 @@ set(MOC_HEADERS
         model/calculator.h
         model/filemanager.h
         model/descriptionfield.h
-        model/ComponentPort.h
+        model/componentport.h
+        model/puzzlecalculator.h
+        model/rowpiece.h
+        model/node.h
 
 
         view/mainwindow.h
@@ -55,7 +58,10 @@ set (SOURCES
         view/mainwindow.cpp
         view/NetworkView.cpp
         view/editview.cpp
-        model/ComponentPort.cpp)
+        model/componentport.cpp
+        model/rowpiece.cpp
+        model/puzzlecalculator.cpp
+)
 
 # set .ui files
 set(UIS

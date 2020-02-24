@@ -12,7 +12,7 @@
 
 #include <model/component.h>
 #include <model/connection.h>
-#include <model/ComponentPort.h>
+#include <model/componentport.h>
 
 class Calculator
 {

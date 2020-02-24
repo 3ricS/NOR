@@ -32,3 +32,4 @@ View
 - keine doppelten Verbindungen
 - selected Connection in Punkten markieren
 - strg + mausrad funktioniert nicht
+- NetworkGraphics hat 600 Zeilen

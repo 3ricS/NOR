@@ -664,5 +664,8 @@ void NetworkGraphics::updateCalc(void)
     _calculator.setLists(_connectionList, _componentList);
     _calculator.calculate();
 
+    _puzzleCalculator.setLists(_connectionList, _componentList);
+    //_puzzleCalculator.calculate();
+
     emit resistanceValueChanged();
 }

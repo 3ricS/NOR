@@ -220,7 +220,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         if(!_model->isThereAComponentOrADescription(gridPosition))
         {
             Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                    gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+                                                     gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
             _sampleComponentOnMoveEvent = sampleResistor;
             _model->addItem(_sampleComponentOnMoveEvent);
             highlightRect(scenePosition, _highlightColor);
@@ -232,7 +232,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         if(!_model->isThereAComponentOrADescription(gridPosition))
         {
             Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                     gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+                                                        gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
             _sampleComponentOnMoveEvent = sampleResistor;
             _model->addItem(_sampleComponentOnMoveEvent);
             highlightRect(scenePosition, _highlightColor);
@@ -276,9 +276,12 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         break;
     case DescriptionMode:
     {
-        _sampleDescriptionOnMoveEvent = new DescriptionField(gridPosition.x(), gridPosition.y(),0);
-        _model->addItem(_sampleDescriptionOnMoveEvent);
-        highlightRect(scenePosition, _highlightColor);
+        if(!_model->isThereAComponentOrADescription(gridPosition))
+        {
+            _sampleDescriptionOnMoveEvent = new DescriptionField(gridPosition.x(), gridPosition.y(),0);
+            _model->addItem(_sampleDescriptionOnMoveEvent);
+            highlightRect(scenePosition, _highlightColor);
+        }
     }
         break;
     }
@@ -291,25 +294,11 @@ void NetworkView::mouseDoubleClickEvent(QMouseEvent* event)
     if (_mouseMode == SelectionMode)
     {
         QPointF gridPosition = scenePositionToGrid(scenePosition);
-        Component* foundComponent = _model->getComponentAtPosition(gridPosition);
-        if (foundComponent != nullptr)
-        {
-            _selectedComponent = foundComponent;
-            //TODO: emit foundComponent
-            EditView* editView = new EditView(foundComponent, _model, false, this);
-            editView->show();
-        }
 
-        DescriptionField* description = _model->getDescriptionAtPosition(gridPosition);
-        if(description != nullptr)
-        {
-            bool ok = false;
-            QString text = QInputDialog::getText(this, "Textfeld bearbeiten", "Text eingeben:",QLineEdit::EchoMode::Normal, description->getText(), &ok, Qt::WindowCloseButtonHint);
-            if(ok)
-            {
-                description->setText(text);
-            }
-        }
+        _selectedComponent = _model->getComponentAtPosition(gridPosition);
+        _selectedDescription = _model->getDescriptionAtPosition(gridPosition);
+            //TODO: emit foundComponent
+        editNetworkOrDescription();
     }
 }
 
@@ -344,8 +333,8 @@ void NetworkView::gridDisappears(void)
     if(nullptr != _sampleDescriptionOnMoveEvent)
     {
         _model->removeItem(_sampleDescriptionOnMoveEvent);
-        delete _sampleComponentOnMoveEvent;
-        _sampleComponentOnMoveEvent = nullptr;
+        delete _sampleDescriptionOnMoveEvent;
+        _sampleDescriptionOnMoveEvent = nullptr;
 
         _model->update();
     }
@@ -365,21 +354,21 @@ void NetworkView::highlightSelectedRect(QPointF gridPosition)
 
     if(_model->isThereAComponentOrADescription(gridPosition))
     {
-    if(_model->getDescriptionAtPosition(gridPosition) != nullptr)
-    {
-    _model->getDescriptionAtPosition(gridPosition)->set_isSelected(true);
-    }
-    else
-    {
-        _model->getComponentAtPosition(gridPosition)->set_isSelected(true);
-    }
-    _model->update();
+        if(_model->getDescriptionAtPosition(gridPosition) != nullptr)
+        {
+            _model->getDescriptionAtPosition(gridPosition)->set_isSelected(true);
+        }
+        else
+        {
+            _model->getComponentAtPosition(gridPosition)->set_isSelected(true);
+        }
+        _model->update();
     }
     else
     {
         removeHighlightSelectedRect();
     }
-   /* int positionX;
+    /* int positionX;
     int positionY;
 
     //TODO: das Markieren des selectedComponent gehört nicht in die Methode für das Highlighting des Bereichs
@@ -444,6 +433,25 @@ void NetworkView::deleteSelectedItem(void)
     }
 }
 
+void NetworkView::editNetworkOrDescription()
+{
+    if (_selectedComponent != nullptr)
+    {
+        EditView* editView = new EditView(_selectedComponent, _model, false, this);
+        editView->show();
+    }
+
+    if(_selectedDescription != nullptr)
+    {
+        bool ok = false;
+        QString text = QInputDialog::getText(this, "Textfeld bearbeiten", "Text eingeben:",QLineEdit::EchoMode::Normal, _selectedDescription->getText(), &ok, Qt::WindowCloseButtonHint);
+        if(ok)
+        {
+            _selectedDescription->setText(text);
+        }
+    }
+}
+
 //Fokussiert auf das geladene Netzwerk
 void NetworkView::focus()
 {
@@ -477,20 +485,20 @@ void NetworkView::rotateComponent(QPointF gridPosition, QPointF scenePosition)
     gridDisappears();
     if(!_model->isThereAComponentOrADescription(gridPosition))
     {
-    if (MouseMode::PowerSupplyMode == _mouseMode)
-    {
-        Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                    gridPosition.toPoint().y(), _isVerticalComponentDefault,
-                                                    0);
-        _sampleComponentOnMoveEvent = sampleResistor;
-    }
-    else if (MouseMode::ResistorMode == _mouseMode)
-    {
-        Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                 gridPosition.toPoint().y(), _isVerticalComponentDefault,
-                                                 0);
-        _sampleComponentOnMoveEvent = sampleResistor;
-    }
+        if (MouseMode::PowerSupplyMode == _mouseMode)
+        {
+            Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
+                                                        gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                        0);
+            _sampleComponentOnMoveEvent = sampleResistor;
+        }
+        else if (MouseMode::ResistorMode == _mouseMode)
+        {
+            Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
+                                                     gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                     0);
+            _sampleComponentOnMoveEvent = sampleResistor;
+        }
     }
     _model->addItem(_sampleComponentOnMoveEvent);
     highlightRect(scenePosition, _highlightColor);
@@ -518,15 +526,20 @@ QPointF NetworkView::findScrollPosition()
 {
     int averageX = 0;
     int averageY = 0;
+    int anzahlResistorAndDescriptions = 0;
     if(_model->getComponents().count() != 0)
     {
         for(Component* c : _model->getComponents())
         {
-            averageX += c->getXPosition();
-            averageY += c->getYPosition();
+            if(c->getComponentType() == Component::Resistor)
+            {
+               qDebug() << c->getName();
+                averageX += c->getXPosition();
+                averageY += c->getYPosition();
+
+                anzahlResistorAndDescriptions++;
+            }
         }
-        averageX /= _model->getComponents().count();
-        averageY /= _model->getComponents().count();
     }
     if(_model->getDescriptions().count() != 0)
     {
@@ -534,8 +547,12 @@ QPointF NetworkView::findScrollPosition()
         {
             averageX += c->getXPos();
             averageY += c->getYPos();
+            anzahlResistorAndDescriptions++;
         }
     }
+    qDebug() << anzahlResistorAndDescriptions;
+    averageY /= anzahlResistorAndDescriptions;
+    averageX /= anzahlResistorAndDescriptions;
     return QPointF(averageX, averageY);
 }
 
@@ -553,8 +570,8 @@ void NetworkView::duplicate(void)
     {
         int xWayToTheRight = 100;
         if(lookingForFreeSpaceToDuplicate(_selectedComponent->getXPosition(), _selectedComponent->getYPosition(), xWayToTheRight))
-        _model->duplicateComponent(_selectedComponent, _selectedComponent->getXPosition() + xWayToTheRight,
-                                   _selectedComponent->getYPosition());
+            _model->duplicateComponent(_selectedComponent, _selectedComponent->getXPosition() + xWayToTheRight,
+                                       _selectedComponent->getYPosition());
     }
     else if(_selectedDescription != nullptr)
     {
@@ -591,7 +608,7 @@ void NetworkView::paste(void)
         }
         else if(_copiedDescription != nullptr)
         {
-               _model->duplicateDescription(_copiedDescription,_lastClickedPositionGrid.x(), _lastClickedPositionGrid.y());
+            _model->duplicateDescription(_copiedDescription,_lastClickedPositionGrid.x(), _lastClickedPositionGrid.y());
         }
     }
 }
@@ -643,6 +660,11 @@ void NetworkView::keyPressEvent(QKeyEvent* event)
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
         removeHighlightSelectedRect();
         gridDisappears();
+
+        //Alle selected Objekte auf nullptr setzten, sonst ungewolltes Löschen
+        _selectedComponent = nullptr;
+        _selectedDescription = nullptr;
+        _selectedConnection = nullptr;
     }
     QGraphicsView::keyPressEvent(event);
 }

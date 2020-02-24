@@ -14,7 +14,6 @@ ___________________________________________________________________
 Model
 UNDO (oben links) QUNDOSTACK
 Linien redraw behandeln, verschwinden teils
-default Ansicht nach Laden
 Linien einzeln entfernen
 dauerhaftes Berechnen der Widerstände
 Multiselect der Bauteile
@@ -27,8 +26,6 @@ View
 - Verbindungen rechtwinklig zeichnen (Leonel: angefangen, wird weiter dran gearbeitet. Teils schon funktionsfähig. Doku schreibe ich selber. Will ich euch nicht zumuten)
 - einzelne Connections löschen
 
-- Bauteile löschen über Button oder Menü
-- Bug beim Verschieben des Textfeldes: QGraphicsScene::removeItem: item 0x67ce970's scene (0x0) is different from this scene (0x354fa30)
 - keine doppelten Verbindungen
 - selected Connection in Punkten markieren
 - strg + mausrad funktioniert nicht

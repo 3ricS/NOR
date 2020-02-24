@@ -23,6 +23,7 @@ public:
 
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
     void deleteSelectedItem(void);
+    void editNetworkOrDescription(void);
 
 public slots:
     void focus();

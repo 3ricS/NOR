@@ -43,8 +43,8 @@ void FileManager::saveAs(void)
 //Filepath wird gesplittet beim Slash und das letzte Element ist der eigentliche Name
 QString FileManager::getFileName(void)
 {
-  QStringList list = _actualFile.fileName().split('/');
-  return list.last();
+    QStringList list = _actualFile.fileName().split('/');
+    return list.last();
 }
 
 //TODO: Doku fertigstellen in filemanager und überprüfen.
@@ -195,20 +195,23 @@ void FileManager::loadComponent(QJsonArray array)
         if (array[i].isObject())
         {
             QJsonObject obj = array[i].toObject();
-            QString name = obj.value("name").toString();
-            int id = obj.value("id").toInt();
-            int xPos = obj.value("xPos").toInt();
-            int yPos = obj.value("yPos").toInt();
-            bool isVertical = obj.value("isVertical").toBool();
-            int resistance = obj.value("resistance").toInt();
-            Component::ComponentType componentType = Component::integerToComponentType(obj.value("type").toInt());
-            if(Component::ComponentType::Resistor == componentType)
+            if(obj.value("type") == 0 || obj.value("type") == 1)
             {
-                _model->addResistor(name, resistance, xPos, yPos, isVertical, id);
-            }
-            else if(Component::ComponentType::PowerSupply == componentType)
-            {
-                _model->addPowerSupply(name, xPos, yPos, isVertical, id);
+                QString name = obj.value("name").toString();
+                int id = obj.value("id").toInt();
+                int xPos = obj.value("xPos").toInt();
+                int yPos = obj.value("yPos").toInt();
+                bool isVertical = obj.value("isVertical").toBool();
+                int resistance = obj.value("resistance").toInt();
+                Component::ComponentType componentType = Component::integerToComponentType(obj.value("type").toInt());
+                if(Component::ComponentType::Resistor == componentType)
+                {
+                    _model->addResistor(name, resistance, xPos, yPos, isVertical, id);
+                }
+                else if(Component::ComponentType::PowerSupply == componentType)
+                {
+                    _model->addPowerSupply(name, xPos, yPos, isVertical, id);
+                }
             }
         }
     }

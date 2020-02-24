@@ -38,6 +38,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_paste, SIGNAL(triggered()), this, SLOT(setPaste()));
     connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(setRotate()));
     connect(_deleteComponent, SIGNAL(triggered()), this, SLOT(deleteItem()));
+    connect(_edit, SIGNAL(triggered()), this, SLOT(setEdit()));
 
     connect(_model, SIGNAL(resistanceValueChanged(void)), this, SLOT(updateResistanceValue(void)));
 }
@@ -226,6 +227,10 @@ void MainWindow::createUpperMenu(void)
     _ui->menuExtras->addAction(_about);
 
     //Bearbeiten Menu
+    _edit = new QAction("Eigenschaften");
+    _edit->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
+    _ui->menuBearbeiten->addAction(_edit);
+
     _copy = new QAction("Kopieren");
     _copy->setShortcut(QKeySequence::Copy);
     _ui->menuBearbeiten->addAction(_copy);
@@ -334,5 +339,10 @@ void MainWindow::updateResistanceValue(void)
 void MainWindow::deleteItem(void)
 {
     _networkView->deleteSelectedItem();
+}
+
+void MainWindow::setEdit()
+{
+    _networkView->editNetworkOrDescription();
 }
 

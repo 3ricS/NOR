@@ -7,16 +7,23 @@
 #include "model/connection.h"
 #include "model/component.h"
 
-PuzzleCalculator::PuzzleCalculator(QList<Connection*> connections, QList<Component*> components) :  _components(components),
-    _connections(connections)
+PuzzleCalculator::PuzzleCalculator()
 {
 
 }
 
-void PuzzleCalculator::calculate()
+double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Component*> components)
 {
+    _connections = connections;
+    _components = components;
+
     QList<RowPiece> rowPieces = findRowPieces();
-    //TODO: calculate
+    if (!rowPieces.isEmpty())
+    {
+        double resistanceValue = calculateResistanceValueFromRowPieces(rowPieces);
+        return resistanceValue;
+    }
+    return 0.0;
 }
 
 void PuzzleCalculator::setLists(QList<Connection*> connections, QList<Component*> components)
@@ -32,15 +39,16 @@ QList<RowPiece> PuzzleCalculator::findRowPieces()
     bool foundPowerSupply = (!startOfSearchComponentsPorts.isEmpty());
 
     QList<RowPiece> rowPieces;
-    if(foundPowerSupply)
+    if (foundPowerSupply)
     {
         QList<Node*> nodes;
 
         //Beginn der rekursiven Suche nach RowPieces
         bool analysisHasEndedSuccessful = true;
-        for(ComponentPort componentPort : startOfSearchComponentsPorts)
+        for (ComponentPort componentPort : startOfSearchComponentsPorts)
         {
-            qDebug() << "BeginnComponent" << componentPort.getComponent()->getName() << "Port" << componentPort.getPort();
+            qDebug() << "BeginnComponent" << componentPort.getComponent()->getName() << "Port"
+                     << componentPort.getPort();
             pathAnalysis(componentPort, analysisHasEndedSuccessful, &rowPieces, &nodes);
         }
 
@@ -49,17 +57,17 @@ QList<RowPiece> PuzzleCalculator::findRowPieces()
             //test
             for (RowPiece rp : rowPieces)
             {
-                qDebug() << "Widerstand RowPiece" <<rp.getResistanceValue();
+                qDebug() << "Widerstand RowPiece" << rp.getResistanceValue() << " von " << rp.getNodeOne()->getId()
+                         << " nach " << rp.getNodeTwo()->getId();
             }
-            for(Node* n : nodes)
+            for (Node* n : nodes)
             {
                 QString comps = "";
-                for(ComponentPort cp : n->getComponentPorts())
+                for (ComponentPort cp : n->getComponentPorts())
                 {
                     comps += (cp.getComponent()->getName() + " ");
                 }
-                qDebug() << "Node " <<
-                            comps;
+                qDebug() << "Node " << n->getId() << comps;
             }
         }
     }
@@ -128,7 +136,7 @@ QList<ComponentPort> PuzzleCalculator::findFirstComponentPort()
     for (Connection* connection : _connections)
     {
         if (Component::ComponentType::PowerSupply ==
-                connection->getComponentPortOne().getComponent()->getComponentType())
+            connection->getComponentPortOne().getComponent()->getComponentType())
         {
             startOfSearch = connection->getComponentPortOne();
             break;
@@ -166,12 +174,14 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
          * Finde alle ComponentPorts, die mit dem gegenüberliegenden Port von actualComponentPort verbunden sind.
          * So kann zwischen einer Reihen- und Parallelschaltung unterschieden werden.
          */
-    QList<ComponentPort> neighbourComponentPorts = searchForNeighbours(
-                actualComponentPort.getOppisiteComponentPort());
-    Node* startNode = getOrCeateNode(actualComponentPort, neighbourComponentPorts, nodeIsKnown, knownNodes);
+    QList<ComponentPort> neighbourComponentPortsOfStartNode = searchForNeighbours(actualComponentPort);
+    Node* startNode = getOrCeateNode(actualComponentPort, neighbourComponentPortsOfStartNode, nodeIsKnown, knownNodes);
+
+    QList<ComponentPort> neighbourComponentPorts = searchForNeighbours(actualComponentPort.getOppisiteComponentPort());
+
     //der aktuelle ComponentPort muss gedreht werden, um den Endknoten bestimmen zu können
     actualComponentPort.invertPort();
-    bool neighbourComponentPortsContainPowerSupply = false;
+    bool neighbourComponentPortsContainPowerSupply = isPowerSupplyinComponentPortList(neighbourComponentPorts);
 
     /*
          * Solange es eine Reihenschaltung ist und man nicht bei der Spannungsquelle wieder angekommen ist,
@@ -184,9 +194,12 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
         resistanceValueOfRowPiece += neighbourComponentPorts.last().getComponent()->getValue();
         //der nächste Widerstand wird betrachtet, damit Endknoten bestimmt werden kann
         actualComponentPort = neighbourComponentPorts.last().getOppisiteComponentPort();
+        qDebug() << "actualComponentPort" << actualComponentPort.getComponent()->getName()
+                 << actualComponentPort.getPort();
         rowPiecesComponents.append(actualComponentPort.getComponent());
         //die mit dem nächsten Widerstand verbundenen Widerstände werden gesucht
         neighbourComponentPorts = searchForNeighbours(actualComponentPort);
+        neighbourComponentPortsContainPowerSupply = isPowerSupplyinComponentPortList(neighbourComponentPorts);
     }
 
     if (0 == neighbourComponentPorts.count())
@@ -206,17 +219,19 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
 
         //Abbruchbedienung das gefundene RowPieces, darf nicht bekannt sein
         bool isAlreadyKnownRowPiece = rowPieces->contains(rowPiece);
-        if(isAlreadyKnownRowPiece)
+        if (isAlreadyKnownRowPiece)
         {
-            qDebug() << "Abbruchbedingus" << actualComponentPort.getComponent()->getName();
+            qDebug() << "Abbruchbedingus" << actualComponentPort.getComponent()->getName() << startNode->getId()
+                     << rowPiecesComponents.first()->getName();
         }
-        if(!isAlreadyKnownRowPiece)
+        if (!isAlreadyKnownRowPiece)
         {
             rowPieces->append(rowPiece);
 
             //Überprüfung: ist eine Spannungsquelle unter den verbundenen Komponenten (Abbruchbedingung)
             bool neighbourComponentPortsContainPowerSupply = isPowerSupplyinComponentPortList(neighbourComponentPorts);
-            qDebug() << "found power supply " << neighbourComponentPortsContainPowerSupply << neighbourComponentPorts.count();
+            qDebug() << "found power supply " << neighbourComponentPortsContainPowerSupply
+                     << neighbourComponentPorts.count();
 
             //Wenn die PowerSupply gefunden wurde, wird die Rekursion beendet
             if (!neighbourComponentPortsContainPowerSupply)
@@ -238,15 +253,10 @@ Node* PuzzleCalculator::getOrCeateNode(ComponentPort componentPortForNewNode,
 {
     for (Node* node : *knownNodes)
     {
-        bool thisNodeIsKnown = node->getComponentPorts().contains(componentPortForNewNode);
-        if (thisNodeIsKnown)
+        nodeIsKnown = node->getComponentPorts().contains(componentPortForNewNode);
+        if (nodeIsKnown)
         {
-            nodeIsKnown = true;
             return node;
-        }
-        else
-        {
-            nodeIsKnown = false;
         }
     }
 
@@ -277,4 +287,78 @@ bool PuzzleCalculator::isPowerSupplyinComponentPortList(const QList<ComponentPor
         }
     }
     return false;
+}
+
+double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces)
+{
+    while (1 < rowPieces.count())
+    {
+        for (RowPiece rp : rowPieces)
+        {
+            QString string = "";
+            for (Component* cp : rp.getComponents())
+            {
+                string += cp->getName();
+            }
+            qDebug() << "RowPiece" << string;
+        }
+
+        bool changedSomething = false;
+        for (RowPiece& rowPieceA : rowPieces)
+        {
+            //Widerstand kurzgeschlossen
+            if(rowPieceA.getNodeOne() == rowPieceA.getNodeTwo())
+            {
+                rowPieces.removeOne(rowPieceA);
+                break;
+            }
+
+            for (RowPiece& rowPieceB : rowPieces)
+            {
+                if (rowPieceA != rowPieceB && rowPieceA.hasEqualNodesOnBothSides(rowPieceB))
+                {
+                    rowPieceA.parallelMerge(rowPieceB);
+                    rowPieces.removeOne(rowPieceB);
+                    changedSomething = true;
+                    break;
+                }
+                else if (rowPieceA != rowPieceB && rowPieceA.hasOneEqualNode(rowPieceB))
+                {
+                    Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
+                    if (equalNode != nullptr)
+                    {
+                        if (2 == countNodesInRowPieces(equalNode, rowPieces))
+                        {
+                            rowPieceA.rowMerge(rowPieceB);
+                            rowPieces.removeOne(rowPieceB);
+                            changedSomething = true;
+                            break;
+                        }
+                        else if (1 == countNodesInRowPieces(equalNode, rowPieces))
+                        {
+                            qDebug() << "nur ein RowPiece mit bestimmtem Node";
+                        }
+                    }
+                }
+            }
+            if (changedSomething)
+            {
+                break;
+            }
+        }
+    }
+    return rowPieces.last().getResistanceValue();
+}
+
+int PuzzleCalculator::countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces)
+{
+    int counter = 0;
+    for (RowPiece rowPiece : listOfRowPieces)
+    {
+        if (rowPiece.hasNode(nodeToCount))
+        {
+            counter++;
+        }
+    }
+    return counter;
 }

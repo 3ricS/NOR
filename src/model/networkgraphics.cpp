@@ -194,7 +194,6 @@ void NetworkGraphics::load(void)
     emit resistanceValueChanged();
     if(_componentList.count() != 0)
     {
-        qDebug() << "List != 0";
         emit newNetworkIsLoad();
     }
 }
@@ -662,8 +661,7 @@ void NetworkGraphics::updateCalc(void)
     _calculator.setLists(_connectionList, _componentList);
     _calculator.calculate();
 
-    _puzzleCalculator.setLists(_connectionList, _componentList);
-    _puzzleCalculator.calculate();
+    _resistanceValue = _puzzleCalculator.calculate(_connectionList, _componentList);
 
     emit resistanceValueChanged();
 }

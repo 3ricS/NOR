@@ -16,3 +16,5 @@ Laden nicht 100%
 - selected Connection in Punkten markieren
 - strg + mausrad funktioniert nicht (vielleicht komplett entfernen?)
 - NetworkGraphics hat 600 Zeilen
+- Widerstandswert als double
+- rotieren funktioniert nicht

@@ -15,15 +15,16 @@ class Component;
 class PuzzleCalculator
 {
 public:
-    PuzzleCalculator(QList<Connection*> connections, QList<Component*> components);
+    PuzzleCalculator();
 
-    void calculate();
+    double calculate(QList<Connection*> connections, QList<Component*> components);
 
     //setter
     void setLists(QList<Connection*> connections, QList<Component*> components);
 
 private:
     QList<RowPiece> findRowPieces();
+    double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces);
     void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful,
                       QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
 
@@ -38,6 +39,8 @@ private:
     Node* getOrCeateNode(ComponentPort componentPortForNewNode, QList<ComponentPort> connectedComponentPorts,
                          bool& nodeIsKnown, QList<Node*>* knownNodes);
     bool isPowerSupplyinComponentPortList(QList<ComponentPort> list);
+
+    int countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
 
 
     QList<Component*> _components;

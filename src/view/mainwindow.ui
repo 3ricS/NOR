@@ -57,7 +57,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
         <property name="spacing">
          <number>7</number>
         </property>
@@ -253,30 +253,10 @@
         <item>
          <widget class="QLabel" name="CalculatedValue">
           <property name="text">
-           <string/>
+           <string>0 Ω</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="Calculate">
-          <property name="text">
-           <string>Berechnen</string>
           </property>
          </widget>
         </item>
@@ -353,7 +333,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -377,8 +357,8 @@
     </property>
    </widget>
    <addaction name="menuDatei"/>
-   <addaction name="menuAnsicht"/>
    <addaction name="menuBearbeiten"/>
+   <addaction name="menuAnsicht"/>
    <addaction name="menuExtras"/>
   </widget>
  </widget>

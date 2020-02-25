@@ -21,7 +21,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->Resistor, SIGNAL(released()), this, SLOT(setResistorMode()));
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
-    connect(_ui->Calculate, SIGNAL(released()), this, SLOT(setCalculation()));
+    //connect(_ui->Calculate, SIGNAL(released()), this, SLOT(setCalculation()));
     connect(_ui->TextButton, SIGNAL(released()), this, SLOT(setDescriptionMode()));
     connect(_new, SIGNAL(triggered()), this, SLOT(setNewFile()));
     connect(_saveAs, SIGNAL(triggered()), this, SLOT(setSaveAsFile()));
@@ -333,7 +333,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateResistanceValue(void)
 {
-    _ui->CalculatedValue->setText(QString::number(_model->getResistanceValue()) + "Ω");
+    _ui->CalculatedValue->setText(QString::number(_model->getResistanceValue()) + " Ω");
 }
 
 void MainWindow::deleteItem(void)

@@ -14,8 +14,24 @@ public:
     {
     }
 
-    int getId(void) const {return _id;}
-    QList<ComponentPort> getComponentPorts() {return _componentPorts;}
+    bool operator==(const Node& rhs)
+    {
+        return _id == rhs._id;
+    }
+
+    bool operator!=(const Node& rhs)
+    {
+        return !(operator==(rhs));
+    }
+
+    int getId(void) const
+    { return _id; }
+
+    QList<ComponentPort> getComponentPorts()
+    { return _componentPorts; }
+
+    int getComponentPortCount()
+    { return _componentPorts.count(); }
 
 private:
     int _id;

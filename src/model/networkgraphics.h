@@ -3,7 +3,6 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-#include <QDebug>
 #include <QMessageBox>
 #include <QMouseEvent>
 
@@ -60,7 +59,7 @@ public:
     QList<Connection*> getConnections(void) {return _connectionList;}
     QList<DescriptionField*> getDescriptions(void) {return _descriptions;}
     QString getFileName(void);
-    double getResistanceValue(void) {return _calculator.getResistanceValue();}
+    double getResistanceValue(void) {return _resistanceValue;}
 
 signals:
     void resistanceValueChanged(void);
@@ -82,9 +81,10 @@ private:
     QGraphicsScene*          _graphics = nullptr;
     FileManager*             _manager = nullptr;
     Calculator               _calculator = Calculator(_connectionList, _componentList);
-    PuzzleCalculator         _puzzleCalculator = PuzzleCalculator(_connectionList, _componentList);
+    PuzzleCalculator         _puzzleCalculator = PuzzleCalculator();
 
     bool _isLoading = false;
+    double _resistanceValue;
 };
 
 #endif // NETWORKGRAPHICS_H

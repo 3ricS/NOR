@@ -148,9 +148,9 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
         _connectionStartComponentPort = _model->getComponentPortAtPosition(scenePosition);
         Component* tempComponentForConnection = _model->getComponentAtPosition(gridPosition);
         _tempComponentListForConnections = _model->getComponents();
-        qDebug() << _tempComponentListForConnections;
+        //qDebug() << _tempComponentListForConnections;
         _tempComponentListForConnections.removeOne(tempComponentForConnection);
-        qDebug() << _tempComponentListForConnections;
+        //qDebug() << _tempComponentListForConnections;
 
 
     }
@@ -506,7 +506,7 @@ QPointF NetworkView::findScrollPosition()
         {
             if(c->getComponentType() == Component::Resistor)
             {
-               qDebug() << c->getName();
+                //qDebug() << c->getName();
                 averageX += c->getXPosition();
                 averageY += c->getYPosition();
 

@@ -31,6 +31,11 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     _diffY = _endPoint.y() - _startPoint.y();
 
     horizontalRoutine();
+
+    if(_isSelected)
+    {
+        paintHitbox(painter);
+    }
 }
 
 /*!
@@ -44,6 +49,11 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
 bool Connection::hasComponent(Component* searchedComponent)
 {
     return _componentPortOne.getComponent() == searchedComponent || (_componentPortTwo.getComponent() == searchedComponent);
+}
+
+void Connection::set_isSelected(bool isSelected)
+{
+     _isSelected = isSelected;
 }
 
 /*!
@@ -101,6 +111,11 @@ void Connection::changePortOfComponentPortWithComponent(Component* componentOfCo
     {
         _componentPortTwo.invertPort();
     }
+}
+
+void Connection::paintHitbox(QPainter *painter)
+{
+
 }
 
 bool Connection::isThereAComponentOrADescription(int x, int y)

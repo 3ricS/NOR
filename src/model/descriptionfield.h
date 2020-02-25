@@ -24,6 +24,7 @@ public:
     int getId(void) {return _id;}
     int getXPos(void) {return _xPosition;}
     int getYPos(void) {return _yPosition;}
+    bool isSelected(void) const { return  _isSelected;}
 
     //Setter
     void setText(const QString text) {_text = text;}

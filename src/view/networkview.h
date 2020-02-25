@@ -39,7 +39,6 @@ private:
 
     QPointF scenePositionToGrid(QPointF scenePosition);
     void gridDisappears(void);
-    void highlightSelectedRect(QPointF gridPosition);
     void highlightRect(QPointF scenePosition, QColor _highlightColor);
     void removeHighlightSelectedRect(void);
     void rotateComponent(QPointF gridPosition, QPointF scenePosition);
@@ -61,9 +60,6 @@ private:
     QList<Component*>  _tempComponentListForConnections;
     ComponentPort*    _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
     QGraphicsItem*    _previousHighlightedRect = nullptr;
-    Component*        _selectedComponent = nullptr;
-    DescriptionField* _selectedDescription = nullptr;
-    Connection*       _selectedConnection = nullptr;
     //TODO: _selectedComponentToMove durch _selectedComponent ersetzen
     Component*        _selectedComponentToMove = nullptr;
     DescriptionField* _selectedDescriptionToMove = nullptr;

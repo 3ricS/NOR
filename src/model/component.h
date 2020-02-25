@@ -42,6 +42,7 @@ public:
     QString getName(void) const {return _name;}
     int getValue(void) const {return _value;}
     bool isVertical(void) const {return _isVertical;}
+    bool isSelected(void) const {return  _isSelected;}
 
     Component::Port getPort(QPointF position) const;
     QPointF getPortPosition(Port port) const;

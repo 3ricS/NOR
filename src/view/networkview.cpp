@@ -94,23 +94,15 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
         if (hasFoundComponent)
         {
-            _selectedComponent = foundComponent;
-            highlightSelectedRect(gridPosition);
-            _selectedDescription = nullptr;
-            _selectedConnection = nullptr;
+            foundComponent->set_isSelected(true);
         }
         else if(hasFoundDescription)
         {
-            _selectedDescription = foundDescription;
-            highlightSelectedRect(gridPosition);
-            _selectedComponent = nullptr;
-            _selectedConnection = nullptr;
+            foundDescription->set_isSelected(true);
         }
         else if (hasFoundConnection)
         {
-            _selectedConnection = foundConnection;
-            _selectedComponent = nullptr;
-            _selectedDescription = nullptr;
+
         }
     }
         break;
@@ -295,8 +287,21 @@ void NetworkView::mouseDoubleClickEvent(QMouseEvent* event)
     {
         QPointF gridPosition = scenePositionToGrid(scenePosition);
 
-        _selectedComponent = _model->getComponentAtPosition(gridPosition);
-        _selectedDescription = _model->getDescriptionAtPosition(gridPosition);
+        for(Component* component : _model->getComponents())
+        {
+            if(component->isSelected())
+            {
+                _model->getComponentAtPosition(gridPosition);
+            }
+        }
+
+        for(DescriptionField* description : _model->getDescriptions())
+        {
+            if(description->isSelected())
+            {
+                _model->getDescriptionAtPosition(gridPosition);
+            }
+        }
             //TODO: emit foundComponent
         editNetworkOrDescription();
     }
@@ -340,52 +345,6 @@ void NetworkView::gridDisappears(void)
     }
 }
 
-void NetworkView::highlightSelectedRect(QPointF gridPosition)
-{
-    for(Component* component : _model->getComponents())
-    {
-        component->set_isSelected(false);
-    }
-
-    for(DescriptionField* descriptionfield : _model->getDescriptions())
-    {
-        descriptionfield->set_isSelected(false);
-    }
-
-    if(_model->isThereAComponentOrADescription(gridPosition))
-    {
-        if(_model->getDescriptionAtPosition(gridPosition) != nullptr)
-        {
-            _model->getDescriptionAtPosition(gridPosition)->set_isSelected(true);
-        }
-        else
-        {
-            _model->getComponentAtPosition(gridPosition)->set_isSelected(true);
-        }
-        _model->update();
-    }
-    else
-    {
-        removeHighlightSelectedRect();
-    }
-    /* int positionX;
-    int positionY;
-
-    //TODO: das Markieren des selectedComponent gehört nicht in die Methode für das Highlighting des Bereichs
-    _selectedComponent = _model->getComponentAtPosition(gridPosition);
-
-    removeHighlightSelectedRect();
-
-    QColor highlightColor = QColor(255, 0, 0, 55);
-    positionX = gridPosition.toPoint().x();
-    positionY = gridPosition.toPoint().y();
-    QGraphicsItem* highlightSelectedRect = _model->addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen,
-                                                           highlightColor);
-
-    _selectedRect = highlightSelectedRect;
-    _model->update();*/
-}
-
 void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
 {
     QPointF gridPosition = scenePositionToGrid(scenePosition);
@@ -403,51 +362,46 @@ void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
 
 void NetworkView::deleteSelectedItem(void)
 {
+    for(Component* component : _model->getComponents())
+    {
+        if(component->isSelected())
+        {
+
+            _model->deleteComponent(component);
+        }
+    }
+
+    for(DescriptionField* description : _model->getDescriptions())
+    {
+        if(description->isSelected())
+        {
+            _model->deleteDescription(description);
+        }
+    }
     removeHighlightSelectedRect();
-
-    if(_selectedComponent != nullptr)
-    {
-        _model->deleteComponent(_selectedComponent);
-
-        if (_copiedComponent == _selectedComponent)
-        {
-            _copiedComponent = nullptr;
-        }
-
-        _selectedComponent = nullptr;
-    }
-    else if(_selectedDescription != nullptr)
-    {
-        _model->deleteDescription(_selectedDescription);
-
-        if(_copiedDescription == _selectedDescription)
-        {
-            _copiedDescription = nullptr;
-        }
-        _selectedDescription = nullptr;
-    }
-    else if (_selectedConnection != nullptr)
-    {
-        _model->deleteConnection(_selectedConnection);
-        _selectedConnection = nullptr;
-    }
 }
 
 void NetworkView::editNetworkOrDescription()
 {
-    if (_selectedComponent != nullptr)
+    for(Component* component : _model->getComponents())
     {
-        EditView* editView = new EditView(_selectedComponent, _model, false, this);
-        editView->show();
+        if(component->isSelected())
+        {
+            EditView* editView = new EditView(component, _model, false, this);
+            editView->show();
+        }
     }
 
-    if(_selectedDescription != nullptr)
+    for(DescriptionField* description : _model->getDescriptions())
     {
-        bool ok = false;
-        QString text = QInputDialog::getText(this, "Textfeld bearbeiten", "Text eingeben:",QLineEdit::EchoMode::Normal, _selectedDescription->getText(), &ok, Qt::WindowCloseButtonHint);
-        if(ok)
+        if(description->isSelected())
         {
-            _selectedDescription->setText(text);
+            bool ok = false;
+            QString text = QInputDialog::getText(this, "Textfeld bearbeiten", "Text eingeben:",QLineEdit::EchoMode::Normal, description->getText(), &ok, Qt::WindowCloseButtonHint);
+            if(ok)
+            {
+                description->setText(text);
+            }
         }
     }
 }
@@ -471,12 +425,6 @@ void NetworkView::removeHighlightSelectedRect(void)
     }
 
     _model->update();
-    /*if (nullptr != _selectedRect)
-    {
-        _model->removeItem(_selectedRect);
-        delete _selectedRect;
-        _selectedRect = nullptr;
-    }*/
 }
 
 void NetworkView::rotateComponent(QPointF gridPosition, QPointF scenePosition)
@@ -565,36 +513,49 @@ void NetworkView::rotateComponentByShortcut()
 
 void NetworkView::duplicate(void)
 {
-    // Verschiebt so lange nach rechts, bis er auf eine Grid-Position gestoßen ist, die unbelegt ist
-    if (_selectedComponent != nullptr)
+    for(Component* component : _model->getComponents())
     {
-        int xWayToTheRight = 100;
-        if(lookingForFreeSpaceToDuplicate(_selectedComponent->getXPosition(), _selectedComponent->getYPosition(), xWayToTheRight))
-            _model->duplicateComponent(_selectedComponent, _selectedComponent->getXPosition() + xWayToTheRight,
-                                       _selectedComponent->getYPosition());
-    }
-    else if(_selectedDescription != nullptr)
-    {
-        int xWayToTheRight = 100;
-        if(lookingForFreeSpaceToDuplicate(_selectedDescription->getXPos(), _selectedDescription->getYPos(), xWayToTheRight))
+        if(component->isSelected())
         {
-            _model->duplicateDescription(_selectedDescription, _selectedDescription->getXPos() + xWayToTheRight,
-                                         _selectedDescription->getYPos());
+            int xWayToTheRight = 100;
+            if(lookingForFreeSpaceToDuplicate(component->getXPosition(), component->getYPosition(), xWayToTheRight))
+                _model->duplicateComponent(component, component->getXPosition() + xWayToTheRight,
+                                           component->getYPosition());
+        }
+    }
+
+    for(DescriptionField* description : _model->getDescriptions())
+    {
+        if(description->isSelected())
+        {
+            int xWayToTheRight = 100;
+            if(lookingForFreeSpaceToDuplicate(description->getXPos(), description->getYPos(), xWayToTheRight))
+            {
+                _model->duplicateDescription(description, description->getXPos() + xWayToTheRight,
+                                             description->getYPos());
+            }
         }
     }
 }
 
 void NetworkView::copy(void)
 {
-    if(_selectedComponent != nullptr)
+    for(Component* component : _model->getComponents())
     {
-        _copiedComponent = _selectedComponent;
-        _copiedDescription = nullptr;
+        if(component->isSelected())
+        {
+            _copiedComponent = component;
+            _copiedDescription = nullptr;
+        }
     }
-    else if(_selectedDescription != nullptr)
+
+    for(DescriptionField* description : _model->getDescriptions())
     {
-        _copiedDescription = _selectedDescription;
-        _copiedComponent = nullptr;
+        if(description->isSelected())
+        {
+            _copiedDescription = description;
+            _copiedComponent = nullptr;
+        }
     }
 }
 
@@ -662,9 +623,21 @@ void NetworkView::keyPressEvent(QKeyEvent* event)
         gridDisappears();
 
         //Alle selected Objekte auf nullptr setzten, sonst ungewolltes Löschen
-        _selectedComponent = nullptr;
-        _selectedDescription = nullptr;
-        _selectedConnection = nullptr;
+        for(Component* component : _model->getComponents())
+        {
+            if(component->isSelected())
+            {
+                component->set_isSelected(false);
+            }
+        }
+
+        for(DescriptionField* description : _model->getDescriptions())
+        {
+            if(description->isSelected())
+            {
+                description->set_isSelected(false);
+            }
+        }
     }
     QGraphicsView::keyPressEvent(event);
 }

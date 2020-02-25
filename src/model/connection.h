@@ -37,6 +37,7 @@ public:
     void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);
 
     //Methoden
+    void paintHitbox(QPainter* painter);
     bool isThereAComponentOrADescription(int x, int y);
     Component* getComponentAtPosition(int x, int y);
     DescriptionField* getDescriptionAtPosition(int x, int y);
@@ -45,6 +46,9 @@ public:
     ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}
     bool hasComponent(Component* searchedComponent);
     static constexpr int _circleRadius = 5;
+
+    void set_isSelected(bool isSelected);
+    bool isSelected(void) const { return  _isSelected;}
 
 private:
     void horizontalRoutine(void);
@@ -68,6 +72,8 @@ private:
 
     NetworkGraphics* _model = nullptr;
     QList<QRect*> _connectionHitbox;
+
+    bool _isSelected = false;
 };
 
 #endif // CONNECTION_H

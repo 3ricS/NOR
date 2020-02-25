@@ -499,6 +499,7 @@ void NetworkGraphics::deleteConnection(Connection* connection)
         _connectionList.removeOne(connection);
         delete connection;
     }
+    updateCalc();
 }
 
 /*!

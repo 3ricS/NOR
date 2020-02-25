@@ -22,11 +22,11 @@ void ComponentPort::invertPort(void)
 }
 
 /*!
- * \brief   Erzeugt ComponentPort des mit invertiertem Port.
+ * \brief   Erzeugt ComponentPort mit invertiertem Port.
  *
  * \return  Gibt einen ComponentPort mit gleichem Zeiger auf einen Component, aber dem invertiertem Port zurück.
  */
-ComponentPort ComponentPort::getOppisiteComponentPort()
+ComponentPort ComponentPort::getOppisiteComponentPort(void)
 {
     return ComponentPort(_component, getOppisitePort());
 }

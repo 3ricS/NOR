@@ -3,6 +3,7 @@
  *
  * \brief   Ein DescriptionField ist ein Textfeld um Notizen und Information zum Netzwerk an die Schaltung zu schreiben.
  *
+ * Ein Textfeld besitz die Größe einse Gitters, in dem ein ausgewählter Text stehen kann.
  */
 #ifndef DESCRIPTIONFIELD_H
 #define DESCRIPTIONFIELD_H

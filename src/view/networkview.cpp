@@ -360,6 +360,11 @@ void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
     }
 }
 
+/*!
+ * \brief Entfernt ein ausgewähltes Element aus der Zeichenebene.
+ *
+ * Anhand des Types des Elements, werden diese entsprechend enfernt.
+ */
 void NetworkView::deleteSelectedItem(void)
 {
     for(Component* component : _model->getComponents())
@@ -391,6 +396,11 @@ void NetworkView::deleteSelectedItem(void)
     removeHighlightSelectedRect();
 }
 
+/*!
+ * \brief Bearbeiten des Netzwerkes oder eines Textfeldes.
+ *
+ *
+ */
 void NetworkView::editNetworkOrDescription()
 {
     for(Component* component : _model->getComponents())
@@ -526,6 +536,11 @@ void NetworkView::rotateComponentByShortcut()
     rotateComponent(gridPosition, _actualMoveScenePosition);
 }
 
+/*!
+ * \brief Dupliziert eine Komponente.
+ *
+ * Die ausgewählte Komponen wird in ein freies Feld nach rechts dupliziert.
+ */
 void NetworkView::duplicate(void)
 {
     for(Component* component : _model->getComponents())
@@ -553,6 +568,11 @@ void NetworkView::duplicate(void)
     }
 }
 
+/*!
+ * \brief Kopiert die ausgewählte Komponente oder Textfeld.
+ *
+ * Die ausgewählte Komponente oder Textfeld wird kopiert.
+ */
 void NetworkView::copy(void)
 {
     for(Component* component : _model->getComponents())
@@ -574,6 +594,11 @@ void NetworkView::copy(void)
     }
 }
 
+/*!
+ * \brief Fügt eine Komponente oder ein Textfeld ein.
+ *
+ * Wenn sich an der ausgewählten neuen Position keine Komponente oder Textfeld befindet, wird dieses dort eingefügt.
+ */
 void NetworkView::paste(void)
 {
     if (!_model->isThereAComponentOrADescription(_lastClickedPositionGrid))

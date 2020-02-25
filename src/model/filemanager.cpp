@@ -6,14 +6,14 @@ FileManager::FileManager(NetworkGraphics *model) :
 }
 
 /*!
-* \brief Speichert das Netzwerk ab.
-*
-* Die Methode speichert die vorhandene Schaltung ab.
-* Zu Beginn wird geprüft ob das Netzwerk bereits abgespeichert wurde.
-* Ist noch keine Datei vorher erstellt worden, wird diese zuerst neu erstellt.
-* Dazu wird mit Hilfe von QStandardPaths der Fad angegeben, wo die Datei abgelegt werden soll.
-* Mit QFileDialog wird der Name der Datei eingegeben.
-*/
+ * \brief Speichert das Netzwerk ab.
+ *
+ * Die Methode speichert die vorhandene Schaltung ab.
+ * Zu Beginn wird geprüft ob das Netzwerk bereits abgespeichert wurde.
+ * Ist noch keine Datei vorher erstellt worden, wird diese zuerst neu erstellt.
+ * Dazu wird mit Hilfe von QStandardPaths der Fad angegeben, wo die Datei abgelegt werden soll.
+ * Mit QFileDialog wird der Name der Datei eingegeben.
+ */
 void FileManager::save(void)
 {
     if(!_isSaved)
@@ -26,12 +26,12 @@ void FileManager::save(void)
 }
 
 /*!
-* \brief Erzeugt eine neue Jsondatei, in der das Netzwerk abgespeichert wird.
-*
-* Es wird mit Hilfe von QStandardPaths der Fad angegeben, wo die Datei abgelegt werden soll.
-* Mit QFileDialog wird der Name der Datei eingegeben.
-* Darauf folgt das speichern.
-*/
+ * \brief Erzeugt eine neue Jsondatei, in der das Netzwerk abgespeichert wird.
+ *
+ * Es wird mit Hilfe von QStandardPaths der Fad angegeben, wo die Datei abgelegt werden soll.
+ * Mit QFileDialog wird der Name der Datei eingegeben.
+ * Darauf folgt das speichern.
+ */
 void FileManager::saveAs(void)
 {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
@@ -40,14 +40,19 @@ void FileManager::saveAs(void)
     _isSaved = saveData();
 }
 
-//Filepath wird gesplittet beim Slash und das letzte Element ist der eigentliche Name
+/*!
+ * \brief Bekommt den Dateinamen
+ *
+ * \return Gibt den Dateinamen zurück.
+ *
+ * Sucht nach dem Dateinamen der aktuell ausgewählten Datei.
+ * Der Filepath wird beim Slash gesplittet und das letzte Element ist der eigentliche Name.
+ */
 QString FileManager::getFileName(void)
 {
     QStringList list = _actualFile.fileName().split('/');
     return list.last();
 }
-
-//TODO: Doku fertigstellen in filemanager und überprüfen.
 
 bool FileManager::saveData(void)
 {
@@ -149,14 +154,14 @@ Component::Port FileManager::toPort(int componentPort)
 }
 
 /*!
-* \brief Lädt ein Netzwerk aus einer vorhandenen Jsondatei.
-*
-* Es wird mit Hilfe von QStandardPaths der Fad angegeben, aus welcher Datei geladen werden soll.
-* Mit QFileDialog wird .
-* Darauf folgt ob die Datei geöffnet wurde und ob in dieser Daten enthalten sind.
-* Zuerst werden die Components geladen.
-* Dann folgen die Connectionss, da dies die Connections zugreifen.
-*/
+ * \brief Lädt ein Netzwerk aus einer vorhandenen Jsondatei.
+ *
+ * Es wird mit Hilfe von QStandardPaths der Fad angegeben, aus welcher Datei geladen werden soll.
+ * Mit QFileDialog wird .
+ * Darauf folgt ob die Datei geöffnet wurde und ob in dieser Daten enthalten sind.
+ * Zuerst werden die Components geladen.
+ * Dann folgen die Connectionss, da dies die Connections zugreifen.
+ */
 void FileManager::load(void)
 {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));

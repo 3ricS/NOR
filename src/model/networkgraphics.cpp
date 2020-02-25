@@ -505,9 +505,9 @@ void NetworkGraphics::deleteConnection(Connection* connection)
 /*!
  * \brief Verschiebt eine Komponente im Netzwerk.
  *
- * \param[in]    componentToMove ist die zu verschiebende Komponente
- * \param[in]    descriptionToMove ist die zu verschiebende Beschreibung
- * \param[in]    gridPosition ist die Position, an die die Komponente verschoben werden soll
+ * \param[in]    componentToMove    ist die zu verschiebende Komponente
+ * \param[in]    descriptionToMove  ist die zu verschiebende Beschreibung
+ * \param[in]    gridPosition       ist die Position, an die die Komponente verschoben werden soll
  *
  * Es wird zuerst geprüft ob sich an der neuen Gitterposition bereits eine Komponente oder ein Textfeld befindet.
  * Befindet sich an der Position nichts, wird die ausgewählte Komponente an die neu Position verschoben.
@@ -603,6 +603,7 @@ void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
  *
  * \param[in]    componentToTurn ist die zu drehende Komponente
  *
+ * Anhand der Ausrichtung der Komponente, wird die neue Ausrichtung nach einmaligem rechtsrum drehen gesetzt.
  */
 void NetworkGraphics::turnComponentRight(Component* componentToTurn)
 {
@@ -652,6 +653,9 @@ void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Comp
 
 /*!
  * \brief Aktualisiert den Widerstandswert.
+ *
+ * Die aktuellen _connectionList und _componentList werden dem Calculator übergeben.
+ * Anschließend wird der aktualisierte Widerstandswert ausgegeben.
  */
 void NetworkGraphics::updateCalc(void)
 {

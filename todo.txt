@@ -1,11 +1,3 @@
-Moritz
-
-Leonel
-
-Sören
-
-Eric
-
 
 Doku: wenn Fehler oder Mängel auffallen bitte bescheid geben
 
@@ -14,19 +6,13 @@ ___________________________________________________________________
 Model
 UNDO (oben links) QUNDOSTACK
 Linien redraw behandeln, verschwinden teils
-Linien einzeln entfernen
-dauerhaftes Berechnen der Widerstände
 Multiselect der Bauteile
+Laden nicht 100% 
 
 
-View
-//-Bau einen Widgets in dem rechten ListView (PropertyView oder so vlt?)
-
-- strg + Mausrad = zoom
 - Verbindungen rechtwinklig zeichnen (Leonel: angefangen, wird weiter dran gearbeitet. Teils schon funktionsfähig. Doku schreibe ich selber. Will ich euch nicht zumuten)
 - einzelne Connections löschen
 
-- keine doppelten Verbindungen
 - selected Connection in Punkten markieren
-- strg + mausrad funktioniert nicht
+- strg + mausrad funktioniert nicht (vielleicht komplett entfernen?)
 - NetworkGraphics hat 600 Zeilen

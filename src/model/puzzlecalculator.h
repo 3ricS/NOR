@@ -34,7 +34,7 @@ private:
                                               QList<ComponentPort>& foundComponentPorts);
     QList<ComponentPort> searchForNeighbours(ComponentPort componentPortForSearch);
 
-    ComponentPort findFirstComponentPort();
+    QList<ComponentPort> findFirstComponentPort();
     Node* getOrCeateNode(ComponentPort componentPortForNewNode, QList<ComponentPort> connectedComponentPorts,
                          bool& nodeIsKnown, QList<Node*>* knownNodes);
     bool isPowerSupplyinComponentPortList(QList<ComponentPort> list);

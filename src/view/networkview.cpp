@@ -102,7 +102,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         }
         else if (hasFoundConnection)
         {
-
+            foundConnection->set_isSelected(true);
         }
     }
         break;
@@ -368,6 +368,7 @@ void NetworkView::deleteSelectedItem(void)
         {
 
             _model->deleteComponent(component);
+            _copiedComponent = nullptr;
         }
     }
 
@@ -376,6 +377,15 @@ void NetworkView::deleteSelectedItem(void)
         if(description->isSelected())
         {
             _model->deleteDescription(description);
+            _copiedDescription = nullptr;
+        }
+    }
+
+    for(Connection* connection : _model->getConnections())
+    {
+        if(connection->isSelected())
+        {
+            _model->deleteConnection(connection);
         }
     }
     removeHighlightSelectedRect();
@@ -422,6 +432,11 @@ void NetworkView::removeHighlightSelectedRect(void)
     for(DescriptionField* descriptionfield : _model->getDescriptions())
     {
         descriptionfield->set_isSelected(false);
+    }
+
+    for(Connection* connection : _model->getConnections())
+    {
+            connection->set_isSelected(false);
     }
 
     _model->update();
@@ -636,6 +651,14 @@ void NetworkView::keyPressEvent(QKeyEvent* event)
             if(description->isSelected())
             {
                 description->set_isSelected(false);
+            }
+        }
+
+        for(Connection* connection : _model->getConnections())
+        {
+            if(connection->isSelected())
+            {
+                connection->set_isSelected(false);
             }
         }
     }

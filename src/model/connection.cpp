@@ -115,7 +115,15 @@ void Connection::changePortOfComponentPortWithComponent(Component* componentOfCo
 
 void Connection::paintHitbox(QPainter *painter)
 {
-
+    for(QRect* hitbox : _connectionHitbox)
+    {
+        QBrush brush;
+        brush.setColor(QColor(255, 0, 0, 5));
+        brush.setStyle(Qt::BrushStyle::SolidPattern);
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(brush);
+        painter->drawRect(hitbox->x(), hitbox->y(), hitbox->width(), hitbox->height());
+    }
 }
 
 bool Connection::isThereAComponentOrADescription(int x, int y)

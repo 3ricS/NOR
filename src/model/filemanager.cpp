@@ -242,7 +242,7 @@ void FileManager::loadConnection(QJsonArray array)
                 Component::Port portB = toPort(obj.value("portB").toInt());
                 ComponentPort componentPortB(componentB, portB);
 
-                _model->addConnection(componentPortA, componentPortB);
+                _model->addConnectionWithoutUndo(componentPortA, componentPortB);
             }
         }
     }

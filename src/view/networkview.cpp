@@ -372,7 +372,7 @@ void NetworkView::deleteSelectedItem(void)
         if(component->isSelected())
         {
 
-            _model->deleteComponent(component);
+            _model->deleteComponentWithoutUndo(component);
             _copiedComponent = nullptr;
         }
     }
@@ -390,7 +390,7 @@ void NetworkView::deleteSelectedItem(void)
     {
         if(connection->isSelected())
         {
-            _model->deleteConnection(connection);
+            _model->deleteConnectionWithoutUndo(connection);
         }
     }
     removeHighlightSelectedRect();

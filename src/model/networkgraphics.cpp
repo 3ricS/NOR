@@ -17,29 +17,38 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
  * Zuerst wird geprüft, ob die Verbindung bereits der connectionList hinzugefügt wurde.
  * Ist noch keine Verbindung vorhanden, wird diese hinzugefügt.
  */
-void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
+Connection* NetworkGraphics::addConnectionWithoutUndo(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     Connection* connection = new Connection(componentPortA, componentPortB, this);
+    Connection* createdConnection = nullptr;
     bool isAlreadyExisting = false;
     for (Connection* otherConnection : _connectionList)
     {
         if (*otherConnection == *connection)
         {
             isAlreadyExisting = true;
+            createdConnection = otherConnection;
             break;
         }
     }
     if (!isAlreadyExisting)
     {
         _connectionList.append(connection);
+        createdConnection = connection;
         addItem(connection);
         update();
+    }
+    else
+    {
+        delete connection;
     }
 
     if (!_isLoading)
     {
         updateCalc();
     }
+
+    return createdConnection;
 }
 
 
@@ -223,6 +232,33 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
     CommandAddComponent* addComponent = new CommandAddComponent(this, gridPosition, componentType, componentIsVertical);
     _undoStack->push(addComponent);
     Component* createdComponent = addComponent->getCreatedComponent();
+    return createdComponent;
+}
+
+Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
+                                                          Component::ComponentType componentType, bool componentIsVertical)
+{
+    Component* createdComponent = nullptr;
+
+    if (isThereAComponentOrADescription(gridPosition))
+    {
+        return nullptr;
+    }
+
+    if (Component::ComponentType::Resistor == componentType)
+    {
+
+        createdComponent = addResistor("", 100, gridPosition.x(), gridPosition.y(), componentIsVertical);
+    }
+    else if (Component::ComponentType::PowerSupply == componentType)
+    {
+        createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical);
+    }
+
+    if (!_isLoading)
+    {
+        updateCalc();
+    }
     return createdComponent;
 }
 
@@ -419,7 +455,7 @@ NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[may
  * Anschließend werden die Verbindungen, die sich an der Komponente befinden entfernt.
  * Zum Schluss wird der Widerstandswert neu berechnet.
  */
-void NetworkGraphics::deleteComponent(Component* component)
+void NetworkGraphics::deleteComponentWithoutUndo(Component* component)
 {
     if (component != nullptr)
     {
@@ -482,7 +518,7 @@ void NetworkGraphics::deleteDescription(DescriptionField* description)
  * Wenn die ausgewählte Verbindung vorhanden ist, wird diese entfernt.
  * Nach dem entfernen aus dem Netzwerk wird die Verbindung aus der connectionList entfernt.
  */
-void NetworkGraphics::deleteConnection(Connection* connection)
+void NetworkGraphics::deleteConnectionWithoutUndo(Connection* connection)
 {
     if (connection != nullptr)
     {
@@ -490,7 +526,9 @@ void NetworkGraphics::deleteConnection(Connection* connection)
         _connectionList.removeOne(connection);
         delete connection;
     }
+
     updateCalc();
+    update();
 }
 
 /*!
@@ -652,4 +690,10 @@ void NetworkGraphics::updateCalc(void)
     _resistanceValue = _puzzleCalculator.calculate(_connectionList, _componentList);
 
     emit resistanceValueChanged();
+}
+
+void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
+{
+    CommandAddConnection* commandAddConnection = new CommandAddConnection(this, componentPortA, componentPortB);
+    _undoStack->push(commandAddConnection);
 }

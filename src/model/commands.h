@@ -9,8 +9,10 @@
 #include <QPointF>
 
 #include <model/component.h>
+#include <model/componentport.h>
 
 class NetworkGraphics;
+class Connection;
 
 class CommandAddComponent : public QUndoCommand
 {
@@ -29,6 +31,24 @@ private:
     Component::ComponentType    _componentType;
     bool                        _componentIsVertical;
 };
+
+
+
+class CommandAddConnection : public QUndoCommand
+{
+public:
+    CommandAddConnection(NetworkGraphics* model, ComponentPort componentPortA, ComponentPort componentPortB);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    NetworkGraphics*    _model = nullptr;
+    Connection*         _createdConnection = nullptr;
+    ComponentPort       _componentPortA;
+    ComponentPort       _componentPortB;
+};
+
 
 
 #endif //NOR_COMMANDS_H

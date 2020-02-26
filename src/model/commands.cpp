@@ -5,7 +5,8 @@
 #include "commands.h"
 #include <model/networkgraphics.h>
 
-CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPosition, Component::ComponentType componentType,
+CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPosition,
+                                         Component::ComponentType componentType,
                                          bool componentIsVertical) :
         _model(model), _gridPosition(gridPosition), _componentType(componentType),
         _componentIsVertical(componentIsVertical)
@@ -15,33 +16,34 @@ CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPos
 
 void CommandAddComponent::undo()
 {
-    _model->deleteComponent(_createdComponent);
+    _model->deleteComponentWithoutUndo(_createdComponent);
 }
 
 void CommandAddComponent::redo()
 {
-    Component* createdComponent = nullptr;
-
-    if (_model->isThereAComponentOrADescription(_gridPosition))
-    {
-        return;
-    }
-
-    if (Component::ComponentType::Resistor == _componentType)
-    {
-
-        createdComponent = _model->addResistor("", 100, _gridPosition.x(), _gridPosition.y(), _componentIsVertical);
-    }
-    else if (Component::ComponentType::PowerSupply == _componentType)
-    {
-        createdComponent = _model->addPowerSupply("", _gridPosition.x(), _gridPosition.y(), _componentIsVertical);
-    }
-
-    if (!_model->isLoading())
-    {
-        _model->updateCalc();
-    }
-    _createdComponent = createdComponent;
+    _createdComponent = _model->createNewComponentWithoutUndo(_gridPosition, _componentType, _componentIsVertical);
 }
 
 
+
+
+/*
+ * _______________________________________________________________________
+ * CommandAddConnection
+ */
+
+CommandAddConnection::CommandAddConnection(NetworkGraphics* model, ComponentPort componentPortA,
+                                           ComponentPort componentPortB) :
+        _model(model), _componentPortA(componentPortA), _componentPortB(componentPortB)
+{
+}
+
+void CommandAddConnection::undo()
+{
+    _model->deleteConnectionWithoutUndo(_createdConnection);
+}
+
+void CommandAddConnection::redo()
+{
+    _createdConnection = _model->addConnectionWithoutUndo(_componentPortA, _componentPortB);
+}

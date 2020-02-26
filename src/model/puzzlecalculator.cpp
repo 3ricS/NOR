@@ -265,7 +265,16 @@ Node* PuzzleCalculator::getOrCeateNode(ComponentPort componentPortForNewNode,
      * Daher wird ein neuer Node erstellt
      */
     connectedComponentPorts.append(componentPortForNewNode);
-    Node* createdNode = new Node(knownNodes->count(), connectedComponentPorts);
+    bool isConnectedToPowerSupply = false;
+    for(ComponentPort cp : connectedComponentPorts)
+    {
+        if(Component::ComponentType::PowerSupply == cp.getComponent()->getComponentType())
+        {
+            isConnectedToPowerSupply = true;
+            break;
+        }
+    }
+    Node* createdNode = new Node(knownNodes->count(), connectedComponentPorts, isConnectedToPowerSupply);
     knownNodes->append(createdNode);
     return createdNode;
 }
@@ -302,6 +311,7 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
             }
             qDebug() << "RowPiece" << string;
         }
+        qDebug() << "---------------------------------";
 
         bool changedSomething = false;
         for (RowPiece& rowPieceA : rowPieces)
@@ -325,7 +335,7 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                 else if (rowPieceA != rowPieceB && rowPieceA.hasOneEqualNode(rowPieceB))
                 {
                     Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
-                    if (equalNode != nullptr)
+                    if (equalNode != nullptr && !equalNode->isConnectedToPowerSupply())
                     {
                         if (2 == countNodesInRowPieces(equalNode, rowPieces))
                         {

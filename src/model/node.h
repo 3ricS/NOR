@@ -10,7 +10,7 @@
 class Node
 {
 public:
-    Node(int id, QList<ComponentPort> componentPorts) : _id(id), _componentPorts(componentPorts)
+    Node(int id, QList<ComponentPort> componentPorts, bool isConnectedToPowerSupply) : _id(id), _componentPorts(componentPorts), _isConnectedToPowerSupply(isConnectedToPowerSupply)
     {
     }
 
@@ -24,6 +24,8 @@ public:
         return !(operator==(rhs));
     }
 
+    bool isConnectedToPowerSupply(void) {return _isConnectedToPowerSupply;}
+
     int getId(void) const
     { return _id; }
 
@@ -36,6 +38,7 @@ public:
 private:
     int _id;
     QList<ComponentPort> _componentPorts;
+    bool _isConnectedToPowerSupply = false;
 };
 
 

@@ -16,12 +16,18 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     //Menuleisten Action wird erzeugt
     createUpperMenu();
 
+    //Modus Buttons werden zu einer Liste hinzugefügt
+    createModusQPushButtonList();
+
+    //ToolTips werden erzeugt
+    createToolTips();
+
     // set connections to model
     connect(_ui->Selection, SIGNAL(released()), this, SLOT(setSelectionMode()));
     connect(_ui->Resistor, SIGNAL(released()), this, SLOT(setResistorMode()));
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
-    connect(_ui->TextButton, SIGNAL(released()), this, SLOT(setDescriptionMode()));
+    connect(_ui->DescriptionField, SIGNAL(released()), this, SLOT(setDescriptionMode()));
     connect(_new, SIGNAL(triggered()), this, SLOT(setNewFile()));
     connect(_saveAs, SIGNAL(triggered()), this, SLOT(setSaveAsFile()));
     connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
@@ -38,6 +44,11 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(setRotate()));
     connect(_deleteComponent, SIGNAL(triggered()), this, SLOT(deleteItem()));
     connect(_edit, SIGNAL(triggered()), this, SLOT(setEdit()));
+    connect(_selectionMode, SIGNAL(triggered()), this, SLOT(setSelectionMode()));
+    connect(_powerSupplyMode, SIGNAL(triggered()), this, SLOT(setPowerSupplyMode()));
+    connect(_resistorMode, SIGNAL(triggered()), this, SLOT(setResistorMode()));
+    connect(_connectionMode, SIGNAL(triggered()), this, SLOT(setConnectionMode()));
+    connect(_descriptionMode, SIGNAL(triggered()), this, SLOT(setDescriptionMode()));
 
     connect(_model, SIGNAL(resistanceValueChanged(void)), this, SLOT(updateResistanceValue(void)));
 }
@@ -48,11 +59,9 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
 void MainWindow::setSelectionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::SelectionMode);
-    _ui->Resistor->setDown(false);
-    _ui->Connection->setDown(false);
-    _ui->PowerSupply->setDown(false);
-    _ui->Selection->setDown(true);
-    _ui->TextButton->setDown(false);
+
+    setFlatModusButtonRight(_ui->Selection);
+    setCheckedInCreateMenu(_selectionMode);
 }
 
 /*!
@@ -61,11 +70,9 @@ void MainWindow::setSelectionMode(void)
 void MainWindow::setResistorMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ResistorMode);
-    _ui->Resistor->setDown(true);
-    _ui->Connection->setDown(false);
-    _ui->PowerSupply->setDown(false);
-    _ui->Selection->setDown(false);
-    _ui->TextButton->setDown(false);
+
+    setFlatModusButtonRight(_ui->Resistor);
+    setCheckedInCreateMenu(_resistorMode);
 }
 
 /*!
@@ -74,11 +81,9 @@ void MainWindow::setResistorMode(void)
 void MainWindow::setPowerSupplyMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::PowerSupplyMode);
-    _ui->Resistor->setDown(false);
-    _ui->Connection->setDown(false);
-    _ui->PowerSupply->setDown(true);
-    _ui->Selection->setDown(false);
-    _ui->TextButton->setDown(false);
+
+    setFlatModusButtonRight(_ui->PowerSupply);
+    setCheckedInCreateMenu(_powerSupplyMode);
 }
 
 /*!
@@ -87,11 +92,9 @@ void MainWindow::setPowerSupplyMode(void)
 void MainWindow::setDescriptionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::DescriptionMode);
-    _ui->TextButton->setDown(true);
-    _ui->Resistor->setDown(false);
-    _ui->Connection->setDown(false);
-    _ui->PowerSupply->setDown(false);
-    _ui->Selection->setDown(false);
+
+    setFlatModusButtonRight(_ui->DescriptionField);
+    setCheckedInCreateMenu(_descriptionMode);
 }
 
 /*!
@@ -100,11 +103,9 @@ void MainWindow::setDescriptionMode(void)
 void MainWindow::setConnectionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ConnectionMode);
-    _ui->Resistor->setDown(false);
-    _ui->Connection->setDown(true);
-    _ui->PowerSupply->setDown(false);
-    _ui->Selection->setDown(false);
-    _ui->TextButton->setDown(false);
+
+    setFlatModusButtonRight(_ui->Connection);
+    setCheckedInCreateMenu(_connectionMode);
 }
 
 void MainWindow::setSaveFile(void)
@@ -244,8 +245,94 @@ void MainWindow::createUpperMenu(void)
     _deleteComponent = new QAction("Entfernen");
     _deleteComponent->setShortcut(QKeySequence(Qt::Key_Delete));
     _ui->menuBearbeiten->addAction(_deleteComponent);
+
+    //Erstellen Menü
+    _selectionMode = new QAction("Auswahl Maus");
+    _selectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    _selectionMode->setCheckable(true);
+    _ui->menuErstellen->addAction(_selectionMode);
+    _createActionGroup.append(_selectionMode);
+    _selectionMode->setChecked(true);
+
+    _powerSupplyMode = new QAction("Spannungsquelle erstellen");
+    _powerSupplyMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
+    _powerSupplyMode->setCheckable(true);
+    _ui->menuErstellen->addAction(_powerSupplyMode);
+    _createActionGroup.append(_powerSupplyMode);
+
+    _resistorMode = new QAction("Widerstand erstellen");
+    _resistorMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
+    _resistorMode->setCheckable(true);
+    _ui->menuErstellen->addAction(_resistorMode);
+    _createActionGroup.append(_resistorMode);
+
+    _connectionMode = new QAction("Verbindung zeichnen");
+    _connectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    _connectionMode->setCheckable(true);
+    _ui->menuErstellen->addAction(_connectionMode);
+    _createActionGroup.append(_connectionMode);
+
+    _descriptionMode = new QAction("Textfeld erstellen");
+    _descriptionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    _descriptionMode->setCheckable(true);
+    _ui->menuErstellen->addAction(_descriptionMode);
+    _createActionGroup.append(_descriptionMode);
 }
 
+/*!
+* \brief Erstellen von Tooltips fürs Erstellen Menü
+*/
+void MainWindow::createToolTips()
+{
+    _ui->PowerSupply->setToolTip("Spannugsquelle einzeichnen");
+    _ui->Resistor->setToolTip("Widerstand einzeichnen");
+    _ui->Connection->setToolTip("Bauteile verbinden");
+    _ui->DescriptionField->setToolTip("Textfeld erstellen");
+    _ui->Selection->setToolTip("Auswahl Maus");
+}
+
+void MainWindow::setCheckedInCreateMenu(QAction* actualAction)
+{
+    for(QAction* a : _createActionGroup)
+    {
+        if(a != actualAction)
+        {
+            a->setChecked(false);
+        }
+        else
+        {
+            a->setChecked(true);
+        }
+    }
+}
+
+void MainWindow::setFlatModusButtonRight(QPushButton *actualPushed)
+{
+    for(QPushButton* pb : _modusButtons)
+    {
+        if(pb != actualPushed)
+        {
+            pb->setDown(false);
+        }
+        else
+        {
+            pb->setDown(true);
+        }
+    }
+}
+
+void MainWindow::createModusQPushButtonList()
+{
+    _modusButtons.append(_ui->Selection);
+    _modusButtons.append(_ui->PowerSupply);
+    _modusButtons.append(_ui->Resistor);
+    _modusButtons.append(_ui->Connection);
+    _modusButtons.append(_ui->DescriptionField);
+}
+
+/*!
+* \brief Erstellen des "Über"-Fensters
+*/
 void MainWindow::openAboutWindow()
 {
     QMessageBox::about(this, ("About Application"),
@@ -282,7 +369,9 @@ void MainWindow::setRotate()
     _networkView->rotateComponentByShortcut();
 }
 
-//Zoom in
+/*!
+* \brief Reinzoomen mit +10% Schritten
+*/
 void MainWindow::setZoomIn()
 {
     double scaleFactor = 1.1;
@@ -293,7 +382,9 @@ void MainWindow::setZoomIn()
     _model->update();
 }
 
-//Zoom out
+/*!
+* \brief Rauszoomen mit -10% Schritten
+*/
 void MainWindow::setZoomOut()
 {
     //_ui->networkView->showNormal()
@@ -304,7 +395,9 @@ void MainWindow::setZoomOut()
     _model->update();
 }
 
-//Zoom 100%
+/*!
+* \brief Zoom auf 100% stellen
+*/
 void MainWindow::setZoom100Percent()
 {
     while (_scalefactor != 1.0)

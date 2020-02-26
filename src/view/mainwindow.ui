@@ -138,7 +138,7 @@
          <widget class="QLabel" name="ToolLabel">
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
+            <pointsize>12</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -154,12 +154,17 @@
         <item>
          <widget class="QPushButton" name="Selection">
           <property name="text">
-           <string>Auswahl</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/img/click.png</normalon>
+           </iconset>
           </property>
           <property name="iconSize">
            <size>
-            <width>16</width>
-            <height>16</height>
+            <width>40</width>
+            <height>40</height>
            </size>
           </property>
          </widget>
@@ -181,7 +186,7 @@
          <widget class="QLabel" name="ModusLabel">
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
+            <pointsize>12</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -196,29 +201,79 @@
         </item>
         <item>
          <widget class="QPushButton" name="PowerSupply">
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
           <property name="text">
-           <string>Spannungsquelle</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/img/dc.png</normalon>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="Resistor">
           <property name="text">
-           <string>Widerstand</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/img/resistor.png</normalon>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="Connection">
           <property name="text">
-           <string>Verbindung</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/img/plug.png</normalon>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="TextButton">
+         <widget class="QPushButton" name="DescriptionField">
           <property name="text">
-           <string>Textfeld</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/img/text-box.png</normalon>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -239,7 +294,7 @@
          <widget class="QLabel" name="CalculateLabel">
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
+            <pointsize>12</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -335,7 +390,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -358,9 +413,15 @@
      <string>Bearbeiten</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuErstellen">
+    <property name="title">
+     <string>Erstellen</string>
+    </property>
+   </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
    <addaction name="menuAnsicht"/>
+   <addaction name="menuErstellen"/>
    <addaction name="menuExtras"/>
   </widget>
  </widget>

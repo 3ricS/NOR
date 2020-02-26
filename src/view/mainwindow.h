@@ -66,6 +66,11 @@ protected:
 
 private:
     void createUpperMenu(void);
+    void createToolTips(void);
+    void setCheckedInCreateMenu(QAction* actualAction);
+    void setFlatModusButtonRight(QPushButton* actualPushed);
+    void createModusQPushButtonList(void);
+
 
 //Variables
     Ui::MainWindow*     _ui;
@@ -85,6 +90,14 @@ private:
     QAction* _rotateComponent = nullptr;
     QAction* _deleteComponent = nullptr;
     QAction* _edit = nullptr;
+    QAction* _resistorMode = nullptr;
+    QAction* _powerSupplyMode = nullptr;
+    QAction* _connectionMode = nullptr;
+    QAction* _descriptionMode = nullptr;
+    QAction* _selectionMode = nullptr;
+
+    QList<QAction*> _createActionGroup;
+    QList<QPushButton*> _modusButtons;
 
     double _scalefactor = 1;
     bool _ctrlIsPressed = false;

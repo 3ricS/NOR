@@ -138,6 +138,7 @@
          <widget class="QLabel" name="ToolLabel">
           <property name="font">
            <font>
+            <pointsize>10</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -180,7 +181,7 @@
          <widget class="QLabel" name="ModusLabel">
           <property name="font">
            <font>
-            <pointsize>13</pointsize>
+            <pointsize>10</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -238,6 +239,7 @@
          <widget class="QLabel" name="CalculateLabel">
           <property name="font">
            <font>
+            <pointsize>10</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -280,7 +282,7 @@
          <widget class="QLabel" name="ZoomLabel">
           <property name="font">
            <font>
-            <pointsize>9</pointsize>
+            <pointsize>10</pointsize>
             <weight>50</weight>
             <bold>false</bold>
            </font>

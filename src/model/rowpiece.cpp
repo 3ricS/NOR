@@ -42,6 +42,13 @@ bool RowPiece::hasEqualNodesOnBothSides(RowPiece otherRowPiece)
     return equalInDirection || equalInOtherDirection;
 }
 
+/*!
+ * \brief
+ *
+ * \param[in]    otherRowPiece
+ *
+ *
+ */
 void RowPiece::parallelMerge(RowPiece otherRowPiece)
 {
     //Listen der Components vergleichen

@@ -584,7 +584,7 @@ int Connection::pathAnalysedodgeRoutine(int howManyConnections)
         }
         if(_diffY < 0)
         {
-            howManyConnections += 1;
+            howManyConnections += 2;
             _currentPoint.setY(_currentPoint.y() - 100);
             _diffY += 100;
             if(!isThereAComponentOrADescription(_currentPoint.x() - 55, _currentPoint.y() - 50) || _diffY == 0)
@@ -599,7 +599,7 @@ int Connection::pathAnalysedodgeRoutine(int howManyConnections)
         }
         if(_diffY > 0)
         {
-            howManyConnections += 1;
+            howManyConnections += 2;
             _currentPoint.setY(_currentPoint.y() + 100);
             _diffY -= 100;
             if(!isThereAComponentOrADescription(_currentPoint.x() - 55, _currentPoint.y() + 50) || _diffY == 0)
@@ -623,7 +623,7 @@ int Connection::pathAnalysedodgeRoutine(int howManyConnections)
         }
         if(_diffX < 0)
         {
-            howManyConnections += 1;
+            howManyConnections += 2;
             _currentPoint.setX(_currentPoint.x() - 100);
             _diffX += 100;
             if(!isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() - 55) || _diffX == 0)
@@ -638,7 +638,7 @@ int Connection::pathAnalysedodgeRoutine(int howManyConnections)
         }
         if(_diffX > 0)
         {
-            howManyConnections += 1;
+            howManyConnections += 2;
             _currentPoint.setX(_currentPoint.x() + 100);
             _diffX -= 100;
             if(!isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() - 55) || _diffX == 0)

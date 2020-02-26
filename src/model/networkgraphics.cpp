@@ -164,20 +164,6 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
     return nullptr;
 }
 
-/*!
- * \brief Gibt den Widerstandswert aus.
- *
- * \return   Gibt den Widerstandswert als double zurück
- *
- * Die Methode sucht, ob ein neuer Gesamtwiderstandswert verfügbar ist.
- * Anschließend wird der Wert ausgegeben.
- */
-double NetworkGraphics::calculate(void)
-{
-    updateCalc();
-    return _calculator.getResistanceValue();
-}
-
 void NetworkGraphics::save(void)
 {
     _manager->save();
@@ -330,7 +316,31 @@ NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, i
     }
     if (0 == id)
     {
-        id = _resistorCount;
+        //Finden einer freien ID
+        int newId = _resistorCount;
+        bool isSetId = false;
+        while(!isSetId)
+        {
+            bool isIdValid = true;
+            for (Component* component : _componentList)
+            {
+               if(component->getId() == newId)
+               {
+                   isIdValid = false;
+               }
+            }
+            if(isIdValid)
+            {
+                id = newId;
+                isSetId = true;
+                break;
+            }
+            else
+            {
+                newId++;
+            }
+        }
+
     }
 
     Component* resistor = new Resistor(name, valueResistance, xPosition, yPosition,
@@ -522,8 +532,6 @@ NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* des
     if (componentToMove != nullptr)
     {
         componentToMove->setPosition(gridPosition);
-        //Beim Bewegen kann ein Component direkt mit seinen Nachbarn verbunden werden
-        connectComponentToNeighbours(componentToMove);
     }
     else if (descriptionToMove != nullptr)
     {
@@ -658,8 +666,6 @@ void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Comp
  */
 void NetworkGraphics::updateCalc(void)
 {
-    _calculator.setLists(_connectionList, _componentList);
-    _calculator.calculate();
 
     _resistanceValue = _puzzleCalculator.calculate(_connectionList, _componentList);
 

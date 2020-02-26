@@ -21,7 +21,6 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->Resistor, SIGNAL(released()), this, SLOT(setResistorMode()));
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
-    //connect(_ui->Calculate, SIGNAL(released()), this, SLOT(setCalculation()));
     connect(_ui->TextButton, SIGNAL(released()), this, SLOT(setDescriptionMode()));
     connect(_new, SIGNAL(triggered()), this, SLOT(setNewFile()));
     connect(_saveAs, SIGNAL(triggered()), this, SLOT(setSaveAsFile()));
@@ -106,11 +105,6 @@ void MainWindow::setConnectionMode(void)
     _ui->PowerSupply->setDown(false);
     _ui->Selection->setDown(false);
     _ui->TextButton->setDown(false);
-}
-
-void MainWindow::setCalculation(void)
-{
-    _ui->CalculatedValue->setText(QString::number(_model->calculate()) + "Ω");
 }
 
 void MainWindow::setSaveFile(void)

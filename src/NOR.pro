@@ -27,7 +27,6 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        model/calculator.cpp \
         model/component.cpp \
         model/connection.cpp \
         model/descriptionfield.cpp \
@@ -43,7 +42,6 @@ SOURCES += \
         model/rowpiece.cpp
 
 HEADERS += \
-        model/calculator.h \
         model/component.h \
         model/connection.h \
         model/descriptionfield.h \

@@ -6,7 +6,6 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 
-#include <model/calculator.h>
 #include <model/descriptionfield.h>
 #include <model/resistor.h>
 #include <model/powersupply.h>
@@ -24,7 +23,6 @@ class NetworkGraphics : public QGraphicsScene
 public:
     NetworkGraphics();
 
-    double calculate(void);
     void save(void);
     void load(void);
     void saveAs(void);
@@ -80,7 +78,6 @@ private:
     QList<DescriptionField*> _descriptions;
     QGraphicsScene*          _graphics = nullptr;
     FileManager*             _manager = nullptr;
-    Calculator               _calculator = Calculator(_connectionList, _componentList);
     PuzzleCalculator         _puzzleCalculator = PuzzleCalculator();
 
     bool _isLoading = false;

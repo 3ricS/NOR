@@ -42,7 +42,6 @@ public slots:
     void setPowerSupplyMode(void);
     void setConnectionMode(void);
     void setDescriptionMode(void);
-    void setCalculation(void);
     void setSaveFile(void);
     void setOpenFile(void);
     void setZoomIn(void);

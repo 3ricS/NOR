@@ -226,6 +226,14 @@ void MainWindow::createUpperMenu(void)
     _edit->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     _ui->menuBearbeiten->addAction(_edit);
 
+    _undo = _model->getUndoStack()->createUndoAction(_model, tr("Rückgängig"));
+    _undo->setShortcut(QKeySequence::Undo);
+    _ui->menuBearbeiten->addAction(_undo);
+
+    _redo = _model->getUndoStack()->createRedoAction(_model, tr("Wiederholen"));
+    _redo->setShortcut(QKeySequence::Redo);
+    _ui->menuBearbeiten->addAction(_redo);
+
     _copy = new QAction("Kopieren");
     _copy->setShortcut(QKeySequence::Copy);
     _ui->menuBearbeiten->addAction(_copy);

@@ -38,6 +38,10 @@ bool RowPiece::hasEqualNodesOnBothSides(RowPiece otherRowPiece)
 {
     bool equalInDirection = (_nodeOne == otherRowPiece._nodeOne && _nodeTwo == otherRowPiece._nodeTwo);
     bool equalInOtherDirection = (_nodeTwo == otherRowPiece._nodeOne && _nodeOne == otherRowPiece._nodeTwo);
+    if(otherRowPiece._components.last()->getName() == "R5" || _components.last()->getName() == "R5")
+    {
+        qDebug() << equalInDirection << equalInOtherDirection;
+    }
 
     return equalInDirection || equalInOtherDirection;
 }

@@ -39,7 +39,8 @@ SOURCES += \
         view/networkview.cpp \
         model/componentport.cpp \
         model/puzzlecalculator.cpp \
-        model/rowpiece.cpp
+        model/rowpiece.cpp \
+        model/commands.cpp
 
 HEADERS += \
         model/component.h \
@@ -55,7 +56,8 @@ HEADERS += \
         model/componentport.h \
         model/node.h \
         model/puzzlecalculator.h \
-        model/rowpiece.h
+        model/rowpiece.h \
+        model/commands.h
 
 FORMS += \
         view/editview.ui \

@@ -1,7 +1,7 @@
 #include "model/networkgraphics.h"
 
 
-NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsScene())
+NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsScene()), _undoStack(new QUndoStack(this))
 {
     // die Anfangsgröße wird initialisiert
     setSceneRect(-_defaultSceneSize, -_defaultSceneSize, _defaultSceneSize, _defaultSceneSize);
@@ -220,27 +220,9 @@ void NetworkGraphics::mirrorComponent(Component* component)
 Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
                                                Component::ComponentType componentType, bool componentIsVertical)
 {
-    Component* createdComponent = nullptr;
-
-    if (isThereAComponentOrADescription(gridPosition))
-    {
-        return nullptr;
-    }
-
-    if (Component::ComponentType::Resistor == componentType)
-    {
-
-        createdComponent = addResistor("", 100, gridPosition.x(), gridPosition.y(), componentIsVertical);
-    }
-    else if (Component::ComponentType::PowerSupply == componentType)
-    {
-        createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical);
-    }
-
-    if (!_isLoading)
-    {
-        updateCalc();
-    }
+    CommandAddComponent* addComponent = new CommandAddComponent(this, gridPosition, componentType, componentIsVertical);
+    _undoStack->push(addComponent);
+    Component* createdComponent = addComponent->getCreatedComponent();
     return createdComponent;
 }
 

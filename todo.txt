@@ -18,3 +18,15 @@ Laden nicht 100%
 - NetworkGraphics hat 600 Zeilen
 - Widerstandswert als double
 - rotieren funktioniert nicht
+
+
+
+
+UndoStackCommands
+- addComponent
+- addConnection
+- edit Component
+- delete Component
+- delete Connection
+- add DescriptionField
+- delete DescriptionField

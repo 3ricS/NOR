@@ -5,14 +5,15 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QUndoStack>
 
 #include <model/descriptionfield.h>
 #include <model/resistor.h>
 #include <model/powersupply.h>
 #include <model/connection.h>
 #include <model/filemanager.h>
-#include <view/editview.h>
 #include <model/puzzlecalculator.h>
+#include <model/commands.h>
 
 class FileManager;
 
@@ -58,6 +59,8 @@ public:
     QList<DescriptionField*> getDescriptions(void) {return _descriptions;}
     QString getFileName(void);
     double getResistanceValue(void) {return _resistanceValue;}
+    bool isLoading(void) {return _isLoading;}
+    QUndoStack* getUndoStack(void) {return _undoStack;}
 
 signals:
     void resistanceValueChanged(void);
@@ -79,6 +82,7 @@ private:
     QGraphicsScene*          _graphics = nullptr;
     FileManager*             _manager = nullptr;
     PuzzleCalculator         _puzzleCalculator = PuzzleCalculator();
+    QUndoStack*              _undoStack;
 
     bool _isLoading = false;
     double _resistanceValue;

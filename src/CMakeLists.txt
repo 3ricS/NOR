@@ -29,7 +29,6 @@ set(MOC_HEADERS
         model/powersupply.h
         model/resistor.h
         model/networkgraphics.h
-        model/calculator.h
         model/filemanager.h
         model/descriptionfield.h
         model/componentport.h
@@ -51,7 +50,6 @@ set (SOURCES
         model/powersupply.cpp
         model/resistor.cpp
         model/networkgraphics.cpp
-        model/calculator.cpp
         model/filemanager.cpp
         model/descriptionfield.cpp
 
@@ -61,7 +59,7 @@ set (SOURCES
         model/componentport.cpp
         model/rowpiece.cpp
         model/puzzlecalculator.cpp
-)
+        model/commands.cpp model/commands.h)
 
 # set .ui files
 set(UIS

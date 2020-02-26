@@ -98,6 +98,8 @@ private:
 
     QList<QAction*> _createActionGroup;
     QList<QPushButton*> _modusButtons;
+    QAction* _undo = nullptr;
+    QAction* _redo = nullptr;
 
     double _scalefactor = 1;
     bool _ctrlIsPressed = false;

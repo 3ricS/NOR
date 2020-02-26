@@ -37,6 +37,7 @@ public:
     void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);
 
     //Methoden
+    int pathAnalyse(bool horizontalFirst);
     void paintHitbox(QPainter* painter);
     bool isThereAComponentOrADescription(int x, int y);
     Component* getComponentAtPosition(int x, int y);
@@ -54,6 +55,9 @@ private:
     void horizontalRoutine(void);
     void verticalRoutine(void);
     void dodgeRoutine(void);
+    int pathAnalysehorizontalRoutine(int howManyConnections, bool horizontalFirst);
+    int pathAnalyseverticalRoutine(int howManyConnections, bool horizontalFirst);
+    int pathAnalysedodgeRoutine(int howManyConnections);
     bool isStartComponentVertical(void);
 
     int _diffX = 0;
@@ -69,11 +73,14 @@ private:
     QPointF _endPoint;
 
     bool _isDodgedBefore = false;
+    bool _isDodgedBeforePathAnalyse = false;
+
 
     NetworkGraphics* _model = nullptr;
     QList<QRect*> _connectionHitbox;
 
     bool _isSelected = false;
+    bool _startHorizontal;
 };
 
 #endif // CONNECTION_H

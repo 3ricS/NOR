@@ -31,7 +31,28 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     _diffX = _endPoint.x() - _startPoint.x();
     _diffY = _endPoint.y() - _startPoint.y();
 
-    horizontalRoutine();
+    int horizontalFirst = pathAnalyse(true);
+
+    _diffX = _endPoint.x() - _startPoint.x();
+    _diffY = _endPoint.y() - _startPoint.y();
+    _currentPoint = _startPoint;
+
+    int verticalFirst = pathAnalyse(false);
+
+    _diffX = _endPoint.x() - _startPoint.x();
+    _diffY = _endPoint.y() - _startPoint.y();
+    _currentPoint = _startPoint;
+    qDebug() << horizontalFirst << verticalFirst;
+    if(horizontalFirst <= verticalFirst)
+    {
+        _startHorizontal = true;
+        horizontalRoutine();
+    }
+    else
+    {
+        _startHorizontal = false;
+        verticalRoutine();
+    }
 
     if(_isSelected)
     {
@@ -112,6 +133,20 @@ void Connection::changePortOfComponentPortWithComponent(Component* componentOfCo
     {
         _componentPortTwo.invertPort();
     }
+}
+
+int Connection::pathAnalyse(bool horizontalFirst)
+{
+   int howManyConnections = 0;
+   if(horizontalFirst)
+   {
+       return  pathAnalysehorizontalRoutine(howManyConnections, horizontalFirst);
+   }
+   else
+   {
+      return pathAnalyseverticalRoutine(howManyConnections, horizontalFirst);
+   }
+
 }
 
 void Connection::paintHitbox(QPainter *painter)
@@ -216,7 +251,10 @@ void Connection::horizontalRoutine()
             }
         }
     }
-    verticalRoutine();
+    if(_startHorizontal)
+    {
+        verticalRoutine();
+    }
 }
 
 void Connection::verticalRoutine()
@@ -274,6 +312,10 @@ void Connection::verticalRoutine()
                 }
             }
         }
+    }
+    if(!_startHorizontal)
+    {
+        horizontalRoutine();
     }
 }
 
@@ -406,5 +448,210 @@ bool Connection::operator==(const Connection& rhs)
 bool Connection::operator!=(const Connection& rhs)
 {
     return !(operator==(rhs));
+}
+
+int Connection::pathAnalysehorizontalRoutine(int howManyConnections, bool horizontalFirst)
+{
+    if(_diffX > 0)
+    {
+        while(_diffX != 0)
+        {
+            if(isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y()) || _diffX == 50)
+            {
+                howManyConnections += 1;
+                _currentPoint.setX(_currentPoint.x() + 50);
+                _diffX -= 50;
+                _isDodgedBeforePathAnalyse = false;
+            }
+            else
+            {
+                if(_diffY == 0)
+                {
+                    howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                }
+                else
+                {
+                    howManyConnections = pathAnalyseverticalRoutine(howManyConnections, horizontalFirst);
+                }
+            }
+        }
+    }
+    else if (_diffX < 0)
+    {
+        while(_diffX != 0)
+        {
+            if(isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y()) || _diffX == 50)
+            {
+                howManyConnections += 1;
+                _currentPoint.setX(_currentPoint.x() - 50);
+                _diffX += 50;
+                _isDodgedBeforePathAnalyse = false;
+            }
+            else
+            {
+                if(_diffY == 0)
+                {
+                    howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                }
+                else
+                {
+                    howManyConnections = pathAnalyseverticalRoutine(howManyConnections, horizontalFirst);
+                }
+            }
+        }
+    }
+    if(horizontalFirst)
+    {
+        howManyConnections = pathAnalyseverticalRoutine(howManyConnections, horizontalFirst);
+        return howManyConnections;
+    }
+    else
+    {
+        return howManyConnections;
+    }
+}
+
+int Connection::pathAnalyseverticalRoutine(int howManyConnections, bool horizontalFirst)
+{
+    if(_diffY > 0)
+    {
+        while(_diffY != 0)
+        {
+            if(!isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50) || _diffY == 50)
+            {
+                howManyConnections += 1;
+                _currentPoint.setY(_currentPoint.y() + 50);
+                _diffY -= 50;
+                _isDodgedBeforePathAnalyse = false;
+            }
+            else
+            {
+                if(_diffX == 0)
+                {
+                    howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                }
+                else
+                {
+                    howManyConnections = pathAnalysehorizontalRoutine(howManyConnections, horizontalFirst);
+                }
+            }
+        }
+    }
+    else if (_diffY < 0)
+    {
+        while(_diffY != 0)
+        {
+            if(!isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() - 50) || _diffY == 50)
+            {
+                howManyConnections += 1;
+                _currentPoint.setY(_currentPoint.y() - 50);
+                _diffY += 50;
+                _isDodgedBeforePathAnalyse = false;
+            }
+            else
+            {
+                if(_diffX == 0)
+                {
+                    howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                }
+                else
+                {
+                    howManyConnections = pathAnalysehorizontalRoutine(howManyConnections, horizontalFirst);
+                }
+            }
+        }
+    }
+    if(!horizontalFirst)
+    {
+        howManyConnections = pathAnalysehorizontalRoutine(howManyConnections, horizontalFirst);
+        return howManyConnections;
+    }
+    else
+    {
+        return howManyConnections;
+    }
+}
+
+int Connection::pathAnalysedodgeRoutine(int howManyConnections)
+{
+    if(_diffX == 0)
+    {
+        if(!_isDodgedBeforePathAnalyse)
+        {
+            howManyConnections += 1;
+            _currentPoint.setX(_currentPoint.x() + 55);
+            _isDodgedBeforePathAnalyse = true;
+        }
+        if(_diffY < 0)
+        {
+            howManyConnections += 1;
+            _currentPoint.setY(_currentPoint.y() - 100);
+            _diffY += 100;
+            if(!isThereAComponentOrADescription(_currentPoint.x() - 55, _currentPoint.y() - 50) || _diffY == 0)
+            {
+                howManyConnections += 1;
+                _currentPoint.setX(_currentPoint.x() - 55);
+            }
+            else
+            {
+                howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+            }
+        }
+        if(_diffY > 0)
+        {
+            howManyConnections += 1;
+            _currentPoint.setY(_currentPoint.y() + 100);
+            _diffY -= 100;
+            if(!isThereAComponentOrADescription(_currentPoint.x() - 55, _currentPoint.y() + 50) || _diffY == 0)
+            {
+                howManyConnections += 1;
+                _currentPoint.setX(_currentPoint.x() - 55);
+            }
+            else
+            {
+                howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+            }
+        }
+    }
+    if(_diffY == 0)
+    {
+        if(!_isDodgedBeforePathAnalyse)
+        {
+            howManyConnections += 1;
+            _currentPoint.setY(_currentPoint.y() + 55);
+            _isDodgedBeforePathAnalyse = true;
+        }
+        if(_diffX < 0)
+        {
+            howManyConnections += 1;
+            _currentPoint.setX(_currentPoint.x() - 100);
+            _diffX += 100;
+            if(!isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() - 55) || _diffX == 0)
+            {
+                howManyConnections += 1;
+                _currentPoint.setY(_currentPoint.y() - 55);
+            }
+            else
+            {
+                howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+            }
+        }
+        if(_diffX > 0)
+        {
+            howManyConnections += 1;
+            _currentPoint.setX(_currentPoint.x() + 100);
+            _diffX -= 100;
+            if(!isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() - 55) || _diffX == 0)
+            {
+                howManyConnections += 1;
+                _currentPoint.setY(_currentPoint.y() - 55);
+            }
+            else
+            {
+                howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+            }
+        }
+    }
+    return howManyConnections;
 }
 

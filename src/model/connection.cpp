@@ -201,7 +201,7 @@ void Connection::horizontalRoutine()
     {
         while(_diffX != 0)
         {
-            if(isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y()) || _diffX == 50)
+            if(!isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y()))
             {
                 QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, 50, 10);
                 _connectionHitbox.append(hitbox);
@@ -228,7 +228,7 @@ void Connection::horizontalRoutine()
     {
         while(_diffX != 0)
         {
-            if(isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y()) || _diffX == 50)
+            if(!isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y()))
             {
                 QRect* hitbox = new QRect(_currentPoint.x() - 50, _currentPoint.y() - 5, 50, 10);
                 _connectionHitbox.append(hitbox);
@@ -263,7 +263,7 @@ void Connection::verticalRoutine()
     {
         while(_diffY != 0)
         {
-            if(!isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50) || _diffY == 50)
+            if(!isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50))
             {
                 QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, 50);
                 _connectionHitbox.append(hitbox);
@@ -290,7 +290,7 @@ void Connection::verticalRoutine()
     {
         while(_diffY != 0)
         {
-            if(!isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() - 50) || _diffY == 50)
+            if(!isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() - 50))
             {
                 QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - 50, 10, 50);
                 _connectionHitbox.append(hitbox);
@@ -456,7 +456,7 @@ int Connection::pathAnalysehorizontalRoutine(int howManyConnections, bool horizo
     {
         while(_diffX != 0)
         {
-            if(isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y()) || _diffX == 50)
+            if(!isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y()))
             {
                 howManyConnections += 1;
                 _currentPoint.setX(_currentPoint.x() + 50);
@@ -480,7 +480,7 @@ int Connection::pathAnalysehorizontalRoutine(int howManyConnections, bool horizo
     {
         while(_diffX != 0)
         {
-            if(isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y()) || _diffX == 50)
+            if(!isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y()))
             {
                 howManyConnections += 1;
                 _currentPoint.setX(_currentPoint.x() - 50);
@@ -517,7 +517,7 @@ int Connection::pathAnalyseverticalRoutine(int howManyConnections, bool horizont
     {
         while(_diffY != 0)
         {
-            if(!isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50) || _diffY == 50)
+            if(!isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50))
             {
                 howManyConnections += 1;
                 _currentPoint.setY(_currentPoint.y() + 50);
@@ -541,7 +541,7 @@ int Connection::pathAnalyseverticalRoutine(int howManyConnections, bool horizont
     {
         while(_diffY != 0)
         {
-            if(!isStartComponentVertical() || !isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() - 50) || _diffY == 50)
+            if(!isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() - 50))
             {
                 howManyConnections += 1;
                 _currentPoint.setY(_currentPoint.y() - 50);

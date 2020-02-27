@@ -23,6 +23,9 @@ QRectF DescriptionField::boundingRect() const
 
 void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)
 {
+    QFont q;
+    q.setPixelSize(13);
+    painter->setFont(q);
     painter->drawText(QRectF (_xPosition - 40, _yPosition - 40, 80, 80), _text);
 
     if(_isSelected)

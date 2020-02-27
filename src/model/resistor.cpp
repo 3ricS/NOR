@@ -29,8 +29,6 @@ Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVerti
  */
 void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
 {
-    //Zeichnen der Informationen (Name und Wert) in Abhängigkeit ob vertikal oder horizontal
-    paintInformations(painter);
 
     if(_isVertical)
     {
@@ -49,6 +47,9 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
     {
         paintHighlightRect(painter);
     }
+
+    //Zeichnen der Informationen (Name und Wert) in Abhängigkeit ob vertikal oder horizontal
+    paintInformations(painter);
 }
 
 void Resistor::paintInformations(QPainter* painter)
@@ -66,6 +67,9 @@ void Resistor::paintInformations(QPainter* painter)
 void Resistor::paintOrientationSensitiv(QPainter* painter, int xPosText, int yPosText, int xPosValue, int yPosValue)
 {
     // Zeichnen des Namens
+    QFont q;
+    q.setPixelSize(13);
+    painter->setFont(q);
     painter->drawText(xPosText, yPosText, _name);
 
     // Darstellung des Widerstandwertes

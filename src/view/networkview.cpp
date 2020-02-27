@@ -564,8 +564,22 @@ void NetworkView::print()
         QPrintDialog dlg(&printer);
         if(dlg.exec()==QDialog::Accepted)
         {
+            //Zuerst fokussieren
+            focus();
+
+            //Alle Objekte im View werden gezeichnet
             QPainter p(&printer);
             render(&p);
+
+            //Gesamtwiderstand wird gedruckt
+            p.drawText(QPointF(1200,100),"Gesamtwiderstand der Schaltung: " + QString::number(_model->getResistanceValue(),'f', 2) + "Ω");
+
+            //Copyright wird gedruckt
+            QFont f;
+            f.setPixelSize(18);
+            p.setFont(f);
+            p.drawText(QPointF(0,3500) ,"© NOR-Developer-Team");
+
             p.end();
         }
 }

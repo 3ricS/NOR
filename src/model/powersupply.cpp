@@ -25,7 +25,6 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, int id) :
  */
 void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
 {
-    paintInformations(painter);
 
     if (_isVertical)
     {
@@ -41,9 +40,14 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
     {
         paintHighlightRect(painter);
     }
+
+    paintInformations(painter);
 }
 
 void PowerSupply::paintInformations(QPainter* painter)
 {
+    QFont q;
+    q.setPixelSize(13);
+    painter->setFont(q);
     painter->drawText(_xPosition - 40, _yPosition - 40, _name);
 }

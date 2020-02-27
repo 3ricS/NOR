@@ -1,7 +1,3 @@
-//
-// Created by erics on 024, 24, Februar.
-//
-
 #include "puzzlecalculator.h"
 #include "model/node.h"
 #include "model/connection.h"
@@ -9,9 +5,17 @@
 
 PuzzleCalculator::PuzzleCalculator()
 {
-
 }
 
+/*!
+ * \brief Ruft das Berechnen des Widerstandes auf.
+ *
+ * \param[in]   connections
+ * \param[in]   components
+ * \return Gibt den Widerstandswert als double zurück.
+ *
+ *
+ */
 double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Component*> components)
 {
     _connections = connections;

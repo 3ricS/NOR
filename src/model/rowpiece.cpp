@@ -37,7 +37,7 @@ bool RowPiece::operator!=(const RowPiece& rhs)
 /*!
  * \brief Prüft ob ein RowPiece zu einem anderen RowPiece die gleichen Knoten an beiden Seiten besitzt.
  *
- * \param[in]    otherRowPiece
+ * \param[in]    otherRowPiece  das zu vergleichende RowPiece
  *
  */
 bool RowPiece::hasEqualNodesOnBothSides(RowPiece otherRowPiece)
@@ -53,11 +53,11 @@ bool RowPiece::hasEqualNodesOnBothSides(RowPiece otherRowPiece)
 }
 
 /*!
- * \brief
+ * \brief Rechnet zwei einzelne RowPieces, die parallel zueinander liegen zusammen.
  *
- * \param[in]    otherRowPiece
+ * \param[in]    otherRowPiece  das anderen RowPiece
  *
- *
+ * Es werden beide Widerstandswerte zusammengerechnet.
  */
 void RowPiece::parallelMerge(RowPiece otherRowPiece)
 {
@@ -70,6 +70,14 @@ void RowPiece::parallelMerge(RowPiece otherRowPiece)
     _resistanceValue = (newResistanceValueCounter / newResistanceValueDenominator);
 }
 
+/*!
+ * \brief Führt zwei einzelnen RowPieces, die in Reihe zueinander liegen zusammen.
+ *
+ * \param[in]    otherRowPiece  das zu vergleichende RowPiece
+ *
+ * Es wird geprüft, ob ein Knoten von zwei RowPieces übereinstimmt und führt diese zusammen.
+ * Nach dem zusammenführen wird der Widerstandswert beider RowPieces addiert.
+ */
 void RowPiece::rowMerge(RowPiece otherRowPiece)
 {
     //Listen der Components vergleichen
@@ -112,13 +120,21 @@ void RowPiece::rowMerge(RowPiece otherRowPiece)
  *
  * \param[in]    otherRowPiece
  * \return Ob der Knoten bei beiden RowPieces gleich ist.
- *
  */
 bool RowPiece::hasOneEqualNode(RowPiece otherRowPiece)
 {
     return nullptr != getEqualNode(otherRowPiece);
 }
 
+/*!
+ * \brief Liefert, ob der Knoten des einen RowPieces mit einem Knoten des zu prüfenden übereinstimmt.
+ *
+ * \param[in]    otherRowPiece ist das zu vergleichende RowPiece
+ * \return Gibt den Knoten zurück.
+ *
+ * Es wird getestet ob der Knoten eins bei dem zu vergleichenden RowPieces gleich ist.
+ * Wenn das nicht der Fall ist wird der andere Knoten des zu vergleichenden RowPiece verglichen.
+ */
 Node* RowPiece::getEqualNode(RowPiece otherRowPiece)
 {
     bool nodeOneEqual = (_nodeOne == otherRowPiece._nodeOne || _nodeOne == otherRowPiece._nodeTwo);
@@ -138,9 +154,7 @@ Node* RowPiece::getEqualNode(RowPiece otherRowPiece)
  * \brief Prüft ob ein Knoten vorhanden ist.
  *
  * \param[in]    node
- * \return Ob ein Knoten vorhanden ist.
- *
- *
+ * \return Gibt zurück, ob ein Knoten vorhanden ist.
  */
 bool RowPiece::hasNode(Node* node)
 {

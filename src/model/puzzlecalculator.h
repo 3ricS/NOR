@@ -1,7 +1,10 @@
-//
-// Created by erics on 024, 24, Februar.
-//
-
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Der PuzzleCalculator berechnet den Gesamtwiderstandswert des Netztwerkes.
+ *
+ *
+ */
 #ifndef NOR_PUZZLECALCULATOR_H
 #define NOR_PUZZLECALCULATOR_H
 

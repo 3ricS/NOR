@@ -51,6 +51,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_resistorMode, SIGNAL(triggered()), this, SLOT(setResistorMode()));
     connect(_connectionMode, SIGNAL(triggered()), this, SLOT(setConnectionMode()));
     connect(_descriptionMode, SIGNAL(triggered()), this, SLOT(setDescriptionMode()));
+    connect(_print, SIGNAL(triggered()), this, SLOT(print()));
 
     connect(_model, SIGNAL(resistanceValueChanged(void)), this, SLOT(updateResistanceValue(void)));
 }
@@ -240,9 +241,13 @@ void MainWindow::createUpperMenu(void)
     _deleteComponent->setShortcut(QKeySequence(Qt::Key_Delete));
     _ui->menuBearbeiten->addAction(_deleteComponent);
 
+    _print = new QAction("Drucken");
+    _print->setShortcut(QKeySequence::Print);
+    _ui->menuBearbeiten->addAction(_print);
+
     //Erstellen Menü
     _selectionMode = new QAction("Auswahl Maus");
-    _selectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    _selectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     _selectionMode->setCheckable(true);
     _ui->menuErstellen->addAction(_selectionMode);
     _createActionGroup.append(_selectionMode);
@@ -267,7 +272,7 @@ void MainWindow::createUpperMenu(void)
     _createActionGroup.append(_connectionMode);
 
     _descriptionMode = new QAction("Textfeld erstellen");
-    _descriptionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    _descriptionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
     _descriptionMode->setCheckable(true);
     _ui->menuErstellen->addAction(_descriptionMode);
     _createActionGroup.append(_descriptionMode);
@@ -435,5 +440,10 @@ void MainWindow::undo()
 void MainWindow::redo()
 {
     _redo->triggered();
+}
+
+void MainWindow::print()
+{
+    _networkView->print();
 }
 

@@ -58,6 +58,7 @@ public slots:
     void setEdit(void);
     void undo(void);
     void redo(void);
+    void print(void);
 
     void updateResistanceValue(void);
 
@@ -96,6 +97,7 @@ private:
     QAction* _connectionMode = nullptr;
     QAction* _descriptionMode = nullptr;
     QAction* _selectionMode = nullptr;
+    QAction* _print;
 
     QList<QAction*> _createActionGroup;
     QList<QPushButton*> _modusButtons;

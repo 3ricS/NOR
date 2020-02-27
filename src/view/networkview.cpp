@@ -1,6 +1,8 @@
 #include "networkview.h"
 
-#include <QTextEdit>
+#include <QPrintDialog>
+#include <QPrinter>
+
 
 NetworkView::NetworkView(QWidget* parent) :
     QGraphicsView(parent)
@@ -550,6 +552,22 @@ void NetworkView::rotateComponentByShortcut()
 {
     QPointF gridPosition = scenePositionToGrid(_actualMoveScenePosition);
     rotateComponent(gridPosition, _actualMoveScenePosition);
+}
+
+void NetworkView::print()
+{
+    QPrinter printer(QPrinter::HighResolution);
+        printer.setPageSize(QPrinter::A4);
+        printer.setOrientation(QPrinter::Portrait);
+        printer.setFullPage(true);
+
+        QPrintDialog dlg(&printer);
+        if(dlg.exec()==QDialog::Accepted)
+        {
+            QPainter p(&printer);
+            render(&p);
+            p.end();
+        }
 }
 
 /*!

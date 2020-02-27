@@ -1,6 +1,5 @@
 #include "model/networkgraphics.h"
 
-
 NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsScene()), _undoStack(new QUndoStack(this))
 {
     // die Anfangsgröße wird initialisiert

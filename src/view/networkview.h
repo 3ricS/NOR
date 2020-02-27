@@ -20,6 +20,7 @@ public:
     void copy(void);
     void paste(void);
     void rotateComponentByShortcut(void);
+    void print(void);
 
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
     void deleteSelectedItem(void);

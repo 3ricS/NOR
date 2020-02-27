@@ -14,11 +14,11 @@ int main(int argc, char *argv[])
     QSysInfo s;
     if(s.productType() == "windows")
     {
-        a.setWindowIcon(QIcon(":/img/NOR_win.jpeg"));
+        a.setWindowIcon(QIcon(":/img/resistorLogo.png"));
     }
     else if(s.productType() == "osx")
     {
-        a.setWindowIcon(QIcon(":/img/NOR.icns"));
+        a.setWindowIcon(QIcon(":/img/resistorLogo.icns"));
     }
 
     return a.exec();

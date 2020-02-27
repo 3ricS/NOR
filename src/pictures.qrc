@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>img/NOR.icns</file>
-        <file>img/NOR_win.jpeg</file>
         <file>img/redo.png</file>
         <file>img/undo.png</file>
         <file>img/dc.png</file>
@@ -9,5 +7,9 @@
         <file>img/plug.png</file>
         <file>img/text-box.png</file>
         <file>img/click.png</file>
+        <file>img/resistorLogo.png</file>
+        <file>img/resistorLogo.icns</file>
+        <file>img/NOR.icns</file>
+        <file>img/NOR_win.jpeg</file>
     </qresource>
 </RCC>

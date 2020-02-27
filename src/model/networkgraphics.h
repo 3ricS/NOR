@@ -38,6 +38,7 @@ public:
     //with Undo
     Component* createNewComponent( QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
+    void moveComponent(Component* componentToMove,DescriptionField* descriptionToMove ,QPointF gridPosition);
 
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
     DescriptionField* duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
@@ -49,7 +50,7 @@ public:
 
     void deleteDescription(DescriptionField* description);
 
-    void moveComponent(Component* componentToMove,DescriptionField* descriptionToMove ,QPointF gridPosition);
+
 
     //for actions
     Component* createNewComponentWithoutUndo(QPointF gridPosition,
@@ -57,6 +58,7 @@ public:
     void deleteComponentWithoutUndo(Component* component);
     Connection* addConnectionWithoutUndo(ComponentPort componentPortA, ComponentPort componentPortB);
     void deleteConnectionWithoutUndo(Connection* connection);
+    void moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove , QPointF gridPosition);
 
 
     //getter

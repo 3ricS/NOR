@@ -542,7 +542,7 @@ void NetworkGraphics::deleteConnectionWithoutUndo(Connection* connection)
  * Befindet sich an der Position nichts, wird die ausgewählte Komponente an die neu Position verschoben.
  */
 void
-NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* descriptionToMove, QPointF gridPosition)
+NetworkGraphics::moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove, QPointF gridPosition)
 {
     bool isComponentAtPosition = isThereAComponentOrADescription(gridPosition);
     if (isComponentAtPosition)
@@ -557,6 +557,7 @@ NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* des
     {
         descriptionToMove->setPosition(gridPosition);
     }
+    update();
 }
 
 void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnectWithNeighbours)
@@ -696,4 +697,12 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
 {
     CommandAddConnection* commandAddConnection = new CommandAddConnection(this, componentPortA, componentPortB);
     _undoStack->push(commandAddConnection);
+}
+
+void
+NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* descriptionToMove, QPointF gridPosition)
+{
+    CommandMoveComponent* commandMoveComponent = new CommandMoveComponent(this, componentToMove, descriptionToMove, gridPosition);
+    qDebug() << "moveEvent";
+    _undoStack->push(commandMoveComponent);
 }

@@ -48,6 +48,7 @@ public:
     QPointF getPortPosition(Port port) const;
     int getId(void) {return _id;}
     Orientation getOrientation(void) {return _orientation;}
+    QPointF getPosition(void) {return QPointF(_xPosition, _yPosition);}
 
     //setter
     void setVertical(bool orientation) {_isVertical = orientation;}

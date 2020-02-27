@@ -13,6 +13,7 @@
 
 class NetworkGraphics;
 class Connection;
+class DescriptionField;
 
 class CommandAddComponent : public QUndoCommand
 {
@@ -47,6 +48,24 @@ private:
     Connection*         _createdConnection = nullptr;
     ComponentPort       _componentPortA;
     ComponentPort       _componentPortB;
+};
+
+
+class CommandMoveComponent : public QUndoCommand
+{
+public:
+    CommandMoveComponent(NetworkGraphics* model, Component* componentToMove,
+                         DescriptionField* descriptionToMove, QPointF gridPosition);
+
+    void undo() override;
+    void redo() override;
+
+private:
+    NetworkGraphics*    _model;
+    Component*          _componentToMove;
+    DescriptionField*   _descriptionToMove;
+    QPointF             _gridEndPosition;
+    QPointF             _gridStartPosition;
 };
 
 

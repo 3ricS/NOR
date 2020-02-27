@@ -47,3 +47,29 @@ void CommandAddConnection::redo()
 {
     _createdConnection = _model->addConnectionWithoutUndo(_componentPortA, _componentPortB);
 }
+
+
+
+
+/*
+ * _______________________________________________________________________
+ * CommandMoveComponnet
+ */
+
+CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* componentToMove,
+                                           DescriptionField* descriptionToMove, QPointF gridPosition) :
+        _model(model), _componentToMove(componentToMove), _descriptionToMove(descriptionToMove), _gridEndPosition(gridPosition), _gridStartPosition(componentToMove->getPosition())
+{
+}
+
+void CommandMoveComponent::undo()
+{
+    qDebug() << _gridStartPosition << _gridEndPosition;
+    _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridStartPosition);
+}
+
+void CommandMoveComponent::redo()
+{
+    qDebug() << _gridStartPosition << _gridEndPosition;
+    _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridEndPosition);
+}

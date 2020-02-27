@@ -80,6 +80,9 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
     case MouseMode::SelectionMode:
     {
         removeHighlightSelectedRect();
+
+        _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
+
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
         _selectedComponentToMove = nullptr;
         _selectedDescriptionToMove = nullptr;
@@ -262,8 +265,6 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         {
             highlightRect(scenePosition, _highlightColor);
         }
-
-        _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove ,gridPosition);
     }
         break;
     case DescriptionMode:

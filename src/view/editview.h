@@ -22,8 +22,8 @@ class EditView : public QDialog
 {
     Q_OBJECT
 public:
-    explicit EditView(Component* component, NetworkGraphics* model, bool isInitializingWindow = false,
-                      QWidget* parent = nullptr);
+    explicit EditView(Component* component, NetworkGraphics* model, bool isInitializingWindow, QWidget* parent,
+                      QUndoStack* undoStack);
 
 public slots:
     void turnLeft(void);
@@ -42,6 +42,8 @@ private:
     Component*             _component = nullptr;
     NetworkGraphics*       _model = nullptr;
     Component::Orientation _orientationAtStart;
+    QUndoStack*            _undoStack;
+    bool                   _isInitializingWindow;
 };
 
 #endif // EDITINGVIEW_H

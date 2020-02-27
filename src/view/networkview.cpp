@@ -40,7 +40,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                                                                      _isVerticalComponentDefault);
             if (createdComponent != nullptr)
             {
-                EditView* editView = new EditView(createdComponent, _model, true, this);
+                EditView* editView = new EditView(createdComponent, _model, true, this, nullptr);
                 editView->show();
             }
         }
@@ -408,7 +408,7 @@ void NetworkView::editNetworkOrDescription()
     {
         if(component->isSelected())
         {
-            EditView* editView = new EditView(component, _model, false, this);
+            EditView* editView = new EditView(component, _model, false, this, nullptr);
             editView->show();
         }
     }

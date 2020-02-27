@@ -70,4 +70,25 @@ private:
 
 
 
+class CommandEditComponent : public QUndoCommand {
+public:
+    CommandEditComponent(NetworkGraphics* model, Component* editedComponent,
+                         Component::Orientation originalOrientation, QString newName,
+                         double newValue);
+
+    void undo() override;
+    void redo() override;
+
+public:
+    NetworkGraphics*    _model = nullptr;
+    Component*          _editedComponent = nullptr;
+    QString             _newName;
+    QString             _oldName;
+    double              _newValue;
+    double              _oldValue;
+    Component::Orientation  _oldOrientation;
+    Component::Orientation  _newOrientation;
+};
+
+
 #endif //NOR_COMMANDS_H

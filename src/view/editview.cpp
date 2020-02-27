@@ -3,9 +3,10 @@
 #include <QMessageBox>
 #include <model/networkgraphics.h>
 
-EditView::EditView(Component* component, NetworkGraphics* model, bool isInitializingWindow, QWidget* parent) :
+EditView::EditView(Component* component, NetworkGraphics* model, bool isInitializingWindow, QWidget* parent,
+                   QUndoStack* undoStack) :
         QDialog(parent, Qt::WindowCloseButtonHint),
-        _editViewUi(new Ui::EditView), _model(model)
+        _editViewUi(new Ui::EditView), _model(model), _undoStack(undoStack), _isInitializingWindow(isInitializingWindow)
 {
     _component = component;
     _orientationAtStart = component->getOrientation();
@@ -42,7 +43,7 @@ void EditView::setupView(void)
         valueDescription = "Spannung [V]:";
     }
 
-    QRegExp regExp("[1-9][0-9]*$");
+    QRegExp regExp("(([1-9][0-9]*)|0).[0-9]*$");
     QRegExpValidator* validator = new QRegExpValidator(regExp, this);
     _editViewUi->textEditValue->setValidator(validator);
     _editViewUi->textEditValue->setFocus();
@@ -66,16 +67,21 @@ void EditView::ok(void)
     if ("" != newValueString)
     {
         bool convertSuccsessful = false;
-        int newValue = newValueString.toInt(&convertSuccsessful);
+        newValueString.replace(',', '.');
+        double newValue = newValueString.toDouble(&convertSuccsessful);
 
         //Werte übernehmen
         if (convertSuccsessful)
         {
             QString newName = _editViewUi->textEditName->text();
-            _component->setName(newName);
-            _component->setValue(newValue);
-
-            _model->updateCalc();
+            if(_isInitializingWindow)
+            {
+                _model->editComponentWithoutUndo(_component, newName, newValue);
+            }
+            else
+            {
+                _model->editComponent(_component, newName, newValue, _orientationAtStart);
+            }
             close();
         }
         else

@@ -25,8 +25,6 @@ void CommandAddComponent::redo()
 }
 
 
-
-
 /*
  * _______________________________________________________________________
  * CommandAddConnection
@@ -49,8 +47,6 @@ void CommandAddConnection::redo()
 }
 
 
-
-
 /*
  * _______________________________________________________________________
  * CommandMoveComponnet
@@ -58,18 +54,56 @@ void CommandAddConnection::redo()
 
 CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* componentToMove,
                                            DescriptionField* descriptionToMove, QPointF gridPosition) :
-        _model(model), _componentToMove(componentToMove), _descriptionToMove(descriptionToMove), _gridEndPosition(gridPosition), _gridStartPosition(componentToMove->getPosition())
+        _model(model), _componentToMove(componentToMove), _descriptionToMove(descriptionToMove),
+        _gridEndPosition(gridPosition), _gridStartPosition(componentToMove->getPosition())
 {
 }
 
 void CommandMoveComponent::undo()
 {
-    qDebug() << _gridStartPosition << _gridEndPosition;
     _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridStartPosition);
 }
 
 void CommandMoveComponent::redo()
 {
-    qDebug() << _gridStartPosition << _gridEndPosition;
     _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridEndPosition);
 }
+
+
+/*
+ * _______________________________________________________________________
+ * CommandMoveComponnet
+ */
+CommandEditComponent::CommandEditComponent(NetworkGraphics* model, Component* editedComponent,
+                                           Component::Orientation originalOrientation, QString newName,
+                                           double newValue) :
+        _model(model), _editedComponent(editedComponent), _oldOrientation(originalOrientation),
+        _newName(newName), _newValue(newValue)
+{
+    _oldName = editedComponent->getName();
+    _oldValue = editedComponent->getValue();
+    _newOrientation = editedComponent->getOrientation();
+}
+
+void CommandEditComponent::undo()
+{
+    if(_editedComponent != nullptr)
+    {
+        _editedComponent->setName(_oldName);
+        _editedComponent->setValue(_oldValue);
+        _editedComponent->setOrientation(_oldOrientation);
+        _model->updateCalc();
+    }
+}
+
+void CommandEditComponent::redo()
+{
+    if(nullptr != _editedComponent)
+    {
+        _editedComponent->setName(_newName);
+        _editedComponent->setValue(_newValue);
+        _editedComponent->setOrientation(_newOrientation);
+        _model->updateCalc();
+    }
+}
+

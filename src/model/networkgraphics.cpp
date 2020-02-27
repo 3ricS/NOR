@@ -187,7 +187,7 @@ void NetworkGraphics::load(void)
 
     updateCalc();
     emit resistanceValueChanged();
-    if(_componentList.count() != 0)
+    if (_componentList.count() != 0)
     {
         emit newNetworkIsLoad();
     }
@@ -236,7 +236,8 @@ Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
 }
 
 Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
-                                                          Component::ComponentType componentType, bool componentIsVertical)
+                                                          Component::ComponentType componentType,
+                                                          bool componentIsVertical)
 {
     Component* createdComponent = nullptr;
 
@@ -337,17 +338,17 @@ NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, i
         //Finden einer freien ID
         int newId = _resistorCount;
         bool isSetId = false;
-        while(!isSetId)
+        while (!isSetId)
         {
             bool isIdValid = true;
             for (Component* component : _componentList)
             {
-                if(component->getId() == newId)
+                if (component->getId() == newId)
                 {
                     isIdValid = false;
                 }
             }
-            if(isIdValid)
+            if (isIdValid)
             {
                 id = newId;
                 isSetId = true;
@@ -421,7 +422,7 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
  */
 DescriptionField*
 NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[maybe_unused]] QString text,
-[[maybe_unused]] int id)
+                                        [[maybe_unused]] int id)
 {
     if (!isLoad)
     {
@@ -542,7 +543,8 @@ void NetworkGraphics::deleteConnectionWithoutUndo(Connection* connection)
  * Befindet sich an der Position nichts, wird die ausgewählte Komponente an die neu Position verschoben.
  */
 void
-NetworkGraphics::moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove, QPointF gridPosition)
+NetworkGraphics::moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove,
+                                          QPointF gridPosition)
 {
     bool isComponentAtPosition = isThereAComponentOrADescription(gridPosition);
     if (isComponentAtPosition)
@@ -637,29 +639,29 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
 {
     switch (componentToTurn->getOrientation())
     {
-    case Component::Orientation::left:
-    {
-        componentToTurn->setOrientation(Component::Orientation::top);
-        //mirrorComponent(componentToTurn);
-    }
-        break;
-    case Component::Orientation::top:
-    {
-        componentToTurn->setOrientation(Component::Orientation::right);
-        mirrorComponent(componentToTurn);
-    }
-        break;
-    case Component::Orientation::right:
-    {
-        componentToTurn->setOrientation(Component::Orientation::bottom);
-    }
-        break;
-    case Component::Orientation::bottom:
-    {
-        componentToTurn->setOrientation(Component::Orientation::left);
-        mirrorComponent(componentToTurn);
-    }
-        break;
+        case Component::Orientation::left:
+        {
+            componentToTurn->setOrientation(Component::Orientation::top);
+            //mirrorComponent(componentToTurn);
+        }
+            break;
+        case Component::Orientation::top:
+        {
+            componentToTurn->setOrientation(Component::Orientation::right);
+            mirrorComponent(componentToTurn);
+        }
+            break;
+        case Component::Orientation::right:
+        {
+            componentToTurn->setOrientation(Component::Orientation::bottom);
+        }
+            break;
+        case Component::Orientation::bottom:
+        {
+            componentToTurn->setOrientation(Component::Orientation::left);
+            mirrorComponent(componentToTurn);
+        }
+            break;
     }
 }
 
@@ -690,6 +692,7 @@ void NetworkGraphics::updateCalc(void)
 
     _resistanceValue = _puzzleCalculator.calculate(_connectionList, _componentList);
 
+    update();
     emit resistanceValueChanged();
 }
 
@@ -704,8 +707,24 @@ NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* des
 {
     if (componentToMove != nullptr)
     {
-        CommandMoveComponent* commandMoveComponent = new CommandMoveComponent(this, componentToMove, descriptionToMove, gridPosition);
-        qDebug() << "moveEvent";
+        CommandMoveComponent* commandMoveComponent = new CommandMoveComponent(this, componentToMove, descriptionToMove,
+                                                                              gridPosition);
         _undoStack->push(commandMoveComponent);
     }
+}
+
+void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QString newName, double newValue)
+{
+    componentToEdit->setName(newName);
+    componentToEdit->setValue(newValue);
+
+    updateCalc();
+}
+
+void NetworkGraphics::editComponent(Component* componentToEdit, QString newName, double newValue,
+                                    Component::Orientation originalOrientation)
+{
+    CommandEditComponent* commandEditComponent = new CommandEditComponent(this, componentToEdit, originalOrientation,
+                                                                          newName, newValue);
+    _undoStack->push(commandEditComponent);
 }

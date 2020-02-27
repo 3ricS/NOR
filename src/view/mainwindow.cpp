@@ -49,6 +49,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_resistorMode, SIGNAL(triggered()), this, SLOT(setResistorMode()));
     connect(_connectionMode, SIGNAL(triggered()), this, SLOT(setConnectionMode()));
     connect(_descriptionMode, SIGNAL(triggered()), this, SLOT(setDescriptionMode()));
+    connect(_ui->Redo, SIGNAL(triggered()), this, SLOT(_redo));
 
     connect(_model, SIGNAL(resistanceValueChanged(void)), this, SLOT(updateResistanceValue(void)));
 }

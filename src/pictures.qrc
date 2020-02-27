@@ -9,7 +9,5 @@
         <file>img/click.png</file>
         <file>img/resistorLogo.png</file>
         <file>img/resistorLogo.icns</file>
-        <file>img/NOR.icns</file>
-        <file>img/NOR_win.jpeg</file>
     </qresource>
 </RCC>

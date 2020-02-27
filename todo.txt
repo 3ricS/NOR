@@ -4,21 +4,16 @@ Doku: wenn Fehler oder Mängel auffallen bitte bescheid geben
 ___________________________________________________________________
 
 Model
-UNDO (oben links) QUNDOSTACK
-Linien redraw behandeln, verschwinden teils
 Multiselect der Bauteile
-Laden nicht 100% 
 
 
 - Verbindungen rechtwinklig zeichnen (Leonel: angefangen, wird weiter dran gearbeitet. Teils schon funktionsfähig. Doku schreibe ich selber. Will ich euch nicht zumuten)
-- einzelne Connections löschen
 
-- selected Connection in Punkten markieren
-- strg + mausrad funktioniert nicht (vielleicht komplett entfernen?)
+- strg + mausrad funktioniert nicht deshalb entfernen (Leonel)
 - NetworkGraphics hat 600 Zeilen
 - Widerstandswert als double
 - rotieren funktioniert nicht
-
+- Eingabefenster Description als Texteingabe
 
 
 - nach Undo Hinzufügen (Component) und wieder Redo Hinzufügen (Component) kann dieser nicht mehr mit Redo verschoben werden

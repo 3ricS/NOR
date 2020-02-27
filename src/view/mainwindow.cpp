@@ -28,6 +28,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
     connect(_ui->DescriptionField, SIGNAL(released()), this, SLOT(setDescriptionMode()));
+    connect(_ui->Undo, SIGNAL(released()), this, SLOT(undo()));
+    connect(_ui->Redo, SIGNAL(released()), this, SLOT(redo()));
     connect(_new, SIGNAL(triggered()), this, SLOT(setNewFile()));
     connect(_saveAs, SIGNAL(triggered()), this, SLOT(setSaveAsFile()));
     connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
@@ -49,7 +51,6 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_resistorMode, SIGNAL(triggered()), this, SLOT(setResistorMode()));
     connect(_connectionMode, SIGNAL(triggered()), this, SLOT(setConnectionMode()));
     connect(_descriptionMode, SIGNAL(triggered()), this, SLOT(setDescriptionMode()));
-    connect(_ui->Redo, SIGNAL(triggered()), this, SLOT(_redo));
 
     connect(_model, SIGNAL(resistanceValueChanged(void)), this, SLOT(updateResistanceValue(void)));
 }
@@ -424,5 +425,15 @@ void MainWindow::deleteItem(void)
 void MainWindow::setEdit()
 {
     _networkView->editNetworkOrDescription();
+}
+
+void MainWindow::undo()
+{
+    _undo->triggered();
+}
+
+void MainWindow::redo()
+{
+    _redo->triggered();
 }
 

@@ -56,6 +56,8 @@ public slots:
     void setRotate(void);
     void deleteItem(void);
     void setEdit(void);
+    void undo(void);
+    void redo(void);
 
     void updateResistanceValue(void);
 

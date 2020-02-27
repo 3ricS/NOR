@@ -1,4 +1,4 @@
-
+﻿
 Doku: wenn Fehler oder Mängel auffallen bitte bescheid geben
 
 ___________________________________________________________________
@@ -6,10 +6,6 @@ ___________________________________________________________________
 Model
 Multiselect der Bauteile
 
-
-- Verbindungen rechtwinklig zeichnen (Leonel: angefangen, wird weiter dran gearbeitet. Teils schon funktionsfähig. Doku schreibe ich selber. Will ich euch nicht zumuten)
-
-- strg + mausrad funktioniert nicht deshalb entfernen (Leonel)
 - NetworkGraphics hat 600 Zeilen
 - Widerstandswert als double
 - rotieren funktioniert nicht

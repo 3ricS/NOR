@@ -163,22 +163,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void MainWindow::wheelEvent(QWheelEvent *event)
-{
-    //TODO: Irgendwie mit Steuerung verknüfen
-    if(_ctrlIsPressed)
-    {
-        if(event->delta() > 0)
-        {
-        setZoomIn();
-        }
-        if(event->delta() < 0)
-        {
-        setZoomOut();
-        }
-    }
-}
-
 void MainWindow::createUpperMenu(void)
 {
     //Datei Menu

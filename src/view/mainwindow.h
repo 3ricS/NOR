@@ -62,7 +62,6 @@ public slots:
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
-    void wheelEvent(QWheelEvent *event) override;
 
 private:
     void createUpperMenu(void);

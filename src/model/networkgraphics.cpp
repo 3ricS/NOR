@@ -663,6 +663,7 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
         }
             break;
     }
+    update();
 }
 
 /*!

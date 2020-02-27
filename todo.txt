@@ -1,4 +1,4 @@
-﻿
+
 Doku: wenn Fehler oder Mängel auffallen bitte bescheid geben
 
 ___________________________________________________________________
@@ -7,10 +7,6 @@ Model
 Multiselect der Bauteile
 
 - NetworkGraphics hat 600 Zeilen
-- Widerstandswert als double
-- rotieren funktioniert nicht
-- Eingabefenster Description als Texteingabe
-
 
 - nach Undo Hinzufügen (Component) und wieder Redo Hinzufügen (Component) kann dieser nicht mehr mit Redo verschoben werden
 

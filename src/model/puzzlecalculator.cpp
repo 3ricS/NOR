@@ -25,6 +25,7 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
     if (!rowPieces.isEmpty())
     {
         double resistanceValue = calculateResistanceValueFromRowPieces(rowPieces);
+        qDebug() << "Widerstandswert Calculate" << resistanceValue;
         return resistanceValue;
     }
     return 0.0;

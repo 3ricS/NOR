@@ -18,7 +18,7 @@ public:
     void parallelMerge(RowPiece otherRowPiece);
     void rowMerge(RowPiece otherRowPiece);
 
-    int getResistanceValue(void) {return _resistanceValue;}
+    double getResistanceValue(void) {return _resistanceValue;}
 
     Node* getNodeOne() {return _nodeOne;}
     Node* getNodeTwo() {return _nodeTwo;}

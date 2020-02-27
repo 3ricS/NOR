@@ -63,7 +63,7 @@ private:
     int _diffX = 0;
     int _diffY = 0;
 
-    int _countChangeDirection;
+    int _countChangeDirection = 0;
 
     ComponentPort _componentPortOne;
     ComponentPort _componentPortTwo;

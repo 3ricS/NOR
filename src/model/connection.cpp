@@ -49,10 +49,17 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     _diffY = _endPoint.y() - _startPoint.y();
     _currentPoint = _startPoint;
 
+    qDebug() << horizontalFirst << verticalFirst << countChangesHorizontalFirst << countChangesVerticalFirst;
+
     if(horizontalFirst < verticalFirst)
     {
         _startHorizontal = true;
         horizontalRoutine();
+    }
+    else if(horizontalFirst > verticalFirst)
+    {
+        _startHorizontal = false;
+        verticalRoutine();
     }
     else if (horizontalFirst == verticalFirst)
     {
@@ -66,11 +73,6 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
             _startHorizontal = false;
             verticalRoutine();
         }
-    }
-    else
-    {
-        _startHorizontal = false;
-        verticalRoutine();
     }
 
     if(_isSelected)

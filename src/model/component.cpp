@@ -1,7 +1,7 @@
 #include <view/editview.h>
 #include "component.h"
 
-Component::Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int id)
+Component::Component(int x, int y, bool isVertical, QString name, double value, ComponentType componentTyp, int id)
         : QGraphicsItem(nullptr),
           _xPosition(x), _yPosition(y), _isVertical(isVertical),
           _name(name), _value(value), _id(id),

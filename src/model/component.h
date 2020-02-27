@@ -27,7 +27,7 @@ public:
     enum ComponentType{Resistor, PowerSupply};
     enum Port{A, B, null};
     enum Orientation{left, top, right, bottom};
-    Component(int x, int y, bool isVertical, QString name, int value, ComponentType componentTyp, int id);
+    Component(int x, int y, bool isVertical, QString name, double value, ComponentType componentTyp, int id);
 
     QRectF boundingRect(void) const;
     bool hasPortAtPosition(QPointF position) const;
@@ -40,7 +40,7 @@ public:
     int getXPosition(void) const {return _xPosition;}
     int getYPosition(void) const {return _yPosition;}
     QString getName(void) const {return _name;}
-    int getValue(void) const {return _value;}
+    double getValue(void) const {return _value;}
     bool isVertical(void) const {return _isVertical;}
     bool isSelected(void) const {return  _isSelected;}
 
@@ -54,7 +54,7 @@ public:
     void setVertical(bool orientation) {_isVertical = orientation;}
     void setOrientation(Component::Orientation newOrientation);
     void setName(QString name) {_name = name;}
-    void setValue(int newValue) {_value = newValue;}
+    void setValue(double newValue) { _value = newValue;}
     void setPosition(QPointF gridPosition);
     void set_isSelected(bool isSelected);
 
@@ -68,8 +68,8 @@ protected:
     bool _isSelected = false;
     Orientation _orientation;
 
-    QString _name;
-    int     _value;
+    QString     _name;
+    double      _value;
 
     //virtuelle Methoden
     virtual void paintInformations(QPainter* painter) = 0;

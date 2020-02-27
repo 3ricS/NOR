@@ -414,7 +414,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateResistanceValue(void)
 {
-    _ui->CalculatedValue->setText(QString::number(_model->getResistanceValue()) + " Ω");
+    _ui->CalculatedValue->setText(QString::number(_model->getResistanceValue(), 'f', 2) + " Ω");
 }
 
 void MainWindow::deleteItem(void)

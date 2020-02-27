@@ -1,5 +1,7 @@
 #include "networkview.h"
 
+#include <QTextEdit>
+
 NetworkView::NetworkView(QWidget* parent) :
     QGraphicsView(parent)
 {
@@ -73,7 +75,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         }
         while (!_tempComponentListForConnections.isEmpty())
         {
-          _tempComponentListForConnections.removeLast();
+            _tempComponentListForConnections.removeLast();
         }
     }
         break;
@@ -117,7 +119,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             DescriptionField * createdDescription = _model->createDescriptionField(gridPosition, false);
             if(createdDescription != nullptr)
             {
-                QString text = QInputDialog::getText(this, "Textfeld bearbeiten", "Text eingeben:",QLineEdit::EchoMode::Normal, "", &ok, Qt::WindowCloseButtonHint);
+                QString text = QInputDialog::getMultiLineText(this, "Textfeld bearbeiten", "Text bearbeiten", "", &ok, Qt::WindowCloseButtonHint);
 
                 if(ok && !text.isEmpty())
                 {
@@ -303,7 +305,7 @@ void NetworkView::mouseDoubleClickEvent(QMouseEvent* event)
                 _model->getDescriptionAtPosition(gridPosition);
             }
         }
-            //TODO: emit foundComponent
+        //TODO: emit foundComponent
         editNetworkOrDescription();
     }
 }
@@ -418,7 +420,7 @@ void NetworkView::editNetworkOrDescription()
         if(description->isSelected())
         {
             bool ok = false;
-            QString text = QInputDialog::getText(this, "Textfeld bearbeiten", "Text eingeben:",QLineEdit::EchoMode::Normal, description->getText(), &ok, Qt::WindowCloseButtonHint);
+            QString text = QInputDialog::getMultiLineText(this, "Textfeld bearbeiten", "Text eingeben:", description->getText(), &ok, Qt::WindowCloseButtonHint);
             if(ok)
             {
                 description->setText(text);
@@ -447,7 +449,7 @@ void NetworkView::removeHighlightSelectedRect(void)
 
     for(Connection* connection : _model->getConnections())
     {
-            connection->set_isSelected(false);
+        connection->set_isSelected(false);
     }
 
     _model->update();
@@ -455,27 +457,40 @@ void NetworkView::removeHighlightSelectedRect(void)
 
 void NetworkView::rotateComponent(QPointF gridPosition, QPointF scenePosition)
 {
-    _isVerticalComponentDefault = !_isVerticalComponentDefault;
-    gridDisappears();
-    if(!_model->isThereAComponentOrADescription(gridPosition))
+    if(MouseMode::SelectionMode != _mouseMode)
     {
-        if (MouseMode::PowerSupplyMode == _mouseMode)
+        _isVerticalComponentDefault = !_isVerticalComponentDefault;
+        gridDisappears();
+        if(!_model->isThereAComponentOrADescription(gridPosition))
         {
-            Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                        gridPosition.toPoint().y(), _isVerticalComponentDefault,
-                                                        0);
-            _sampleComponentOnMoveEvent = sampleResistor;
+            if (MouseMode::PowerSupplyMode == _mouseMode)
+            {
+                Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
+                                                            gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                            0);
+                _sampleComponentOnMoveEvent = sampleResistor;
+            }
+            else if (MouseMode::ResistorMode == _mouseMode)
+            {
+                Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
+                                                         gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                         0);
+                _sampleComponentOnMoveEvent = sampleResistor;
+            }
         }
-        else if (MouseMode::ResistorMode == _mouseMode)
+        _model->addItem(_sampleComponentOnMoveEvent);
+        highlightRect(scenePosition, _highlightColor);
+    }
+    else if(MouseMode::SelectionMode == _mouseMode)
+    {
+        for(Component* c : _model->getComponents())
         {
-            Component* sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                                     gridPosition.toPoint().y(), _isVerticalComponentDefault,
-                                                     0);
-            _sampleComponentOnMoveEvent = sampleResistor;
+            if(c->isSelected())
+            {
+                _model->turnComponentRight(c);
+            }
         }
     }
-    _model->addItem(_sampleComponentOnMoveEvent);
-    highlightRect(scenePosition, _highlightColor);
 }
 
 bool NetworkView::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWaytoTheRight)

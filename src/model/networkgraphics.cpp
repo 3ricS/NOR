@@ -342,10 +342,10 @@ NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, i
             bool isIdValid = true;
             for (Component* component : _componentList)
             {
-               if(component->getId() == newId)
-               {
-                   isIdValid = false;
-               }
+                if(component->getId() == newId)
+                {
+                    isIdValid = false;
+                }
             }
             if(isIdValid)
             {
@@ -421,7 +421,7 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
  */
 DescriptionField*
 NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[maybe_unused]] QString text,
-                                        [[maybe_unused]] int id)
+[[maybe_unused]] int id)
 {
     if (!isLoad)
     {
@@ -637,29 +637,29 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
 {
     switch (componentToTurn->getOrientation())
     {
-        case Component::Orientation::left:
-        {
-            componentToTurn->setOrientation(Component::Orientation::top);
-            //mirrorComponent(componentToTurn);
-        }
-            break;
-        case Component::Orientation::top:
-        {
-            componentToTurn->setOrientation(Component::Orientation::right);
-            mirrorComponent(componentToTurn);
-        }
-            break;
-        case Component::Orientation::right:
-        {
-            componentToTurn->setOrientation(Component::Orientation::bottom);
-        }
-            break;
-        case Component::Orientation::bottom:
-        {
-            componentToTurn->setOrientation(Component::Orientation::left);
-            mirrorComponent(componentToTurn);
-        }
-            break;
+    case Component::Orientation::left:
+    {
+        componentToTurn->setOrientation(Component::Orientation::top);
+        //mirrorComponent(componentToTurn);
+    }
+        break;
+    case Component::Orientation::top:
+    {
+        componentToTurn->setOrientation(Component::Orientation::right);
+        mirrorComponent(componentToTurn);
+    }
+        break;
+    case Component::Orientation::right:
+    {
+        componentToTurn->setOrientation(Component::Orientation::bottom);
+    }
+        break;
+    case Component::Orientation::bottom:
+    {
+        componentToTurn->setOrientation(Component::Orientation::left);
+        mirrorComponent(componentToTurn);
+    }
+        break;
     }
 }
 
@@ -702,7 +702,10 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
 void
 NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* descriptionToMove, QPointF gridPosition)
 {
-    CommandMoveComponent* commandMoveComponent = new CommandMoveComponent(this, componentToMove, descriptionToMove, gridPosition);
-    qDebug() << "moveEvent";
-    _undoStack->push(commandMoveComponent);
+    if (componentToMove != nullptr)
+    {
+        CommandMoveComponent* commandMoveComponent = new CommandMoveComponent(this, componentToMove, descriptionToMove, gridPosition);
+        qDebug() << "moveEvent";
+        _undoStack->push(commandMoveComponent);
+    }
 }

@@ -55,13 +55,15 @@ private:
     void horizontalRoutine(void);
     void verticalRoutine(void);
     void dodgeRoutine(void);
-    int pathAnalysehorizontalRoutine(int howManyConnections, bool horizontalFirst);
-    int pathAnalyseverticalRoutine(int howManyConnections, bool horizontalFirst);
-    int pathAnalysedodgeRoutine(int howManyConnections);
+    int pathAnalyseHorizontalRoutine(int howManyConnections, bool horizontalFirst);
+    int pathAnalyseVerticalRoutine(int howManyConnections, bool horizontalFirst);
+    int pathAnalyseDodgeRoutine(int howManyConnections);
     bool isStartComponentVertical(void);
 
     int _diffX = 0;
     int _diffY = 0;
+
+    int _countChangeDirection;
 
     ComponentPort _componentPortOne;
     ComponentPort _componentPortTwo;

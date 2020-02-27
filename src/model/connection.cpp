@@ -33,20 +33,39 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
 
     int horizontalFirst = pathAnalyse(true);
 
+    int countChangesHorizontalFirst = _countChangeDirection;
+    _countChangeDirection = 0;
+
     _diffX = _endPoint.x() - _startPoint.x();
     _diffY = _endPoint.y() - _startPoint.y();
     _currentPoint = _startPoint;
 
     int verticalFirst = pathAnalyse(false);
 
+    int countChangesVerticalFirst = _countChangeDirection;
+    _countChangeDirection = 0;
+
     _diffX = _endPoint.x() - _startPoint.x();
     _diffY = _endPoint.y() - _startPoint.y();
     _currentPoint = _startPoint;
-    qDebug() << horizontalFirst << verticalFirst;
-    if(horizontalFirst <= verticalFirst)
+
+    if(horizontalFirst < verticalFirst)
     {
         _startHorizontal = true;
         horizontalRoutine();
+    }
+    else if (horizontalFirst == verticalFirst)
+    {
+        if(countChangesHorizontalFirst <= countChangesVerticalFirst)
+        {
+            _startHorizontal = true;
+            horizontalRoutine();
+        }
+        else
+        {
+            _startHorizontal = false;
+            verticalRoutine();
+        }
     }
     else
     {
@@ -140,11 +159,11 @@ int Connection::pathAnalyse(bool horizontalFirst)
    int howManyConnections = 0;
    if(horizontalFirst)
    {
-       return  pathAnalysehorizontalRoutine(howManyConnections, horizontalFirst);
+       return  pathAnalyseHorizontalRoutine(howManyConnections, horizontalFirst);
    }
    else
    {
-      return pathAnalyseverticalRoutine(howManyConnections, horizontalFirst);
+      return pathAnalyseVerticalRoutine(howManyConnections, horizontalFirst);
    }
 
 }
@@ -450,7 +469,7 @@ bool Connection::operator!=(const Connection& rhs)
     return !(operator==(rhs));
 }
 
-int Connection::pathAnalysehorizontalRoutine(int howManyConnections, bool horizontalFirst)
+int Connection::pathAnalyseHorizontalRoutine(int howManyConnections, bool horizontalFirst)
 {
     if(_diffX > 0)
     {
@@ -467,11 +486,12 @@ int Connection::pathAnalysehorizontalRoutine(int howManyConnections, bool horizo
             {
                 if(_diffY == 0)
                 {
-                    howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                    howManyConnections = pathAnalyseDodgeRoutine(howManyConnections);
                 }
                 else
                 {
-                    howManyConnections = pathAnalyseverticalRoutine(howManyConnections, horizontalFirst);
+                    _countChangeDirection += 1;
+                    howManyConnections = pathAnalyseVerticalRoutine(howManyConnections, horizontalFirst);
                 }
             }
         }
@@ -491,18 +511,19 @@ int Connection::pathAnalysehorizontalRoutine(int howManyConnections, bool horizo
             {
                 if(_diffY == 0)
                 {
-                    howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                    howManyConnections = pathAnalyseDodgeRoutine(howManyConnections);
                 }
                 else
                 {
-                    howManyConnections = pathAnalyseverticalRoutine(howManyConnections, horizontalFirst);
+                    _countChangeDirection += 1;
+                    howManyConnections = pathAnalyseVerticalRoutine(howManyConnections, horizontalFirst);
                 }
             }
         }
     }
     if(horizontalFirst)
     {
-        howManyConnections = pathAnalyseverticalRoutine(howManyConnections, horizontalFirst);
+        howManyConnections = pathAnalyseVerticalRoutine(howManyConnections, horizontalFirst);
         return howManyConnections;
     }
     else
@@ -511,7 +532,7 @@ int Connection::pathAnalysehorizontalRoutine(int howManyConnections, bool horizo
     }
 }
 
-int Connection::pathAnalyseverticalRoutine(int howManyConnections, bool horizontalFirst)
+int Connection::pathAnalyseVerticalRoutine(int howManyConnections, bool horizontalFirst)
 {
     if(_diffY > 0)
     {
@@ -528,11 +549,12 @@ int Connection::pathAnalyseverticalRoutine(int howManyConnections, bool horizont
             {
                 if(_diffX == 0)
                 {
-                    howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                    howManyConnections = pathAnalyseDodgeRoutine(howManyConnections);
                 }
                 else
                 {
-                    howManyConnections = pathAnalysehorizontalRoutine(howManyConnections, horizontalFirst);
+                    _countChangeDirection += 1;
+                    howManyConnections = pathAnalyseHorizontalRoutine(howManyConnections, horizontalFirst);
                 }
             }
         }
@@ -552,18 +574,19 @@ int Connection::pathAnalyseverticalRoutine(int howManyConnections, bool horizont
             {
                 if(_diffX == 0)
                 {
-                    howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                    howManyConnections = pathAnalyseDodgeRoutine(howManyConnections);
                 }
                 else
                 {
-                    howManyConnections = pathAnalysehorizontalRoutine(howManyConnections, horizontalFirst);
+                    _countChangeDirection += 1;
+                    howManyConnections = pathAnalyseHorizontalRoutine(howManyConnections, horizontalFirst);
                 }
             }
         }
     }
     if(!horizontalFirst)
     {
-        howManyConnections = pathAnalysehorizontalRoutine(howManyConnections, horizontalFirst);
+        howManyConnections = pathAnalyseHorizontalRoutine(howManyConnections, horizontalFirst);
         return howManyConnections;
     }
     else
@@ -572,7 +595,7 @@ int Connection::pathAnalyseverticalRoutine(int howManyConnections, bool horizont
     }
 }
 
-int Connection::pathAnalysedodgeRoutine(int howManyConnections)
+int Connection::pathAnalyseDodgeRoutine(int howManyConnections)
 {
     if(_diffX == 0)
     {
@@ -594,7 +617,7 @@ int Connection::pathAnalysedodgeRoutine(int howManyConnections)
             }
             else
             {
-                howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                howManyConnections = pathAnalyseDodgeRoutine(howManyConnections);
             }
         }
         if(_diffY > 0)
@@ -609,7 +632,7 @@ int Connection::pathAnalysedodgeRoutine(int howManyConnections)
             }
             else
             {
-                howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                howManyConnections = pathAnalyseDodgeRoutine(howManyConnections);
             }
         }
     }
@@ -633,7 +656,7 @@ int Connection::pathAnalysedodgeRoutine(int howManyConnections)
             }
             else
             {
-                howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                howManyConnections = pathAnalyseDodgeRoutine(howManyConnections);
             }
         }
         if(_diffX > 0)
@@ -648,7 +671,7 @@ int Connection::pathAnalysedodgeRoutine(int howManyConnections)
             }
             else
             {
-                howManyConnections = pathAnalysedodgeRoutine(howManyConnections);
+                howManyConnections = pathAnalyseDodgeRoutine(howManyConnections);
             }
         }
     }

@@ -61,8 +61,26 @@ bool RowPiece::hasEqualNodesOnBothSides(RowPiece otherRowPiece)
  */
 void RowPiece::parallelMerge(RowPiece otherRowPiece)
 {
+    QString mergeNames;
+    QString name;
+    QString otherName;
+    for (Component* component : _components)
+    {
+        name += component->getName();
+    }
+    for (Component* component : otherRowPiece._components)
+    {
+        otherName += component->getName();
+    }
+
     //Listen der Components vergleichen
     _components.append(otherRowPiece._components);
+    for (Component* component : _components)
+    {
+        mergeNames += component->getName();
+    }
+
+    qDebug() << mergeNames << " = " << name << " * " << otherName << " / " << name << " + " << otherName;
 
     //Werte zusammenrechnen
     double newResistanceValueCounter = _resistanceValue * otherRowPiece._resistanceValue;
@@ -80,6 +98,24 @@ void RowPiece::parallelMerge(RowPiece otherRowPiece)
  */
 void RowPiece::rowMerge(RowPiece otherRowPiece)
 {
+    QString mergeNames;
+    QString name;
+    QString otherName;
+    for (Component* component : _components)
+    {
+        name += component->getName();
+    }
+    for (Component* component : otherRowPiece._components)
+    {
+        otherName += component->getName();
+    }
+
+    //Listen der Components vergleichen
+    _components.append(otherRowPiece._components);
+    for (Component* component : _components)
+    {
+        mergeNames += component->getName();
+    }
     //Listen der Components vergleichen
     _components.append(otherRowPiece._components);
 
@@ -110,6 +146,8 @@ void RowPiece::rowMerge(RowPiece otherRowPiece)
         }
         delete otherRowPiece._nodeTwo;
     }
+
+    qDebug() << mergeNames << " = " << name << " + " << otherName;
 
     //Widerstandswerte addieren
     _resistanceValue = _resistanceValue + otherRowPiece._resistanceValue;

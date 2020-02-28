@@ -49,8 +49,6 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     _diffY = _endPoint.y() - _startPoint.y();
     _currentPoint = _startPoint;
 
-    qDebug() << horizontalFirst << verticalFirst << countChangesHorizontalFirst << countChangesVerticalFirst;
-
     if(horizontalFirst < verticalFirst)
     {
         _startHorizontal = true;

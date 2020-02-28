@@ -142,18 +142,23 @@ void CommandDeleteComponent::undo()
     {
         _model->addConnectionWithoutUndo(connection);
     }
+    _hasDoneUndo = true;
 }
 
 void CommandDeleteComponent::redo()
 {
     _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_deletedComponent);
+    _hasDoneUndo = false;
 }
 
 CommandDeleteComponent::~CommandDeleteComponent()
 {
-    for (Connection* connection : _deletedConnections)
+    if(!_hasDoneUndo)
     {
-        delete connection;
+        for (Connection* connection : _deletedConnections)
+        {
+            delete connection;
+        }
+        delete _deletedComponent;
     }
-    delete _deletedComponent;
 }

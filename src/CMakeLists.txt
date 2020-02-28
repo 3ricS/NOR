@@ -17,10 +17,11 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Gui REQUIRED)
 find_package(Qt5 COMPONENTS Sql REQUIRED)
-find_package(Qt5PrintSupport REQUIRED)
+find_package(Qt5 COMPONENTS PrintSupport REQUIRED)
 
 include_directories(doc)
 include_directories(src)
+include_directories(img)
 
 # set .h files
 set(MOC_HEADERS

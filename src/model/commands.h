@@ -104,6 +104,7 @@ private:
     NetworkGraphics*    _model = nullptr;
     Component*          _deletedComponent = nullptr;
     QList<Connection*>  _deletedConnections;
+    bool                _hasDoneUndo = false;
 };
 
 

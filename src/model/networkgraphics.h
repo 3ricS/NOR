@@ -1,3 +1,11 @@
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Eine PowerSupply ist eine Komponente der Schaltung
+ *
+ * Die Klasse NetworkGraphics ist die Modelklasse.
+ *
+ */
 #ifndef NETWORKGRAPHICS_H
 #define NETWORKGRAPHICS_H
 
@@ -54,9 +62,6 @@ public:
     Component* addPowerSupply(QString name, int x, int y, bool isVertical, int id = 0);
 
 
-
-
-
     //only for QUndoCommands
     Component* createNewComponentWithoutUndo(QPointF gridPosition,
                                              Component::ComponentType componentType, bool componentIsVertical);
@@ -70,8 +75,6 @@ public:
     void deleteDescriptionWithoutUndo(DescriptionField* description);
     void moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove , QPointF gridPosition);
     void editComponentWithoutUndo(Component* componentToEdit, QString newName, double newValue);
-
-
 
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);

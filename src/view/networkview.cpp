@@ -10,6 +10,13 @@ NetworkView::NetworkView(QWidget* parent) :
     setMouseTracking(true);
 }
 
+/*!
+ * \brief Verbindet den View mit dem Model
+ *
+ * \param[in]    model
+ *
+ * Der View bekommt das Model übergeben, damit dieses bekannt ist.
+ */
 void NetworkView::setModel(NetworkGraphics *model)
 {
     _model = model;
@@ -405,7 +412,7 @@ void NetworkView::deleteSelectedItem(void)
  *
  *
  */
-void NetworkView::editNetworkOrDescription()
+void NetworkView::editNetworkOrDescription(void)
 {
     for(Component* component : _model->getComponents())
     {
@@ -546,14 +553,24 @@ QPointF NetworkView::findScrollPosition()
     return QPointF(averageX, averageY);
 }
 
-//Bereitet die Scene und GridPosition für das Rotieren per Shortcut auf
-void NetworkView::rotateComponentByShortcut()
+/*!
+ * \brief Bereitet die Scene und GridPosition für das Rotieren per Shortcut auf.
+ *
+ */
+void NetworkView::rotateComponentByShortcut(void)
 {
     QPointF gridPosition = scenePositionToGrid(_actualMoveScenePosition);
     rotateComponent(gridPosition, _actualMoveScenePosition);
 }
 
-void NetworkView::print()
+/*!
+ * \brief Ausdrucken der Netzwerkschaltung.
+ *
+ * Es werden die Standardeigenschaften zum drucken gesetzt, wie die größe des Blattes und die Ausrichtung.
+ * Es folgt das fokussieren des Netzwerkes.
+ * Es wird die Schaltung, der Gesamtwiderstandswert der Schaltung und das Copyright gedruckt.
+ */
+void NetworkView::print(void)
 {
     QPrinter printer(QPrinter::HighResolution);
         printer.setPageSize(QPrinter::A4);

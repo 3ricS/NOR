@@ -230,6 +230,16 @@ Component* NetworkGraphics::addComponent(QPointF gridPosition,
     return createdComponent;
 }
 
+/*!
+ * \brief Erzeugt eine neue Komponente.
+ *
+ * \param[in]   gridPosition        ist die Position, an der die Komponente erzeugt werden soll
+ * \param[in]   componentType       ist der Typ der Komponente
+ * \param[in]   componentIsVertical ist die Ausrichtung der Komponente
+ * \return Gibt eine Komponente zurück.
+ *
+ * Erzeugt entsprechend des componentType die Komponente.
+ */
 Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
                                                           Component::ComponentType componentType,
                                                           bool componentIsVertical)
@@ -433,7 +443,12 @@ NetworkGraphics::addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoa
     return description;
 }
 
-
+/*!
+ * \brief Fügt ein Textfeld dem Netzwerk hinzu.
+ *
+ * \param[in]   descriptionFieldToAdd   ist das Textfeld, welches hinzugefügt wird
+ *
+ */
 void NetworkGraphics::addDescriptionFieldWithoutUndo(DescriptionField* descriptionFieldToAdd)
 {
     _descriptions.append(descriptionFieldToAdd);
@@ -697,6 +712,14 @@ void NetworkGraphics::updateCalc(void)
     }
 }
 
+/*!
+ * \brief Fügt eine Verbindung der Schaltung hinzu.
+ *
+ * \param[in]   componentPortA
+ * \param[in]   componentPortB
+ *
+ * Fügt eine Verbindung zwischen den beiden Ports hinzu.
+ */
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     CommandAddConnection* commandAddConnection = new CommandAddConnection(this, componentPortA, componentPortB);
@@ -704,6 +727,15 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
     _undoStack->push(commandAddConnection);
 }
 
+/*!
+ * \brief Verschiebt eine Komponente.
+ *
+ * \param[in]   componentToMove     ist die zu verschiebene Komponente
+ * \param[in]   descriptionToMove   ist das zu verschieben Textfeld
+ * \param[in]   gridPosition        neue Position
+ *
+ * Wenn eine Komponente ausgewählt ist, wird die Komponente verschoben.
+ */
 void
 NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* descriptionToMove, QPointF gridPosition)
 {
@@ -723,6 +755,16 @@ void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QStri
     updateCalc();
 }
 
+/*!
+ * \brief Bearbeiten einer Komponente
+ *
+ * \param[in]   componentToEdite    ist die zu bearbeitende Komponente
+ * \param[in]   newName             ist der neue name für die Komponente
+ * \param[in]   newValue            ist der neue Widerstandswert
+ * \param[in]   originalOrientation ist die vorherige ausrichtung
+ *
+ *
+ */
 void NetworkGraphics::editComponent(Component* componentToEdit, QString newName, double newValue,
                                     Component::Orientation originalOrientation)
 {
@@ -731,6 +773,13 @@ void NetworkGraphics::editComponent(Component* componentToEdit, QString newName,
     _undoStack->push(commandEditComponent);
 }
 
+/*!
+ * \brief Fügt eine Komponente hinzu.
+ *
+ * \param[in]   componentToAdd  ist die hinzuzufügende Komponente
+ *
+ * Fügt eine Komponente an einer Position hinzu, wenn sich an dieser keine befindet.
+ */
 void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
 {
     QPointF gridPosition = componentToAdd->getPosition();
@@ -762,12 +811,26 @@ void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
     updateCalc();
 }
 
+/*!
+ * \brief Entfernt eine Komponente.
+ *
+ * \param[in]   componentToDelete   ist die zu entfernende Komponete
+ *
+ */
 void NetworkGraphics::deleteComponent(Component* componentToDelete)
 {
     CommandDeleteComponent* commandDeleteComponent = new CommandDeleteComponent(this, componentToDelete);
     _undoStack->push(commandDeleteComponent);
 }
 
+/*!
+ * \brief Fügt eine Verbindung hinzu.
+ *
+ * \param[in]   connection   ist die Verbindung, die hinzugefügt wird
+ *
+ * Es wird geprüft, ob die Verbindung bereits existiert.
+ * Anschließend wird die Verbindung hinzugefügt.
+ */
 void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
 {
     bool isAlreadyExisting = false;
@@ -788,18 +851,42 @@ void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
     updateCalc();
 }
 
+/*!
+ * \brief Entfernt eine ausgewählte Verbindung.
+ *
+ * \param[in]   connectionToDelete  ist die zu entfernende Verbindung
+ *
+ */
 void NetworkGraphics::deleteConnection(Connection* connectionToDelete)
 {
     CommandDeleteConnection* commandDeleteConnection = new CommandDeleteConnection(this, connectionToDelete);
     _undoStack->push(commandDeleteConnection);
 }
 
+/*!
+ * \brief Entfernt ein Textfeld.
+ *
+ * \param[in]   descriptionFieldToDelete    ist das zu entfernende Textfeld
+ *
+ */
 void NetworkGraphics::deleteDescription(DescriptionField* descriptionFieldToDelete)
 {
     CommandDeleteDescription* commandDeleteDescription = new CommandDeleteDescription(this, descriptionFieldToDelete);
     _undoStack->push(commandDeleteDescription);
 }
 
+/*!
+ * \brief Fügt ein Textfeld hinzu.
+ *
+ * \param[in]   gridPosoition   ist die GitterPositon, an der das Textfeld erzeugt werden soll
+ * \param[in]   isLoad          ob das Textfeld aus einer Datei geladen wurde
+ * \param[in]   text            der Textinhalt des Textfeldes
+ * \param[in]   id              die intern vergebene Id
+ * \return Gibt ein Textfeld zurück.
+ *
+ * Wenn das Textfeld nicht geladen wird, wird überprüft, ob sich eine Komponente oder ein Textfeld an der Position befindet und die Id neu vergeben.
+ * Anschließend wird das Textfeld erstellt.
+ */
 DescriptionField* NetworkGraphics::addDescriptionField(QPointF gridPosition, bool isLoad, QString text, int id)
 {
     if (!isLoad)

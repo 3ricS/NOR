@@ -11,7 +11,6 @@ CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPos
         _model(model), _gridPosition(gridPosition), _componentType(componentType),
         _componentIsVertical(componentIsVertical)
 {
-
 }
 
 void CommandAddComponent::undo()
@@ -284,4 +283,26 @@ void CommandDeleteDescription::redo()
 {
     _hasDoneUndo = false;
     _model->deleteDescriptionWithoutUndo(_deletedDescription);
+}
+
+CommandDuplicateComponent::CommandDuplicateComponent(NetworkGraphics *model, Component *componentToDuplicate, int xPosition, int yPosition) :
+    _model(model), _componentToDuplicate(componentToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
+{
+
+}
+
+void CommandDuplicateComponent::undo()
+{
+    if(_createdComponent != nullptr)
+    {
+        _model->deleteComponentWithoutUndoAndGetDeletedConnections(_createdComponent);
+    }
+}
+
+void CommandDuplicateComponent::redo()
+{
+    if(_componentToDuplicate != nullptr)
+    {
+        _createdComponent = _model->duplicateComponentWithoutUndo(_componentToDuplicate, _xPosition, _yPosition);
+    }
 }

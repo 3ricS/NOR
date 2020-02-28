@@ -55,6 +55,7 @@ public:
 
 
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
+    Component* duplicateComponentWithoutUndo(Component* componentToDuplicate, int xPosition, int yPosition);
     DescriptionField* duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
 
 

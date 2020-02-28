@@ -31,6 +31,7 @@ private:
     QPointF                     _gridPosition;
     Component::ComponentType    _componentType;
     bool                        _componentIsVertical;
+    QList<Connection*>          _deletedConnections;
 };
 
 
@@ -61,9 +62,9 @@ public:
     void redo() override;
 
 private:
-    NetworkGraphics*    _model;
-    Component*          _componentToMove;
-    DescriptionField*   _descriptionToMove;
+    NetworkGraphics*    _model = nullptr;
+    Component*          _componentToMove = nullptr;
+    DescriptionField*   _descriptionToMove = nullptr;
     QPointF             _gridEndPosition;
     QPointF             _gridStartPosition;
 };
@@ -79,7 +80,7 @@ public:
     void undo() override;
     void redo() override;
 
-public:
+private:
     NetworkGraphics*    _model = nullptr;
     Component*          _editedComponent = nullptr;
     QString             _newName;
@@ -88,6 +89,21 @@ public:
     double              _oldValue;
     Component::Orientation  _oldOrientation;
     Component::Orientation  _newOrientation;
+};
+
+class CommandDeleteComponent : public QUndoCommand
+{
+public:
+    CommandDeleteComponent(NetworkGraphics* model, Component* componentToDelete);
+    ~CommandDeleteComponent();
+
+    void undo() override;
+    void redo() override;
+
+private:
+    NetworkGraphics*    _model = nullptr;
+    Component*          _deletedComponent = nullptr;
+    QList<Connection*>  _deletedConnections;
 };
 
 

@@ -16,12 +16,23 @@ CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPos
 
 void CommandAddComponent::undo()
 {
-    _model->deleteComponentWithoutUndo(_createdComponent);
+    _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_createdComponent);
 }
 
 void CommandAddComponent::redo()
 {
-    _createdComponent = _model->createNewComponentWithoutUndo(_gridPosition, _componentType, _componentIsVertical);
+    if (_createdComponent == nullptr)
+    {
+        _createdComponent = _model->createNewComponentWithoutUndo(_gridPosition, _componentType, _componentIsVertical);
+    }
+    else if (_createdComponent != nullptr)
+    {
+        _model->addComponentWithoutUndo(_createdComponent);
+        for (Connection* connection : _deletedConnections)
+        {
+            _model->addConnectionWithoutUndo(connection);
+        }
+    }
 }
 
 
@@ -43,7 +54,14 @@ void CommandAddConnection::undo()
 
 void CommandAddConnection::redo()
 {
-    _createdConnection = _model->addConnectionWithoutUndo(_componentPortA, _componentPortB);
+    if (_createdConnection == nullptr)
+    {
+        _createdConnection = _model->addConnectionWithoutUndo(_componentPortA, _componentPortB);
+    }
+    else
+    {
+        _model->addConnectionWithoutUndo(_createdConnection);
+    }
 }
 
 
@@ -72,7 +90,7 @@ void CommandMoveComponent::redo()
 
 /*
  * _______________________________________________________________________
- * CommandMoveComponnet
+ * CommandEditComponnet
  */
 CommandEditComponent::CommandEditComponent(NetworkGraphics* model, Component* editedComponent,
                                            Component::Orientation originalOrientation, QString newName,
@@ -87,7 +105,7 @@ CommandEditComponent::CommandEditComponent(NetworkGraphics* model, Component* ed
 
 void CommandEditComponent::undo()
 {
-    if(_editedComponent != nullptr)
+    if (_editedComponent != nullptr)
     {
         _editedComponent->setName(_oldName);
         _editedComponent->setValue(_oldValue);
@@ -98,7 +116,7 @@ void CommandEditComponent::undo()
 
 void CommandEditComponent::redo()
 {
-    if(nullptr != _editedComponent)
+    if (nullptr != _editedComponent)
     {
         _editedComponent->setName(_newName);
         _editedComponent->setValue(_newValue);
@@ -107,3 +125,35 @@ void CommandEditComponent::redo()
     }
 }
 
+
+/*
+ * _______________________________________________________________________
+ * CommandDeleteComponnet
+ */
+CommandDeleteComponent::CommandDeleteComponent(NetworkGraphics* model, Component* componentToDelete) :
+        _model(model), _deletedComponent(componentToDelete)
+{
+}
+
+void CommandDeleteComponent::undo()
+{
+    _model->addComponentWithoutUndo(_deletedComponent);
+    for (Connection* connection : _deletedConnections)
+    {
+        _model->addConnectionWithoutUndo(connection);
+    }
+}
+
+void CommandDeleteComponent::redo()
+{
+    _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_deletedComponent);
+}
+
+CommandDeleteComponent::~CommandDeleteComponent()
+{
+    for (Connection* connection : _deletedConnections)
+    {
+        delete connection;
+    }
+    delete _deletedComponent;
+}

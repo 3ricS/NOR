@@ -300,6 +300,11 @@
         </item>
         <item>
          <widget class="QLabel" name="CalculatedValue">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
           <property name="text">
            <string>0 Ω</string>
           </property>
@@ -381,7 +386,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

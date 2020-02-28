@@ -91,7 +91,8 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
  */
 bool Connection::hasComponent(Component* searchedComponent)
 {
-    return _componentPortOne.getComponent() == searchedComponent || (_componentPortTwo.getComponent() == searchedComponent);
+    return (_componentPortOne.getComponent() == searchedComponent) || (_componentPortTwo.getComponent() == searchedComponent);
+
 }
 
 void Connection::set_isSelected(bool isSelected)

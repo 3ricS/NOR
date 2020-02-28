@@ -6,7 +6,7 @@ project(NOR)
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_PREFIX_PATH "C:\\Qt\\5.14.0\\mingw73_64")
+set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.14.1\\Tools\\mingw730_64")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -17,6 +17,7 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Gui REQUIRED)
 find_package(Qt5 COMPONENTS Sql REQUIRED)
+find_package(Qt5PrintSupport REQUIRED)
 
 include_directories(doc)
 include_directories(src)
@@ -83,3 +84,4 @@ add_executable(NOR
 target_link_libraries(NOR Qt5::Widgets)
 target_link_libraries(NOR Qt5::Core)
 target_link_libraries(NOR Qt5::Gui)
+target_link_libraries(NOR Qt5::PrintSupport)

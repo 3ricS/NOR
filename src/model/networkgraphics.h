@@ -40,6 +40,7 @@ public:
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     void moveComponent(Component* componentToMove,DescriptionField* descriptionToMove ,QPointF gridPosition);
     void editComponent(Component* componentToEdit, QString newName, double newValue, Component::Orientation originalOrientation);
+    void deleteComponent(Component* componentToDelete);
 
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
     DescriptionField* duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
@@ -56,8 +57,10 @@ public:
     //for actions
     Component* createNewComponentWithoutUndo(QPointF gridPosition,
                                              Component::ComponentType componentType, bool componentIsVertical);
-    void deleteComponentWithoutUndo(Component* component);
+    void addComponentWithoutUndo(Component* componentToAdd);
+    QList<Connection*> deleteComponentWithoutUndoAndGetDeletedConnections(Component* component);
     Connection* addConnectionWithoutUndo(ComponentPort componentPortA, ComponentPort componentPortB);
+    void addConnectionWithoutUndo(Connection* connection);
     void deleteConnectionWithoutUndo(Connection* connection);
     void moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove , QPointF gridPosition);
     void editComponentWithoutUndo(Component* componentToEdit, QString newName, double newValue);

@@ -36,7 +36,8 @@ public:
     void paintHighlightRect(QPainter* painter);
 
     //getter
-    int getComponentType(void) const {return _componentType;}
+    int getComponentTypeInt(void) const {return _componentType;}
+    ComponentType getComponentType(void) const {return _componentType;}
     int getXPosition(void) const {return _xPosition;}
     int getYPosition(void) const {return _yPosition;}
     QString getName(void) const {return _name;}

@@ -33,12 +33,12 @@ void EditView::setupView(void)
     QString valueDescription = "";
     QString valuePlaceHolder = "";
 
-    if (_component->getComponentType() == Component::ComponentType::Resistor)
+    if (_component->getComponentTypeInt() == Component::ComponentType::Resistor)
     {
         valueDescription = "Widerstandswert [Ohm]:";
         valuePlaceHolder = "Widerstandswert hier eingeben";
     }
-    else if (_component->getComponentType() == Component::ComponentType::PowerSupply)
+    else if (_component->getComponentTypeInt() == Component::ComponentType::PowerSupply)
     {
         valueDescription = "Spannung [V]:";
     }
@@ -53,7 +53,7 @@ void EditView::setupView(void)
     _editViewUi->textEditValue->setText(QString::number(_component->getValue()));
     _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
 
-    if (_component->getComponentType() == Component::PowerSupply)
+    if (_component->getComponentTypeInt() == Component::PowerSupply)
     {
         _editViewUi->labelValue->close();
         _editViewUi->textEditValue->close();

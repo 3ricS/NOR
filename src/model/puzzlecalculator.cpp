@@ -141,13 +141,13 @@ QList<ComponentPort> PuzzleCalculator::findFirstComponentPort()
     for (Connection* connection : _connections)
     {
         if (Component::ComponentType::PowerSupply ==
-            connection->getComponentPortOne().getComponent()->getComponentType())
+                connection->getComponentPortOne().getComponent()->getComponentTypeInt())
         {
             startOfSearch = connection->getComponentPortOne();
             break;
         }
         else if (Component::ComponentType::PowerSupply ==
-                 connection->getComponentPortTwo().getComponent()->getComponentType())
+                connection->getComponentPortTwo().getComponent()->getComponentTypeInt())
         {
             startOfSearch = connection->getComponentPortTwo();
             break;
@@ -273,7 +273,7 @@ Node* PuzzleCalculator::getOrCeateNode(ComponentPort componentPortForNewNode,
     bool isConnectedToPowerSupply = false;
     for(ComponentPort cp : connectedComponentPorts)
     {
-        if(Component::ComponentType::PowerSupply == cp.getComponent()->getComponentType())
+        if(Component::ComponentType::PowerSupply == cp.getComponent()->getComponentTypeInt())
         {
             isConnectedToPowerSupply = true;
             break;
@@ -295,7 +295,7 @@ bool PuzzleCalculator::isPowerSupplyinComponentPortList(const QList<ComponentPor
 {
     for (ComponentPort componentPort : list)
     {
-        if (Component::ComponentType::PowerSupply == componentPort.getComponent()->getComponentType())
+        if (Component::ComponentType::PowerSupply == componentPort.getComponent()->getComponentTypeInt())
         {
             return true;
         }

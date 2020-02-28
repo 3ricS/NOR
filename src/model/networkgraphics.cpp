@@ -54,15 +54,11 @@ Connection* NetworkGraphics::addConnectionWithoutUndo(ComponentPort componentPor
 void NetworkGraphics::addObject(Component* component)
 {
     _componentList.append(component);
-    connectComponentToNeighbours(component);
+    //Hier kann der Widerstand direkt mit den Nachbarn bzw. angrenzenden Widerständen verbunden werden
+    //connectComponentToNeighbours(component);
     addItem(component);
 
-    update();
-
-    if (!_isLoading)
-    {
-        updateCalc();
-    }
+    updateCalc();
 }
 
 /*!
@@ -282,11 +278,11 @@ Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, 
     int value = componentToDuplicate->getValue();
     bool componentIsVertical = componentToDuplicate->isVertical();
 
-    if (Component::ComponentType::Resistor == componentToDuplicate->getComponentType())
+    if (Component::ComponentType::Resistor == componentToDuplicate->getComponentTypeInt())
     {
         duplicatedComponent = addResistor(name, value, xPosition, yPosition, componentIsVertical);
     }
-    else if (Component::ComponentType::PowerSupply == componentToDuplicate->getComponentType())
+    else if (Component::ComponentType::PowerSupply == componentToDuplicate->getComponentTypeInt())
     {
         duplicatedComponent = addPowerSupply(name, xPosition, yPosition, componentIsVertical);
     }
@@ -383,14 +379,14 @@ NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, i
  */
 Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical, int id)
 {
-    _powerSupplyCount++;
     if ("" == name)
     {
         name = "Q" + QString::number(_powerSupplyCount);
     }
 
-    if (_powerSupplyCount <= 1)
+    if (_powerSupplyCount < 1)
     {
+        _powerSupplyCount++;
         Component* powerSupply = new PowerSupply(name, x, y,
                                                  isVertical, id);
         addObject(powerSupply);
@@ -398,7 +394,6 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
     }
     else
     {
-        _powerSupplyCount--;
         QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
     }
     return nullptr;
@@ -455,19 +450,20 @@ NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[may
  * Anschließend werden die Verbindungen, die sich an der Komponente befinden entfernt.
  * Zum Schluss wird der Widerstandswert neu berechnet.
  */
-void NetworkGraphics::deleteComponentWithoutUndo(Component* component)
+QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConnections(Component* component)
 {
+    QList<Connection*> deletedConnections;
     if (component != nullptr)
     {
         removeItem(component);
         _componentList.removeOne(component);
 
         //ResistorCount und PowerSupplyCount setzen
-        if (Component::ComponentType::Resistor == component->getComponentType())
+        if (Component::ComponentType::Resistor == component->getComponentTypeInt())
         {
             _resistorCount--;
         }
-        else if (Component::ComponentType::PowerSupply == component->getComponentType())
+        else if (Component::ComponentType::PowerSupply == component->getComponentTypeInt())
         {
             _powerSupplyCount--;
         }
@@ -479,14 +475,14 @@ void NetworkGraphics::deleteComponentWithoutUndo(Component* component)
             {
                 removeItem(connection);
                 _connectionList.removeOne(connection);
-                delete connection;
+                deletedConnections.append(connection);
             }
         }
 
         updateCalc();
-        delete component;
     }
     update();
+    return deletedConnections;
 }
 
 /*!
@@ -524,7 +520,6 @@ void NetworkGraphics::deleteConnectionWithoutUndo(Connection* connection)
     {
         removeItem(connection);
         _connectionList.removeOne(connection);
-        delete connection;
     }
 
     updateCalc();
@@ -689,16 +684,19 @@ void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Comp
  */
 void NetworkGraphics::updateCalc(void)
 {
+    if(!_isLoading)
+    {
+        _resistanceValue = _puzzleCalculator.calculate(_connectionList, _componentList);
 
-    _resistanceValue = _puzzleCalculator.calculate(_connectionList, _componentList);
-
-    update();
-    emit resistanceValueChanged();
+        update();
+        emit resistanceValueChanged();
+    }
 }
 
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     CommandAddConnection* commandAddConnection = new CommandAddConnection(this, componentPortA, componentPortB);
+    qDebug() << "Connection added";
     _undoStack->push(commandAddConnection);
 }
 
@@ -727,4 +725,61 @@ void NetworkGraphics::editComponent(Component* componentToEdit, QString newName,
     CommandEditComponent* commandEditComponent = new CommandEditComponent(this, componentToEdit, originalOrientation,
                                                                           newName, newValue);
     _undoStack->push(commandEditComponent);
+}
+
+void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
+{
+    QPointF gridPosition = componentToAdd->getPosition();
+    Component::ComponentType componentType = componentToAdd->getComponentType();
+
+    if (isThereAComponentOrADescription(gridPosition))
+    {
+        return;
+    }
+
+    if (Component::ComponentType::Resistor == componentType)
+    {
+        _resistorCount++;
+        addObject(componentToAdd);
+    }
+    else if (Component::ComponentType::PowerSupply == componentType)
+    {
+        if (_powerSupplyCount < 1)
+        {
+            _powerSupplyCount++;
+            addObject(componentToAdd);
+        }
+        else
+        {
+            QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
+        }
+    }
+
+    updateCalc();
+}
+
+void NetworkGraphics::deleteComponent(Component* componentToDelete)
+{
+    CommandDeleteComponent* commandDeleteComponent = new CommandDeleteComponent(this, componentToDelete);
+    _undoStack->push(commandDeleteComponent);
+}
+
+void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
+{
+    bool isAlreadyExisting = false;
+    for (Connection* otherConnection : _connectionList)
+    {
+        if (*otherConnection == *connection)
+        {
+            isAlreadyExisting = true;
+            break;
+        }
+    }
+    if (!isAlreadyExisting)
+    {
+        _connectionList.append(connection);
+        addItem(connection);
+    }
+
+    updateCalc();
 }

@@ -92,7 +92,7 @@ QString FileManager::createJson(void)
 QJsonObject FileManager::saveComponent(Component* component)
 {
     QJsonObject r;
-    r.insert("type", component->getComponentType());
+    r.insert("type", component->getComponentTypeInt());
     r.insert("id", component->getId());
     r.insert("name", component->getName());
     r.insert("xPos", component->getXPosition());

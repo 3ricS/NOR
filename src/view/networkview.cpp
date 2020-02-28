@@ -376,8 +376,7 @@ void NetworkView::deleteSelectedItem(void)
     {
         if(component->isSelected())
         {
-
-            _model->deleteComponentWithoutUndo(component);
+            _model->deleteComponent(component);
             _copiedComponent = nullptr;
         }
     }
@@ -412,7 +411,7 @@ void NetworkView::editNetworkOrDescription()
     {
         if(component->isSelected())
         {
-            EditView* editView = new EditView(component, _model, false, this, nullptr);
+            EditView* editView = new EditView(component, _model, false, this, _model->getUndoStack());
             editView->show();
         }
     }
@@ -522,7 +521,7 @@ QPointF NetworkView::findScrollPosition()
     {
         for(Component* c : _model->getComponents())
         {
-            if(c->getComponentType() == Component::Resistor)
+            if(c->getComponentTypeInt() == Component::Resistor)
             {
                 //qDebug() << c->getName();
                 averageX += c->getXPosition();

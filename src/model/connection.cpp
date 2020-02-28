@@ -21,12 +21,14 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     _currentPoint = _startPoint;
     _endPoint = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
 
+    qDebug() << _currentPoint;
     //Punkte an Enden zeichnen
     painter->setBrush(QBrush(Qt::black));
     painter->drawEllipse(_startPoint.toPoint(), _circleRadius, _circleRadius);
     painter->drawEllipse(_endPoint.toPoint(), _circleRadius, _circleRadius);
 
     _painter = painter;
+    _isDodgedBefore = false;
 
     _diffX = _endPoint.x() - _startPoint.x();
     _diffY = _endPoint.y() - _startPoint.y();
@@ -283,6 +285,7 @@ void Connection::verticalRoutine()
     {
         while(_diffY != 0)
         {
+            qDebug() << isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50) << _currentPoint;
             if(!isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50))
             {
                 QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, 50);

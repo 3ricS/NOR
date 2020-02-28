@@ -167,6 +167,24 @@ private:
 };
 
 
+class CommandDuplicateComponent : public QUndoCommand
+{
+public:
+    CommandDuplicateComponent(NetworkGraphics* model, Component* componentToDuplicate, int xPosition, int yPosition);
+    ~CommandDuplicateComponent() {};
+
+    void undo() override;
+    void redo() override;
+
+    Component* getCreatedComponent() {return _createdComponent;}
+
+private:
+    Component*                  _createdComponent = nullptr;
+    NetworkGraphics*            _model = nullptr;
+    Component*                  _componentToDuplicate = nullptr;
+    int                         _xPosition;
+    int                         _yPosition;
+};
 
 
 #endif //NOR_COMMANDS_H

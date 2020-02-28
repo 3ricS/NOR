@@ -282,6 +282,14 @@ Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
  */
 Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition)
 {
+    CommandDuplicateComponent* duplicateComponent = new CommandDuplicateComponent(this, componentToDuplicate, xPosition, yPosition);
+    _undoStack->push(duplicateComponent);
+    Component* createdComponent = duplicateComponent->getCreatedComponent();
+    return createdComponent;
+}
+
+Component *NetworkGraphics::duplicateComponentWithoutUndo(Component *componentToDuplicate, int xPosition, int yPosition)
+{
     Component* duplicatedComponent = nullptr;
 
     QString name = componentToDuplicate->getName();

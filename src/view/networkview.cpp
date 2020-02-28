@@ -69,23 +69,21 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             ComponentPort* connectionComponentPortEnd = nullptr;
             for (Component* component : _tempComponentListForConnections)
             {
-                bool equalX = (component->getXPosition() == gridPosition.toPoint().x());
-                bool equalY = (component->getYPosition() == gridPosition.toPoint().y());
-                if (equalX && equalY)
+                bool hasFoundPort = component->hasPortAtPosition(scenePosition);
+                if (hasFoundPort)
                 {
-                    connectionComponentPortEnd = _model->getComponentPortAtPosition(scenePosition);
+                    Component::Port port = component->getPort(scenePosition);
+                    connectionComponentPortEnd = new ComponentPort(component, port);
                 }
             }
+
             if (connectionComponentPortEnd != nullptr)
             {
                 _model->addConnection(*_connectionStartComponentPort, *connectionComponentPortEnd);
                 _connectionStartComponentPort = nullptr;
             }
         }
-        while (!_tempComponentListForConnections.isEmpty())
-        {
-            _tempComponentListForConnections.removeLast();
-        }
+        _tempComponentListForConnections.clear();
     }
         break;
     case MouseMode::SelectionMode:
@@ -160,7 +158,7 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     case ConnectionMode:
     {
         _connectionStartComponentPort = _model->getComponentPortAtPosition(scenePosition);
-        Component* tempComponentForConnection = _model->getComponentAtPosition(gridPosition);
+        Component* tempComponentForConnection = _connectionStartComponentPort->getComponent();;
         _tempComponentListForConnections = _model->getComponents();
         //qDebug() << _tempComponentListForConnections;
         _tempComponentListForConnections.removeOne(tempComponentForConnection);

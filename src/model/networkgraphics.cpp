@@ -221,8 +221,8 @@ void NetworkGraphics::mirrorComponent(Component* component)
  * Zu Beginn wird geprüft ob sich an der ausgewählten Position bereits eine Komponente befindet.
  * Anschließend wird anhand des ausgewählten Typs, jeweils ein Widerstand oder eine Spannungsquelle erzeugt.
  */
-Component* NetworkGraphics::createNewComponent(QPointF gridPosition,
-                                               Component::ComponentType componentType, bool componentIsVertical)
+Component* NetworkGraphics::addComponent(QPointF gridPosition,
+                                         Component::ComponentType componentType, bool componentIsVertical)
 {
     CommandAddComponent* addComponent = new CommandAddComponent(this, gridPosition, componentType, componentIsVertical);
     _undoStack->push(addComponent);
@@ -302,7 +302,7 @@ Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, 
 DescriptionField*
 NetworkGraphics::duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition)
 {
-    return createDescriptionField(QPointF(xPosition, yPosition), false, descriptionToDuplicate->getText());
+    return addDescriptionFieldWithoutUndo(QPointF(xPosition, yPosition), false, descriptionToDuplicate->getText());
 }
 
 /*!
@@ -415,8 +415,8 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
  * Anschließend wird ein neues Textfeld erzeugt und der descriptionCount um eins erhöht.
  */
 DescriptionField*
-NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[maybe_unused]] QString text,
-                                        [[maybe_unused]] int id)
+NetworkGraphics::addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoad, [[maybe_unused]] QString text,
+                                                [[maybe_unused]] int id)
 {
     if (!isLoad)
     {
@@ -428,14 +428,20 @@ NetworkGraphics::createDescriptionField(QPointF gridPosition, bool isLoad, [[may
     }
 
     DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id, text);
+    addDescriptionFieldWithoutUndo(description);
 
-    _descriptions.append(description);
-    addItem(description);
+    return description;
+}
+
+
+void NetworkGraphics::addDescriptionFieldWithoutUndo(DescriptionField* descriptionFieldToAdd)
+{
+    _descriptions.append(descriptionFieldToAdd);
+    addItem(descriptionFieldToAdd);
 
     update();
 
     _descriptionCount++;
-    return description;
 }
 
 /*!
@@ -494,15 +500,13 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
  * Dannach wird das Textfeld aus der Liste descriptions entfernt.
  * Der descriptionCount wird um eins reduziert.
  */
-void NetworkGraphics::deleteDescription(DescriptionField* description)
+void NetworkGraphics::deleteDescriptionWithoutUndo(DescriptionField* description)
 {
     if (description != nullptr)
     {
         removeItem(description);
         _descriptions.removeOne(description);
         _descriptionCount--;
-
-        delete description;
     }
 }
 
@@ -775,7 +779,7 @@ void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
             break;
         }
     }
-    if (!isAlreadyExisting)
+    if (!isAlreadyExisting && nullptr != connection)
     {
         _connectionList.append(connection);
         addItem(connection);
@@ -783,3 +787,35 @@ void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
 
     updateCalc();
 }
+
+void NetworkGraphics::deleteConnection(Connection* connectionToDelete)
+{
+    CommandDeleteConnection* commandDeleteConnection = new CommandDeleteConnection(this, connectionToDelete);
+    _undoStack->push(commandDeleteConnection);
+}
+
+void NetworkGraphics::deleteDescription(DescriptionField* descriptionFieldToDelete)
+{
+    CommandDeleteDescription* commandDeleteDescription = new CommandDeleteDescription(this, descriptionFieldToDelete);
+    _undoStack->push(commandDeleteDescription);
+}
+
+DescriptionField* NetworkGraphics::addDescriptionField(QPointF gridPosition, bool isLoad, QString text, int id)
+{
+    if (!isLoad)
+    {
+        if (isThereAComponentOrADescription(gridPosition))
+        {
+            return nullptr;
+        }
+        id = _descriptionCount;
+    }
+
+    DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id, text);
+
+    CommandAddDescriptionField* commandAddDescriptionField = new CommandAddDescriptionField(this, description);
+    _undoStack->push(commandAddDescriptionField);
+
+    return description;
+}
+

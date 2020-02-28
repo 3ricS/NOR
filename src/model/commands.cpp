@@ -17,6 +17,7 @@ CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPos
 void CommandAddComponent::undo()
 {
     _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_createdComponent);
+    _hasDoneUndo = true;
 }
 
 void CommandAddComponent::redo()
@@ -32,6 +33,15 @@ void CommandAddComponent::redo()
         {
             _model->addConnectionWithoutUndo(connection);
         }
+    }
+    _hasDoneUndo = false;
+}
+
+CommandAddComponent::~CommandAddComponent()
+{
+    if(_hasDoneUndo)
+    {
+        delete _createdComponent;
     }
 }
 
@@ -50,6 +60,7 @@ CommandAddConnection::CommandAddConnection(NetworkGraphics* model, ComponentPort
 void CommandAddConnection::undo()
 {
     _model->deleteConnectionWithoutUndo(_createdConnection);
+    _hasDoneUndo = true;
 }
 
 void CommandAddConnection::redo()
@@ -62,7 +73,51 @@ void CommandAddConnection::redo()
     {
         _model->addConnectionWithoutUndo(_createdConnection);
     }
+    _hasDoneUndo = false;
 }
+
+CommandAddConnection::~CommandAddConnection()
+{
+    if(_hasDoneUndo)
+    {
+        delete _createdConnection;
+    }
+}
+
+
+
+
+
+/*
+ * _______________________________________________________________________
+ * CommandAddDescriptionField
+ */
+CommandAddDescriptionField::CommandAddDescriptionField(NetworkGraphics* model, DescriptionField* descriptionField) :
+        _model(model), _createdDescriptionField(descriptionField)
+{
+
+}
+
+void CommandAddDescriptionField::undo()
+{
+    _model->deleteDescriptionWithoutUndo(_createdDescriptionField);
+    _hasDoneUndo = true;
+}
+
+void CommandAddDescriptionField::redo()
+{
+    _model->addDescriptionFieldWithoutUndo(_createdDescriptionField);
+    _hasDoneUndo = false;
+}
+
+CommandAddDescriptionField::~CommandAddDescriptionField()
+{
+    if(_hasDoneUndo)
+    {
+        delete _createdDescriptionField;
+    }
+}
+
 
 
 /*
@@ -161,4 +216,72 @@ CommandDeleteComponent::~CommandDeleteComponent()
         }
         delete _deletedComponent;
     }
+}
+
+
+
+
+/*
+ * _______________________________________________________________________
+ * CommandDeleteComponnet
+ */
+CommandDeleteConnection::CommandDeleteConnection(NetworkGraphics* model, Connection* connectionToDelete) :
+    _model(model), _deletedConnection(connectionToDelete)
+{
+}
+
+void CommandDeleteConnection::undo()
+{
+    _hasDoneUndo = true;
+    _model->addConnectionWithoutUndo(_deletedConnection);
+}
+
+void CommandDeleteConnection::redo()
+{
+    _hasDoneUndo = false;
+    _model->deleteConnectionWithoutUndo(_deletedConnection);
+}
+
+CommandDeleteConnection::~CommandDeleteConnection()
+{
+    if(!_hasDoneUndo)
+    {
+        delete _deletedConnection;
+    }
+}
+
+
+
+
+
+
+
+/*
+ * _______________________________________________________________________
+ * CommandDeleteDescription
+ */
+
+CommandDeleteDescription::CommandDeleteDescription(NetworkGraphics* model, DescriptionField* descriptionField) :
+    _model(model), _deletedDescription(descriptionField)
+{
+}
+
+CommandDeleteDescription::~CommandDeleteDescription()
+{
+    if(!_hasDoneUndo)
+    {
+        delete _deletedDescription;
+    }
+}
+
+void CommandDeleteDescription::undo()
+{
+    _hasDoneUndo = true;
+    _model->addDescriptionFieldWithoutUndo(_deletedDescription);
+}
+
+void CommandDeleteDescription::redo()
+{
+    _hasDoneUndo = false;
+    _model->deleteDescriptionWithoutUndo(_deletedDescription);
 }

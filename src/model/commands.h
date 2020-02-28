@@ -19,6 +19,7 @@ class CommandAddComponent : public QUndoCommand
 {
 public:
     CommandAddComponent(NetworkGraphics* model, QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
+    ~CommandAddComponent();
 
     void undo() override;
     void redo() override;
@@ -32,6 +33,7 @@ private:
     Component::ComponentType    _componentType;
     bool                        _componentIsVertical;
     QList<Connection*>          _deletedConnections;
+    bool                        _hasDoneUndo = false;
 };
 
 
@@ -40,6 +42,7 @@ class CommandAddConnection : public QUndoCommand
 {
 public:
     CommandAddConnection(NetworkGraphics* model, ComponentPort componentPortA, ComponentPort componentPortB);
+    ~CommandAddConnection();
 
     void undo() override;
     void redo() override;
@@ -49,7 +52,29 @@ private:
     Connection*         _createdConnection = nullptr;
     ComponentPort       _componentPortA;
     ComponentPort       _componentPortB;
+    bool                _hasDoneUndo = false;
 };
+
+
+
+
+class CommandAddDescriptionField : public QUndoCommand
+{
+public:
+    CommandAddDescriptionField(NetworkGraphics* model, DescriptionField* descriptionField);
+    ~CommandAddDescriptionField();
+
+    void undo() override;
+    void redo() override;
+
+private:
+    NetworkGraphics*    _model = nullptr;
+    DescriptionField*   _createdDescriptionField = nullptr;
+    bool                _hasDoneUndo = false;
+};
+
+
+
 
 
 class CommandMoveComponent : public QUndoCommand
@@ -106,6 +131,42 @@ private:
     QList<Connection*>  _deletedConnections;
     bool                _hasDoneUndo = false;
 };
+
+
+class CommandDeleteConnection : public QUndoCommand
+{
+public:
+    CommandDeleteConnection(NetworkGraphics* model, Connection* connectionToDelete);
+    ~CommandDeleteConnection();
+
+    void undo() override;
+    void redo() override;
+
+private:
+    NetworkGraphics*    _model = nullptr;
+    Connection*         _deletedConnection = nullptr;
+    bool                _hasDoneUndo = false;
+};
+
+
+
+
+class CommandDeleteDescription : public QUndoCommand
+{
+public:
+    CommandDeleteDescription(NetworkGraphics* model, DescriptionField* descriptionField);
+    ~CommandDeleteDescription();
+
+    void undo() override;
+    void redo() override;
+
+private:
+    NetworkGraphics*    _model = nullptr;
+    DescriptionField*    _deletedDescription = nullptr;
+    bool                _hasDoneUndo = false;
+};
+
+
 
 
 #endif //NOR_COMMANDS_H

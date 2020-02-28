@@ -40,8 +40,8 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
     {
         if (Qt::LeftButton == mouseEvent->button())
         {
-            Component* createdComponent = _model->createNewComponent(gridPosition, componentType,
-                                                                     _isVerticalComponentDefault);
+            Component* createdComponent = _model->addComponent(gridPosition, componentType,
+                                                               _isVerticalComponentDefault);
             if (createdComponent != nullptr)
             {
                 EditView* editView = new EditView(createdComponent, _model, true, this, nullptr);
@@ -118,7 +118,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         if(mouseEvent->button() == Qt::LeftButton)
         {
             bool ok;
-            DescriptionField * createdDescription = _model->createDescriptionField(gridPosition, false);
+            DescriptionField * createdDescription = _model->addDescriptionField(gridPosition, false);
             if(createdDescription != nullptr)
             {
                 QString text = QInputDialog::getMultiLineText(this, "Textfeld bearbeiten", "Text bearbeiten", "", &ok, Qt::WindowCloseButtonHint);
@@ -394,7 +394,7 @@ void NetworkView::deleteSelectedItem(void)
     {
         if(connection->isSelected())
         {
-            _model->deleteConnectionWithoutUndo(connection);
+            _model->deleteConnection(connection);
         }
     }
     removeHighlightSelectedRect();

@@ -127,13 +127,25 @@ CommandAddDescriptionField::~CommandAddDescriptionField()
 CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* componentToMove,
                                            DescriptionField* descriptionToMove, QPointF gridPosition) :
         _model(model), _componentToMove(componentToMove), _descriptionToMove(descriptionToMove),
-        _gridEndPosition(gridPosition), _gridStartPosition(componentToMove->getPosition())
+        _gridEndPosition(gridPosition)
 {
+    if(componentToMove != nullptr)
+    {
+        _gridComponentStartPosition = _componentToMove->getPosition();
+    }
+    else if(descriptionToMove != nullptr)
+    {
+        _gridDescriptionStartPosition = QPointF(descriptionToMove->getXPos(), descriptionToMove->getYPos());
+    }
 }
 
 void CommandMoveComponent::undo()
 {
-    _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridStartPosition);
+    if(_componentToMove != nullptr)
+    _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridComponentStartPosition);
+
+    if(_descriptionToMove != nullptr)
+    _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridDescriptionStartPosition);
 }
 
 void CommandMoveComponent::redo()

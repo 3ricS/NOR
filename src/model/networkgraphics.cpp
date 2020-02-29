@@ -753,6 +753,12 @@ NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* des
                                                                               gridPosition);
         _undoStack->push(commandMoveComponent);
     }
+    else if(descriptionToMove != nullptr)
+    {
+        CommandMoveComponent* commandMoveComponent = new CommandMoveComponent(this, componentToMove, descriptionToMove,
+                                                                              gridPosition);
+        _undoStack->push(commandMoveComponent);
+    }
 }
 
 void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QString newName, double newValue)

@@ -91,7 +91,8 @@ private:
     Component*          _componentToMove = nullptr;
     DescriptionField*   _descriptionToMove = nullptr;
     QPointF             _gridEndPosition;
-    QPointF             _gridStartPosition;
+    QPointF             _gridComponentStartPosition;
+    QPointF             _gridDescriptionStartPosition;
 };
 
 

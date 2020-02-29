@@ -152,6 +152,7 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     //Keine Verbindung begonnen: _connectionStartComponentPort muss auf Nullptr zeigen
     _connectionStartComponentPort = nullptr;
     _selectedComponentToMove = nullptr;
+    _selectedDescriptionToMove = nullptr;
 
     switch (_mouseMode)
     {

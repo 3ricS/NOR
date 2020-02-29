@@ -55,7 +55,6 @@ public:
 
 
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
-    Component* duplicateComponentWithoutUndo(Component* componentToDuplicate, int xPosition, int yPosition);
     DescriptionField* duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
 
 
@@ -67,6 +66,7 @@ public:
     Component* createNewComponentWithoutUndo(QPointF gridPosition,
                                              Component::ComponentType componentType, bool componentIsVertical);
     void addComponentWithoutUndo(Component* componentToAdd);
+    Component* duplicateComponentWithoutUndo(Component* componentToDuplicate, int xPosition, int yPosition);
     void addConnectionWithoutUndo(Connection* connection);
     Connection* addConnectionWithoutUndo(ComponentPort componentPortA, ComponentPort componentPortB);
     DescriptionField* addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);

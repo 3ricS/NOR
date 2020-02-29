@@ -42,6 +42,7 @@ private:
     Node* getOrCeateNode(ComponentPort componentPortForNewNode, QList<ComponentPort> connectedComponentPorts,
                          bool& nodeIsKnown, QList<Node*>* knownNodes);
     bool isPowerSupplyinComponentPortList(QList<ComponentPort> list);
+    bool isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces);
 
     int countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
 

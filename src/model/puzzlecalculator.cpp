@@ -22,7 +22,8 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
     _components = components;
 
     QList<RowPiece> rowPieces = findRowPieces();
-    if (!rowPieces.isEmpty())
+
+    if (!rowPieces.isEmpty() && isNodeConnectedToPowerSupply(rowPieces))
     {
         double resistanceValue = calculateResistanceValueFromRowPieces(rowPieces);
         qDebug() << "Widerstandswert Calculate" << resistanceValue;
@@ -301,6 +302,29 @@ bool PuzzleCalculator::isPowerSupplyinComponentPortList(const QList<ComponentPor
         }
     }
     return false;
+}
+
+bool PuzzleCalculator::isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces)
+{
+    QList<Node*> nodes;
+    for(RowPiece rp : rowPieces)
+    {
+        if(rp.getNodeOne()->isConnectedToPowerSupply())
+        {
+            if(!nodes.contains(rp.getNodeOne()))
+            {
+                nodes.append(rp.getNodeOne());
+            }
+        }
+        if(rp.getNodeTwo()->isConnectedToPowerSupply())
+        {
+            if(!nodes.contains(rp.getNodeTwo()))
+            {
+                nodes.append(rp.getNodeTwo());
+            }
+        }
+    }
+    return (nodes.count() == 2);
 }
 
 double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces)

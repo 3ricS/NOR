@@ -223,6 +223,10 @@ void Connection::horizontalRoutine()
     {
         while(_diffX != 0)
         {
+            if(_diffX == 50 && ((_diffY > 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() + 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() - 50))))
+            {
+                verticalRoutine();
+            }
             if(!isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y()))
             {
                 QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, 50, 10);
@@ -250,6 +254,10 @@ void Connection::horizontalRoutine()
     {
         while(_diffX != 0)
         {
+            if(_diffX == - 50 && ((_diffY > 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() + 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() - 50))))
+            {
+                verticalRoutine();
+            }
             if(!isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y()))
             {
                 QRect* hitbox = new QRect(_currentPoint.x() - 50, _currentPoint.y() - 5, 50, 10);
@@ -285,7 +293,10 @@ void Connection::verticalRoutine()
     {
         while(_diffY != 0)
         {
-            qDebug() << isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50) << _currentPoint;
+            if(_diffY == 50 && ((_diffX > 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() + 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() + 50))))
+            {
+                horizontalRoutine();
+            }
             if(!isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() + 50))
             {
                 QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, 50);
@@ -313,6 +324,10 @@ void Connection::verticalRoutine()
     {
         while(_diffY != 0)
         {
+            if(_diffY == - 50 && ((_diffX > 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() - 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() - 50))))
+            {
+                horizontalRoutine();
+            }
             if(!isThereAComponentOrADescription(_currentPoint.x(), _currentPoint.y() - 50))
             {
                 QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - 50, 10, 50);

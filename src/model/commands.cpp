@@ -346,6 +346,11 @@ void CommandEditDescription::redo()
     _model->update();
 }
 
+/*
+ * _______________________________________________________________________
+ * CommandEditDescription
+ */
+
 CommandRotateComponent::CommandRotateComponent(Component* componentToTurn, NetworkGraphics* model) :
     _componentToTurn(componentToTurn), _model(model), _oldOrientation(componentToTurn->getOrientation())
 {

@@ -658,33 +658,8 @@ void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
  */
 void NetworkGraphics::turnComponentRight(Component* componentToTurn)
 {
-    switch (componentToTurn->getOrientation())
-    {
-        case Component::Orientation::left:
-        {
-            componentToTurn->setOrientation(Component::Orientation::top);
-            //mirrorComponent(componentToTurn);
-        }
-            break;
-        case Component::Orientation::top:
-        {
-            componentToTurn->setOrientation(Component::Orientation::right);
-            mirrorComponent(componentToTurn);
-        }
-            break;
-        case Component::Orientation::right:
-        {
-            componentToTurn->setOrientation(Component::Orientation::bottom);
-        }
-            break;
-        case Component::Orientation::bottom:
-        {
-            componentToTurn->setOrientation(Component::Orientation::left);
-            mirrorComponent(componentToTurn);
-        }
-            break;
-    }
-    update();
+    CommandRotateComponent* commandRotateComponent = new CommandRotateComponent(componentToTurn, this);
+    _undoStack->push(commandRotateComponent);
 }
 
 /*!
@@ -767,6 +742,37 @@ void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QStri
     componentToEdit->setValue(newValue);
 
     updateCalc();
+}
+
+void NetworkGraphics::turnComponentRightWithoutUndo(Component *componentToTurn)
+{
+    switch (componentToTurn->getOrientation())
+    {
+        case Component::Orientation::left:
+        {
+            componentToTurn->setOrientation(Component::Orientation::top);
+            //mirrorComponent(componentToTurn);
+        }
+            break;
+        case Component::Orientation::top:
+        {
+            componentToTurn->setOrientation(Component::Orientation::right);
+            mirrorComponent(componentToTurn);
+        }
+            break;
+        case Component::Orientation::right:
+        {
+            componentToTurn->setOrientation(Component::Orientation::bottom);
+        }
+            break;
+        case Component::Orientation::bottom:
+        {
+            componentToTurn->setOrientation(Component::Orientation::left);
+            mirrorComponent(componentToTurn);
+        }
+            break;
+    }
+    update();
 }
 
 /*!
@@ -887,6 +893,12 @@ void NetworkGraphics::deleteDescription(DescriptionField* descriptionFieldToDele
 {
     CommandDeleteDescription* commandDeleteDescription = new CommandDeleteDescription(this, descriptionFieldToDelete);
     _undoStack->push(commandDeleteDescription);
+}
+
+void NetworkGraphics::editDescription(DescriptionField *descriptionToEdit, QString newText)
+{
+    CommandEditDescription* commandEditDescription = new CommandEditDescription(this, descriptionToEdit, newText);
+    _undoStack->push(commandEditDescription);
 }
 
 /*!

@@ -297,6 +297,11 @@ void CommandDeleteDescription::redo()
     _model->deleteDescriptionWithoutUndo(_deletedDescription);
 }
 
+/*
+ * _______________________________________________________________________
+ * CommandDeleteDescription
+ */
+
 CommandDuplicateComponent::CommandDuplicateComponent(NetworkGraphics *model, Component *componentToDuplicate, int xPosition, int yPosition) :
     _model(model), _componentToDuplicate(componentToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
 {
@@ -317,4 +322,45 @@ void CommandDuplicateComponent::redo()
     {
         _createdComponent = _model->duplicateComponentWithoutUndo(_componentToDuplicate, _xPosition, _yPosition);
     }
+}
+
+/*
+ * _______________________________________________________________________
+ * CommandEditDescription
+ */
+
+CommandEditDescription::CommandEditDescription(NetworkGraphics *model, DescriptionField *descriptionFieldToEdit, QString newText) :
+    _editDescription(descriptionFieldToEdit), _model(model), _newText(newText) , _oldText(descriptionFieldToEdit->getText())
+{
+}
+
+void CommandEditDescription::undo()
+{
+    _editDescription->setText(_oldText);
+    _model->update();
+}
+
+void CommandEditDescription::redo()
+{
+    _editDescription->setText(_newText);
+    _model->update();
+}
+
+CommandRotateComponent::CommandRotateComponent(Component* componentToTurn, NetworkGraphics* model) :
+    _componentToTurn(componentToTurn), _model(model), _oldOrientation(componentToTurn->getOrientation())
+{
+}
+
+void CommandRotateComponent::undo()
+{
+    //Dreimal rechts = einmal links
+    for(int i = 0; i < 3; i++)
+    {
+        _model->turnComponentRightWithoutUndo(_componentToTurn);
+    }
+}
+
+void CommandRotateComponent::redo()
+{
+    _model->turnComponentRightWithoutUndo(_componentToTurn);
 }

@@ -430,7 +430,7 @@ void NetworkView::editNetworkOrDescription(void)
             QString text = QInputDialog::getMultiLineText(this, "Textfeld bearbeiten", "Text eingeben:", description->getText(), &ok, Qt::WindowCloseButtonHint);
             if(ok)
             {
-                description->setText(text);
+                _model->editDescription(description, text);
             }
         }
     }

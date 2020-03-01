@@ -187,5 +187,38 @@ private:
     int                         _yPosition;
 };
 
+class CommandEditDescription : public QUndoCommand
+{
+public:
+    CommandEditDescription(NetworkGraphics* model, DescriptionField* descriptionFieldToEdit, QString newText);
+    ~CommandEditDescription() {};
+
+    void undo() override;
+    void redo() override;
+
+private:
+    DescriptionField*                  _editDescription = nullptr;
+    NetworkGraphics*            _model = nullptr;
+    QString                     _newText;
+    QString                     _oldText;
+};
+
+class CommandRotateComponent : public QUndoCommand
+{
+public:
+    CommandRotateComponent(Component* ComponentToTurn, NetworkGraphics* model);
+    ~CommandRotateComponent() {};
+
+    void undo() override;
+    void redo() override;
+
+
+private:
+    Component*           _componentToTurn = nullptr;
+    NetworkGraphics*            _model = nullptr;
+    Component::Orientation      _newOrientation;
+    Component::Orientation      _oldOrientation;
+};
+
 
 #endif //NOR_COMMANDS_H

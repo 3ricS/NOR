@@ -8,14 +8,3 @@ Multiselect der Bauteile
 
 - NetworkGraphics hat 600 Zeilen
 
-- nach Undo Hinzufügen (Component) und wieder Redo Hinzufügen (Component) kann dieser nicht mehr mit Redo verschoben werden
-
-UndoStackCommands
-- addComponent
-- addConnection
-- move Component
-- edit Component
-- delete Component
-- delete Connection
-- add DescriptionField
-- delete DescriptionField

@@ -40,10 +40,10 @@ public:
 
     void mirrorComponent(Component* component);
     void turnComponentLeft(Component* componentToTurn);
-    void turnComponentRight(Component* componentToTurn);
     void setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation);
 
     //with Undo
+    void turnComponentRight(Component* componentToTurn);
     Component* addComponent(QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     DescriptionField* addDescriptionField(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
@@ -52,6 +52,7 @@ public:
     void deleteComponent(Component* componentToDelete);
     void deleteConnection(Connection* connectionToDelete);
     void deleteDescription(DescriptionField* descriptionFieldToDelete);
+    void editDescription(DescriptionField* descriptionToEdit, QString newText);
 
 
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
@@ -76,6 +77,7 @@ public:
     void deleteDescriptionWithoutUndo(DescriptionField* description);
     void moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove , QPointF gridPosition);
     void editComponentWithoutUndo(Component* componentToEdit, QString newName, double newValue);
+    void turnComponentRightWithoutUndo(Component* componentToTurn);
 
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);

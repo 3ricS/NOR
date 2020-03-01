@@ -26,7 +26,7 @@ public:
     void setLists(QList<Connection*> connections, QList<Component*> components);
 
 private:
-    QList<RowPiece> findRowPieces();
+    QList<RowPiece> findRowPieces(void);
     double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces);
     void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful,
                       QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
@@ -38,7 +38,7 @@ private:
                                               QList<ComponentPort>& foundComponentPorts);
     QList<ComponentPort> searchForNeighbours(ComponentPort componentPortForSearch);
 
-    QList<ComponentPort> findFirstComponentPort();
+    QList<ComponentPort> findFirstComponentPort(void);
     Node* getOrCeateNode(ComponentPort componentPortForNewNode, QList<ComponentPort> connectedComponentPorts,
                          bool& nodeIsKnown, QList<Node*>* knownNodes);
     bool isPowerSupplyinComponentPortList(QList<ComponentPort> list);

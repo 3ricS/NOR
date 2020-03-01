@@ -1,3 +1,9 @@
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Der EditView ist für die Veränderung des dargestellten Netzwerkes zuständig.
+ *
+ */
 #ifndef EDITINGVIEW_H
 #define EDITINGVIEW_H
 

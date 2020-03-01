@@ -1,6 +1,8 @@
-//
-// Created by erics on 024, 24, Februar.
-//
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Eine Node ist Knoten, an dem Connections abzweigen.
+ */
 
 #ifndef NOR_NODE_H
 #define NOR_NODE_H
@@ -29,10 +31,10 @@ public:
     int getId(void) const
     { return _id; }
 
-    QList<ComponentPort> getComponentPorts()
+    QList<ComponentPort> getComponentPorts(void)
     { return _componentPorts; }
 
-    int getComponentPortCount()
+    int getComponentPortCount(void)
     { return _componentPorts.count(); }
 
 private:

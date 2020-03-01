@@ -1,6 +1,8 @@
-//
-// Created by erics on 024, 24, Februar.
-//
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Ein RowPiece ist ein Objekt, welches aus Widerständen zusammengesetzt ist, um den Gesamtwiderstand zu berechnen.
+ */
 
 #ifndef NOR_ROWPIECE_H
 #define NOR_ROWPIECE_H
@@ -20,8 +22,8 @@ public:
 
     double getResistanceValue(void) {return _resistanceValue;}
 
-    Node* getNodeOne() {return _nodeOne;}
-    Node* getNodeTwo() {return _nodeTwo;}
+    Node* getNodeOne(void) {return _nodeOne;}
+    Node* getNodeTwo(void) {return _nodeTwo;}
 
     bool operator==(const RowPiece& rhs);
     bool operator!=(const RowPiece& rhs);
@@ -29,7 +31,7 @@ public:
     bool hasEqualNodesOnBothSides(RowPiece otherRowPiece);
     bool hasOneEqualNode(RowPiece otherRowPiece);
 
-    QList<Component*> getComponents() {return _components;}
+    QList<Component*> getComponents(void) {return _components;}
     Node* getEqualNode(RowPiece otherRowPiece);
 
     bool hasNode(Node* node);

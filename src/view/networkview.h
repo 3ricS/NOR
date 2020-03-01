@@ -1,3 +1,10 @@
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Der NetworkView ist die Oberfläche in der das Netzwerk dargestellt wird.
+ *
+ * Auf diesr Oberfläche können Komponenten, Verbindungen und Textfelder erzeugt, bearbeitet und verschoben werden.
+ */
 #ifndef NETWORKVIEW_H
 #define NETWORKVIEW_H
 

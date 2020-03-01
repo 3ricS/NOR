@@ -38,7 +38,7 @@ void PuzzleCalculator::setLists(QList<Connection*> connections, QList<Component*
     _components = components;
 }
 
-QList<RowPiece> PuzzleCalculator::findRowPieces()
+QList<RowPiece> PuzzleCalculator::findRowPieces(void)
 {
     //Anfang suchen
     QList<ComponentPort> startOfSearchComponentsPorts = findFirstComponentPort();
@@ -136,7 +136,7 @@ PuzzleCalculator::searchingForDirectParallelNeighbours(ComponentPort actualComPo
     foundComponentPorts.removeAll(actualComPort);
 }
 
-QList<ComponentPort> PuzzleCalculator::findFirstComponentPort()
+QList<ComponentPort> PuzzleCalculator::findFirstComponentPort(void)
 {
     ComponentPort startOfSearch(nullptr, Component::Port::null);
     for (Connection* connection : _connections)

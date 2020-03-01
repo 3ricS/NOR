@@ -9,7 +9,6 @@
  * Ein Component hat zwei Ports (Anschlüsse). Außerdem hat ein Component einen Wert und kennt seinen eigenen Typen (z.B. Widerstand oder Spannungsquelle).
  * Darüber hinaus hat ein Component eine Position und einen Namen.
  */
-//TODO: Doku vollenden
 
 #ifndef COMPONENT_H
 #define COMPONENT_H

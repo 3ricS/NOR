@@ -90,7 +90,13 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
     {
         removeHighlightSelectedRect();
 
-        _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
+        //Move Event nur auslösen, wenn Objekt an neuer GridPosition
+        if((_selectedComponentToMove != nullptr && _selectedComponentToMove->getPosition() != gridPosition) ||
+                (_selectedDescriptionToMove != nullptr &&
+                 QPointF(_selectedDescriptionToMove->getXPos(), _selectedDescriptionToMove->getYPos()) != gridPosition))
+        {
+            _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
+        }
 
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
         _selectedComponentToMove = nullptr;

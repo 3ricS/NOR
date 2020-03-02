@@ -52,6 +52,7 @@ private:
     void rotateComponent(QPointF gridPosition, QPointF scenePosition);
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
     QPointF findScrollPosition(void);
+    void focusForPrint();
 
 protected:
     void leaveEvent(QEvent* event) override;

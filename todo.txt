@@ -10,7 +10,5 @@ Stern-Dreieck-Umformung
 
 - NetworkGraphics hat 600 Zeilen
 
-- Redo- und Undo- Button ausgrauen, wenn nicht mehr möglich
-- PowerSupply-Button ausgrauen nach 1x verwenden
 - Kanstante für GridwerteMenüleiste überarbeiten
-- Name von Widerstand runtersetzen
+- Wenn man im Connection Mode in leeren Raum drückt - Absturz

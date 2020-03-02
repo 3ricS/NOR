@@ -21,6 +21,7 @@ void NetworkView::setModel(NetworkGraphics *model)
 {
     _model = model;
     connect(_model, SIGNAL(newNetworkIsLoad()), this, SLOT(focus()));
+    connect(_model, SIGNAL(powerSupplyIsAllowed(bool)), this, SLOT(setSelectionModeAfterPowerSupplyIsPlaced(bool)));
 }
 
 void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
@@ -535,7 +536,6 @@ QPointF NetworkView::findScrollPosition()
         {
             if(c->getComponentTypeInt() == Component::Resistor)
             {
-                //qDebug() << c->getName();
                 averageX += c->getXPosition();
                 averageY += c->getYPosition();
 
@@ -552,10 +552,19 @@ QPointF NetworkView::findScrollPosition()
             anzahlResistorAndDescriptions++;
         }
     }
-    qDebug() << anzahlResistorAndDescriptions;
-    averageY /= anzahlResistorAndDescriptions;
-    averageX /= anzahlResistorAndDescriptions;
+    if(anzahlResistorAndDescriptions != 0)
+    {
+        averageY /= anzahlResistorAndDescriptions;
+        averageX /= anzahlResistorAndDescriptions;
+    }
     return QPointF(averageX, averageY);
+}
+
+void NetworkView::focusForPrint()
+{
+    QPointF center = findScrollPosition();
+    center.setY(center.y() - 100);
+    centerOn(center);
 }
 
 /*!
@@ -586,14 +595,27 @@ void NetworkView::print(void)
         if(dlg.exec()==QDialog::Accepted)
         {
             //Zuerst fokussieren
-            focus();
+            focusForPrint();
 
             //Alle Objekte im View werden gezeichnet
             QPainter p(&printer);
             render(&p);
 
+            //Name der Schaltung
+            QString name;
+            if(_model->getFileName() == "")
+            {
+                name = "Widerstandsnetzwerk";
+            }
+            else
+            {
+                name = _model->getFileName();
+            }
+
+            p.drawText(QPointF(950, 50), name);
+
             //Gesamtwiderstand wird gedruckt
-            p.drawText(QPointF(1200,100),"Gesamtwiderstand der Schaltung: " + QString::number(_model->getResistanceValue(),'f', 2) + "Ω");
+            p.drawText(QPointF(750, 3000),"Gesamtwiderstand der Schaltung: " + QString::number(_model->getResistanceValue(),'f', 2) + "Ω");
 
             //Copyright wird gedruckt
             QFont f;

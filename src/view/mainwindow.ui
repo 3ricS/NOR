@@ -72,6 +72,9 @@
           </item>
           <item>
            <widget class="QToolButton" name="Undo">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -84,6 +87,9 @@
           </item>
           <item>
            <widget class="QToolButton" name="Redo">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -386,7 +392,7 @@
      <x>0</x>
      <y>0</y>
      <width>845</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

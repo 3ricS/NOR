@@ -142,10 +142,14 @@ CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* co
 void CommandMoveComponent::undo()
 {
     if(_componentToMove != nullptr)
-    _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridComponentStartPosition);
+    {
+        _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridComponentStartPosition);
+    }
 
     if(_descriptionToMove != nullptr)
-    _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridDescriptionStartPosition);
+    {
+        _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridDescriptionStartPosition);
+    }
 }
 
 void CommandMoveComponent::redo()
@@ -161,8 +165,8 @@ void CommandMoveComponent::redo()
 CommandEditComponent::CommandEditComponent(NetworkGraphics* model, Component* editedComponent,
                                            Component::Orientation originalOrientation, QString newName,
                                            double newValue) :
-        _model(model), _editedComponent(editedComponent), _oldOrientation(originalOrientation),
-        _newName(newName), _newValue(newValue)
+        _model(model), _editedComponent(editedComponent),
+        _newName(newName), _newValue(newValue), _oldOrientation(originalOrientation)
 {
     _oldName = editedComponent->getName();
     _oldValue = editedComponent->getValue();

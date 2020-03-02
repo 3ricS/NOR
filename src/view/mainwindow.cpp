@@ -54,6 +54,9 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_print, SIGNAL(triggered()), this, SLOT(print()));
 
     connect(_model, SIGNAL(resistanceValueChanged(void)), this, SLOT(updateResistanceValue(void)));
+    connect(_model, SIGNAL(powerSupplyIsAllowed(bool)), this, SLOT(isPowerSupplyAllowed(bool)));
+    connect(_model->getUndoStack(), SIGNAL(canRedoChanged(bool)), this, SLOT(isRedoPossible(bool)));
+    connect(_model->getUndoStack(), SIGNAL(canUndoChanged(bool)), this, SLOT(isUndoPossible(bool)));
 }
 
 /*!
@@ -190,7 +193,7 @@ void MainWindow::createUpperMenu(void)
 
     _print = new QAction("Drucken");
     _print->setShortcut(QKeySequence::Print);
-    _ui->menuBearbeiten->addAction(_print);
+    _ui->menuDatei->addAction(_print);
 
     //Ansichts Menu
     _zoomIn = new QAction("Zoom In");
@@ -426,6 +429,46 @@ MainWindow::~MainWindow()
 void MainWindow::updateResistanceValue(void)
 {
     _ui->CalculatedValue->setText(_countryConverter.toString(_model->getResistanceValue(), 'f', 2) + " Ω");
+}
+
+void MainWindow::isPowerSupplyAllowed(bool isAllowed)
+{
+    if(isAllowed)
+    {
+        _ui->PowerSupply->setFlat(false);
+        _ui->PowerSupply->setEnabled(true);
+    }
+    else
+    {
+        _ui->PowerSupply->setFlat(true);
+        _ui->PowerSupply->setEnabled(false);
+
+        setSelectionMode();
+    }
+}
+
+void MainWindow::isUndoPossible(bool canUndo)
+{
+    if(canUndo)
+    {
+        _ui->Undo->setEnabled(true);
+    }
+    else
+    {
+        _ui->Undo->setEnabled(false);
+    }
+}
+
+void MainWindow::isRedoPossible(bool canRedo)
+{
+    if(canRedo)
+    {
+        _ui->Redo->setEnabled(true);
+    }
+    else
+    {
+        _ui->Redo->setEnabled(false);
+    }
 }
 
 void MainWindow::deleteItem(void)

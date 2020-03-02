@@ -227,6 +227,7 @@ Component* NetworkGraphics::addComponent(QPointF gridPosition,
     CommandAddComponent* addComponent = new CommandAddComponent(this, gridPosition, componentType, componentIsVertical);
     _undoStack->push(addComponent);
     Component* createdComponent = addComponent->getCreatedComponent();
+
     return createdComponent;
 }
 
@@ -259,6 +260,10 @@ Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
     else if (Component::ComponentType::PowerSupply == componentType)
     {
         createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical);
+
+
+        emit powerSupplyIsAllowed(false);
+
     }
 
     if (!_isLoading)
@@ -285,6 +290,7 @@ Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, 
     CommandDuplicateComponent* duplicateComponent = new CommandDuplicateComponent(this, componentToDuplicate, xPosition, yPosition);
     _undoStack->push(duplicateComponent);
     Component* createdComponent = duplicateComponent->getCreatedComponent();
+
     return createdComponent;
 }
 
@@ -495,6 +501,7 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
         else if (Component::ComponentType::PowerSupply == component->getComponentTypeInt())
         {
             _powerSupplyCount--;
+            emit powerSupplyIsAllowed(true);
         }
 
         //Lösche Verbindungen vom Component

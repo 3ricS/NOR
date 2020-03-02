@@ -61,6 +61,9 @@ public slots:
     void print(void);
 
     void updateResistanceValue(void);
+    void isPowerSupplyAllowed(bool isAllowed);
+    void isRedoPossible(bool canRedo);
+    void isUndoPossible(bool canUndo);
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;

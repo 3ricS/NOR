@@ -1,0 +1,22 @@
+Protokoll vom 2. März 2020
+
+Start: 9:50 Uhr
+
+Anwesend:
+Leonel Fransen 
+Moritz Fichte
+Sören Köstler
+Eric Schniedermeyer
+Herr Henseler
+
+Protokollant:
+Moritz Fichte
+
+Protokoll:
+- Für Zahlendarstellung Nummern formatieren (Qlocal)
+- UNdo- und Redo-Button ausgrauen, wenn nicht mehr möglich 
+- PowerSupply-Button ausgrauen nach 1x hinzufügen einer Spannungsquelle
+- Name vom Widerstand runtersetzen
+- für Gittergröße Konstanten verwenden
+- Menüleiste anpassen (Drucken in Dateimenü)
+- Zoom begrenzen

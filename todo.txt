@@ -6,5 +6,14 @@ ___________________________________________________________________
 Model
 Multiselect der Bauteile
 
+Stern-Dreieck-Umformung
+
 - NetworkGraphics hat 600 Zeilen
 
+- Zahlen formatieren (Qlocal)
+- Redo- und Undo- Button ausgrauen, wenn nicht mehr möglich
+- PowerSupply-Button ausgrauen nach 1x verwenden
+- Kanstante für GridwerteMenüleiste überarbeiten
+- Drucken im Dateimenü
+- Name von Widerstand runtersetzen
+- Zoom begrenzen

@@ -10,7 +10,7 @@ Eric Schniedermeyer
 Herr Henseler
 
 Protokollant:
-Moritz Fichte
+Leonel Fransen
 
 Protokoll:
 -Rekursives Includen in C++ nicht möglich

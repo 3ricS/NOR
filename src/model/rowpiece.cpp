@@ -85,7 +85,14 @@ void RowPiece::parallelMerge(RowPiece otherRowPiece)
     //Werte zusammenrechnen
     double newResistanceValueCounter = _resistanceValue * otherRowPiece._resistanceValue;
     double newResistanceValueDenominator = _resistanceValue + otherRowPiece._resistanceValue;
-    _resistanceValue = (newResistanceValueCounter / newResistanceValueDenominator);
+    if(newResistanceValueDenominator != 0)
+    {
+        _resistanceValue = (newResistanceValueCounter / newResistanceValueDenominator);
+    }
+    else
+    {
+        _resistanceValue = 0;
+    }
 }
 
 /*!

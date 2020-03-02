@@ -188,6 +188,10 @@ void MainWindow::createUpperMenu(void)
     _saveAs->setStatusTip("Speichern unter neuem Dateipfad");
     _ui->menuDatei->addAction(_saveAs);
 
+    _print = new QAction("Drucken");
+    _print->setShortcut(QKeySequence::Print);
+    _ui->menuBearbeiten->addAction(_print);
+
     //Ansichts Menu
     _zoomIn = new QAction("Zoom In");
     _zoomIn->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
@@ -241,9 +245,6 @@ void MainWindow::createUpperMenu(void)
     _deleteComponent->setShortcut(QKeySequence(Qt::Key_Delete));
     _ui->menuBearbeiten->addAction(_deleteComponent);
 
-    _print = new QAction("Drucken");
-    _print->setShortcut(QKeySequence::Print);
-    _ui->menuBearbeiten->addAction(_print);
 
     //Erstellen Menü
     _selectionMode = new QAction("Auswahl Maus");
@@ -373,12 +374,15 @@ void MainWindow::setRotate()
 */
 void MainWindow::setZoomIn()
 {
-    double scaleFactor = 1.1;
-    _scalefactor += 0.1;
-    _ui->PercentZoom->setText(QString::number(_scalefactor * 100) + "%");
-    _ui->networkView->scale(scaleFactor, scaleFactor);
+    if((_scalefactor * 100) < _maximumZoom)
+    {
+        double scaleFactor = 1.1;
+        _scalefactor += 0.1;
+        _ui->PercentZoom->setText(QString::number(_scalefactor * 100) + "%");
+        _ui->networkView->scale(scaleFactor, scaleFactor);
 
-    _model->update();
+        _model->update();
+    }
 }
 
 /*!
@@ -386,12 +390,14 @@ void MainWindow::setZoomIn()
 */
 void MainWindow::setZoomOut()
 {
-    //_ui->networkView->showNormal()
-    double scaleFactor = 0.9;
-    _scalefactor -= 0.1;
-    _ui->PercentZoom->setText(QString::number(_scalefactor * 100) + "%");
-    _ui->networkView->scale(scaleFactor, scaleFactor);
-    _model->update();
+    if((_scalefactor * 100) > _minimumZoom)
+    {
+        double scaleFactor = 0.9;
+        _scalefactor -= 0.1;
+        _ui->PercentZoom->setText(QString::number(_scalefactor * 100) + "%");
+        _ui->networkView->scale(scaleFactor, scaleFactor);
+        _model->update();
+    }
 }
 
 /*!
@@ -419,7 +425,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateResistanceValue(void)
 {
-    _ui->CalculatedValue->setText(QString::number(_model->getResistanceValue(), 'f', 2) + " Ω");
+    _ui->CalculatedValue->setText(_countryConverter.toString(_model->getResistanceValue(), 'f', 2) + " Ω");
 }
 
 void MainWindow::deleteItem(void)

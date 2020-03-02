@@ -8,7 +8,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QMouseEvent>
-
+#include <QLocale>
 #include <QToolBar>
 #include <QListView>
 #include <QHBoxLayout>
@@ -73,6 +73,9 @@ private:
     void setFlatModusButtonRight(QPushButton* actualPushed);
     void createModusQPushButtonList(void);
 
+//Konstanten
+    static constexpr double _maximumZoom = 299;
+    static constexpr double _minimumZoom = 11;
 
 //Variables
     Ui::MainWindow*     _ui;
@@ -98,6 +101,7 @@ private:
     QAction* _descriptionMode = nullptr;
     QAction* _selectionMode = nullptr;
     QAction* _print;
+    QLocale _countryConverter = QLocale::system();
 
     QList<QAction*> _createActionGroup;
     QList<QPushButton*> _modusButtons;

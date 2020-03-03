@@ -12,3 +12,4 @@ Stern-Dreieck-Umformung
 
 - Kanstante für GridwerteMenüleiste überarbeiten
 - Wenn man im Connection Mode in leeren Raum drückt - Absturz
+- NAch dreimal PowerSuplly drehen - Absturz

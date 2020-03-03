@@ -327,6 +327,20 @@ bool PuzzleCalculator::isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces)
     return (nodes.count() == 2);
 }
 
+double PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC)
+{
+    //Summe aller Widerstände
+    int additionValue = rowPieceA.getResistanceValue() + rowPieceB.getResistanceValue() + rowPieceC.getResistanceValue();
+
+    // Die drei Stern-Zweige
+    double starValueA = ((rowPieceA.getResistanceValue() * rowPieceB.getResistanceValue()) / additionValue);
+    double starValueB = ((rowPieceB.getResistanceValue() * rowPieceC.getResistanceValue()) / additionValue);
+    double starValueC = ((rowPieceA.getResistanceValue() * rowPieceC.getResistanceValue()) / additionValue);
+
+    //A und B parallel und C dazu in Reihe
+    return ((starValueA * starValueB) / (starValueA + starValueB)) + starValueC;
+}
+
 double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces)
 {
     while (1 < rowPieces.count())
@@ -351,7 +365,6 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                 rowPieces.removeOne(rowPieceA);
                 break;
             }
-
             for (RowPiece& rowPieceB : rowPieces)
             {
                 if (rowPieceA != rowPieceB && rowPieceA.hasEqualNodesOnBothSides(rowPieceB))
@@ -366,6 +379,20 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                     Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
                     if (equalNode != nullptr && !equalNode->isConnectedToPowerSupply())
                     {
+
+                        RowPiece hello(rowPieceA.getNodeTwo(), rowPieceB.getNodeTwo(),0, rowPieceB.getComponents());
+
+                        for(RowPiece& rp : rowPieces)
+                        {
+                            if(rp.hasEqualNodesOnBothSides(hello))
+                            {
+                                qDebug() << "Sternwiderstand: " << calculateStar(rowPieceA, rowPieceB, rp);
+                                rowPieces.removeOne(rowPieceA);
+                                rowPieces.removeOne(rowPieceB);
+                                rowPieces.removeOne(rp);
+                                break;
+                            }
+                        }
                         if (2 == countNodesInRowPieces(equalNode, rowPieces))
                         {
                             rowPieceA.rowMerge(rowPieceB);

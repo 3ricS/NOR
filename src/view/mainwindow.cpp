@@ -214,6 +214,7 @@ void MainWindow::createUpperMenu(void)
     //About Menu
     _about = new QAction("Über");
     _ui->menuExtras->addAction(_about);
+    _about->setMenuRole(QAction::ApplicationSpecificRole);
 
     //Bearbeiten Menu
     _edit = new QAction("Eigenschaften");

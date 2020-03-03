@@ -45,6 +45,7 @@ private:
     bool isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces);
 
     int countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
+    double calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC);
 
 
     QList<Component*> _components;

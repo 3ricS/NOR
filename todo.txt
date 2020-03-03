@@ -3,13 +3,9 @@ Doku: wenn Fehler oder Mängel auffallen bitte bescheid geben
 
 ___________________________________________________________________
 
-Model
-Multiselect der Bauteile
-
-Stern-Dreieck-Umformung
-
+- Multiselect der Bauteile
+- Stern-Dreieck-Umformung
 - NetworkGraphics hat 600 Zeilen
-
 - Kanstante für GridwerteMenüleiste überarbeiten
-- Wenn man im Connection Mode in leeren Raum drückt - Absturz
+
 - NAch dreimal PowerSuplly drehen - Absturz

@@ -21,7 +21,6 @@ void NetworkView::setModel(NetworkGraphics *model)
 {
     _model = model;
     connect(_model, SIGNAL(newNetworkIsLoad()), this, SLOT(focus()));
-    connect(_model, SIGNAL(powerSupplyIsAllowed(bool)), this, SLOT(setSelectionModeAfterPowerSupplyIsPlaced(bool)));
 }
 
 void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
@@ -166,13 +165,12 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     case ConnectionMode:
     {
         _connectionStartComponentPort = _model->getComponentPortAtPosition(scenePosition);
-        Component* tempComponentForConnection = _connectionStartComponentPort->getComponent();;
-        _tempComponentListForConnections = _model->getComponents();
-        //qDebug() << _tempComponentListForConnections;
-        _tempComponentListForConnections.removeOne(tempComponentForConnection);
-        //qDebug() << _tempComponentListForConnections;
-
-
+        if(_connectionStartComponentPort != nullptr)
+        {
+            Component* tempComponentForConnection = _connectionStartComponentPort->getComponent();;
+            _tempComponentListForConnections = _model->getComponents();
+            _tempComponentListForConnections.removeOne(tempComponentForConnection);
+        }
     }
         break;
     case SelectionMode:

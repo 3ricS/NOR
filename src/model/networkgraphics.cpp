@@ -828,6 +828,7 @@ void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
         {
             _powerSupplyCount++;
             addObject(componentToAdd);
+            emit powerSupplyIsAllowed(false);
         }
         else
         {

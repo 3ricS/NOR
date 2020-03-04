@@ -223,7 +223,7 @@ void Connection::horizontalRoutine()
     {
         while(_diffX != 0)
         {
-            if(_diffX == 50 && ((_diffY > 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() + 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() - 50))))
+            if((_diffY != 50 || _diffY != -50) && _diffX == 50 && ((_diffY > 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() + 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() - 50))))
             {
                 verticalRoutine();
             }
@@ -254,7 +254,7 @@ void Connection::horizontalRoutine()
     {
         while(_diffX != 0)
         {
-            if(_diffX == - 50 && ((_diffY > 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() + 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() - 50))))
+            if((_diffY != 50 || _diffY != -50) && _diffX == - 50 && ((_diffY > 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() + 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() - 50))))
             {
                 verticalRoutine();
             }
@@ -293,7 +293,7 @@ void Connection::verticalRoutine()
     {
         while(_diffY != 0)
         {
-            if(_diffY == 50 && ((_diffX > 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() + 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() + 50))))
+            if((_diffX != 50 || _diffX != -50) && _diffY == 50 && ((_diffX > 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() + 50)) || (_diffX < 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() + 50))))
             {
                 horizontalRoutine();
             }
@@ -324,7 +324,7 @@ void Connection::verticalRoutine()
     {
         while(_diffY != 0)
         {
-            if(_diffY == - 50 && ((_diffX > 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() - 50)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() - 50))))
+            if((_diffX != 50 || _diffX != -50) && _diffY == - 50 && ((_diffX > 0 && isThereAComponentOrADescription(_currentPoint.x() + 50, _currentPoint.y() - 50)) || (_diffX < 0 && isThereAComponentOrADescription(_currentPoint.x() - 50, _currentPoint.y() - 50))))
             {
                 horizontalRoutine();
             }

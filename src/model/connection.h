@@ -52,12 +52,16 @@ public:
     bool isSelected(void) const { return  _isSelected;}
 
 private:
-    void horizontalRoutine(void);
-    void verticalRoutine(void);
-    void dodgeRoutine(void);
-    int pathAnalyseHorizontalRoutine(int howManyConnections, bool horizontalFirst);
-    int pathAnalyseVerticalRoutine(int howManyConnections, bool horizontalFirst);
-    int pathAnalyseDodgeRoutine(int howManyConnections);
+    void drawHorizontalLines(void);
+    void drawLeftOrRight(int leftOrRight);
+    void drawVerticalLines(void);
+    void drawUpOrDown(int upOrDown);
+    void dodgeComponent(void);
+    int horizontalPathAnalysis(int howManyConnections, bool horizontalFirst);
+    int leftOrRightPathAnalysis(int howManyConnections, bool horizontalFirst, int leftOrRight);
+    int verticalPathAnalysis(int howManyConnections, bool horizontalFirst);
+    int upOrDownPathAnalysis(int howManyConnections, bool horizontalFirst, int upOrDown);
+    int pathAnalyseDodgeComponent(int howManyConnections);
     bool isStartComponentVertical(void);
 
     int _diffX = 0;

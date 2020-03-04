@@ -18,7 +18,6 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     //TODO: Funktion mit mehreren Rückgabewerten für xStart, xEnd, ...
     _connectionHitbox.clear();
     _startPoint = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
-    _currentPoint = _startPoint;
     _endPoint = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
 
     qDebug() << _currentPoint;
@@ -30,26 +29,19 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     _painter = painter;
     _isDodgedBefore = false;
 
-    _diffX = _endPoint.x() - _startPoint.x();
-    _diffY = _endPoint.y() - _startPoint.y();
+    initializeValues();
 
     int horizontalFirst = pathAnalyse(true);
 
     int countChangesHorizontalFirst = _countChangeDirection;
-    _countChangeDirection = 0;
 
-    _diffX = _endPoint.x() - _startPoint.x();
-    _diffY = _endPoint.y() - _startPoint.y();
-    _currentPoint = _startPoint;
+    initializeValues();
 
     int verticalFirst = pathAnalyse(false);
 
     int countChangesVerticalFirst = _countChangeDirection;
-    _countChangeDirection = 0;
 
-    _diffX = _endPoint.x() - _startPoint.x();
-    _diffY = _endPoint.y() - _startPoint.y();
-    _currentPoint = _startPoint;
+    initializeValues();
 
     if(horizontalFirst < verticalFirst)
     {
@@ -444,6 +436,15 @@ void Connection::dodgeComponent()
 bool Connection::isStartComponentVertical()
 {
     return _startPoint.toPoint().y() % 100 == 0;
+}
+
+void Connection::initializeValues()
+{
+    _countChangeDirection = 0;
+
+    _diffX = _endPoint.x() - _startPoint.x();
+    _diffY = _endPoint.y() - _startPoint.y();
+    _currentPoint = _startPoint;
 }
 
 bool Connection::operator==(const Connection& rhs)

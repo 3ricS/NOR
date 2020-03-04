@@ -12,7 +12,8 @@
 class Node
 {
 public:
-    Node(int id, QList<ComponentPort> componentPorts, bool isConnectedToPowerSupply) : _id(id), _componentPorts(componentPorts), _isConnectedToPowerSupply(isConnectedToPowerSupply)
+    Node(int id, QList<ComponentPort> componentPorts, bool isConnectedToPowerSupply) :
+        _id(id), _componentPorts(componentPorts), _isConnectedToPowerSupply(isConnectedToPowerSupply)
     {
     }
 

@@ -15,7 +15,7 @@ class Node;
 class RowPiece
 {
 public:
-    RowPiece(Node* nodeOne, Node* nodeTwo, int resistanceValue, QList<Component *> includedComponents);
+    RowPiece(Node* nodeOne, Node* nodeTwo, double resistanceValue, QList<Component *> includedComponents);
 
     void parallelMerge(RowPiece otherRowPiece);
     void rowMerge(RowPiece otherRowPiece);
@@ -33,6 +33,7 @@ public:
 
     QList<Component*> getComponents(void) {return _components;}
     Node* getEqualNode(RowPiece otherRowPiece);
+    Node* getOppositeNode(Node* node);
 
     bool hasNode(Node* node);
 

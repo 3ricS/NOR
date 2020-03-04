@@ -6,12 +6,8 @@
 #include "model/component.h"
 #include "model/node.h"
 
-RowPiece::RowPiece(Node* nodeOne, Node* nodeTwo, int resistanceValue, QList<Component*> includedComponents) : _nodeOne(
-        nodeOne), _nodeTwo(nodeTwo),
-                                                                                                              _resistanceValue(
-                                                                                                                      resistanceValue),
-                                                                                                              _components(
-                                                                                                                      includedComponents)
+RowPiece::RowPiece(Node* nodeOne, Node* nodeTwo, double resistanceValue, QList<Component*> includedComponents) :
+    _nodeOne(nodeOne), _nodeTwo(nodeTwo), _resistanceValue(resistanceValue), _components(includedComponents)
 {
 }
 
@@ -191,6 +187,19 @@ Node* RowPiece::getEqualNode(RowPiece otherRowPiece)
     if (nodeTwoEqual)
     {
         return _nodeTwo;
+    }
+    return nullptr;
+}
+
+Node *RowPiece::getOppositeNode(Node *node)
+{
+    if(node == _nodeOne)
+    {
+        return _nodeTwo;
+    }
+    if (node == _nodeTwo)
+    {
+        return _nodeOne;
     }
     return nullptr;
 }

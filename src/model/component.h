@@ -43,6 +43,8 @@ public:
     double getValue(void) const {return _value;}
     bool isVertical(void) const {return _isVertical;}
     bool isSelected(void) const {return  _isSelected;}
+    double getVoltage(void) {return _voltage;}
+    double getAmp(void) {return _amp;}
 
     Component::Port getPort(QPointF position) const;
     QPointF getPortPosition(Port port) const;
@@ -57,6 +59,8 @@ public:
     void setValue(double newValue) { _value = newValue;}
     void setPosition(QPointF gridPosition);
     void set_isSelected(bool isSelected);
+    void setVoltage(double voltage) {_voltage = voltage;}
+    void setAmp(double amp) {_amp = amp;}
 
     static constexpr int _hitBoxSize = 20;
 
@@ -70,6 +74,9 @@ protected:
 
     QString     _name;
     double      _value;
+
+    double _voltage = 0.0;
+    double _amp = 0.0;
 
     //virtuelle Methoden
     virtual void paintInformations(QPainter* painter) = 0;

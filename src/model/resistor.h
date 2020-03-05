@@ -19,6 +19,12 @@ public:
     //Methoden
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
+    //getter
+
+    //setter
+
+    //Klassenmethoden
+
 private:
 
     //Klassenvariablen
@@ -26,6 +32,7 @@ private:
     //Methoden
     virtual void paintInformations(QPainter* painter) override;
     void paintOrientationSensitiv(QPainter* painter, int xPosText, int yPosText, int xPosValue, int yPosValue);
+
     //Variablen
 
 };

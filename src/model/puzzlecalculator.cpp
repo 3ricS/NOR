@@ -26,9 +26,10 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
 
     if (!rowPieces.isEmpty() && isNodeConnectedToPowerSupply(rowPieces))
     {
-        double resistanceValue = calculateResistanceValueFromRowPieces(rowPieces, nodes);
-        qDebug() << "Widerstandswert Calculate" << resistanceValue;
-        return resistanceValue;
+        _resistanceValue = calculateResistanceValueFromRowPieces(rowPieces, nodes);
+        qDebug() << "Widerstandswert Calculate" << _resistanceValue;
+        calculateVoltageAndAmo();
+        return _resistanceValue;
     }
     return 0.0;
 }
@@ -349,6 +350,17 @@ QList<RowPiece> PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece row
     listOfNewRowPieces.append(rowPieceBC);
     listOfNewRowPieces.append(rowPieceCA);
     return listOfNewRowPieces;
+}
+
+void PuzzleCalculator::calculateVoltageAndAmo()
+{
+    for(Component* component : _components)
+    {
+        if(1 == component->getComponentTypeInt())
+        {
+            component->setAmp(component->getVoltage() / _resistanceValue);
+        }
+    }
 }
 
 double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node*> nodes)

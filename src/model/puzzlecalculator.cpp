@@ -148,7 +148,7 @@ QList<ComponentPort> PuzzleCalculator::findFirstComponentPort(void)
             break;
         }
         else if (Component::ComponentType::PowerSupply ==
-                connection->getComponentPortTwo().getComponent()->getComponentTypeInt())
+                 connection->getComponentPortTwo().getComponent()->getComponentTypeInt())
         {
             startOfSearch = connection->getComponentPortTwo();
             break;
@@ -254,8 +254,8 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
 }
 
 Node* PuzzleCalculator::getOrCreateNode(ComponentPort componentPortForNewNode,
-                                       QList<ComponentPort> connectedComponentPorts,
-                                       bool& nodeIsKnown, QList<Node*>* knownNodes)
+                                        QList<ComponentPort> connectedComponentPorts,
+                                        bool& nodeIsKnown, QList<Node*>* knownNodes)
 {
     for (Node* node : *knownNodes)
     {
@@ -408,18 +408,63 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                     Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
                     if (equalNode != nullptr && !equalNode->isConnectedToPowerSupply())
                     {
-                        //Wenn die Anzahl der Node ComponentPort größer 2 ist, klingt es nach Stern-Dreieck
-                        if(equalNode->getComponentPortCount() > 2)
+                        if(changedSomething)
                         {
-                            //Nun schauen auf der gegenüberliegenden Seite vom gleichen Node
-                            Node* oppositeNode = rowPieceB.getOppositeNode(equalNode);
-                            RowPiece* searchedRowPieces = nullptr;
-                            bool found = false;
+                            break;
+                        }
 
-                            /*Durchgehen aller ComponentPorts des gegenüberliegenden Nodes, schauen, wo der Component teil
-                            * eines RowPieces ist, wenn eine angrenzendes RowPieces gefunden wurde, schauen, ob der gegenüberliegende Node gleich
-                            * dem anfangs gefundenen EqualNode ist, wenn ja rausspringen
-                            */
+                        if (2 == countNodesInRowPieces(equalNode, rowPieces))
+                        {
+                            rowPieceA.rowMerge(rowPieceB);
+                            rowPieces.removeOne(rowPieceB);
+                            changedSomething = true;
+                            break;
+                        }
+                        else if (1 == countNodesInRowPieces(equalNode, rowPieces))
+                        {
+                            qDebug() << "nur ein RowPiece mit bestimmtem Node";
+                        }
+                    }
+                    //Wenn die Anzahl der Node ComponentPort größer 3 ist, klingt es nach Stern-Dreieck, RowPieces werden nach Anbindung zum Node
+                    //durchsucht
+                    int count = 0;
+                    for(RowPiece rs : rowPieces)
+                    {
+                        if(rs.getNodeOne()->getId() == equalNode->getId())
+                        {
+                            count++;
+                        }
+                        else if(rs.getNodeTwo()->getId() == equalNode->getId())
+                        {
+                            count++;
+                        }
+                    }
+                    if(count >= 3 && !changedSomething)
+                    {
+                        //Nun schauen auf der gegenüberliegenden Seite vom gleichen Node
+                        Node* oppositeNode = rowPieceB.getOppositeNode(equalNode);
+                        RowPiece* searchedRowPieces = nullptr;
+                        bool found = false;
+
+                        /*Zuerst wird geschaut, ob auch am Opposite Node mindestens 3 RowPieces angeschlossen sind
+                         * Durchgehen aller ComponentPorts des gegenüberliegenden Nodes, schauen, wo der Component teil
+                        * eines RowPieces ist, wenn eine angrenzendes RowPieces gefunden wurde, schauen, ob der gegenüberliegende Node gleich
+                        * dem anfangs gefundenen EqualNode ist, wenn ja rausspringen
+                        */
+                        int count = 0;
+                        for(RowPiece rs : rowPieces)
+                        {
+                            if(rs.getNodeOne()->getId() == oppositeNode->getId())
+                            {
+                                count++;
+                            }
+                            else if(rs.getNodeTwo()->getId() == oppositeNode->getId())
+                            {
+                                count++;
+                            }
+                        }
+                        if(count >= 3)
+                        {
                             for(ComponentPort cp :  oppositeNode->getComponentPorts())
                             {
                                 for(RowPiece rs : rowPieces)
@@ -429,7 +474,7 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                                         if(c == cp.getComponent())
                                         {
                                             if(rs.getOppositeNode(oppositeNode) == rowPieceA.getOppositeNode(equalNode))
-                                            searchedRowPieces = new RowPiece(rs.getNodeOne(), rs.getNodeTwo(), rs.getResistanceValue(), rs.getComponents());
+                                                searchedRowPieces = new RowPiece(rs.getNodeOne(), rs.getNodeTwo(), rs.getResistanceValue(), rs.getComponents());
                                             break;
                                         }
                                     }
@@ -460,23 +505,11 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                                 qDebug() << "SternDreieck";
                             }
                         }
-                        if(changedSomething)
-                        {
-                            break;
-                        }
-
-                        if (2 == countNodesInRowPieces(equalNode, rowPieces))
-                        {
-                            rowPieceA.rowMerge(rowPieceB);
-                            rowPieces.removeOne(rowPieceB);
-                            changedSomething = true;
-                            break;
-                        }
-                        else if (1 == countNodesInRowPieces(equalNode, rowPieces))
-                        {
-                            qDebug() << "nur ein RowPiece mit bestimmtem Node";
-                        }
                     }
+                }
+                if (changedSomething)
+                {
+                    break;
                 }
             }
             if (changedSomething)

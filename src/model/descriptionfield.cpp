@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "descriptionfield.h"
 
 DescriptionField::DescriptionField(int x, int y, int id, QString text)
@@ -18,7 +19,7 @@ void DescriptionField::setPosition(QPointF gridPosition)
 
 QRectF DescriptionField::boundingRect() const
 {
-    return QRectF (_xPosition - 100, _yPosition - 50, 150, 100);
+    return QRectF (_xPosition - Defines::gridLength, _yPosition - Defines::halfGridLength, 150, Defines::gridLength);
 }
 
 void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)
@@ -47,7 +48,7 @@ void DescriptionField::paintHighlightRect(QPainter *painter)
     brush.setColor(QColor(255, 0, 0, 55));
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     painter->setBrush(brush);
-    painter->drawRect(_xPosition - 50, _yPosition -50, 100, 100);
+    painter->drawRect(_xPosition - Defines::halfGridLength, _yPosition - Defines::halfGridLength, Defines::gridLength, Defines::gridLength);
 }
 
 void DescriptionField::set_isSelected(bool isSelected)

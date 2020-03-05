@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "networkview.h"
 
 #include <QPrintDialog>
@@ -325,8 +326,8 @@ void NetworkView::mouseDoubleClickEvent(QMouseEvent* event)
 
 QPointF NetworkView::scenePositionToGrid(QPointF scenePosition)
 {
-    qreal xPos = scenePosition.toPoint().x() / 100 * 100 - 50;
-    qreal yPos = scenePosition.toPoint().y() / 100 * 100 - 50;
+    qreal xPos = scenePosition.toPoint().x() / Defines::gridLength * Defines::gridLength - Defines::halfGridLength;
+    qreal yPos = scenePosition.toPoint().y() / Defines::gridLength * Defines::gridLength - Defines::halfGridLength;
     return QPointF(xPos, yPos);
 }
 
@@ -368,7 +369,7 @@ void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
     int positionY = gridPosition.toPoint().y();
     if (!_model->isThereAComponentOrADescription(gridPosition))
     {
-        QGraphicsItem* highlightedRect = _model->addRect(positionX - 50, positionY - 50, 100, 100, Qt::NoPen,
+        QGraphicsItem* highlightedRect = _model->addRect(positionX - Defines::halfGridLength, positionY - Defines::halfGridLength, Defines::gridLength, Defines::gridLength, Qt::NoPen,
                                                          highlightColor);
         _previousHighlightedRect = highlightedRect;
 
@@ -517,7 +518,7 @@ bool NetworkView::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWayto
             return created;
         }
 
-        xWaytoTheRight += 100;
+        xWaytoTheRight += Defines::gridLength;
     }
     return created;
 }
@@ -561,7 +562,7 @@ QPointF NetworkView::findScrollPosition()
 void NetworkView::focusForPrint()
 {
     QPointF center = findScrollPosition();
-    center.setY(center.y() - 100);
+    center.setY(center.y() - Defines::gridLength);
     centerOn(center);
 }
 
@@ -636,7 +637,7 @@ void NetworkView::duplicate(void)
     {
         if(component->isSelected())
         {
-            int xWayToTheRight = 100;
+            int xWayToTheRight = Defines::gridLength;
             if(lookingForFreeSpaceToDuplicate(component->getXPosition(), component->getYPosition(), xWayToTheRight))
                 _model->duplicateComponent(component, component->getXPosition() + xWayToTheRight,
                                            component->getYPosition());
@@ -647,7 +648,7 @@ void NetworkView::duplicate(void)
     {
         if(description->isSelected())
         {
-            int xWayToTheRight = 100;
+            int xWayToTheRight = Defines::gridLength;
             if(lookingForFreeSpaceToDuplicate(description->getXPos(), description->getYPos(), xWayToTheRight))
             {
                 _model->duplicateDescription(description, description->getXPos() + xWayToTheRight,

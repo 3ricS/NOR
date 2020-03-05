@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "powersupply.h"
 /*!
  * \brief Erzeugt ein neues Spannungsquellenobjekt
@@ -29,12 +30,12 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
     if (_isVertical)
     {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
-        painter->drawLine(_xPosition, _yPosition + 50, _xPosition, _yPosition - 50);
+        painter->drawLine(_xPosition, _yPosition + Defines::halfGridLength, _xPosition, _yPosition - Defines::halfGridLength);
     }
     else
     {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
-        painter->drawLine(_xPosition - 50, _yPosition, _xPosition + 50, _yPosition);
+        painter->drawLine(_xPosition - Defines::halfGridLength, _yPosition, _xPosition + Defines::halfGridLength, _yPosition);
     }
     if(_isSelected)
     {

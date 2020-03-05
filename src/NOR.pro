@@ -44,6 +44,7 @@ SOURCES += \
         model/commands.cpp
 
 HEADERS += \
+        defines.h \
         model/component.h \
         model/connection.h \
         model/descriptionfield.h \

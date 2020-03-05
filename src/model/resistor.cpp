@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "resistor.h"
 #include "connection.h"
 
@@ -34,14 +35,14 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
     {
         //Resistor has length of 120 and width of 60
         painter->drawRect(_xPosition - 20, _yPosition - 30, 40, 60);
-        painter->drawLine(_xPosition, _yPosition - 30, _xPosition, _yPosition - 50 + Connection::_circleRadius);
-        painter->drawLine(_xPosition, _yPosition + 30, _xPosition, _yPosition + 50 - Connection::_circleRadius);
+        painter->drawLine(_xPosition, _yPosition - 30, _xPosition, _yPosition - Defines::halfGridLength + Connection::_circleRadius);
+        painter->drawLine(_xPosition, _yPosition + 30, _xPosition, _yPosition + Defines::halfGridLength - Connection::_circleRadius);
     }
     else
     {
         painter->drawRect(_xPosition - 30, _yPosition - 20, 60, 40);
-        painter->drawLine(_xPosition - 30, _yPosition + 0, _xPosition - 50 + Connection::_circleRadius, _yPosition + 0);
-        painter->drawLine(_xPosition + 30, _yPosition + 0, _xPosition + 50 - Connection::_circleRadius, _yPosition + 0);
+        painter->drawLine(_xPosition - 30, _yPosition + 0, _xPosition - Defines::halfGridLength + Connection::_circleRadius, _yPosition + 0);
+        painter->drawLine(_xPosition + 30, _yPosition + 0, _xPosition + Defines::halfGridLength - Connection::_circleRadius, _yPosition + 0);
     }
     if(_isSelected)
     {

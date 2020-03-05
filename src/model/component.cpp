@@ -1,4 +1,4 @@
-#include <view/editview.h>
+#include "defines.h"
 #include "component.h"
 
 Component::Component(int x, int y, bool isVertical, QString name, double value, ComponentType componentTyp, int id)
@@ -25,7 +25,7 @@ Component::Component(int x, int y, bool isVertical, QString name, double value, 
 QRectF Component::boundingRect(void) const
 {
     //TODO: Zoomfaktor hier einfügen
-    return QRectF(_xPosition - 100, _yPosition - 50, 150, 100);
+    return QRectF(_xPosition - Defines::gridLength, _yPosition - Defines::halfGridLength, 150, Defines::gridLength);
 }
 
 int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
@@ -136,7 +136,7 @@ void Component::paintHighlightRect(QPainter *painter)
     brush.setColor(QColor(255, 0, 0, 55));
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     painter->setBrush(brush);
-    painter->drawRect(_xPosition - 50, _yPosition -50, 100, 100);
+    painter->drawRect(_xPosition - Defines::halfGridLength, _yPosition - Defines::halfGridLength, Defines::gridLength, Defines::gridLength);
 }
 
 QPointF Component::getPortPosition(Component::Port port) const

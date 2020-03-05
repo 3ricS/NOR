@@ -14,7 +14,6 @@
 #include <QPainter>
 #include <QDebug>
 
-
 class DescriptionField : public QGraphicsItem
 {
 public:

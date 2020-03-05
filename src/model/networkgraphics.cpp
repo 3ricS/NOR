@@ -184,6 +184,17 @@ void NetworkGraphics::load(void)
     emit resistanceValueChanged();
     if (_componentList.count() != 0)
     {
+        bool powerSupplyFound = false;
+        for(Component* component : _componentList)
+        {
+            if(component->getComponentType() == Component::PowerSupply)
+            {
+                powerSupplyFound = true;
+            }
+        }
+
+        bool isAllowedPowerSupply = !powerSupplyFound;
+        emit powerSupplyIsAllowed(isAllowedPowerSupply);
         emit newNetworkIsLoad();
     }
 }

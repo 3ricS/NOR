@@ -49,6 +49,7 @@ private:
 
     void calculateVoltageAndAmo();
 
+    QList<RowPiece> _rowPieceListForCalculateAmp;
     double _resistanceValue = 0;
     QList<Component*> _components;
     QList<Connection*> _connections;

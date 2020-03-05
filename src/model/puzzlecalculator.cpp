@@ -29,6 +29,10 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
         _resistanceValue = calculateResistanceValueFromRowPieces(rowPieces, nodes);
         qDebug() << "Widerstandswert Calculate" << _resistanceValue;
         calculateVoltageAndAmo();
+        for(RowPiece rowpiece : _rowPieceListForCalculateAmp)
+        {
+        qDebug() << rowpiece.getResistanceValue();
+        }
         return _resistanceValue;
     }
     return 0.0;
@@ -391,6 +395,8 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
             {
                 if (rowPieceA != rowPieceB && rowPieceA.hasEqualNodesOnBothSides(rowPieceB))
                 {
+                    _rowPieceListForCalculateAmp.append(rowPieceA);
+                    _rowPieceListForCalculateAmp.append(rowPieceB);
                     rowPieceA.parallelMerge(rowPieceB);
                     rowPieces.removeOne(rowPieceB);
                     changedSomething = true;

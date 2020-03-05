@@ -333,9 +333,16 @@ bool PuzzleCalculator::isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces)
 
 QList<RowPiece> PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node* newNode)
 {
+    qDebug() << "RowA" << rowPieceA.getComponents()[0]->getName();
+    qDebug() << "RowB" << rowPieceB.getComponents()[0]->getName();
+    qDebug() << "RowC" << rowPieceC.getComponents()[0]->getName();
+
     Node* equalNodeA = rowPieceA.getEqualNode(rowPieceB);
     Node* equalNodeB = rowPieceB.getEqualNode(rowPieceC);
     Node* equalNodeC = rowPieceC.getEqualNode(rowPieceA);
+    qDebug() << "Eq NodeA" << equalNodeA->getId();
+    qDebug() << "Eq NodeB" << equalNodeB->getId();
+    qDebug() << "Eq NodeC" << equalNodeC->getId();
 
     //Summe aller Widerstände
     int additionValue = rowPieceA.getResistanceValue() + rowPieceB.getResistanceValue() + rowPieceC.getResistanceValue();
@@ -345,8 +352,8 @@ QList<RowPiece> PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece row
     double starValueB = ((rowPieceB.getResistanceValue() * rowPieceC.getResistanceValue()) / additionValue);
     double starValueC = ((rowPieceA.getResistanceValue() * rowPieceC.getResistanceValue()) / additionValue);
 
-    RowPiece rowPieceAB(equalNodeA, newNode, starValueA, rowPieceA.getComponents());
-    RowPiece rowPieceBC(equalNodeB, newNode, starValueB, rowPieceB.getComponents());
+    RowPiece rowPieceAB(newNode, equalNodeA, starValueA, rowPieceA.getComponents());
+    RowPiece rowPieceBC(newNode, equalNodeB, starValueB, rowPieceB.getComponents());
     RowPiece rowPieceCA(equalNodeC, newNode, starValueC, rowPieceC.getComponents());
 
     QList<RowPiece> listOfNewRowPieces;
@@ -407,10 +414,37 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                     Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
                     if (equalNode != nullptr && !equalNode->isConnectedToPowerSupply())
                     {
-                        for(RowPiece& rp : rowPieces)
+                        //Wenn die Anzahl der Node ComponentPort größer 2 ist, klingt es nach Stern-Dreieck
+                        if(equalNode->getComponentPortCount() > 2)
                         {
-                            Node* oppositeNode = rp.getOppositeNode(equalNode);
-                            if(oppositeNode != nullptr && rp != rowPieceA && rp != rowPieceB)
+                            //Nun schauen auf der gegenüberliegenden Seite vom gleichen Node
+                            Node* oppositeNode = rowPieceB.getOppositeNode(equalNode);
+                            RowPiece* searchedRowPieces = nullptr;
+                            bool found = false;
+
+                            /*Durchgehen aller ComponentPorts des gegenüberliegenden Nodes, schauen, wo der Component teil
+                            * eines RowPieces ist, wenn eine angrenzendes RowPieces gefunden wurde, schauen, ob der gegenüberliegende Node gleich
+                            * dem anfangs gefundenen EqualNode ist, wenn ja rausspringen
+                            */
+                            for(ComponentPort cp :  oppositeNode->getComponentPorts())
+                            {
+                                for(RowPiece rs : rowPieces)
+                                {
+                                    for(Component* c : rs.getComponents())
+                                    {
+                                        if(c == cp.getComponent())
+                                        {
+                                            if(rs.getOppositeNode(oppositeNode) == rowPieceA.getOppositeNode(equalNode))
+                                            searchedRowPieces = new RowPiece(rs.getNodeOne(), rs.getNodeTwo(), rs.getResistanceValue(), rs.getComponents());
+                                            break;
+                                        }
+                                    }
+                                    if(found){break;}
+                                }
+                                if(found){break;}
+                            }
+
+                            if(oppositeNode != nullptr && searchedRowPieces != nullptr && *searchedRowPieces != rowPieceA && *searchedRowPieces != rowPieceB)
                             {
                                 //rp ist rowPieceC
                                 //Dreieck zu Stern
@@ -418,12 +452,17 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                                 Node* newNode = new Node(nodes.count(), componentPorts, false);
                                 nodes.append(newNode);
 
-                                QList<RowPiece> listOfNewRowPieces = calculateStar(rowPieceA, rowPieceB, rp, newNode);
+                                //Erstellen der Stern-RowPieces und alte removen
+                                QList<RowPiece> listOfNewRowPieces = calculateStar(rowPieceA, rowPieceB, *searchedRowPieces, newNode);
                                 rowPieces.removeOne(rowPieceA);
                                 rowPieces.removeOne(rowPieceB);
-                                rowPieces.removeOne(rp);
+                                rowPieces.removeOne(*searchedRowPieces);
                                 rowPieces.append(listOfNewRowPieces);
                                 changedSomething = true;
+                                for(RowPiece r : listOfNewRowPieces)
+                                {
+                                    qDebug() << "List of RowPiece" << r.getResistanceValue() << "Von" << r.getNodeOne()->getId() << "nach" << r.getNodeTwo()->getId();
+                                }
                                 qDebug() << "SternDreieck";
                             }
                         }

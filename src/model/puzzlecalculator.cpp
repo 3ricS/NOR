@@ -31,7 +31,11 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
         calculateVoltageAndAmo();
         for(RowPiece rowpiece : _rowPieceListForCalculateAmp)
         {
-        qDebug() << rowpiece.getResistanceValue();
+            for(Component* component : rowpiece.getComponents())
+            {
+                qDebug() <<"moin" << component->getName();
+            }
+            qDebug() <<"___________________";
         }
         return _resistanceValue;
     }
@@ -372,10 +376,12 @@ void PuzzleCalculator::calculateVoltageAndAmo()
             component->setAmp(component->getVoltage() / _resistanceValue);
         }
     }
+
 }
 
 double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node*> nodes)
 {
+    //_rowPieceListForCalculateAmp = rowPieces;
     while (1 < rowPieces.count())
     {
         for (RowPiece rp : rowPieces)
@@ -405,6 +411,7 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                     _rowPieceListForCalculateAmp.append(rowPieceA);
                     _rowPieceListForCalculateAmp.append(rowPieceB);
                     rowPieceA.parallelMerge(rowPieceB);
+                    //_rowPieceListForCalculateAmp.append(rowPieceA);
                     rowPieces.removeOne(rowPieceB);
                     changedSomething = true;
                     break;
@@ -473,6 +480,8 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
 
                         if (2 == countNodesInRowPieces(equalNode, rowPieces))
                         {
+                            _rowPieceListForCalculateAmp.append(rowPieceA);
+                            _rowPieceListForCalculateAmp.append(rowPieceB);
                             rowPieceA.rowMerge(rowPieceB);
                             rowPieces.removeOne(rowPieceB);
                             changedSomething = true;

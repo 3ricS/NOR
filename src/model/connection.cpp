@@ -21,7 +21,6 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     _startPoint = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
     _endPoint = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
 
-    qDebug() << _currentPoint;
     //Punkte an Enden zeichnen
     painter->setBrush(QBrush(Qt::black));
     painter->drawEllipse(_startPoint.toPoint(), _circleRadius, _circleRadius);

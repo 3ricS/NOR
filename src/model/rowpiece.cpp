@@ -1,7 +1,3 @@
-//
-// Created by erics on 024, 24, Februar.
-//
-
 #include "rowpiece.h"
 #include "model/component.h"
 #include "model/node.h"
@@ -33,7 +29,7 @@ bool RowPiece::operator!=(const RowPiece& rhs)
 /*!
  * \brief Prüft ob ein RowPiece zu einem anderen RowPiece die gleichen Knoten an beiden Seiten besitzt.
  *
- * \param[in]    otherRowPiece  das zu vergleichende RowPiece
+ * \param   otherRowPiece  das zu vergleichende RowPiece
  *
  */
 bool RowPiece::hasEqualNodesOnBothSides(RowPiece otherRowPiece)
@@ -51,7 +47,7 @@ bool RowPiece::hasEqualNodesOnBothSides(RowPiece otherRowPiece)
 /*!
  * \brief Rechnet zwei einzelne RowPieces, die parallel zueinander liegen zusammen.
  *
- * \param[in]    otherRowPiece  das anderen RowPiece
+ * \param   otherRowPiece  das anderen RowPiece
  *
  * Es werden beide Widerstandswerte zusammengerechnet.
  */
@@ -94,7 +90,7 @@ void RowPiece::parallelMerge(RowPiece otherRowPiece)
 /*!
  * \brief Führt zwei einzelnen RowPieces, die in Reihe zueinander liegen zusammen.
  *
- * \param[in]    otherRowPiece  das zu vergleichende RowPiece
+ * \param   otherRowPiece  das zu vergleichende RowPiece
  *
  * Es wird geprüft, ob ein Knoten von zwei RowPieces übereinstimmt und führt diese zusammen.
  * Nach dem zusammenführen wird der Widerstandswert beider RowPieces addiert.
@@ -159,7 +155,7 @@ void RowPiece::rowMerge(RowPiece otherRowPiece)
 /*!
  * \brief Ob ein anderes RawPiece den gleichen Knoten besitzt.
  *
- * \param[in]    otherRowPiece
+ * \param   otherRowPiece
  * \return Ob der Knoten bei beiden RowPieces gleich ist.
  */
 bool RowPiece::hasOneEqualNode(RowPiece otherRowPiece)
@@ -170,7 +166,7 @@ bool RowPiece::hasOneEqualNode(RowPiece otherRowPiece)
 /*!
  * \brief Liefert, ob der Knoten des einen RowPieces mit einem Knoten des zu prüfenden übereinstimmt.
  *
- * \param[in]    otherRowPiece ist das zu vergleichende RowPiece
+ * \param   otherRowPiece   ist das zu vergleichende RowPiece
  * \return Gibt den Knoten zurück.
  *
  * Es wird getestet ob der Knoten eins bei dem zu vergleichenden RowPieces gleich ist.
@@ -207,7 +203,7 @@ Node *RowPiece::getOppositeNode(Node *node)
 /*!
  * \brief Prüft ob ein Knoten vorhanden ist.
  *
- * \param[in]    node
+ * \param   node
  * \return Gibt zurück, ob ein Knoten vorhanden ist.
  */
 bool RowPiece::hasNode(Node* node)

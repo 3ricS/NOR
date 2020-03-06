@@ -14,7 +14,7 @@ NetworkView::NetworkView(QWidget* parent) :
 /*!
  * \brief Verbindet den View mit dem Model
  *
- * \param[in]    model
+ * \param   model
  *
  * Der View bekommt das Model übergeben, damit dieses bekannt ist.
  */
@@ -99,6 +99,17 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
         }
         //Multiselection der Bauteile
+        else if ((_firstClickedPositionGrid == gridPosition) && !_model->isThereAComponentOrADescription(gridPosition))
+        {
+            for (DescriptionField* description : _model->getDescriptions())
+            {
+                description->set_isSelected(false);
+            }
+            for (Component* component : _model->getComponents())
+            {
+                component->set_isSelected(false);
+            }
+        }
         else
         {
             _lastClickedPositionGrid = gridPosition;
@@ -182,6 +193,14 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
         break;
     case SelectionMode:
     {
+        for (DescriptionField* description : _model->getDescriptions())
+        {
+            description->set_isSelected(false);
+        }
+        for (Component* component : _model->getComponents())
+        {
+            component->set_isSelected(false);
+        }
         bool isComponentAtPosition = _model->isThereAComponentOrADescription(gridPosition);
         if (isComponentAtPosition)
         {
@@ -451,7 +470,7 @@ void NetworkView::editNetworkOrDescription(void)
 }
 
 //Fokussiert auf das geladene Netzwerk
-void NetworkView::focus()
+void NetworkView::focus(void)
 {
     centerOn(findScrollPosition());
 }

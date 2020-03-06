@@ -38,7 +38,7 @@ void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOpti
 /*!
  * \brief Highlightet das Textfeld in einer anderen Farbe.
  *
- * \param[in]   painter
+ * \param painter
  *
  * Färbt das Textfeld an der ausgewählten Position, mit der eingestelten Farbe, ein.
  */

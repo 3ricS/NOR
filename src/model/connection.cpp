@@ -10,9 +10,9 @@ Connection::Connection(ComponentPort componentPortA, ComponentPort componentPort
 
 /*!
  * \brief   Zeichnet die Verbindung in QGraphicsScene
- * \param[inout]    painter Objekt, das die einzelnen Elemente zeichnet
- * \param[]         option
- * \param[]         widget
+ * \param   painter Objekt, das die einzelnen Elemente zeichnet
+ * \param   option
+ * \param   widget
  */
 void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
 {
@@ -77,8 +77,8 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
 /*!
  * \brief   Gibt an, ob die Connection den übergebenen Komponenten der Schaltung enthält
  *
- * \param[in]   searchedComponent ist eine Komponente, die in der Verbindung gesucht wird.
- * \return      Gibt einen boolschen Wert zurück, ob der übergebene Component in der Verbindung enthalten ist
+ * \param   searchedComponent ist eine Komponente, die in der Verbindung gesucht wird.
+ * \return  Gibt einen boolschen Wert zurück, ob der übergebene Component in der Verbindung enthalten ist
  *
  * Ist die übergebene Komponente der Schatlung einer der Verbindungspartner dieser Verbindung, gibt die Methode true zurück, sonst false.
  */
@@ -133,7 +133,7 @@ QRectF Connection::boundingRect(void) const
 /*!
  * \brief   Wechselt den Port, mit welchem die Verbindung verbunden ist, bei dem übergebenen Component.
  *
- * \param[inout]   componentOfComponentPortToChangePortOf Komponente der Schaltung, an dem der Port der Verbindung getauscht werden soll
+ * \param   componentOfComponentPortToChangePortOf Komponente der Schaltung, an dem der Port der Verbindung getauscht werden soll
  *
  * Die Verbindung zeigt jeweils auf eine Component und einen Port des Components, mit dem es verbunden ist.
  * Soll der Port bei einem Component getauscht werden, wird diese Methode aufgerufen. Ist der übergebene Component
@@ -640,4 +640,3 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
     }
     return howManyConnections;
 }
-

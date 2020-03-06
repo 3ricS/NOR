@@ -10,8 +10,8 @@ PuzzleCalculator::PuzzleCalculator()
 /*!
  * \brief Ruft das Berechnen des Widerstandes auf.
  *
- * \param[in]   connections
- * \param[in]   components
+ * \param   connections
+ * \param   components
  * \return Gibt den Widerstandswert als double zurück.
  *
  *

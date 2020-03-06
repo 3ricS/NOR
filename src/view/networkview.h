@@ -34,7 +34,7 @@ public:
     void editNetworkOrDescription(void);
 
 public slots:
-    void focus();
+    void focus(void);
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;

@@ -50,5 +50,5 @@ void PowerSupply::paintInformations(QPainter* painter)
     QFont q;
     q.setPixelSize(13);
     painter->setFont(q);
-    painter->drawText(_xPosition - 40, _yPosition - 40, _name);
+    painter->drawText(_xPosition - 40, _yPosition - 30, _name);
 }

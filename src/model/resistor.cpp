@@ -57,11 +57,11 @@ void Resistor::paintInformations(QPainter* painter)
 {
     if(_isVertical)
     {
-        paintOrientationSensitiv(painter, _xPosition - 40, _yPosition - 40, _xPosition - 60, _yPosition);
+        paintOrientationSensitiv(painter, _xPosition - 40, _yPosition - 30, _xPosition - 60, _yPosition);
     }
     else
     {
-        paintOrientationSensitiv(painter, _xPosition - 5, _yPosition - 30, _xPosition - 5, _yPosition + 40);
+        paintOrientationSensitiv(painter, _xPosition - 5, _yPosition - 25, _xPosition - 5, _yPosition + 40);
     }
 }
 

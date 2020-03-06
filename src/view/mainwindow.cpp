@@ -419,6 +419,7 @@ void MainWindow::setZoom100Percent()
         {
             setZoomIn();
         }
+        qDebug() << _scalefactor;
     }
 }
 

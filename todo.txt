@@ -4,8 +4,5 @@ Doku: wenn Fehler oder Mängel auffallen bitte bescheid geben
 ___________________________________________________________________
 
 - Multiselect der Bauteile
-- Stern-Dreieck-Umformung
 - NetworkGraphics hat 600 Zeilen
-- Kanstante für GridwerteMenüleiste überarbeiten
 
-- NAch dreimal PowerSuplly drehen - Absturz

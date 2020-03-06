@@ -6,8 +6,8 @@
         <file>img/resistor.png</file>
         <file>img/plug.png</file>
         <file>img/text-box.png</file>
-        <file>img/click.png</file>
         <file>img/resistorLogo.png</file>
         <file>img/resistorLogo.icns</file>
+        <file>img/hand.png</file>
     </qresource>
 </RCC>

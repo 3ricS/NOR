@@ -155,7 +155,7 @@
           </property>
           <property name="icon">
            <iconset>
-            <normalon>:/img/click.png</normalon>
+            <normalon>:/img/hand.png</normalon>
            </iconset>
           </property>
           <property name="iconSize">

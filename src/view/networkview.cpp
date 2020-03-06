@@ -616,7 +616,11 @@ void NetworkView::print(void)
             }
             else
             {
-                name = _model->getFileName();
+                QStringList splittedName = _model->getFileName().split('.');
+
+                //Nur das erste Item interessiert, da zweites die Dateiendung ist
+                //Datei-Name mit Punkten sollten eh nicht gemacht werden - erzieherische Maßnahme für diejenigen die es dennoch tun
+                name = splittedName.at(0);
             }
 
             p.drawText(QPointF(950, 50), name);

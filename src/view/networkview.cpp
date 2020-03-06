@@ -98,6 +98,12 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         {
             _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
         }
+        //Multiselection der Bauteile
+        else
+        {
+            _lastClickedPositionGrid = gridPosition;
+            multiselcting();
+        }
 
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
         _selectedComponentToMove = nullptr;
@@ -194,8 +200,9 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
         }
         else
         {
-            _selectedComponentToMove = nullptr;
-            _selectedDescriptionToMove = nullptr;
+            _firstClickedPositionGrid = gridPosition;
+            //_selectedComponentToMove = nullptr;
+            //_selectedDescriptionToMove = nullptr;
         }
     }
         break;
@@ -364,13 +371,14 @@ void NetworkView::gridDisappears(void)
 
 void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
 {
-    QPointF gridPosition = scenePositionToGrid(scenePosition);
-    int positionX = gridPosition.toPoint().x();
-    int positionY = gridPosition.toPoint().y();
-    if (!_model->isThereAComponentOrADescription(gridPosition))
+    QPointF gridPositionOne = scenePositionToGrid(scenePosition);
+    int positionX = gridPositionOne.toPoint().x();
+    int positionY = gridPositionOne.toPoint().y();
+
+    if (!_model->isThereAComponentOrADescription(gridPositionOne))
     {
-        QGraphicsItem* highlightedRect = _model->addRect(positionX - Defines::halfGridLength, positionY - Defines::halfGridLength, Defines::gridLength, Defines::gridLength, Qt::NoPen,
-                                                         highlightColor);
+        QGraphicsItem* highlightedRect = _model->addRect(positionX - Defines::halfGridLength, positionY - Defines::halfGridLength,
+                                                         Defines::gridLength, Defines::gridLength, Qt::NoPen, highlightColor);
         _previousHighlightedRect = highlightedRect;
 
         _model->update();
@@ -780,3 +788,65 @@ void NetworkView::keyPressEvent(QKeyEvent* event)
     QGraphicsView::keyPressEvent(event);
 }
 
+void NetworkView::multiselcting(void)
+{
+    int firstClickedXPosition = _firstClickedPositionGrid.toPoint().x();
+    int firstClickedYPosition = _firstClickedPositionGrid.toPoint().y();
+    int lastClickedXPosition = _lastClickedPositionGrid.toPoint().x();
+    int lastClickedYPosition = _lastClickedPositionGrid.toPoint().y();
+
+    for (Component* component : _model->getComponents())
+    {
+        if ((component->getXPosition() >= firstClickedXPosition) && (component->getXPosition() <= lastClickedXPosition)
+                && (component->getYPosition() >= firstClickedYPosition) && (component->getYPosition() <= lastClickedYPosition))
+        {
+            component->set_isSelected(true);
+            highlightRect(component->getPosition(), _highlightColor);
+        }
+        else if ((component->getXPosition() <= firstClickedXPosition) && (component->getXPosition() >= lastClickedXPosition)
+                 && (component->getYPosition() <= firstClickedYPosition) && (component->getYPosition() >= lastClickedYPosition))
+        {
+            component->set_isSelected(true);
+            highlightRect(component->getPosition(), _highlightColor);
+        }
+        else if ((component->getXPosition() >= firstClickedXPosition) && (component->getXPosition() <= lastClickedXPosition)
+                 && (component->getYPosition() <= firstClickedYPosition) && (component->getYPosition() >= lastClickedYPosition))
+        {
+            component->set_isSelected(true);
+            highlightRect(component->getPosition(), _highlightColor);
+        }
+        else if ((component->getXPosition() <= firstClickedXPosition) && (component->getXPosition() >= lastClickedXPosition)
+                 && (component->getYPosition() >= firstClickedYPosition) && (component->getYPosition() <= lastClickedYPosition))
+        {
+            component->set_isSelected(true);
+            highlightRect(component->getPosition(), _highlightColor);
+        }
+    }
+    for (DescriptionField* description : _model->getDescriptions())
+    {
+        if ((description->getXPos() >= firstClickedXPosition) && (description->getXPos() <= lastClickedXPosition)
+                && (description->getYPos() >= firstClickedYPosition) && (description->getYPos() <= lastClickedYPosition))
+        {
+            description->set_isSelected(true);
+            highlightRect(description->getPosition(), _highlightColor);
+        }
+        else if ((description->getXPos() <= firstClickedXPosition) && (description->getXPos() >= lastClickedXPosition)
+                 && (description->getYPos() <= firstClickedYPosition) && (description->getYPos() >= lastClickedYPosition))
+        {
+            description->set_isSelected(true);
+            highlightRect(description->getPosition(), _highlightColor);
+        }
+        else if ((description->getXPos() >= firstClickedXPosition) && (description->getXPos() <= lastClickedXPosition)
+                 && (description->getYPos() <= firstClickedYPosition) && (description->getYPos() >= lastClickedYPosition))
+        {
+            description->set_isSelected(true);
+            highlightRect(description->getPosition(), _highlightColor);
+        }
+        else if ((description->getXPos() <= firstClickedXPosition) && (description->getXPos() >= lastClickedXPosition)
+                 && (description->getYPos() >= firstClickedYPosition) && (description->getYPos() <= lastClickedYPosition))
+        {
+            description->set_isSelected(true);
+            highlightRect(description->getPosition(), _highlightColor);
+        }
+    }
+}

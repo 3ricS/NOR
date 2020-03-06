@@ -24,6 +24,7 @@ public:
     //Getter
     QString getText(void) const {return _text;}
     int getId(void) {return _id;}
+    QPointF getPosition(void) {return QPointF(_xPosition, _yPosition);}
     int getXPos(void) {return _xPosition;}
     int getYPos(void) {return _yPosition;}
     bool isSelected(void) const { return  _isSelected;}

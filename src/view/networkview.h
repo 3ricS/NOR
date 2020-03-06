@@ -47,12 +47,13 @@ private:
 
     QPointF scenePositionToGrid(QPointF scenePosition);
     void gridDisappears(void);
-    void highlightRect(QPointF scenePosition, QColor _highlightColor);
+    void highlightRect(QPointF scenePositionOne, QColor _highlightColor);
     void removeHighlightSelectedRect(void);
     void rotateComponent(QPointF gridPosition, QPointF scenePosition);
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
     QPointF findScrollPosition(void);
     void focusForPrint();
+    void multiselcting(void);
 
 protected:
     void leaveEvent(QEvent* event) override;
@@ -78,6 +79,9 @@ private:
     Component*        _copiedComponent = nullptr;
     DescriptionField* _copiedDescription = nullptr;
     QPointF           _lastClickedPositionGrid;
+
+    QPointF           _firstClickedPositionGrid;
+
     MouseMode         _mouseMode = SelectionMode;
     QColor            _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
     QPointF           _actualMoveScenePosition;

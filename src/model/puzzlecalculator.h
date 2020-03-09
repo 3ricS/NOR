@@ -27,6 +27,7 @@ public:
 
 private:
     QList<RowPiece> findRowPieces(QList<Node *> &nodes);
+    void findSameRowPieces(RowPiece rowpiece);
     double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes);
     void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful,
                       QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
@@ -47,9 +48,9 @@ private:
     int countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
     QList<RowPiece> calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node *newNode);
 
-    void calculateVoltageAndAmo();
+    void calculateVoltageAndAmp();
 
-    QList<RowPiece> _rowPieceListForCalculateAmp;
+    QList<RowPiece> _mergeList;
     double _resistanceValue = 0;
     QList<Component*> _components;
     QList<Connection*> _connections;

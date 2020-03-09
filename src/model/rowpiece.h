@@ -25,6 +25,12 @@ public:
     Node* getNodeOne(void) {return _nodeOne;}
     Node* getNodeTwo(void) {return _nodeTwo;}
 
+    bool getIsMergedParallel() {return _isMergedParallel;}
+    void setIsMergedParallel(bool isMergedParallel) {_isMergedParallel = isMergedParallel;}
+
+    double getAmp(void) {return _amp;}
+    void setAmp(double amp) {_amp = amp;}
+
     bool operator==(const RowPiece& rhs);
     bool operator!=(const RowPiece& rhs);
 
@@ -39,9 +45,11 @@ public:
 
 private:
     double _resistanceValue;
+    double _amp = 0.0;
     Node* _nodeOne;
     Node* _nodeTwo;
     QList<Component*> _components;
+    bool _isMergedParallel = false;
 };
 
 

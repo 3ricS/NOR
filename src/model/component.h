@@ -75,7 +75,7 @@ protected:
     QString     _name;
     double      _value;
 
-    double _voltage = 0.0;
+    double _voltage = 100.0;
     double _amp = 0.0;
 
     //virtuelle Methoden

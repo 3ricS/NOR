@@ -99,7 +99,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
         }
         //Multiselection der Bauteile
-        else if ((_firstClickedPositionGrid == gridPosition) && !_model->isThereAComponentOrADescription(gridPosition))
+        else if ((_firstClickedPositionGrid == gridPosition) && (!_model->isThereAComponentOrADescription(gridPosition)))
         {
             for (DescriptionField* description : _model->getDescriptions())
             {
@@ -112,8 +112,21 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         }
         else
         {
+            for (DescriptionField* description : _model->getDescriptions())
+            {
+                description->set_isSelected(false);
+            }
+            for (Component* component : _model->getComponents())
+            {
+                component->set_isSelected(false);
+            }
             _lastClickedPositionGrid = gridPosition;
             multiselcting();
+            _firstClickedPositionGrid.isNull();
+            for (Component* component : _model->getComponents())
+            {
+            qDebug() <<component->getName() <<component->isSelected();
+            }
         }
 
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
@@ -586,7 +599,7 @@ QPointF NetworkView::findScrollPosition()
     return QPointF(averageX, averageY);
 }
 
-void NetworkView::focusForPrint()
+void NetworkView::focusForPrint(void)
 {
     QPointF center = findScrollPosition();
     center.setY(center.y() - Defines::gridLength);

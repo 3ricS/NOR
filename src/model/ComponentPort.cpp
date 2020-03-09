@@ -1,7 +1,3 @@
-//
-// Created by erics on 003, 03, Februar.
-//
-
 #include "componentport.h"
 
 /*!

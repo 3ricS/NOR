@@ -9,7 +9,7 @@ Connection::Connection(ComponentPort componentPortA, ComponentPort componentPort
 }
 
 /*!
- * \brief   Zeichnet die Verbindung in QGraphicsScene
+ * \brief   Zeichnet die Verbindung in der QGraphicsScene.
  * \param   painter Objekt, das die einzelnen Elemente zeichnet
  * \param   option
  * \param   widget
@@ -209,7 +209,7 @@ DescriptionField *Connection::getDescriptionAtPosition(int x, int y)
     return nullptr;
 }
 
-void Connection::drawHorizontalLines()
+void Connection::drawHorizontalLines(void)
 {
     if(_diffX > 0)
     {
@@ -229,7 +229,8 @@ void Connection::drawLeftOrRight(int leftOrRight)
 {
     while(_diffX != 0)
     {
-        if((_diffY != Defines::halfGridLength || _diffY != - Defines::halfGridLength) && _diffX == leftOrRight && ((_diffY > 0 && isThereAComponentOrADescription(_currentPoint.x() + leftOrRight, _currentPoint.y() + Defines::halfGridLength)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() + leftOrRight, _currentPoint.y() - Defines::halfGridLength))))
+        if((_diffY != Defines::halfGridLength || _diffY != - Defines::halfGridLength) && _diffX == leftOrRight &&
+                ((_diffY > 0 && isThereAComponentOrADescription(_currentPoint.x() + leftOrRight, _currentPoint.y() + Defines::halfGridLength)) || (_diffY < 0 && isThereAComponentOrADescription(_currentPoint.x() + leftOrRight, _currentPoint.y() - Defines::halfGridLength))))
         {
             drawVerticalLines();
         }
@@ -265,7 +266,7 @@ void Connection::drawLeftOrRight(int leftOrRight)
     }
 }
 
-void Connection::drawVerticalLines()
+void Connection::drawVerticalLines(void)
 {
     if(_diffY > 0)
     {
@@ -285,7 +286,8 @@ void Connection::drawUpOrDown(int upOrDown)
 {
     while(_diffY != 0)
     {
-        if((_diffX != Defines::halfGridLength || _diffX != - Defines::halfGridLength) && _diffY == upOrDown && ((_diffX > 0 && isThereAComponentOrADescription(_currentPoint.x() + Defines::halfGridLength, _currentPoint.y() + upOrDown)) || (_diffX < 0 && isThereAComponentOrADescription(_currentPoint.x() - Defines::halfGridLength, _currentPoint.y() + upOrDown))))
+        if((_diffX != Defines::halfGridLength || _diffX != - Defines::halfGridLength) && _diffY == upOrDown &&
+                ((_diffX > 0 && isThereAComponentOrADescription(_currentPoint.x() + Defines::halfGridLength, _currentPoint.y() + upOrDown)) || (_diffX < 0 && isThereAComponentOrADescription(_currentPoint.x() - Defines::halfGridLength, _currentPoint.y() + upOrDown))))
         {
             drawHorizontalLines();
         }
@@ -321,7 +323,7 @@ void Connection::drawUpOrDown(int upOrDown)
     }
 }
 
-void Connection::dodgeComponent()
+void Connection::dodgeComponent(void)
 {
     if(_diffX == 0)
     {
@@ -433,12 +435,12 @@ void Connection::dodgeComponent()
     }
 }
 
-bool Connection::isStartComponentVertical()
+bool Connection::isStartComponentVertical(void)
 {
     return _startPoint.toPoint().y() % 100 == 0;
 }
 
-void Connection::initializeValues()
+void Connection::initializeValues(void)
 {
     _countChangeDirection = 0;
 

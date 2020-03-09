@@ -1,6 +1,11 @@
-//
-// Created by erics on 026, 26, Februar.
-//
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Ein Commands ist für das Undo, Redo zuständig.
+ *
+ * Ein Commands ist ein QUndoCommand.
+ * Die Methoden werden entsprechend für die einzelnen Aktionen, die beim bearbeiten des Netzwerkes getätigt werden, überladen.
+ */
 
 #ifndef NOR_COMMANDS_H
 #define NOR_COMMANDS_H
@@ -19,12 +24,12 @@ class CommandAddComponent : public QUndoCommand
 {
 public:
     CommandAddComponent(NetworkGraphics* model, QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
-    ~CommandAddComponent();
+    ~CommandAddComponent(void);
 
     void undo(void) override;
     void redo(void) override;
 
-    Component* getCreatedComponent() {return _createdComponent;}
+    Component* getCreatedComponent(void) {return _createdComponent;}
 
 private:
     Component*                  _createdComponent = nullptr;
@@ -42,10 +47,10 @@ class CommandAddConnection : public QUndoCommand
 {
 public:
     CommandAddConnection(NetworkGraphics* model, ComponentPort componentPortA, ComponentPort componentPortB);
-    ~CommandAddConnection();
+    ~CommandAddConnection(void);
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
 private:
     NetworkGraphics*    _model = nullptr;
@@ -62,10 +67,10 @@ class CommandAddDescriptionField : public QUndoCommand
 {
 public:
     CommandAddDescriptionField(NetworkGraphics* model, DescriptionField* descriptionField);
-    ~CommandAddDescriptionField();
+    ~CommandAddDescriptionField(void);
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
 private:
     NetworkGraphics*    _model = nullptr;
@@ -83,8 +88,8 @@ public:
     CommandMoveComponent(NetworkGraphics* model, Component* componentToMove,
                          DescriptionField* descriptionToMove, QPointF gridPosition);
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
 private:
     NetworkGraphics*    _model = nullptr;
@@ -103,8 +108,8 @@ public:
                          Component::Orientation originalOrientation, QString newName,
                          double newValue);
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
 private:
     NetworkGraphics*    _model = nullptr;
@@ -121,10 +126,10 @@ class CommandDeleteComponent : public QUndoCommand
 {
 public:
     CommandDeleteComponent(NetworkGraphics* model, Component* componentToDelete);
-    ~CommandDeleteComponent();
+    ~CommandDeleteComponent(void);
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
 private:
     NetworkGraphics*    _model = nullptr;
@@ -138,10 +143,10 @@ class CommandDeleteConnection : public QUndoCommand
 {
 public:
     CommandDeleteConnection(NetworkGraphics* model, Connection* connectionToDelete);
-    ~CommandDeleteConnection();
+    ~CommandDeleteConnection(void);
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
 private:
     NetworkGraphics*    _model = nullptr;
@@ -156,10 +161,10 @@ class CommandDeleteDescription : public QUndoCommand
 {
 public:
     CommandDeleteDescription(NetworkGraphics* model, DescriptionField* descriptionField);
-    ~CommandDeleteDescription();
+    ~CommandDeleteDescription(void);
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
 private:
     NetworkGraphics*    _model = nullptr;
@@ -174,8 +179,8 @@ public:
     CommandDuplicateComponent(NetworkGraphics* model, Component* componentToDuplicate, int xPosition, int yPosition);
     ~CommandDuplicateComponent() {};
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
     Component* getCreatedComponent() {return _createdComponent;}
 
@@ -193,8 +198,8 @@ public:
     CommandEditDescription(NetworkGraphics* model, DescriptionField* descriptionFieldToEdit, QString newText);
     ~CommandEditDescription() {};
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
 private:
     DescriptionField*                  _editDescription = nullptr;
@@ -209,8 +214,8 @@ public:
     CommandRotateComponent(Component* ComponentToTurn, NetworkGraphics* model);
     ~CommandRotateComponent() {};
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
 
 private:

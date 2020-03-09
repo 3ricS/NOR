@@ -52,7 +52,7 @@ private:
     void rotateComponent(QPointF gridPosition, QPointF scenePosition);
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
     QPointF findScrollPosition(void);
-    void focusForPrint();
+    void focusForPrint(void);
     void multiselcting(void);
 
 protected:

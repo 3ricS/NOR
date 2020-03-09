@@ -41,7 +41,7 @@ void FileManager::saveAs(void)
 }
 
 /*!
- * \brief Bekommt den Dateinamen
+ * \brief Bekommt den Dateinamen.
  *
  * \return Gibt den Dateinamen zurück.
  *

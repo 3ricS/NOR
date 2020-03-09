@@ -20,21 +20,10 @@ public:
     //Methoden
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-
-    //getter
-
-    //setter
-
-    //Klassenmethoden
-
 private:
-
-    //Klassenvariablen
 
     //Methodenn
     virtual void paintInformations(QPainter* painter) override;
-
-    //Variablen
 };
 
 #endif // POWERSUPPLY_H

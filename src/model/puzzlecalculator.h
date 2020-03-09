@@ -49,6 +49,7 @@ private:
     QList<RowPiece> calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node *newNode);
 
     void calculateVoltageAndAmp();
+    void calculateVoltageAndAmpInResistor(RowPiece* rowpiece);
 
     QList<RowPiece> _mergeList;
     double _resistanceValue = 0;

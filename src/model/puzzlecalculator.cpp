@@ -29,15 +29,11 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
         _resistanceValue = calculateResistanceValueFromRowPieces(rowPieces, nodes);
         qDebug() << "Widerstandswert Calculate" << _resistanceValue;
         calculateVoltageAndAmp();
-        for(RowPiece rowpiece : _mergeList)
-        {
-            qDebug() << rowpiece.getAmp() << "Ampere";
-            for(Component* component : rowpiece.getComponents())
+            for(Component* component : _components)
             {
-                qDebug() <<"moin" << component->getName() << rowpiece.getIsMergedParallel() << rowpiece.getAmp();
+                qDebug() <<"moin" << component->getName() << component->getAmp() << "Ampere" << component->getVoltage() <<"Volt";
             }
             qDebug() <<"___________________";
-        }
         return _resistanceValue;
     }
     return 0.0;
@@ -404,47 +400,64 @@ void PuzzleCalculator::calculateVoltageAndAmp()
         }
     }
     else
-    {
-    for(Component* component : _components)
-    {
-        if(1 == component->getComponentTypeInt())
         {
-            component->setAmp(component->getVoltage() / _resistanceValue);
-            _mergeList[ListSize].setAmp(component->getAmp());
+        for(Component* component : _components)
+        {
+            if(1 == component->getComponentTypeInt())
+            {
+                component->setAmp(component->getVoltage() / _resistanceValue);
+                _mergeList[ListSize].setAmp(component->getAmp());
+            }
+        }
+        for(int i = 0; i < (ListSize +1) / 3; i++)
+        {
+        if(_mergeList[ListSize - 3*i].getIsMergedParallel())
+        {
+            qDebug() << "yooo";
+            RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
+            RowPiece* rowpiece = &_mergeList[ListSize - 3*i - 1];
+            RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i -2];
+
+            rowpiece->setAmp(mergedRowpieces->getAmp() * (rowpiece2->getResistanceValue() / (rowpiece->getResistanceValue() + rowpiece2->getResistanceValue())));
+            findSameRowPieces(*rowpiece);
+            calculateVoltageAndAmpInResistor(rowpiece);
+            rowpiece2->setAmp(mergedRowpieces->getAmp() * (rowpiece->getResistanceValue() / (rowpiece->getResistanceValue() + rowpiece2->getResistanceValue())));
+            findSameRowPieces(*rowpiece2);
+            calculateVoltageAndAmpInResistor(rowpiece2);
+        }
+        else
+        {
+            RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
+            RowPiece* rowpiece = &_mergeList[ListSize - 3*i - 1];
+            RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i - 2];
+
+            rowpiece->setAmp(mergedRowpieces->getAmp());
+            findSameRowPieces(*rowpiece);
+            calculateVoltageAndAmpInResistor(rowpiece);
+
+            rowpiece2->setAmp(mergedRowpieces->getAmp());
+            findSameRowPieces(*rowpiece2);
+            calculateVoltageAndAmpInResistor(rowpiece2);
+            bool hallo = false;
+            if(_mergeList[ListSize - 2].getAmp() == _mergeList[ListSize - 3].getAmp())
+                    {
+                hallo = true;
+            }
+            qDebug() << hallo << "kaka" << _mergeList[ListSize - 2].getAmp() << _mergeList[ListSize - 3].getAmp();
+        }
         }
     }
-    for(int i = 0; i < (ListSize +1) / 3; i++)
-    {
-    if(_mergeList[ListSize - 3*i].getIsMergedParallel())
-    {
-        qDebug() << "yooo";
-        RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
-        RowPiece* rowpiece = &_mergeList[ListSize - 3*i - 1];
-        RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i -2];
+}
 
-        rowpiece->setAmp(mergedRowpieces->getAmp() * (rowpiece2->getResistanceValue() / (rowpiece->getResistanceValue() + rowpiece2->getResistanceValue())));
-        findSameRowPieces(*rowpiece);
-        rowpiece2->setAmp(mergedRowpieces->getAmp() * (rowpiece->getResistanceValue() / (rowpiece->getResistanceValue() + rowpiece2->getResistanceValue())));
-        findSameRowPieces(*rowpiece2);
-    }
-    else
+void PuzzleCalculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
+{
+    for(Component* component : rowpiece->getComponents())
     {
-        RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
-        RowPiece* rowpiece = &_mergeList[ListSize - 3*i - 1];
-        RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i - 2];
-
-        rowpiece->setAmp(mergedRowpieces->getAmp());
-        findSameRowPieces(*rowpiece);
-        rowpiece2->setAmp(mergedRowpieces->getAmp());
-        findSameRowPieces(*rowpiece2);
-        bool hallo = false;
-        if(_mergeList[ListSize - 2].getAmp() == _mergeList[ListSize - 3].getAmp())
+        if(0 == component->getComponentTypeInt())
         {
-            hallo = true;
+            component->setAmp(rowpiece->getAmp());
+            component->setVoltage(component->getAmp() * component->getValue());
         }
-        qDebug() << hallo << "kaka" << _mergeList[ListSize - 2].getAmp() << _mergeList[ListSize - 3].getAmp();
-    }
-    }
     }
 }
 

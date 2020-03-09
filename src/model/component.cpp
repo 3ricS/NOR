@@ -60,8 +60,8 @@ int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
 /*!
  * \brief Liefert den Port der Komponente.
  *
- * \param[in]   position ist die zu prüfende Position
- * \return Gibt Port der Komponente an der Position zurück
+ * \param   position ist die zu prüfende Position
+ * \return  Gibt Port der Komponente an der Position zurück
  *
  *
  */
@@ -93,8 +93,8 @@ Component::Port Component::getPort(QPointF position) const
 /*!
  * \brief Prüft ob sich an der ausgewählten Position ein Port befindet
  *
- * \param[in]    position ist die zu prüfende Position
- * \return       Liefert einen bool zurück, ob sich an der zu prüfenden Position ein Port befindet
+ * \param   position ist die zu prüfende Position
+ * \return  Liefert einen bool zurück, ob sich an der zu prüfenden Position ein Port befindet
  *
  * Es wird geprüft, ob der Port an der Position != dem nullptr ist und somit an der Position ein Port vorhanden ist.
  */
@@ -107,8 +107,8 @@ bool Component::hasPortAtPosition(QPointF position) const
 /*!
  * \brief Wandelt den Integer in einen Komponententyp
  *
- * \param[in]    componentType ist ein int, der für einen Komponententyp steht
- * \return       Gibt den ComponentType der zu prüfenden Komponente zurück
+ * \param   componentType ist ein int, der für einen Komponententyp steht
+ * \return  Gibt den ComponentType der zu prüfenden Komponente zurück
  *
  * Es wird geprüft ob es sich bei dem componentType um einen Widerstand oder eine Spannungsquelle handelt.
  */
@@ -126,7 +126,7 @@ Component::ComponentType Component::integerToComponentType(int componentType)
 /*!
  * \brief Highlightet das Textfeld in einer Farbe.
  *
- * \param[in]   painter
+ * \param   painter
  *
  * Färbt das Gitterfeld um die Komponente an der ausgewählten Position, mit der eingestelten Farbe, ein.
  */

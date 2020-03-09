@@ -111,7 +111,7 @@ private:
     QAction* _undo = nullptr;
     QAction* _redo = nullptr;
 
-    double _scalefactor = 1;
+    double _scalefactor = 1.0;
     bool _ctrlIsPressed = false;
 };
 

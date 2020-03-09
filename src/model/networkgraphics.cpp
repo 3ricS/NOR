@@ -10,8 +10,8 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
 /*!
  * \brief Fügt eine Verbindung dem Netzwerk hinzu.
  *
- * \param[in]    componentPortA  Port der Komponente 1.
- * \param[in]    componentPortB  Port der Komponente 2.
+ * \param   componentPortA  Port der Komponente 1.
+ * \param   componentPortB  Port der Komponente 2.
  *
  * Zuerst wird geprüft, ob die Verbindung bereits der connectionList hinzugefügt wurde.
  * Ist noch keine Verbindung vorhanden, wird diese hinzugefügt.
@@ -64,7 +64,7 @@ void NetworkGraphics::addObject(Component* component)
 /*!
  * \brief Gibt ein Component aus der ComponentList aus, welches an den Soll-Koordinaten x und y ist.
  *
- * \param[in]    gridPosition   ist die zu überprüfende Gitterposition
+ * \param   gridPosition   ist die zu überprüfende Gitterposition
  * \return
  *
  * Es werden nacheinander Components aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
@@ -87,7 +87,7 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
 /*!
  * \brief Gibt eine Describtion aus der Liste aus Descriptions aus, welches an den Soll-Koordinaten x und y ist.
  *
- * \param[in]    gridPosition   ist die zu überprüfende Gitterposition
+ * \param   gridPosition   ist die zu überprüfende Gitterposition
  * \return
  *
  * Es werden nacheinander Description aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
@@ -110,7 +110,7 @@ DescriptionField* NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition
 /*!
  * \brief Prüft ob sich an einer bestimmten Koordinate, eine Komponente oder Textfeld befindet.
  *
- * \param[in]    gridPosition    ist die zu überprüfende GitterPositon
+ * \param   gridPosition    ist die zu überprüfende GitterPositon
  * \return Gibt zurück, ob sich an der Gitterposition eine Komponente oder Textfeld befindet.
  *
  */
@@ -138,7 +138,7 @@ Connection* NetworkGraphics::getConnectionAtPosition(QPointF gridposition)
     return nullptr;
 }
 
-QString NetworkGraphics::getFileName()
+QString NetworkGraphics::getFileName(void)
 {
     return _manager->getFileName();
 }
@@ -146,7 +146,7 @@ QString NetworkGraphics::getFileName()
 /*!
  * \brief Gibt einen Componentport aus der ComponentList aus, welcher sich an den Soll-Position in der Scene befinden.
  *
- * \param[in]    scenePosition
+ * \param   scenePosition
  * \return Gibt den ComponentPort an der Position zurück.
  *
  * Es wird in der Componentlist nach einem Port an der Sceneposition gesucht.
@@ -207,7 +207,7 @@ void NetworkGraphics::saveAs(void)
 /*!
  * \brief
  *
- * \param[in]    component  Port der Komponente 1
+ * \param   component  Port der Komponente 1
  *
  */
 void NetworkGraphics::mirrorComponent(Component* component)
@@ -224,9 +224,9 @@ void NetworkGraphics::mirrorComponent(Component* component)
 /*!
  * \brief Erzeugt eine neue Komponente im Netzwerk.
  *
- * \param[in]    gridPosition           ist die zu prüfende Gitterposition
- * \param[in]    componentType
- * \param[in]    componentIsVertical    ist die räumliche Ausrichtung der Komponente
+ * \param   gridPosition           ist die zu prüfende Gitterposition
+ * \param   componentType
+ * \param   componentIsVertical    ist die räumliche Ausrichtung der Komponente
  * \return Gibt eine neue Komponente zurück.
  *
  * Zu Beginn wird geprüft ob sich an der ausgewählten Position bereits eine Komponente befindet.
@@ -245,9 +245,9 @@ Component* NetworkGraphics::addComponent(QPointF gridPosition,
 /*!
  * \brief Erzeugt eine neue Komponente.
  *
- * \param[in]   gridPosition        ist die Position, an der die Komponente erzeugt werden soll
- * \param[in]   componentType       ist der Typ der Komponente
- * \param[in]   componentIsVertical ist die Ausrichtung der Komponente
+ * \param   gridPosition        ist die Position, an der die Komponente erzeugt werden soll
+ * \param   componentType       ist der Typ der Komponente
+ * \param   componentIsVertical ist die Ausrichtung der Komponente
  * \return Gibt eine Komponente zurück.
  *
  * Erzeugt entsprechend des componentType die Komponente.
@@ -287,9 +287,9 @@ Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
 /*!
  * \brief Dupliziert eine ausgewählte Komponente.
  *
- * \param[in]    componentToDuplicate ist die zu duplizierende Komponente
- * \param[in]    xPosition ist die X-Koordinate der übergebenden Komponente
- * \param[in]    yPosition ist die Y-Koordinate der übergebenden Komponente
+ * \param   componentToDuplicate ist die zu duplizierende Komponente
+ * \param   xPosition ist die X-Koordinate der übergebenden Komponente
+ * \param   yPosition ist die Y-Koordinate der übergebenden Komponente
  * \return Gibt die duplizierte Komponente zurück.
  *
  * Zuerst wird der Name, Wert und die räumliche Ausrichtung der zu kopierenden Komponente erfragt.
@@ -329,9 +329,9 @@ Component *NetworkGraphics::duplicateComponentWithoutUndo(Component *componentTo
 /*!
  * \brief Verdoppelt ein Textfeld.
  *
- * \param[in]    descriptionToDuplicate  ist das zu verdoppelde Textfeld
- * \param[in]    xPosition               ist die X-Koordinate, an der das Textfeld erzeugt werden soll
- * \param[in]    yPosition               ist die Y-Koordinate, an der das Textfeld erzeugt werden soll
+ * \param   descriptionToDuplicate  ist das zu verdoppelde Textfeld
+ * \param   xPosition               ist die X-Koordinate, an der das Textfeld erzeugt werden soll
+ * \param   yPosition               ist die Y-Koordinate, an der das Textfeld erzeugt werden soll
  * \return Gibt ein neues Textfeld zurück.
  */
 DescriptionField*
@@ -343,12 +343,12 @@ NetworkGraphics::duplicateDescription(DescriptionField* descriptionToDuplicate, 
 /*!
  * \brief Fügt einen Widerstand dem Netzwerk hinzu.
  *
- * \param[in]    name            ist der Name des Widerstandsobjektes
- * \param[in]    valueResistance ist der zugewiesene Widerstandswertes
- * \param[in]    x               ist die X-Koordinate der zugewiesenen Position
- * \param[in]    y               ist die Y-Koordinate der zugewiesenen Position
- * \param[in]    isVertical      ist die räumliche Ausrichtung im Netzwerk
- * \param[in]    id              ist die intern zugewiesene Id des Widerstandes
+ * \param   name            ist der Name des Widerstandsobjektes
+ * \param   valueResistance ist der zugewiesene Widerstandswertes
+ * \param   x               ist die X-Koordinate der zugewiesenen Position
+ * \param   y               ist die Y-Koordinate der zugewiesenen Position
+ * \param   isVertical      ist die räumliche Ausrichtung im Netzwerk
+ * \param   id              ist die intern zugewiesene Id des Widerstandes
  * \return Gibt einen neuen Widerstand zurück.
  *
  * Falls noch kein Name vorhanden ist, wird dieser neu erzeugt.
@@ -401,11 +401,11 @@ NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, i
 /*!
  * \brief Fügt eine Spannungsquelle dem Netzwerk hinzu.
  *
- * \param[inout]    name            ist der Name des Spannungsquellenobjektes
- * \param[inout]    x               ist die X-Koordinate der zugewiesenen Position
- * \param[inout]    y               ist die Y-Koordinate der zugewiesenen Position
- * \param[inout]    isVertical      ist die räumliche Ausrichtung im Netzwerk
- * \param[inout]    id              ist die intern zugewiesene Id der Spannungsquelle
+ * \param   name            ist der Name des Spannungsquellenobjektes
+ * \param   x               ist die X-Koordinate der zugewiesenen Position
+ * \param   y               ist die Y-Koordinate der zugewiesenen Position
+ * \param   isVertical      ist die räumliche Ausrichtung im Netzwerk
+ * \param   id              ist die intern zugewiesene Id der Spannungsquelle
  * \return Gibt eine neue Spannungsquelle zurück.
  *
  * Falls noch kein Name vorhanden ist, wird dieser neu erzeugt.
@@ -437,10 +437,10 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
 /*!
  * \brief Erzeugt ein neues Textfeld.
  *
- * \param[inout]     gridPosition    ist die Gitterposition innerhalb im Netzwerk
- * \param[in]        isLoad          ist ein bool der angibt, ob das Textfeld bereits geladen wurde
- * \param[inout]     text            ist der Text des Textfeldes
- * \param[inout]     id              ist die Id des Textfeldes
+ * \param   gridPosition    ist die Gitterposition innerhalb im Netzwerk
+ * \param   isLoad          ist ein bool der angibt, ob das Textfeld bereits geladen wurde
+ * \param   text            ist der Text des Textfeldes
+ * \param   id              ist die Id des Textfeldes
  * \return Gibt ein neues Textfeld zurück.
  *
  * Es wird zuerst geprüft ob das Textfeld bereits geladen wurde.
@@ -471,7 +471,7 @@ NetworkGraphics::addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoa
 /*!
  * \brief Fügt ein Textfeld dem Netzwerk hinzu.
  *
- * \param[in]   descriptionFieldToAdd   ist das Textfeld, welches hinzugefügt wird
+ * \param   descriptionFieldToAdd   ist das Textfeld, welches hinzugefügt wird
  *
  */
 void NetworkGraphics::addDescriptionFieldWithoutUndo(DescriptionField* descriptionFieldToAdd)
@@ -487,7 +487,7 @@ void NetworkGraphics::addDescriptionFieldWithoutUndo(DescriptionField* descripti
 /*!
  * \brief Entfernt Komponenten aus dem Netzwerk.
  *
- * \param[in]    component ist die zu entfernende Komponente
+ * \param   component ist die zu entfernende Komponente
  *
  * Wenn die ausgewählte Komponente vorhanden ist, wird diese entfernt.
  * Nach dem entfernen aus dem Netzwerk wird die Komponente aus dem componentList entfernt.
@@ -535,7 +535,7 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
 /*!
  * \brief Entfernt ein Textfeld aus dem Netzwerk.
  *
- * \param[in]    description ist das zu entfernende Textfeld
+ * \param   description ist das zu entfernende Textfeld
  *
  * Wenn das ausgewählte Textfeld vorhanden ist, wird diese entfernt.
  * Dannach wird das Textfeld aus der Liste descriptions entfernt.
@@ -554,7 +554,7 @@ void NetworkGraphics::deleteDescriptionWithoutUndo(DescriptionField* description
 /*!
  * \brief Entfernt eine Verbindung aus dem Netzwerk.
  *
- * \param[in]    connecton ist die zu entfernende Verbindung
+ * \param   connecton ist die zu entfernende Verbindung
  *
  * Wenn die ausgewählte Verbindung vorhanden ist, wird diese entfernt.
  * Nach dem entfernen aus dem Netzwerk wird die Verbindung aus der connectionList entfernt.
@@ -574,9 +574,9 @@ void NetworkGraphics::deleteConnectionWithoutUndo(Connection* connection)
 /*!
  * \brief Verschiebt eine Komponente im Netzwerk.
  *
- * \param[in]    componentToMove    ist die zu verschiebende Komponente
- * \param[in]    descriptionToMove  ist die zu verschiebende Beschreibung
- * \param[in]    gridPosition       ist die Position, an die die Komponente verschoben werden soll
+ * \param   componentToMove    ist die zu verschiebende Komponente
+ * \param   descriptionToMove  ist die zu verschiebende Beschreibung
+ * \param   gridPosition       ist die Position, an die die Komponente verschoben werden soll
  *
  * Es wird zuerst geprüft ob sich an der neuen Gitterposition bereits eine Komponente oder ein Textfeld befindet.
  * Befindet sich an der Position nichts, wird die ausgewählte Komponente an die neu Position verschoben.
@@ -654,7 +654,7 @@ void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnect
 /*!
  * \brief Dreht die Komponente linksrum.
  *
- * \param[in]    componentToTurn ist die zu drehende Komponente
+ * \param   componentToTurn ist die zu drehende Komponente
  *
  * Es wird die Methode turnComponentRight drei Mal aufgerufen, da dies einmal linksrum drehen entspricht.
  */
@@ -670,7 +670,7 @@ void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
 /*!
  * \brief Dreht die Komponente rechtsrum.
  *
- * \param[in]    componentToTurn ist die zu drehende Komponente
+ * \param   componentToTurn ist die zu drehende Komponente
  *
  * Anhand der Ausrichtung der Komponente, wird die neue Ausrichtung nach einmaligem rechtsrum drehen gesetzt.
  */
@@ -683,8 +683,8 @@ void NetworkGraphics::turnComponentRight(Component* componentToTurn)
 /*!
  * \brief Setzt die Orientierung einer ausgewählten Komponente.
  *
- * \param[in]    componentToTurn ist die zu drehende Komponente
- * \param[in]    orientation     ist die Orientierung der zu drehenden Komponente
+ * \param   componentToTurn ist die zu drehende Komponente
+ * \param   orientation     ist die Orientierung der zu drehenden Komponente
  *
  * Die Komponente wird so lange rechtsrum gedreht, bis die neue Orientierung der übergebenen Orientierung ist.
  */
@@ -716,8 +716,8 @@ void NetworkGraphics::updateCalc(void)
 /*!
  * \brief Fügt eine Verbindung der Schaltung hinzu.
  *
- * \param[in]   componentPortA
- * \param[in]   componentPortB
+ * \param   componentPortA
+ * \param   componentPortB
  *
  * Fügt eine Verbindung zwischen den beiden Ports hinzu.
  */
@@ -731,9 +731,9 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
 /*!
  * \brief Verschiebt eine Komponente.
  *
- * \param[in]   componentToMove     ist die zu verschiebene Komponente
- * \param[in]   descriptionToMove   ist das zu verschieben Textfeld
- * \param[in]   gridPosition        neue Position
+ * \param   componentToMove     ist die zu verschiebene Komponente
+ * \param   descriptionToMove   ist das zu verschieben Textfeld
+ * \param   gridPosition        neue Position
  *
  * Wenn eine Komponente ausgewählt ist, wird die Komponente verschoben.
  */
@@ -796,10 +796,10 @@ void NetworkGraphics::turnComponentRightWithoutUndo(Component *componentToTurn)
 /*!
  * \brief Bearbeiten einer Komponente
  *
- * \param[in]   componentToEdite    ist die zu bearbeitende Komponente
- * \param[in]   newName             ist der neue name für die Komponente
- * \param[in]   newValue            ist der neue Widerstandswert
- * \param[in]   originalOrientation ist die vorherige ausrichtung
+ * \param   componentToEdite    ist die zu bearbeitende Komponente
+ * \param   newName             ist der neue name für die Komponente
+ * \param   newValue            ist der neue Widerstandswert
+ * \param   originalOrientation ist die vorherige ausrichtung
  *
  *
  */
@@ -814,7 +814,7 @@ void NetworkGraphics::editComponent(Component* componentToEdit, QString newName,
 /*!
  * \brief Fügt eine Komponente hinzu.
  *
- * \param[in]   componentToAdd  ist die hinzuzufügende Komponente
+ * \param   componentToAdd  ist die hinzuzufügende Komponente
  *
  * Fügt eine Komponente an einer Position hinzu, wenn sich an dieser keine befindet.
  */
@@ -853,7 +853,7 @@ void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
 /*!
  * \brief Entfernt eine Komponente.
  *
- * \param[in]   componentToDelete   ist die zu entfernende Komponete
+ * \param   componentToDelete   ist die zu entfernende Komponete
  *
  */
 void NetworkGraphics::deleteComponent(Component* componentToDelete)
@@ -865,7 +865,7 @@ void NetworkGraphics::deleteComponent(Component* componentToDelete)
 /*!
  * \brief Fügt eine Verbindung hinzu.
  *
- * \param[in]   connection   ist die Verbindung, die hinzugefügt wird
+ * \param   connection   ist die Verbindung, die hinzugefügt wird
  *
  * Es wird geprüft, ob die Verbindung bereits existiert.
  * Anschließend wird die Verbindung hinzugefügt.
@@ -893,7 +893,7 @@ void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
 /*!
  * \brief Entfernt eine ausgewählte Verbindung.
  *
- * \param[in]   connectionToDelete  ist die zu entfernende Verbindung
+ * \param   connectionToDelete  ist die zu entfernende Verbindung
  *
  */
 void NetworkGraphics::deleteConnection(Connection* connectionToDelete)
@@ -905,7 +905,7 @@ void NetworkGraphics::deleteConnection(Connection* connectionToDelete)
 /*!
  * \brief Entfernt ein Textfeld.
  *
- * \param[in]   descriptionFieldToDelete    ist das zu entfernende Textfeld
+ * \param   descriptionFieldToDelete    ist das zu entfernende Textfeld
  *
  */
 void NetworkGraphics::deleteDescription(DescriptionField* descriptionFieldToDelete)
@@ -923,10 +923,10 @@ void NetworkGraphics::editDescription(DescriptionField *descriptionToEdit, QStri
 /*!
  * \brief Fügt ein Textfeld hinzu.
  *
- * \param[in]   gridPosoition   ist die GitterPositon, an der das Textfeld erzeugt werden soll
- * \param[in]   isLoad          ob das Textfeld aus einer Datei geladen wurde
- * \param[in]   text            der Textinhalt des Textfeldes
- * \param[in]   id              die intern vergebene Id
+ * \param   gridPosoition   ist die GitterPositon, an der das Textfeld erzeugt werden soll
+ * \param   isLoad          ob das Textfeld aus einer Datei geladen wurde
+ * \param   text            der Textinhalt des Textfeldes
+ * \param   id              die intern vergebene Id
  * \return Gibt ein Textfeld zurück.
  *
  * Wenn das Textfeld nicht geladen wird, wird überprüft, ob sich eine Komponente oder ein Textfeld an der Position befindet und die Id neu vergeben.
@@ -950,4 +950,3 @@ DescriptionField* NetworkGraphics::addDescriptionField(QPointF gridPosition, boo
 
     return description;
 }
-

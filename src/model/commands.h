@@ -21,8 +21,8 @@ public:
     CommandAddComponent(NetworkGraphics* model, QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
     ~CommandAddComponent();
 
-    void undo() override;
-    void redo() override;
+    void undo(void) override;
+    void redo(void) override;
 
     Component* getCreatedComponent() {return _createdComponent;}
 

@@ -1,7 +1,3 @@
-//
-// Created by erics on 026, 26, Februar.
-//
-
 #include "commands.h"
 #include <model/networkgraphics.h>
 
@@ -13,13 +9,13 @@ CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPos
 {
 }
 
-void CommandAddComponent::undo()
+void CommandAddComponent::undo(void)
 {
     _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_createdComponent);
     _hasDoneUndo = true;
 }
 
-void CommandAddComponent::redo()
+void CommandAddComponent::redo(void)
 {
     if (_createdComponent == nullptr)
     {

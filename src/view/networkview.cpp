@@ -99,18 +99,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
         }
         //Multiselection der Bauteile
-        else if ((_firstClickedPositionGrid == gridPosition) && (!_model->isThereAComponentOrADescription(gridPosition)))
-        {
-            for (DescriptionField* description : _model->getDescriptions())
-            {
-                description->set_isSelected(false);
-            }
-            for (Component* component : _model->getComponents())
-            {
-                component->set_isSelected(false);
-            }
-        }
-        else
+        else if ((_firstClickedPositionGrid != gridPosition) && (!_model->isThereAComponentOrADescription(gridPosition)))
         {
             for (DescriptionField* description : _model->getDescriptions())
             {
@@ -122,11 +111,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             }
             _lastClickedPositionGrid = gridPosition;
             multiselcting();
-            _firstClickedPositionGrid.isNull();
-            for (Component* component : _model->getComponents())
-            {
-            qDebug() <<component->getName() <<component->isSelected();
-            }
+            _firstClickedPositionGrid = QPointF(0,0);
         }
 
         QApplication::setOverrideCursor(Qt::OpenHandCursor);

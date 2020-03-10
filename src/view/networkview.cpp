@@ -735,11 +735,12 @@ void NetworkView::paste(void)
     {
         if(_copiedComponent != nullptr)
         {
-            _model->duplicateComponent(_copiedComponent, _lastPositionMultiselect.x(), _lastPositionMultiselect.y());
+
+            _model->duplicateComponent(_copiedComponent, scenePositionToGrid(_lastPositionMultiselect).x(), scenePositionToGrid(_lastPositionMultiselect).y());
         }
         else if(_copiedDescription != nullptr)
         {
-            _model->duplicateDescription(_copiedDescription,_lastPositionMultiselect.x(), _lastPositionMultiselect.y());
+            _model->duplicateDescription(_copiedDescription, scenePositionToGrid(_lastPositionMultiselect).x(), scenePositionToGrid(_lastPositionMultiselect).y());
         }
     }
 }

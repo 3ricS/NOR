@@ -31,7 +31,11 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
     //Merken des zuletzt geklickten Bereichs, wird beim Paste benötigt
     _lastPositionMultiselect = gridPosition;
-    delete _multiselectRect;
+
+    if(_multiselectRect != nullptr)
+    {
+        delete _multiselectRect;
+    }
     _multiselectRect = nullptr;
 
     _mouseIsPressed = false;

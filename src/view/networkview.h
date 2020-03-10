@@ -79,7 +79,7 @@ private:
     Component*        _copiedComponent = nullptr;
     DescriptionField* _copiedDescription = nullptr;
     QPointF           _lastPositionMultiselect;
-    QGraphicsRectItem*        _multiselectRect;
+    QGraphicsRectItem*_multiselectRect = nullptr;
 
     QPointF           _firstPositionMultiselect;
 

@@ -3,6 +3,6 @@ Doku: wenn Fehler oder Mängel auffallen bitte bescheid geben
 
 ___________________________________________________________________
 
-- Multiselect der Bauteile
+- Multiselect der Bauteile (Move)
 - NetworkGraphics hat 600 Zeilen
 

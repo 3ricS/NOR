@@ -13,6 +13,8 @@
 PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, int id) :
         Component(x, y, isVertical, name, 0, Component::ComponentType::PowerSupply, id)
 {
+    //Default Spannung
+    _voltage = 100.0;
 }
 
 /*!
@@ -51,4 +53,12 @@ void PowerSupply::paintInformations(QPainter* painter)
     q.setPixelSize(13);
     painter->setFont(q);
     painter->drawText(_xPosition - 40, _yPosition - 30, _name);
+    if(_voltage > 1000)
+    {
+        painter->drawText(_xPosition + 10, _yPosition - 30, QString::number(_voltage / 1000) + "kV");
+    }
+    else
+    {
+        painter->drawText(_xPosition + 10, _yPosition - 30, QString::number(_voltage) + "V");
+    }
 }

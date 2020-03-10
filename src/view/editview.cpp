@@ -50,14 +50,15 @@ void EditView::setupView(void)
 
     _editViewUi->labelValue->setText(valueDescription);
     _editViewUi->textEditName->setText(_component->getName());
-    _editViewUi->textEditValue->setText(QString::number(_component->getValue()));
-    _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
-
-    if (_component->getComponentTypeInt() == Component::PowerSupply)
+    if(_component->getComponentType() == Component::Resistor)
     {
-        //_editViewUi->labelValue->close();
-        //_editViewUi->textEditValue->close();
+        _editViewUi->textEditValue->setText(QString::number(_component->getValue()));
     }
+    else
+    {
+        _editViewUi->textEditValue->setText(QString::number(_component->getVoltage()));
+    }
+    _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
 }
 
 void EditView::ok(void)

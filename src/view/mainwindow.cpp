@@ -516,27 +516,28 @@ void MainWindow::openCurrentVoltageWindow()
     {
         if(c->getComponentType() == Component::PowerSupply)
         {
-            text += "Gesamt U: " + QString::number(c->getVoltage(), 'f', 2) + "V" + "   Gesamt I: " + QString::number(c->getAmp(), 'f', 2) + "A"
-                    + "   Gesamt R: " + QString::number(_model->getResistanceValue(), 'f', 2) + "Ω" + "<br> <br>";
+            text += "Gesamtspannung: " + QString::number(c->getVoltage(), 'f', 2) + "V" + "<br>" + "Gesamtstrom: " + QString::number(c->getAmp(), 'f', 2)
+                    + "A" + "<br> <br>";
         }
     }
     for(Component* c : _model->getComponents())
     {
         if(c->getComponentType() == Component::Resistor)
         {
-            text += c->getName();
-            text += " I: ";
-            text += QString::number(c->getAmp(), 'f', 2) + "A";
-            text += "   U: ";
+            text += c->getName() + ": <br>";
+            text += "Widerstand: ";
+            text += QString::number(c->getValue(), 'f', 2) + "Ω" + "<br>";
+            text += "Strom: ";
+            text += QString::number(c->getAmp(), 'f', 2) + "A" + "<br>";
+            text += "Spannung: ";
             text += QString::number(c->getVoltage(), 'f', 2) + "V";
-            text += "   R: ";
-            text += QString::number(c->getValue(), 'f', 2) + "Ω";
             text += " <br> <br>";
         }
     }
+    text += "Gesamtwiderstand: " + QString::number(_model->getResistanceValue(), 'f', 2) + "Ω";
 
     QMessageBox* m = new QMessageBox("Strom und Spannung", text, QMessageBox::NoIcon, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, this);
-    m->resize(500, 500);
+    m->resize(700, 500);
     m->show();
 }
 

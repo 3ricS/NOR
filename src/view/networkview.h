@@ -53,7 +53,7 @@ private:
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
     QPointF findScrollPosition(void);
     void focusForPrint(void);
-    void multiselcting(void);
+    void multiselecting(void);
 
 protected:
     void leaveEvent(QEvent* event) override;
@@ -78,9 +78,10 @@ private:
     DescriptionField* _sampleDescriptionOnMoveEvent = nullptr;
     Component*        _copiedComponent = nullptr;
     DescriptionField* _copiedDescription = nullptr;
-    QPointF           _lastClickedPositionGrid;
+    QPointF           _lastPositionMultiselect;
+    QGraphicsRectItem*        _multiselectRect;
 
-    QPointF           _firstClickedPositionGrid;
+    QPointF           _firstPositionMultiselect;
 
     MouseMode         _mouseMode = SelectionMode;
     QColor            _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz

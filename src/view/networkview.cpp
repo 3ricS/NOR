@@ -30,7 +30,9 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
     QPointF gridPosition = scenePositionToGrid(scenePosition);
 
     //Merken des zuletzt geklickten Bereichs, wird beim Paste benötigt
-    _lastClickedPositionGrid = gridPosition;
+    _lastPositionMultiselect = gridPosition;
+    delete _multiselectRect;
+    _multiselectRect = nullptr;
 
     _mouseIsPressed = false;
     _componentOrDescriptionIsGrabbed = false;
@@ -98,8 +100,9 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         {
             _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
         }
+
         //Multiselection der Bauteile
-        else if ((_firstClickedPositionGrid != gridPosition) && (!_model->isThereAComponentOrADescription(gridPosition)))
+        else if ((_firstPositionMultiselect != gridPosition) && (!_model->isThereAComponentOrADescription(gridPosition)))
         {
             for (DescriptionField* description : _model->getDescriptions())
             {
@@ -109,9 +112,11 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             {
                 component->set_isSelected(false);
             }
-            _lastClickedPositionGrid = gridPosition;
-            multiselcting();
-            _firstClickedPositionGrid = QPointF(0,0);
+            _lastPositionMultiselect = scenePosition;
+            multiselecting();
+            delete _multiselectRect;
+            _multiselectRect = nullptr;
+            //_firstClickedPositionGrid = QPointF(0,0);
         }
 
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
@@ -217,7 +222,7 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
         }
         else
         {
-            _firstClickedPositionGrid = gridPosition;
+            _firstPositionMultiselect = scenePosition;
             //_selectedComponentToMove = nullptr;
             //_selectedDescriptionToMove = nullptr;
         }
@@ -304,6 +309,12 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         if (_mouseIsPressed && _componentOrDescriptionIsGrabbed)
         {
             highlightRect(scenePosition, _highlightColor);
+        }
+        if (_mouseIsPressed && _selectedComponentToMove == nullptr && _selectedDescriptionToMove == nullptr)
+        {
+            _lastPositionMultiselect = scenePosition;
+            qDebug() << _lastPositionMultiselect;
+            multiselecting();
         }
     }
         break;
@@ -720,15 +731,15 @@ void NetworkView::copy(void)
  */
 void NetworkView::paste(void)
 {
-    if (!_model->isThereAComponentOrADescription(_lastClickedPositionGrid))
+    if (!_model->isThereAComponentOrADescription(_lastPositionMultiselect))
     {
         if(_copiedComponent != nullptr)
         {
-            _model->duplicateComponent(_copiedComponent, _lastClickedPositionGrid.x(), _lastClickedPositionGrid.y());
+            _model->duplicateComponent(_copiedComponent, _lastPositionMultiselect.x(), _lastPositionMultiselect.y());
         }
         else if(_copiedDescription != nullptr)
         {
-            _model->duplicateDescription(_copiedDescription,_lastClickedPositionGrid.x(), _lastClickedPositionGrid.y());
+            _model->duplicateDescription(_copiedDescription,_lastPositionMultiselect.x(), _lastPositionMultiselect.y());
         }
     }
 }
@@ -809,12 +820,37 @@ void NetworkView::keyPressEvent(QKeyEvent* event)
     QGraphicsView::keyPressEvent(event);
 }
 
-void NetworkView::multiselcting(void)
+void NetworkView::multiselecting(void)
 {
-    int firstClickedXPosition = _firstClickedPositionGrid.toPoint().x();
-    int firstClickedYPosition = _firstClickedPositionGrid.toPoint().y();
-    int lastClickedXPosition = _lastClickedPositionGrid.toPoint().x();
-    int lastClickedYPosition = _lastClickedPositionGrid.toPoint().y();
+    int firstClickedXPosition = _firstPositionMultiselect.toPoint().x();
+    int firstClickedYPosition = _firstPositionMultiselect.toPoint().y();
+    int lastClickedXPosition = _lastPositionMultiselect.toPoint().x();
+    int lastClickedYPosition = _lastPositionMultiselect.toPoint().y();
+
+    if(lastClickedXPosition > firstClickedXPosition && lastClickedYPosition > firstClickedXPosition)
+    {
+        delete _multiselectRect;
+        _multiselectRect = nullptr;
+        _multiselectRect = _model->addRect(firstClickedXPosition, firstClickedYPosition, lastClickedXPosition - firstClickedXPosition, lastClickedYPosition - firstClickedYPosition);
+    }
+    if (firstClickedXPosition > lastClickedXPosition && lastClickedYPosition > firstClickedYPosition)
+    {
+        delete _multiselectRect;
+        _multiselectRect = nullptr;
+        _multiselectRect = _model->addRect(lastClickedXPosition, firstClickedYPosition, firstClickedXPosition - lastClickedXPosition, lastClickedYPosition - firstClickedYPosition);
+    }
+    if (lastClickedXPosition > firstClickedXPosition && firstClickedYPosition > lastClickedYPosition)
+    {
+        delete _multiselectRect;
+        _multiselectRect = nullptr;
+        _multiselectRect = _model->addRect(firstClickedXPosition, lastClickedYPosition, lastClickedXPosition - firstClickedXPosition, firstClickedYPosition - lastClickedYPosition);
+    }
+    if (firstClickedXPosition > lastClickedXPosition && firstClickedYPosition > lastClickedYPosition)
+    {
+        delete _multiselectRect;
+        _multiselectRect = nullptr;
+        _multiselectRect = _model->addRect(lastClickedXPosition, lastClickedYPosition, firstClickedXPosition - lastClickedXPosition, firstClickedYPosition - lastClickedYPosition);
+    }
 
     for (Component* component : _model->getComponents())
     {
@@ -842,6 +878,11 @@ void NetworkView::multiselcting(void)
             component->set_isSelected(true);
             highlightRect(component->getPosition(), _highlightColor);
         }
+        else
+        {
+            component->set_isSelected(false);
+        }
+        _model->update();
     }
     for (DescriptionField* description : _model->getDescriptions())
     {

@@ -533,9 +533,9 @@ void MainWindow::openCurrentVoltageWindow()
             text += " <br> <br>";
         }
     }
+
     QMessageBox* m = new QMessageBox("Strom und Spannung", text, QMessageBox::NoIcon, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, this);
     m->resize(500, 500);
     m->show();
-    //QMessageBox::about(this, ("Spannungen und Ströme"), (text)) ;
 }
 

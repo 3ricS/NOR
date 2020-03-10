@@ -84,7 +84,7 @@ void EditView::ok(void)
             }
             if(_component->getComponentType() == Component::PowerSupply)
             {
-                _component->valueToVoltage();
+                _model->valueToVoltage(_component);
             }
             close();
         }

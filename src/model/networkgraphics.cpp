@@ -696,6 +696,12 @@ void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Comp
     }
 }
 
+void NetworkGraphics::valueToVoltage(Component *component)
+{
+    component->setVoltage(component->getValue());
+    updateCalc();
+}
+
 /*!
  * \brief Aktualisiert den Widerstandswert.
  *

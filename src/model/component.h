@@ -31,7 +31,6 @@ public:
     QRectF boundingRect(void) const;
     bool hasPortAtPosition(QPointF position) const;
     static ComponentType integerToComponentType(int componentType);
-    void valueToVoltage(void){_voltage = _value;}
 
     void paintHighlightRect(QPainter* painter);
 

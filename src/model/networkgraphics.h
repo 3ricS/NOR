@@ -41,6 +41,7 @@ public:
     void mirrorComponent(Component* component);
     void turnComponentLeft(Component* componentToTurn);
     void setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation);
+    void valueToVoltage(Component* component);
 
     //with Undo
     void turnComponentRight(Component* componentToTurn);

@@ -9,12 +9,18 @@ CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPos
 {
 }
 
+/*!
+ * \brief Undo des Hinzufügen einer Komponente.
+ */
 void CommandAddComponent::undo(void)
 {
     _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_createdComponent);
     _hasDoneUndo = true;
 }
 
+/*!
+ * \brief Redo der zuvor entfernten Komponente.
+ */
 void CommandAddComponent::redo(void)
 {
     if (_createdComponent == nullptr)
@@ -32,14 +38,13 @@ void CommandAddComponent::redo(void)
     _hasDoneUndo = false;
 }
 
-CommandAddComponent::~CommandAddComponent()
+CommandAddComponent::~CommandAddComponent(void)
 {
     if(_hasDoneUndo)
     {
         delete _createdComponent;
     }
 }
-
 
 /*
  * _______________________________________________________________________
@@ -52,13 +57,19 @@ CommandAddConnection::CommandAddConnection(NetworkGraphics* model, ComponentPort
 {
 }
 
-void CommandAddConnection::undo()
+/*!
+ * \brief Undo des Hinzufügen einer Connection.
+ */
+void CommandAddConnection::undo(void)
 {
     _model->deleteConnectionWithoutUndo(_createdConnection);
     _hasDoneUndo = true;
 }
 
-void CommandAddConnection::redo()
+/*!
+ * \brief Redo der zuvor enfernten Connection.
+ */
+void CommandAddConnection::redo(void)
 {
     if (_createdConnection == nullptr)
     {
@@ -71,7 +82,7 @@ void CommandAddConnection::redo()
     _hasDoneUndo = false;
 }
 
-CommandAddConnection::~CommandAddConnection()
+CommandAddConnection::~CommandAddConnection(void)
 {
     if(_hasDoneUndo)
     {
@@ -79,41 +90,41 @@ CommandAddConnection::~CommandAddConnection()
     }
 }
 
-
-
-
-
 /*
  * _______________________________________________________________________
  * CommandAddDescriptionField
  */
+
 CommandAddDescriptionField::CommandAddDescriptionField(NetworkGraphics* model, DescriptionField* descriptionField) :
         _model(model), _createdDescriptionField(descriptionField)
 {
-
 }
 
-void CommandAddDescriptionField::undo()
+/*!
+ * \brief Undo des Hinuufügen eines Textfeldes.
+ */
+void CommandAddDescriptionField::undo(void)
 {
     _model->deleteDescriptionWithoutUndo(_createdDescriptionField);
     _hasDoneUndo = true;
 }
 
-void CommandAddDescriptionField::redo()
+/*!
+ * \brief Redo des zuvor entfernten Textfeldes.
+ */
+void CommandAddDescriptionField::redo(void)
 {
     _model->addDescriptionFieldWithoutUndo(_createdDescriptionField);
     _hasDoneUndo = false;
 }
 
-CommandAddDescriptionField::~CommandAddDescriptionField()
+CommandAddDescriptionField::~CommandAddDescriptionField(void)
 {
     if(_hasDoneUndo)
     {
         delete _createdDescriptionField;
     }
 }
-
-
 
 /*
  * _______________________________________________________________________
@@ -135,7 +146,10 @@ CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* co
     }
 }
 
-void CommandMoveComponent::undo()
+/*!
+ * \brief Undo des verschieben einer Komponente zurück zur vorherigen Position.
+ */
+void CommandMoveComponent::undo(void)
 {
     if(_componentToMove != nullptr)
     {
@@ -148,16 +162,19 @@ void CommandMoveComponent::undo()
     }
 }
 
-void CommandMoveComponent::redo()
+/*!
+ * \brief Komponente an die vorherige Position verschieben.
+ */
+void CommandMoveComponent::redo(void)
 {
     _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridEndPosition);
 }
-
 
 /*
  * _______________________________________________________________________
  * CommandEditComponnet
  */
+
 CommandEditComponent::CommandEditComponent(NetworkGraphics* model, Component* editedComponent,
                                            Component::Orientation originalOrientation, QString newName,
                                            double newValue) :
@@ -169,7 +186,10 @@ CommandEditComponent::CommandEditComponent(NetworkGraphics* model, Component* ed
     _newOrientation = editedComponent->getOrientation();
 }
 
-void CommandEditComponent::undo()
+/*!
+ * \brief Undo der bearbeiteten Eigenschaften einer Komponente.
+ */
+void CommandEditComponent::undo(void)
 {
     if (_editedComponent != nullptr)
     {
@@ -180,7 +200,10 @@ void CommandEditComponent::undo()
     }
 }
 
-void CommandEditComponent::redo()
+/*!
+ * \brief Redo der bearbeiteten Eigenschaften einer Komponente.
+ */
+void CommandEditComponent::redo(void)
 {
     if (nullptr != _editedComponent)
     {
@@ -191,17 +214,20 @@ void CommandEditComponent::redo()
     }
 }
 
-
 /*
  * _______________________________________________________________________
  * CommandDeleteComponnet
  */
+
 CommandDeleteComponent::CommandDeleteComponent(NetworkGraphics* model, Component* componentToDelete) :
         _model(model), _deletedComponent(componentToDelete)
 {
 }
 
-void CommandDeleteComponent::undo()
+/*!
+ * \brief Undo des Entfernen einer Komponente.
+ */
+void CommandDeleteComponent::undo(void)
 {
     _model->addComponentWithoutUndo(_deletedComponent);
     for (Connection* connection : _deletedConnections)
@@ -211,13 +237,16 @@ void CommandDeleteComponent::undo()
     _hasDoneUndo = true;
 }
 
-void CommandDeleteComponent::redo()
+/*!
+ * \brief Redo des Entfernen einer Komponente.
+ */
+void CommandDeleteComponent::redo(void)
 {
     _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_deletedComponent);
     _hasDoneUndo = false;
 }
 
-CommandDeleteComponent::~CommandDeleteComponent()
+CommandDeleteComponent::~CommandDeleteComponent(void)
 {
     if(!_hasDoneUndo)
     {
@@ -229,43 +258,41 @@ CommandDeleteComponent::~CommandDeleteComponent()
     }
 }
 
-
-
-
 /*
  * _______________________________________________________________________
  * CommandDeleteComponnet
  */
+
 CommandDeleteConnection::CommandDeleteConnection(NetworkGraphics* model, Connection* connectionToDelete) :
     _model(model), _deletedConnection(connectionToDelete)
 {
 }
 
-void CommandDeleteConnection::undo()
+/*!
+ * \brief Undo des Entfernen einer Connection.
+ */
+void CommandDeleteConnection::undo(void)
 {
     _hasDoneUndo = true;
     _model->addConnectionWithoutUndo(_deletedConnection);
 }
 
-void CommandDeleteConnection::redo()
+/*!
+ * \brief Redo des Entfernen einer Connection.
+ */
+void CommandDeleteConnection::redo(void)
 {
     _hasDoneUndo = false;
     _model->deleteConnectionWithoutUndo(_deletedConnection);
 }
 
-CommandDeleteConnection::~CommandDeleteConnection()
+CommandDeleteConnection::~CommandDeleteConnection(void)
 {
     if(!_hasDoneUndo)
     {
         delete _deletedConnection;
     }
 }
-
-
-
-
-
-
 
 /*
  * _______________________________________________________________________
@@ -277,7 +304,7 @@ CommandDeleteDescription::CommandDeleteDescription(NetworkGraphics* model, Descr
 {
 }
 
-CommandDeleteDescription::~CommandDeleteDescription()
+CommandDeleteDescription::~CommandDeleteDescription(void)
 {
     if(!_hasDoneUndo)
     {
@@ -285,13 +312,19 @@ CommandDeleteDescription::~CommandDeleteDescription()
     }
 }
 
-void CommandDeleteDescription::undo()
+/*!
+ * \brief Undo des Entfernen eines Textfeldes.
+ */
+void CommandDeleteDescription::undo(void)
 {
     _hasDoneUndo = true;
     _model->addDescriptionFieldWithoutUndo(_deletedDescription);
 }
 
-void CommandDeleteDescription::redo()
+/*!
+ * \brief Redo des Entfernen eines Textfeldes.
+ */
+void CommandDeleteDescription::redo(void)
 {
     _hasDoneUndo = false;
     _model->deleteDescriptionWithoutUndo(_deletedDescription);
@@ -305,10 +338,12 @@ void CommandDeleteDescription::redo()
 CommandDuplicateComponent::CommandDuplicateComponent(NetworkGraphics *model, Component *componentToDuplicate, int xPosition, int yPosition) :
     _model(model), _componentToDuplicate(componentToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
 {
-
 }
 
-void CommandDuplicateComponent::undo()
+/*!
+ * \brief Undo der zuvor kopierten Komponente.
+ */
+void CommandDuplicateComponent::undo(void)
 {
     if(_createdComponent != nullptr)
     {
@@ -316,7 +351,10 @@ void CommandDuplicateComponent::undo()
     }
 }
 
-void CommandDuplicateComponent::redo()
+/*!
+ * \brief Redo der kopierten Komente, die enfernt wurde.
+ */
+void CommandDuplicateComponent::redo(void)
 {
     if(_componentToDuplicate != nullptr)
     {
@@ -334,13 +372,19 @@ CommandEditDescription::CommandEditDescription(NetworkGraphics *model, Descripti
 {
 }
 
-void CommandEditDescription::undo()
+/*!
+ * \brief Undo der Bearbeitung eines Textfeldes.
+ */
+void CommandEditDescription::undo(void)
 {
     _editDescription->setText(_oldText);
     _model->update();
 }
 
-void CommandEditDescription::redo()
+/*!
+ * \brief Redo der Bearbeitung eines Textfeldes.
+ */
+void CommandEditDescription::redo(void)
 {
     _editDescription->setText(_newText);
     _model->update();
@@ -356,7 +400,10 @@ CommandRotateComponent::CommandRotateComponent(Component* componentToTurn, Netwo
 {
 }
 
-void CommandRotateComponent::undo()
+/*!
+ * \brief Undo des Drehen einer Komponente.
+ */
+void CommandRotateComponent::undo(void)
 {
     //Dreimal rechts = einmal links
     for(int i = 0; i < 3; i++)
@@ -365,7 +412,10 @@ void CommandRotateComponent::undo()
     }
 }
 
-void CommandRotateComponent::redo()
+/*!
+ * \brief Redo des Drehen einer Komponente.
+ */
+void CommandRotateComponent::redo(void)
 {
     _model->turnComponentRightWithoutUndo(_componentToTurn);
 }

@@ -145,7 +145,7 @@ void MainWindow::setNewFile(void)
     window->show();
 }
 
-void MainWindow::setSaveAsFile()
+void MainWindow::setSaveAsFile(void)
 {
     _model->saveAs();
     setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
@@ -286,7 +286,7 @@ void MainWindow::createUpperMenu(void)
 /*!
 * \brief Erstellen von Tooltips fürs Erstellen Menü
 */
-void MainWindow::createToolTips()
+void MainWindow::createToolTips(void)
 {
     _ui->PowerSupply->setToolTip("Spannugsquelle einzeichnen");
     _ui->Resistor->setToolTip("Widerstand einzeichnen");
@@ -325,7 +325,7 @@ void MainWindow::setFlatModusButtonRight(QPushButton *actualPushed)
     }
 }
 
-void MainWindow::createModusQPushButtonList()
+void MainWindow::createModusQPushButtonList(void)
 {
     _modusButtons.append(_ui->Selection);
     _modusButtons.append(_ui->PowerSupply);
@@ -337,7 +337,7 @@ void MainWindow::createModusQPushButtonList()
 /*!
 * \brief Erstellen des "Über"-Fensters
 */
-void MainWindow::openAboutWindow()
+void MainWindow::openAboutWindow(void)
 {
     QMessageBox::about(this, ("About Application"),
                        ("Das Programm <b>NOR - Network of Resistance</b> berechnet den Gesamtwiderstand von Netzwerken "
@@ -353,22 +353,22 @@ void MainWindow::openAboutWindow()
                        );
 }
 
-void MainWindow::setDuplicate()
+void MainWindow::setDuplicate(void)
 {
     _networkView->duplicate();
 }
 
-void MainWindow::setCopy()
+void MainWindow::setCopy(void)
 {
     _networkView->copy();
 }
 
-void MainWindow::setPaste()
+void MainWindow::setPaste(void)
 {
     _networkView->paste();
 }
 
-void MainWindow::setRotate()
+void MainWindow::setRotate(void)
 {
     _networkView->rotateComponentByShortcut();
 }
@@ -376,7 +376,7 @@ void MainWindow::setRotate()
 /*!
 * \brief Reinzoomen mit +10% Schritten
 */
-void MainWindow::setZoomIn()
+void MainWindow::setZoomIn(void)
 {
     if((_scalefactor * 100) < _maximumZoom)
     {
@@ -392,7 +392,7 @@ void MainWindow::setZoomIn()
 /*!
 * \brief Rauszoomen mit -10% Schritten
 */
-void MainWindow::setZoomOut()
+void MainWindow::setZoomOut(void)
 {
     if((_scalefactor * 100) > _minimumZoom)
     {
@@ -407,7 +407,7 @@ void MainWindow::setZoomOut()
 /*!
 * \brief Zoom auf 100% stellen
 */
-void MainWindow::setZoom100Percent()
+void MainWindow::setZoom100Percent(void)
 {
     while (_scalefactor != 1.0)
     {
@@ -423,7 +423,7 @@ void MainWindow::setZoom100Percent()
     }
 }
 
-MainWindow::~MainWindow()
+MainWindow::~MainWindow(void)
 {
     delete _ui;
 }
@@ -478,22 +478,22 @@ void MainWindow::deleteItem(void)
     _networkView->deleteSelectedItem();
 }
 
-void MainWindow::setEdit()
+void MainWindow::setEdit(void)
 {
     _networkView->editNetworkOrDescription();
 }
 
-void MainWindow::undo()
+void MainWindow::undo(void)
 {
     _undo->triggered();
 }
 
-void MainWindow::redo()
+void MainWindow::redo(void)
 {
     _redo->triggered();
 }
 
-void MainWindow::print()
+void MainWindow::print(void)
 {
     _networkView->print();
 }

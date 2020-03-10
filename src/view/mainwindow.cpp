@@ -513,13 +513,29 @@ void MainWindow::openCurrentVoltageWindow()
     QString text = "";
     for(Component* c : _model->getComponents())
     {
-        text += c->getName();
-        text += " Strom: ";
-        text += QString::number(c->getAmp(), 'g', 2) + "A";
-        text += " Spannung: ";
-        text += QString::number(c->getVoltage()) + "V";
-        text += " <br>";
+        if(c->getComponentType() == Component::PowerSupply)
+        {
+            text += "Gesamt U: " + QString::number(c->getVoltage(), 'f', 2) + "V" + "   Gesamt I: " + QString::number(c->getAmp(), 'f', 2) + "A"
+                    + "   Gesamt R: " + QString::number(_model->getResistanceValue(), 'f', 2) + "Ω" + "<br> <br>";
+        }
     }
-    QMessageBox::about(this, ("Spannungen und Ströme"), (text));
+    for(Component* c : _model->getComponents())
+    {
+        if(c->getComponentType() == Component::Resistor)
+        {
+            text += c->getName();
+            text += " I: ";
+            text += QString::number(c->getAmp(), 'f', 2) + "A";
+            text += "   U: ";
+            text += QString::number(c->getVoltage(), 'f', 2) + "V";
+            text += "   R: ";
+            text += QString::number(c->getValue(), 'f', 2) + "Ω";
+            text += " <br> <br>";
+        }
+    }
+    QMessageBox* m = new QMessageBox("Strom und Spannung", text, QMessageBox::NoIcon, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, this);
+    m->resize(500, 500);
+    m->show();
+    //QMessageBox::about(this, ("Spannungen und Ströme"), (text)) ;
 }
 

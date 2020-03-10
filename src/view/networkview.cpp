@@ -313,7 +313,6 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         if (_mouseIsPressed && _selectedComponentToMove == nullptr && _selectedDescriptionToMove == nullptr)
         {
             _lastPositionMultiselect = scenePosition;
-            qDebug() << _lastPositionMultiselect;
             multiselecting();
         }
     }
@@ -731,7 +730,7 @@ void NetworkView::copy(void)
  */
 void NetworkView::paste(void)
 {
-    if (!_model->isThereAComponentOrADescription(_lastPositionMultiselect))
+    if (!_model->isThereAComponentOrADescription(scenePositionToGrid(_lastPositionMultiselect)))
     {
         if(_copiedComponent != nullptr)
         {

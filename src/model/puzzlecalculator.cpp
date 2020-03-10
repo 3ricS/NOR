@@ -20,6 +20,7 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
 {
     _connections = connections;
     _components = components;
+    _mergeList.clear();
 
     QList<Node*> nodes;
     QList<RowPiece> rowPieces = findRowPieces(nodes);

@@ -13,6 +13,9 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     _ui->networkView->setScene(_model);
     setSelectionMode();
 
+    //Zuerst Strom und Spannungs Button verstecken
+    setCurrentButtonHide(false);
+
     //Menuleisten Action wird erzeugt
     createUpperMenu();
 
@@ -30,6 +33,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->DescriptionField, SIGNAL(released()), this, SLOT(setDescriptionMode()));
     connect(_ui->Undo, SIGNAL(released()), this, SLOT(undo()));
     connect(_ui->Redo, SIGNAL(released()), this, SLOT(redo()));
+    connect(_ui->CurrentView, SIGNAL(released()), this, SLOT(openCurrentVoltageWindow()));
     connect(_new, SIGNAL(triggered()), this, SLOT(setNewFile()));
     connect(_saveAs, SIGNAL(triggered()), this, SLOT(setSaveAsFile()));
     connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
@@ -57,6 +61,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_model, SIGNAL(powerSupplyIsAllowed(bool)), this, SLOT(isPowerSupplyAllowed(bool)));
     connect(_model->getUndoStack(), SIGNAL(canRedoChanged(bool)), this, SLOT(isRedoPossible(bool)));
     connect(_model->getUndoStack(), SIGNAL(canUndoChanged(bool)), this, SLOT(isUndoPossible(bool)));
+    connect(_model, SIGNAL(currentAndVoltageIsValid(bool)), this, SLOT(setCurrentButtonHide(bool)));
 }
 
 /*!
@@ -334,6 +339,11 @@ void MainWindow::createModusQPushButtonList(void)
     _modusButtons.append(_ui->DescriptionField);
 }
 
+void MainWindow::setCurrentButtonHide(bool canShown)
+{
+    _ui->CurrentView->setHidden(!canShown);
+}
+
 /*!
 * \brief Erstellen des "Über"-Fensters
 */
@@ -496,5 +506,20 @@ void MainWindow::redo(void)
 void MainWindow::print(void)
 {
     _networkView->print();
+}
+
+void MainWindow::openCurrentVoltageWindow()
+{
+    QString text = "";
+    for(Component* c : _model->getComponents())
+    {
+        text += c->getName();
+        text += " Strom: ";
+        text += QString::number(c->getAmp(), 'g', 2) + "A";
+        text += " Spannung: ";
+        text += QString::number(c->getVoltage()) + "V";
+        text += " <br>";
+    }
+    QMessageBox::about(this, ("Spannungen und Ströme"), (text));
 }
 

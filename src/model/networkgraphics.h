@@ -97,6 +97,7 @@ signals:
     void resistanceValueChanged(void);
     void newNetworkIsLoad(void);
     void powerSupplyIsAllowed(bool isAllowed);
+    void currentAndVoltageIsValid(bool isValid);
 
 private:
     static constexpr int _defaultSceneSize = 6000;

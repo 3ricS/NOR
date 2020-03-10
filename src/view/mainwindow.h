@@ -59,6 +59,8 @@ public slots:
     void undo(void);
     void redo(void);
     void print(void);
+    void openCurrentVoltageWindow(void);
+    void setCurrentButtonHide(bool canShown);
 
     void updateResistanceValue(void);
     void isPowerSupplyAllowed(bool isAllowed);

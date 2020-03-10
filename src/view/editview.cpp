@@ -55,8 +55,8 @@ void EditView::setupView(void)
 
     if (_component->getComponentTypeInt() == Component::PowerSupply)
     {
-        _editViewUi->labelValue->close();
-        _editViewUi->textEditValue->close();
+        //_editViewUi->labelValue->close();
+        //_editViewUi->textEditValue->close();
     }
 }
 
@@ -81,6 +81,10 @@ void EditView::ok(void)
             else
             {
                 _model->editComponent(_component, newName, newValue, _orientationAtStart);
+            }
+            if(_component->getComponentType() == Component::PowerSupply)
+            {
+                _component->valueToVoltage();
             }
             close();
         }

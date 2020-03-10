@@ -48,7 +48,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
         <property name="spacing">
          <number>7</number>
         </property>
@@ -316,6 +316,13 @@
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="CurrentView">
+          <property name="text">
+           <string>Strom und Spannung</string>
           </property>
          </widget>
         </item>

@@ -710,6 +710,14 @@ void NetworkGraphics::updateCalc(void)
 
         update();
         emit resistanceValueChanged();
+        if(_resistanceValue != 0)
+        {
+            emit currentAndVoltageIsValid(true);
+        }
+        else
+        {
+            emit currentAndVoltageIsValid(false);
+        }
     }
 }
 

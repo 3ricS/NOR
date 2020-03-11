@@ -14,7 +14,10 @@
 class Resistor : public Component
 {
 public:
-    Resistor(QString _name, int valueResistance, int _xPosition, int _yPosition, bool isVertical, int id);
+    Resistor(QString name, double valueResistance, int x, int y, bool isVertical, int id);
+
+    double getResistanceValue(void) {return _resistanceValue;}
+    void setResistanceValue(double resistance) {_resistanceValue = resistance;}
 
     //Methoden
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
@@ -24,6 +27,8 @@ private:
     //Methoden
     virtual void paintInformation(QPainter* painter) override;
     void paintOrientationSensitiv(QPainter* painter, int xPosText, int yPosText, int xPosValue, int yPosValue);
+
+    double _resistanceValue;
 };
 
 #endif // RESISTOR_H

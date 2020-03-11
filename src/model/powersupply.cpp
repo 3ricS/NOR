@@ -10,11 +10,9 @@
  * \param   id              ist die intern zugewiesene Id
  *
  */
-PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, int id) :
-        Component(x, y, isVertical, name, 0, Component::ComponentType::PowerSupply, id)
+PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id) :
+        Component(x, y, isVertical, name, voltage, Component::ComponentType::PowerSupply, id)
 {
-    //Default Spannung
-    _voltage = 100.0;
 }
 
 /*!

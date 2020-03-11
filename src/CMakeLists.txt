@@ -6,7 +6,7 @@ project(NOR)
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.14.1\\Tools\\mingw730_64")
+set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.14.1\\5.14.1\\mingw73_64")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -25,43 +25,42 @@ include_directories(img)
 
 # set .h files
 set(MOC_HEADERS
-        main.h
+        defines.h
         model/component.h
         model/connection.h
+        model/descriptionfield.h
+        model/filemanager.h
         model/powersupply.h
         model/resistor.h
+        view/editview.h
+        view/mainwindow.h
         model/networkgraphics.h
-        model/filemanager.h
-        model/descriptionfield.h
+        view/networkview.h
         model/componentport.h
+        model/node.h
         model/puzzlecalculator.h
         model/rowpiece.h
-        model/node.h
-
-
-        view/mainwindow.h
-        view/NetworkView.h
-        view/editview.h
+        model/commands.h
         )
 
 # set .cpp files
-set (SOURCES
+set(SOURCES
         main.cpp
         model/component.cpp
         model/connection.cpp
+        model/descriptionfield.cpp
+        model/filemanager.cpp
         model/powersupply.cpp
         model/resistor.cpp
-        model/networkgraphics.cpp
-        model/filemanager.cpp
-        model/descriptionfield.cpp
-
-        view/mainwindow.cpp
-        view/NetworkView.cpp
         view/editview.cpp
+        view/mainwindow.cpp
+        model/networkgraphics.cpp
+        view/networkview.cpp
         model/componentport.cpp
-        model/rowpiece.cpp
         model/puzzlecalculator.cpp
-        model/commands.cpp model/commands.h)
+        model/rowpiece.cpp
+        model/commands.cpp
+        )
 
 # set .ui files
 set(UIS

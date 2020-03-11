@@ -1,7 +1,7 @@
 #include "view/mainwindow.h"
 
 MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow),
-    _model(model)
+                                                                  _model(model)
 {
     _ui->setupUi(this);
     setWindowTitle("NOR - Network of Resistance");
@@ -127,20 +127,20 @@ void MainWindow::setSaveFile(void)
 
 void MainWindow::setOpenFile(void)
 {
-        if(_model->getComponents().count() != 0)
-        {
-            NetworkGraphics* model = new NetworkGraphics();
-            MainWindow* window = new MainWindow(model);
-            window->show();
-            model->load();
-            window->setWindowTitle("NOR - Network of Resistance ~ " + model->getFileName());
-            setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
-        }
-        else
-        {
-            _model->load();
-            setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
-        }
+    if (_model->getComponents().count() != 0)
+    {
+        NetworkGraphics* model = new NetworkGraphics();
+        MainWindow* window = new MainWindow(model);
+        window->show();
+        model->load();
+        window->setWindowTitle("NOR - Network of Resistance ~ " + model->getFileName());
+        setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
+    }
+    else
+    {
+        _model->load();
+        setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
+    }
 }
 
 void MainWindow::setNewFile(void)
@@ -156,19 +156,19 @@ void MainWindow::setSaveAsFile(void)
     setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
 }
 
-void MainWindow::keyReleaseEvent(QKeyEvent *event)
+void MainWindow::keyReleaseEvent(QKeyEvent* event)
 {
     _ctrlIsPressed = false;
-    if(event->key() == Qt::Key::Key_Escape)
+    if (event->key() == Qt::Key::Key_Escape)
     {
         setSelectionMode();
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
     }
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
+void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-    if(event->key() == Qt::Key::Key_Control)
+    if (event->key() == Qt::Key::Key_Control)
     {
         _ctrlIsPressed = true;
     }
@@ -303,9 +303,9 @@ void MainWindow::createToolTips(void)
 
 void MainWindow::setCheckedInCreateMenu(QAction* actualAction)
 {
-    for(QAction* a : _createActionGroup)
+    for (QAction* a : _createActionGroup)
     {
-        if(a != actualAction)
+        if (a != actualAction)
         {
             a->setChecked(false);
         }
@@ -316,11 +316,11 @@ void MainWindow::setCheckedInCreateMenu(QAction* actualAction)
     }
 }
 
-void MainWindow::setFlatModusButtonRight(QPushButton *actualPushed)
+void MainWindow::setFlatModusButtonRight(QPushButton* actualPushed)
 {
-    for(QPushButton* pb : _modusButtons)
+    for (QPushButton* pb : _modusButtons)
     {
-        if(pb != actualPushed)
+        if (pb != actualPushed)
         {
             pb->setDown(false);
         }
@@ -361,7 +361,7 @@ void MainWindow::openAboutWindow(void)
                         "<br> Sören Köstler"
                         "<br>"
                         "<br> Version: 1.0")
-                       );
+    );
 }
 
 void MainWindow::setDuplicate(void)
@@ -389,7 +389,7 @@ void MainWindow::setRotate(void)
 */
 void MainWindow::setZoomIn(void)
 {
-    if((_scalefactor * 100) < _maximumZoom)
+    if ((_scalefactor * 100) < _maximumZoom)
     {
         double scaleFactor = 1.1;
         _scalefactor += 0.1;
@@ -405,7 +405,7 @@ void MainWindow::setZoomIn(void)
 */
 void MainWindow::setZoomOut(void)
 {
-    if((_scalefactor * 100) > _minimumZoom)
+    if ((_scalefactor * 100) > _minimumZoom)
     {
         double scaleFactor = 0.9;
         _scalefactor -= 0.1;
@@ -422,11 +422,11 @@ void MainWindow::setZoom100Percent(void)
 {
     while (_scalefactor != 1.0)
     {
-        if(_scalefactor > 1.0)
+        if (_scalefactor > 1.0)
         {
             setZoomOut();
         }
-        else if(_scalefactor < 1.0)
+        else if (_scalefactor < 1.0)
         {
             setZoomIn();
         }
@@ -446,7 +446,7 @@ void MainWindow::updateResistanceValue(void)
 
 void MainWindow::isPowerSupplyAllowed(bool isAllowed)
 {
-    if(isAllowed)
+    if (isAllowed)
     {
         _ui->PowerSupply->setFlat(false);
         _ui->PowerSupply->setEnabled(true);
@@ -462,7 +462,7 @@ void MainWindow::isPowerSupplyAllowed(bool isAllowed)
 
 void MainWindow::isUndoPossible(bool canUndo)
 {
-    if(canUndo)
+    if (canUndo)
     {
         _ui->Undo->setEnabled(true);
     }
@@ -474,7 +474,7 @@ void MainWindow::isUndoPossible(bool canUndo)
 
 void MainWindow::isRedoPossible(bool canRedo)
 {
-    if(canRedo)
+    if (canRedo)
     {
         _ui->Redo->setEnabled(true);
     }
@@ -511,41 +511,9 @@ void MainWindow::print(void)
 
 void MainWindow::openCurrentVoltageWindow()
 {
-    QString text = "";
-    if(!_model->getPuzzleCalculator().getUsedStarCalculation())
-    {
-    for(Component* c : _model->getComponents())
-    {
-        if(c->getComponentType() == Component::PowerSupply)
-        {
-            text += "Gesamtspannung: " + QString::number(c->getVoltage(), 'f', 2) + "V" + "<br>" + "Gesamtstrom: " + QString::number(c->getAmp(), 'f', 2)
-                    + "A" + "<br> <br>";
-        }
-    }
-    for(Component* c : _model->getComponents())
-    {
-        if(c->getComponentType() == Component::Resistor)
-        {
-            text += c->getName() + ": <br>";
-            text += "Widerstand: ";
-            text += QString::number(c->getValue(), 'f', 2) + "Ω" + "<br>";
-            text += "Strom: ";
-            text += QString::number(c->getAmp(), 'f', 2) + "A" + "<br>";
-            text += "Spannung: ";
-            text += QString::number(c->getVoltage(), 'f', 2) + "V";
-            text += " <br> <br>";
-        }
-    }
-    text += "Gesamtwiderstand: " + QString::number(_model->getResistanceValue(), 'f', 2) + "Ω";
-    }
-    else
-    {
-       text +="Warnung: <br><br>";
-       text += "In Ihrem Netzwerk wurde eine Stern-Dreiecks-Umformung durchgeführt."
-               "<br>Da sich die Funktion der Wertetabelle noch in der Beta befindet, können wir Ihnen keine richtigen Spannungen und Ströme ausgeben."
-               "<br><br> Vielen Dank für Ihr Vertändnis!";
-    }
-    QMessageBox* m = new QMessageBox("Strom und Spannung", text, QMessageBox::NoIcon, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, this);
+    QString information = _model->getVoltageAndCurrentInformation();
+    QMessageBox* m = new QMessageBox("Strom und Spannung", information, QMessageBox::NoIcon, QMessageBox::Ok,
+                                     QMessageBox::NoButton, QMessageBox::NoButton, this);
     m->resize(700, 500);
     m->show();
 

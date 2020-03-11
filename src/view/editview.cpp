@@ -50,9 +50,11 @@ void EditView::setupView(void)
 
     _editViewUi->labelValue->setText(valueDescription);
     _editViewUi->textEditName->setText(_component->getName());
-    if(_component->getComponentType() == Component::Resistor)
+    Resistor* resistor = dynamic_cast<Resistor*>(_component);
+    bool isResistor = (nullptr != resistor);
+    if (isResistor)
     {
-        _editViewUi->textEditValue->setText(QString::number(_component->getValue()));
+        _editViewUi->textEditValue->setText(QString::number(resistor->getResistanceValue()));
     }
     else
     {
@@ -82,10 +84,6 @@ void EditView::ok(void)
             else
             {
                 _model->editComponent(_component, newName, newValue, _orientationAtStart);
-            }
-            if(_component->getComponentType() == Component::PowerSupply)
-            {
-                _model->valueToVoltage(_component);
             }
             close();
         }

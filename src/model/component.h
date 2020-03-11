@@ -26,7 +26,7 @@ public:
     enum ComponentType{Resistor, PowerSupply};
     enum Port{A, B, null};
     enum Orientation{left, top, right, bottom};
-    Component(int x, int y, bool isVertical, QString name, double value, ComponentType componentTyp, int id);
+    Component(int x, int y, bool isVertical, QString name, double voltage, ComponentType componentTyp, int id);
 
     QRectF boundingRect(void) const;
     bool hasPortAtPosition(QPointF position) const;
@@ -40,7 +40,6 @@ public:
     int getXPosition(void) const {return _xPosition;}
     int getYPosition(void) const {return _yPosition;}
     QString getName(void) const {return _name;}
-    double getValue(void) const {return _value;}
     bool isVertical(void) const {return _isVertical;}
     bool isSelected(void) const {return  _isSelected;}
     double getVoltage(void) {return _voltage;}
@@ -56,7 +55,6 @@ public:
     void setVertical(bool orientation) {_isVertical = orientation;}
     void setOrientation(Component::Orientation newOrientation);
     void setName(QString name) {_name = name;}
-    void setValue(double newValue) { _value = newValue;}
     void setPosition(QPointF gridPosition);
     void setIsSelected(bool isSelected);
     void setVoltage(double voltage) {_voltage = voltage;}
@@ -73,7 +71,6 @@ protected:
     Orientation _orientation;
 
     QString     _name;
-    double      _value;
 
     double _voltage = 0.0;
     double _amp = 0.0;

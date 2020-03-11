@@ -1,10 +1,10 @@
 #include "defines.h"
 #include "component.h"
 
-Component::Component(int x, int y, bool isVertical, QString name, double value, ComponentType componentTyp, int id)
+Component::Component(int x, int y, bool isVertical, QString name, double voltage, ComponentType componentTyp, int id)
         : QGraphicsItem(nullptr),
           _xPosition(x), _yPosition(y), _isVertical(isVertical),
-          _name(name), _value(value), _id(id),
+          _name(name), _voltage(voltage), _id(id),
           _componentType(componentTyp)
 {
     if (isVertical)

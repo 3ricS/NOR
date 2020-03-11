@@ -2,6 +2,7 @@
 #include "model/node.h"
 #include "model/connection.h"
 #include "model/component.h"
+#include "model/resistor.h"
 
 PuzzleCalculator::PuzzleCalculator()
 {
@@ -220,11 +221,29 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
          * Solange es eine Reihenschaltung ist und man nicht bei der Spannungsquelle wieder angekommen ist,
          * wird der Widerstandswert der Komponenten addiert
          */
-    resistanceValueOfRowPiece += actualComponentPort.getComponent()->getValue();
+    Resistor* resistor = dynamic_cast<Resistor*>(actualComponentPort.getComponent());
+    bool isResistor = (nullptr != resistor);
+    if (isResistor)
+    {
+        resistanceValueOfRowPiece += resistor->getResistanceValue();
+    }
+    else
+    {
+        return;
+    }
     while (neighbourComponentPorts.count() == 1 && !neighbourComponentPortsContainPowerSupply)
     {
         //der Widerstandswert des RowPieces wird addiert
-        resistanceValueOfRowPiece += neighbourComponentPorts.last().getComponent()->getValue();
+        Resistor* resistor = dynamic_cast<Resistor*>(neighbourComponentPorts.last().getComponent());
+        bool isResistor = (nullptr != resistor);
+        if (isResistor)
+        {
+            resistanceValueOfRowPiece += resistor->getResistanceValue();
+        }
+        else
+        {
+            break;
+        }
         //der nächste Widerstand wird betrachtet, damit Endknoten bestimmt werden kann
         actualComponentPort = neighbourComponentPorts.last().getOppisiteComponentPort();
         qDebug() << "actualComponentPort" << actualComponentPort.getComponent()->getName()
@@ -407,7 +426,12 @@ void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
             if(Component::Resistor == component->getComponentType())
             {
                 component->setAmp(totalCurrent);
-                component->setVoltage(totalCurrent * component->getValue());
+                Resistor* resistor = dynamic_cast<Resistor*>(component);
+                bool isResistor = (nullptr != resistor);
+                if (isResistor)
+                {
+                    component->setVoltage(totalCurrent * resistor->getResistanceValue());
+                }
             }
         }
         }
@@ -468,7 +492,12 @@ void PuzzleCalculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
         if(Component::Resistor == component->getComponentType())
         {
             component->setAmp(rowpiece->getAmp());
-            component->setVoltage(component->getAmp() * component->getValue());
+            Resistor* resistor = dynamic_cast<Resistor*>(component);
+            bool isResistor = (nullptr != resistor);
+            if (isResistor)
+            {
+                component->setVoltage(component->getAmp() * resistor->getResistanceValue());
+            }
         }
     }
 }
@@ -478,17 +507,6 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
     //_rowPieceListForCalculateAmp = rowPieces;
     while (1 < rowPieces.count())
     {
-        for (RowPiece rp : rowPieces)
-        {
-            QString string = "";
-            for (Component* cp : rp.getComponents())
-            {
-                string += cp->getName();
-            }
-            qDebug() << "RowPiece" << string;
-        }
-        qDebug() << "---------------------------------";
-
         bool changedSomething = false;
         for (RowPiece& rowPieceA : rowPieces)
         {

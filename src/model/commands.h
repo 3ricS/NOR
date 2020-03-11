@@ -3,8 +3,9 @@
  *
  * \brief   Ein Commands ist für das Undo, Redo zuständig.
  *
- * Ein Commands ist ein QUndoCommand.
- * Die Methoden werden entsprechend für die einzelnen Aktionen, die beim bearbeiten des Netzwerkes getätigt werden, überladen.
+ * Ein Command ist ein QUndoCommand.
+ * Die Methoden werden entsprechend für die einzelnen Aktionen, die beim Bearbeiten des Netzwerkes getätigt werden, überladen.
+ * Die Zeiger auf entfernte Elemente bleiben so lange erhalten, bis die QUndoCommands vom QUndoStack entfernt werden.
  */
 
 #ifndef NOR_COMMANDS_H

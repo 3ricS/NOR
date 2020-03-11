@@ -185,9 +185,9 @@ void NetworkGraphics::load(void)
     if (_componentList.count() != 0)
     {
         bool powerSupplyFound = false;
-        for(Component* component : _componentList)
+        for (Component* component : _componentList)
         {
-            if(component->getComponentType() == Component::PowerSupply)
+            if (component->getComponentType() == Component::PowerSupply)
             {
                 powerSupplyFound = true;
             }
@@ -270,7 +270,7 @@ Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
     }
     else if (Component::ComponentType::PowerSupply == componentType)
     {
-        createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical);
+        createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical, 100, 0);
 
 
         emit powerSupplyIsAllowed(false);
@@ -298,28 +298,32 @@ Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
  */
 Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition)
 {
-    CommandDuplicateComponent* duplicateComponent = new CommandDuplicateComponent(this, componentToDuplicate, xPosition, yPosition);
+    CommandDuplicateComponent* duplicateComponent = new CommandDuplicateComponent(this, componentToDuplicate, xPosition,
+                                                                                  yPosition);
     _undoStack->push(duplicateComponent);
     Component* createdComponent = duplicateComponent->getCreatedComponent();
 
     return createdComponent;
 }
 
-Component *NetworkGraphics::duplicateComponentWithoutUndo(Component *componentToDuplicate, int xPosition, int yPosition)
+Component* NetworkGraphics::duplicateComponentWithoutUndo(Component* componentToDuplicate, int xPosition, int yPosition)
 {
     Component* duplicatedComponent = nullptr;
 
     QString name = componentToDuplicate->getName();
-    int value = componentToDuplicate->getValue();
-    bool componentIsVertical = componentToDuplicate->isVertical();
 
-    if (Component::ComponentType::Resistor == componentToDuplicate->getComponentTypeInt())
+    Resistor* resistor = dynamic_cast<Resistor*>(componentToDuplicate);
+    bool isResistor = (nullptr != resistor);
+    bool componentIsVertical = componentToDuplicate->isVertical();
+    if (isResistor)
     {
-        duplicatedComponent = addResistor(name, value, xPosition, yPosition, componentIsVertical);
+        double resistance = resistor->getVoltage();
+        duplicatedComponent = addResistor(name, resistance, xPosition, yPosition, componentIsVertical);
     }
-    else if (Component::ComponentType::PowerSupply == componentToDuplicate->getComponentTypeInt())
+    else
     {
-        duplicatedComponent = addPowerSupply(name, xPosition, yPosition, componentIsVertical);
+        double voltage = componentToDuplicate->getVoltage();
+        duplicatedComponent = addPowerSupply(name, xPosition, yPosition, componentIsVertical, voltage, 0);
     }
 
     updateCalc();
@@ -356,7 +360,8 @@ NetworkGraphics::duplicateDescription(DescriptionField* descriptionToDuplicate, 
  * Es wird nach dem hinzufügen der Widerstandswert neu berechnet.
  */
 Component*
-NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, int yPosition, bool isVertical, int id)
+NetworkGraphics::addResistor(QString name, double valueResistance, int xPosition, int yPosition, bool isVertical,
+                             int id)
 {
     _resistorCount++;
     if ("" == name)
@@ -412,7 +417,7 @@ NetworkGraphics::addResistor(QString name, int valueResistance, int xPosition, i
  * Befindet sich im Netzwerk bereits eine Spannungsquelle, kann keine weitere erzeugt werden.
  * Anschließend wird eine neue Spannungsquelle erzeugt.
  */
-Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical, int id)
+Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id)
 {
     if ("" == name)
     {
@@ -423,7 +428,7 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
     {
         _powerSupplyCount++;
         Component* powerSupply = new PowerSupply(name, x, y,
-                                                 isVertical, id);
+                                                 isVertical, voltage, id);
         addObject(powerSupply);
         return powerSupply;
     }
@@ -696,12 +701,6 @@ void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Comp
     }
 }
 
-void NetworkGraphics::valueToVoltage(Component *component)
-{
-    component->setVoltage(component->getValue());
-    updateCalc();
-}
-
 /*!
  * \brief Aktualisiert den Widerstandswert.
  *
@@ -710,13 +709,13 @@ void NetworkGraphics::valueToVoltage(Component *component)
  */
 void NetworkGraphics::updateCalc(void)
 {
-    if(!_isLoading)
+    if (!_isLoading)
     {
         _resistanceValue = _puzzleCalculator.calculate(_connectionList, _componentList);
 
         update();
         emit resistanceValueChanged();
-        if(_resistanceValue != 0)
+        if (_resistanceValue != 0)
         {
             emit currentAndVoltageIsValid(true);
         }
@@ -760,7 +759,7 @@ NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* des
                                                                               gridPosition);
         _undoStack->push(commandMoveComponent);
     }
-    else if(descriptionToMove != nullptr)
+    else if (descriptionToMove != nullptr)
     {
         CommandMoveComponent* commandMoveComponent = new CommandMoveComponent(this, componentToMove, descriptionToMove,
                                                                               gridPosition);
@@ -771,12 +770,21 @@ NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* des
 void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QString newName, double newValue)
 {
     componentToEdit->setName(newName);
-    componentToEdit->setValue(newValue);
+    Resistor* resistor = dynamic_cast<Resistor*>(componentToEdit);
+    bool isResistor = (nullptr != resistor);
+    if (isResistor)
+    {
+        resistor->setResistanceValue(newValue);
+    }
+    else
+    {
+        componentToEdit->setVoltage(newValue);
+    }
 
     updateCalc();
 }
 
-void NetworkGraphics::turnComponentRightWithoutUndo(Component *componentToTurn)
+void NetworkGraphics::turnComponentRightWithoutUndo(Component* componentToTurn)
 {
     switch (componentToTurn->getOrientation())
     {
@@ -928,7 +936,7 @@ void NetworkGraphics::deleteDescription(DescriptionField* descriptionFieldToDele
     _undoStack->push(commandDeleteDescription);
 }
 
-void NetworkGraphics::editDescription(DescriptionField *descriptionToEdit, QString newText)
+void NetworkGraphics::editDescription(DescriptionField* descriptionToEdit, QString newText)
 {
     CommandEditDescription* commandEditDescription = new CommandEditDescription(this, descriptionToEdit, newText);
     _undoStack->push(commandEditDescription);
@@ -963,4 +971,50 @@ DescriptionField* NetworkGraphics::addDescriptionField(QPointF gridPosition, boo
     _undoStack->push(commandAddDescriptionField);
 
     return description;
+}
+
+QString NetworkGraphics::getVoltageAndCurrentInformation(void)
+{
+    QString information;
+    if (!getPuzzleCalculator().getUsedStarCalculation())
+    {
+        for (Component* c : getComponents())
+        {
+            if (c->getComponentType() == Component::PowerSupply)
+            {
+                information +=
+                        "Gesamtspannung: " + QString::number(c->getVoltage(), 'f', 2) + "V" + "<br>" + "Gesamtstrom: " +
+                        QString::number(c->getAmp(), 'f', 2)
+                        + "A" + "<br> <br>";
+            }
+        }
+        for (Component* c : getComponents())
+        {
+            if (c->getComponentType() == Component::Resistor)
+            {
+                Resistor* resistor = dynamic_cast<Resistor*>(c);
+                bool isResistor = (nullptr != resistor);
+                if (isResistor)
+                {
+                    information += c->getName() + ": <br>";
+                    information += "Widerstand: ";
+                    information += QString::number(resistor->getResistanceValue(), 'f', 2) + "Ω" + "<br>";
+                    information += "Strom: ";
+                    information += QString::number(c->getAmp(), 'f', 2) + "A" + "<br>";
+                    information += "Spannung: ";
+                    information += QString::number(c->getVoltage(), 'f', 2) + "V";
+                    information += " <br> <br>";
+                }
+            }
+        }
+        information += "Gesamtwiderstand: " + QString::number(getResistanceValue(), 'f', 2) + "Ω";
+    }
+    else
+    {
+        information += "Warnung: <br><br>";
+        information += "In Ihrem Netzwerk wurde eine Stern-Dreiecks-Umformung durchgeführt."
+                       "<br>Da sich die Funktion der Wertetabelle noch in der Beta befindet, können wir Ihnen keine richtigen Spannungen und Ströme ausgeben."
+                       "<br><br> Vielen Dank für Ihr Vertändnis!";
+    }
+    return information;
 }

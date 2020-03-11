@@ -276,7 +276,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
         if(!_model->isThereAComponentOrADescription(gridPosition))
         {
             Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                        gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+                                                        gridPosition.toPoint().y(), _isVerticalComponentDefault, 0, 0);
             _sampleComponentOnMoveEvent = sampleResistor;
             _model->addItem(_sampleComponentOnMoveEvent);
             highlightRect(scenePosition, _highlightColor);
@@ -518,7 +518,7 @@ void NetworkView::rotateComponent(QPointF gridPosition, QPointF scenePosition)
             if (MouseMode::PowerSupplyMode == _mouseMode)
             {
                 Component* sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                                            gridPosition.toPoint().y(), _isVerticalComponentDefault,
+                                                            gridPosition.toPoint().y(), _isVerticalComponentDefault, 0,
                                                             0);
                 _sampleComponentOnMoveEvent = sampleResistor;
             }

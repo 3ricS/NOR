@@ -13,8 +13,9 @@
  * \param   id              ist die intern zugewiesene Id
  *
  */
-Resistor::Resistor(QString name, int valueResistance, int x, int y, bool isVertical, int id)
-        : Component(x, y, isVertical, name, valueResistance, Component::ComponentType::Resistor, id)
+Resistor::Resistor(QString name, double valueResistance, int x, int y, bool isVertical, int id)
+        : Component(x, y, isVertical, name, 0.0, Component::ComponentType::Resistor, id),
+        _resistanceValue(valueResistance)
 {
 }
 
@@ -74,12 +75,17 @@ void Resistor::paintOrientationSensitiv(QPainter* painter, int xPosText, int yPo
     painter->drawText(xPosText, yPosText, _name);
 
     // Darstellung des Widerstandwertes
-    if(_value < 1000)
+    if(_resistanceValue < 1000)
     {
-        painter->drawText(xPosValue, yPosValue, QString::number(_value) + "Ω");
+        painter->drawText(xPosValue, yPosValue, QString::number(_resistanceValue) + "Ω");
+    }
+    else if(_resistanceValue < 1000000)
+    {
+        painter->drawText(xPosValue, yPosValue, QString::number((double)_resistanceValue / 1000) + "kΩ");
     }
     else
     {
-        painter->drawText(xPosValue, yPosValue, QString::number((double)_value / 1000) + "kΩ");
+        painter->drawText(xPosValue, yPosValue, QString::number((double)_resistanceValue / 1000000) + "MΩ");
     }
+
 }

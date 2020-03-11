@@ -40,7 +40,7 @@ void CommandAddComponent::redo(void)
 
 CommandAddComponent::~CommandAddComponent(void)
 {
-    if(_hasDoneUndo)
+    if (_hasDoneUndo)
     {
         delete _createdComponent;
     }
@@ -84,7 +84,7 @@ void CommandAddConnection::redo(void)
 
 CommandAddConnection::~CommandAddConnection(void)
 {
-    if(_hasDoneUndo)
+    if (_hasDoneUndo)
     {
         delete _createdConnection;
     }
@@ -120,7 +120,7 @@ void CommandAddDescriptionField::redo(void)
 
 CommandAddDescriptionField::~CommandAddDescriptionField(void)
 {
-    if(_hasDoneUndo)
+    if (_hasDoneUndo)
     {
         delete _createdDescriptionField;
     }
@@ -136,11 +136,11 @@ CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* co
         _model(model), _componentToMove(componentToMove), _descriptionToMove(descriptionToMove),
         _gridEndPosition(gridPosition)
 {
-    if(componentToMove != nullptr)
+    if (componentToMove != nullptr)
     {
         _gridComponentStartPosition = _componentToMove->getPosition();
     }
-    else if(descriptionToMove != nullptr)
+    else if (descriptionToMove != nullptr)
     {
         _gridDescriptionStartPosition = QPointF(descriptionToMove->getXPos(), descriptionToMove->getYPos());
     }
@@ -151,12 +151,12 @@ CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* co
  */
 void CommandMoveComponent::undo(void)
 {
-    if(_componentToMove != nullptr)
+    if (_componentToMove != nullptr)
     {
         _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridComponentStartPosition);
     }
 
-    if(_descriptionToMove != nullptr)
+    if (_descriptionToMove != nullptr)
     {
         _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridDescriptionStartPosition);
     }
@@ -182,7 +182,16 @@ CommandEditComponent::CommandEditComponent(NetworkGraphics* model, Component* ed
         _newName(newName), _newValue(newValue), _oldOrientation(originalOrientation)
 {
     _oldName = editedComponent->getName();
-    _oldValue = editedComponent->getValue();
+    Resistor* resistor = dynamic_cast<Resistor*>(editedComponent);
+    bool isResistor = (nullptr != resistor);
+    if (isResistor)
+    {
+        _oldValue = resistor->getResistanceValue();
+    }
+    else
+    {
+        _oldValue = editedComponent->getVoltage();
+    }
     _newOrientation = editedComponent->getOrientation();
 }
 
@@ -194,8 +203,18 @@ void CommandEditComponent::undo(void)
     if (_editedComponent != nullptr)
     {
         _editedComponent->setName(_oldName);
-        _editedComponent->setValue(_oldValue);
         _editedComponent->setOrientation(_oldOrientation);
+
+        Resistor* resistor = dynamic_cast<Resistor*>(_editedComponent);
+        bool isAResistor = (nullptr != resistor);
+        if (isAResistor)
+        {
+            resistor->setResistanceValue(_oldValue);
+        }
+        else
+        {
+            _editedComponent->setVoltage(_oldValue);
+        }
         _model->updateCalc();
     }
 }
@@ -208,8 +227,18 @@ void CommandEditComponent::redo(void)
     if (nullptr != _editedComponent)
     {
         _editedComponent->setName(_newName);
-        _editedComponent->setValue(_newValue);
         _editedComponent->setOrientation(_newOrientation);
+
+        Resistor* resistor = dynamic_cast<Resistor*>(_editedComponent);
+        bool isAResistor = (nullptr != resistor);
+        if (isAResistor)
+        {
+            resistor->setResistanceValue(_newValue);
+        }
+        else
+        {
+            _editedComponent->setVoltage(_newValue);
+        }
         _model->updateCalc();
     }
 }
@@ -248,7 +277,7 @@ void CommandDeleteComponent::redo(void)
 
 CommandDeleteComponent::~CommandDeleteComponent(void)
 {
-    if(!_hasDoneUndo)
+    if (!_hasDoneUndo)
     {
         for (Connection* connection : _deletedConnections)
         {
@@ -264,7 +293,7 @@ CommandDeleteComponent::~CommandDeleteComponent(void)
  */
 
 CommandDeleteConnection::CommandDeleteConnection(NetworkGraphics* model, Connection* connectionToDelete) :
-    _model(model), _deletedConnection(connectionToDelete)
+        _model(model), _deletedConnection(connectionToDelete)
 {
 }
 
@@ -288,7 +317,7 @@ void CommandDeleteConnection::redo(void)
 
 CommandDeleteConnection::~CommandDeleteConnection(void)
 {
-    if(!_hasDoneUndo)
+    if (!_hasDoneUndo)
     {
         delete _deletedConnection;
     }
@@ -300,13 +329,13 @@ CommandDeleteConnection::~CommandDeleteConnection(void)
  */
 
 CommandDeleteDescription::CommandDeleteDescription(NetworkGraphics* model, DescriptionField* descriptionField) :
-    _model(model), _deletedDescription(descriptionField)
+        _model(model), _deletedDescription(descriptionField)
 {
 }
 
 CommandDeleteDescription::~CommandDeleteDescription(void)
 {
-    if(!_hasDoneUndo)
+    if (!_hasDoneUndo)
     {
         delete _deletedDescription;
     }
@@ -335,8 +364,9 @@ void CommandDeleteDescription::redo(void)
  * CommandDeleteDescription
  */
 
-CommandDuplicateComponent::CommandDuplicateComponent(NetworkGraphics *model, Component *componentToDuplicate, int xPosition, int yPosition) :
-    _model(model), _componentToDuplicate(componentToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
+CommandDuplicateComponent::CommandDuplicateComponent(NetworkGraphics* model, Component* componentToDuplicate,
+                                                     int xPosition, int yPosition) :
+        _model(model), _componentToDuplicate(componentToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
 {
 }
 
@@ -345,7 +375,7 @@ CommandDuplicateComponent::CommandDuplicateComponent(NetworkGraphics *model, Com
  */
 void CommandDuplicateComponent::undo(void)
 {
-    if(_createdComponent != nullptr)
+    if (_createdComponent != nullptr)
     {
         _model->deleteComponentWithoutUndoAndGetDeletedConnections(_createdComponent);
     }
@@ -356,7 +386,7 @@ void CommandDuplicateComponent::undo(void)
  */
 void CommandDuplicateComponent::redo(void)
 {
-    if(_componentToDuplicate != nullptr)
+    if (_componentToDuplicate != nullptr)
     {
         _createdComponent = _model->duplicateComponentWithoutUndo(_componentToDuplicate, _xPosition, _yPosition);
     }
@@ -367,8 +397,10 @@ void CommandDuplicateComponent::redo(void)
  * CommandEditDescription
  */
 
-CommandEditDescription::CommandEditDescription(NetworkGraphics *model, DescriptionField *descriptionFieldToEdit, QString newText) :
-    _editDescription(descriptionFieldToEdit), _model(model), _newText(newText) , _oldText(descriptionFieldToEdit->getText())
+CommandEditDescription::CommandEditDescription(NetworkGraphics* model, DescriptionField* descriptionFieldToEdit,
+                                               QString newText) :
+        _editDescription(descriptionFieldToEdit), _model(model), _newText(newText),
+        _oldText(descriptionFieldToEdit->getText())
 {
 }
 
@@ -396,7 +428,7 @@ void CommandEditDescription::redo(void)
  */
 
 CommandRotateComponent::CommandRotateComponent(Component* componentToTurn, NetworkGraphics* model) :
-    _componentToTurn(componentToTurn), _model(model), _oldOrientation(componentToTurn->getOrientation())
+        _componentToTurn(componentToTurn), _model(model), _oldOrientation(componentToTurn->getOrientation())
 {
 }
 
@@ -406,7 +438,7 @@ CommandRotateComponent::CommandRotateComponent(Component* componentToTurn, Netwo
 void CommandRotateComponent::undo(void)
 {
     //Dreimal rechts = einmal links
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         _model->turnComponentRightWithoutUndo(_componentToTurn);
     }

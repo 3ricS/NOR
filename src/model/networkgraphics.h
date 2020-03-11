@@ -41,7 +41,6 @@ public:
     void mirrorComponent(Component* component);
     void turnComponentLeft(Component* componentToTurn);
     void setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation);
-    void valueToVoltage(Component* component);
 
     //with Undo
     void turnComponentRight(Component* componentToTurn);
@@ -60,8 +59,8 @@ public:
     DescriptionField* duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
 
 
-    Component* addResistor(QString name, int valueResistance, int _xPosition, int _yPosition, bool isVertical, int id = 0);
-    Component* addPowerSupply(QString name, int x, int y, bool isVertical, int id = 0);
+    Component* addResistor(QString name, double valueResistance, int xPosition, int yPosition, bool isVertical, int id = 0);
+    Component* addPowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id = 0);
 
 
     //only for QUndoCommands
@@ -94,6 +93,7 @@ public:
     bool isLoading(void) {return _isLoading;}
     QUndoStack* getUndoStack(void) {return _undoStack;}
     PuzzleCalculator getPuzzleCalculator(void) {return _puzzleCalculator;}
+    QString getVoltageAndCurrentInformation(void);
 
 signals:
     void resistanceValueChanged(void);

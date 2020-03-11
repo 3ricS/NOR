@@ -98,7 +98,18 @@ QJsonObject FileManager::saveComponent(Component* component)
     r.insert("xPos", component->getXPosition());
     r.insert("yPos", component->getYPosition());
     r.insert("isVertical", component->isVertical());
-    r.insert("resistance", component->getValue());
+    Resistor* resistor = dynamic_cast<Resistor*>(component);
+    bool isResistor = (nullptr != resistor);
+    if (isResistor)
+    {
+        r.insert("value", resistor->getResistanceValue());
+        qDebug() << "value speichern" << resistor->getResistanceValue();
+    }
+    else
+    {
+        r.insert("value", component->getVoltage());
+    }
+
     return r;
 }
 
@@ -207,15 +218,16 @@ void FileManager::loadComponent(QJsonArray array)
                 int xPos = obj.value("xPos").toInt();
                 int yPos = obj.value("yPos").toInt();
                 bool isVertical = obj.value("isVertical").toBool();
-                int resistance = obj.value("resistance").toInt();
+                double value = obj.value("value").toDouble();
+                qDebug() << "value laden" << value;
                 Component::ComponentType componentType = Component::integerToComponentType(obj.value("type").toInt());
                 if(Component::ComponentType::Resistor == componentType)
                 {
-                    _model->addResistor(name, resistance, xPos, yPos, isVertical, id);
+                    _model->addResistor(name, value, xPos, yPos, isVertical, id);
                 }
                 else if(Component::ComponentType::PowerSupply == componentType)
                 {
-                    _model->addPowerSupply(name, xPos, yPos, isVertical, id);
+                    _model->addPowerSupply(name, xPos, yPos, isVertical, value, id);
                 }
             }
         }

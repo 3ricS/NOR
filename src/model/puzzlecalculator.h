@@ -48,7 +48,7 @@ private:
     int countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
     QList<RowPiece> calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node *newNode);
 
-    void calculateVoltageAndAmp();
+    void calculateVoltageAndAmp(QList<RowPiece> rowpieces);
     void calculateVoltageAndAmpInResistor(RowPiece* rowpiece);
 
     QList<RowPiece> _mergeList;

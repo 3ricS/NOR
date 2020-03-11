@@ -29,7 +29,7 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
     {
         _resistanceValue = calculateResistanceValueFromRowPieces(rowPieces, nodes);
         qDebug() << "Widerstandswert Calculate" << _resistanceValue;
-        calculateVoltageAndAmp();
+        calculateVoltageAndAmp(rowPieces);
             for(Component* component : _components)
             {
                 qDebug() <<"moin" << component->getName() << component->getAmp() << "Ampere" << component->getVoltage() <<"Volt";
@@ -385,7 +385,7 @@ QList<RowPiece> PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece row
     return listOfNewRowPieces;
 }
 
-void PuzzleCalculator::calculateVoltageAndAmp()
+void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
 {
     int ListSize = _mergeList.count() - 1;
     double totalCurrent = 0.0;
@@ -399,13 +399,16 @@ void PuzzleCalculator::calculateVoltageAndAmp()
                 totalCurrent = component->getAmp();
             }
         }
-        for(Component* component : _components)
+        for(RowPiece rowpiece : rowpieces)
+        {
+        for(Component* component : rowpiece.getComponents())
         {
             if(0 == component->getComponentTypeInt())
             {
                 component->setAmp(totalCurrent);
                 component->setVoltage(totalCurrent * component->getValue());
             }
+        }
         }
     }
     else

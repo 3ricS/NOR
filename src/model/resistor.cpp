@@ -50,7 +50,7 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
     }
 
     //Zeichnen der Informationen (Name und Wert) in Abhängigkeit ob vertikal oder horizontal
-    paintInformations(painter);
+    paintInformation(painter);
 }
 
 void Resistor::paintInformation(QPainter* painter)

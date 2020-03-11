@@ -25,6 +25,9 @@ public:
     //setter
     void setLists(QList<Connection*> connections, QList<Component*> components);
 
+    //getter
+    bool getUsedStarCalculation(void) {return _usedStarCalcutlation;}
+
 private:
     QList<RowPiece> findRowPieces(QList<Node *> &nodes);
     void findSameRowPieces(RowPiece rowpiece);
@@ -55,6 +58,7 @@ private:
     double _resistanceValue = 0;
     QList<Component*> _components;
     QList<Connection*> _connections;
+    bool _usedStarCalcutlation = false;
 };
 
 

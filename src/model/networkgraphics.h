@@ -93,6 +93,7 @@ public:
     double getResistanceValue(void) {return _resistanceValue;}
     bool isLoading(void) {return _isLoading;}
     QUndoStack* getUndoStack(void) {return _undoStack;}
+    PuzzleCalculator getPuzzleCalculator(void) {return _puzzleCalculator;}
 
 signals:
     void resistanceValueChanged(void);

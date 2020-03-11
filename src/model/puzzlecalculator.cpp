@@ -18,6 +18,7 @@ PuzzleCalculator::PuzzleCalculator()
  */
 double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Component*> components)
 {
+    _usedStarCalcutlation = false;
     _connections = connections;
     _components = components;
     _mergeList.clear();
@@ -619,6 +620,7 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
 
                                 if(oppositeNode != nullptr && searchedRowPieces != nullptr && *searchedRowPieces != rowPieceA && *searchedRowPieces != rowPieceB)
                                 {
+                                    _usedStarCalcutlation = true;
                                     //rp ist rowPieceC
                                     //Dreieck zu Stern
                                     QList<ComponentPort> componentPorts;

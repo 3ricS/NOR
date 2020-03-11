@@ -44,7 +44,7 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
         paintHighlightRect(painter);
     }
 
-    paintInformations(painter);
+    paintInformation(painter);
 }
 
 void PowerSupply::paintInformation(QPainter* painter)

@@ -512,6 +512,8 @@ void MainWindow::print(void)
 void MainWindow::openCurrentVoltageWindow()
 {
     QString text = "";
+    if(!_model->getPuzzleCalculator().getUsedStarCalculation())
+    {
     for(Component* c : _model->getComponents())
     {
         if(c->getComponentType() == Component::PowerSupply)
@@ -535,9 +537,17 @@ void MainWindow::openCurrentVoltageWindow()
         }
     }
     text += "Gesamtwiderstand: " + QString::number(_model->getResistanceValue(), 'f', 2) + "Ω";
-
+    }
+    else
+    {
+       text +="Warnung: <br><br>";
+       text += "In Ihrem Netzwerk wurde eine Stern-Dreiecks-Umformung durchgeführt."
+               "<br>Da sich die Funktion der Wertetabelle noch in der Beta befindet, können wir Ihnen keine richtigen Spannungen und Ströme ausgeben."
+               "<br><br> Vielen Dank für Ihr Vertändnis!";
+    }
     QMessageBox* m = new QMessageBox("Strom und Spannung", text, QMessageBox::NoIcon, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, this);
     m->resize(700, 500);
     m->show();
+
 }
 

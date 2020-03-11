@@ -114,7 +114,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             }
             for (Component* component : _model->getComponents())
             {
-                component->set_isSelected(false);
+                component->setIsSelected(false);
             }
             _lastPositionMultiselect = scenePosition;
             multiselecting();
@@ -137,7 +137,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
         if (hasFoundComponent)
         {
-            foundComponent->set_isSelected(true);
+            foundComponent->setIsSelected(true);
         }
         else if(hasFoundDescription)
         {
@@ -206,7 +206,7 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
         }
         for (Component* component : _model->getComponents())
         {
-            component->set_isSelected(false);
+            component->setIsSelected(false);
         }
         bool isComponentAtPosition = _model->isThereAComponentOrADescription(gridPosition);
         if (isComponentAtPosition)
@@ -491,7 +491,7 @@ void NetworkView::removeHighlightSelectedRect(void)
 {
     for(Component* component : _model->getComponents())
     {
-        component->set_isSelected(false);
+        component->setIsSelected(false);
     }
 
     for(DescriptionField* descriptionfield : _model->getDescriptions())
@@ -801,7 +801,7 @@ void NetworkView::keyPressEvent(QKeyEvent* event)
         {
             if(component->isSelected())
             {
-                component->set_isSelected(false);
+                component->setIsSelected(false);
             }
         }
 
@@ -861,30 +861,30 @@ void NetworkView::multiselecting(void)
         if ((component->getXPosition() >= firstClickedXPosition) && (component->getXPosition() <= lastClickedXPosition)
                 && (component->getYPosition() >= firstClickedYPosition) && (component->getYPosition() <= lastClickedYPosition))
         {
-            component->set_isSelected(true);
+            component->setIsSelected(true);
             highlightRect(component->getPosition(), _highlightColor);
         }
         else if ((component->getXPosition() <= firstClickedXPosition) && (component->getXPosition() >= lastClickedXPosition)
                  && (component->getYPosition() <= firstClickedYPosition) && (component->getYPosition() >= lastClickedYPosition))
         {
-            component->set_isSelected(true);
+            component->setIsSelected(true);
             highlightRect(component->getPosition(), _highlightColor);
         }
         else if ((component->getXPosition() >= firstClickedXPosition) && (component->getXPosition() <= lastClickedXPosition)
                  && (component->getYPosition() <= firstClickedYPosition) && (component->getYPosition() >= lastClickedYPosition))
         {
-            component->set_isSelected(true);
+            component->setIsSelected(true);
             highlightRect(component->getPosition(), _highlightColor);
         }
         else if ((component->getXPosition() <= firstClickedXPosition) && (component->getXPosition() >= lastClickedXPosition)
                  && (component->getYPosition() >= firstClickedYPosition) && (component->getYPosition() <= lastClickedYPosition))
         {
-            component->set_isSelected(true);
+            component->setIsSelected(true);
             highlightRect(component->getPosition(), _highlightColor);
         }
         else
         {
-            component->set_isSelected(false);
+            component->setIsSelected(false);
         }
         _model->update();
     }

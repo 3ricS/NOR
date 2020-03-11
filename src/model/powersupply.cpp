@@ -47,7 +47,7 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
     paintInformations(painter);
 }
 
-void PowerSupply::paintInformations(QPainter* painter)
+void PowerSupply::paintInformation(QPainter* painter)
 {
     QFont q;
     q.setPixelSize(13);

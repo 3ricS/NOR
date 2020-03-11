@@ -53,7 +53,7 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
     paintInformations(painter);
 }
 
-void Resistor::paintInformations(QPainter* painter)
+void Resistor::paintInformation(QPainter* painter)
 {
     if(_isVertical)
     {

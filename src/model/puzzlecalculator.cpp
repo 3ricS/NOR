@@ -168,13 +168,13 @@ QList<ComponentPort> PuzzleCalculator::findFirstComponentPort(void)
     for (Connection* connection : _connections)
     {
         if (Component::ComponentType::PowerSupply ==
-                connection->getComponentPortOne().getComponent()->getComponentTypeInt())
+                connection->getComponentPortOne().getComponent()->getComponentType())
         {
             startOfSearch = connection->getComponentPortOne();
             break;
         }
         else if (Component::ComponentType::PowerSupply ==
-                 connection->getComponentPortTwo().getComponent()->getComponentTypeInt())
+                 connection->getComponentPortTwo().getComponent()->getComponentType())
         {
             startOfSearch = connection->getComponentPortTwo();
             break;
@@ -300,7 +300,7 @@ Node* PuzzleCalculator::getOrCreateNode(ComponentPort componentPortForNewNode,
     bool isConnectedToPowerSupply = false;
     for(ComponentPort cp : connectedComponentPorts)
     {
-        if(Component::ComponentType::PowerSupply == cp.getComponent()->getComponentTypeInt())
+        if(Component::ComponentType::PowerSupply == cp.getComponent()->getComponentType())
         {
             isConnectedToPowerSupply = true;
             break;
@@ -322,7 +322,7 @@ bool PuzzleCalculator::isPowerSupplyinComponentPortList(const QList<ComponentPor
 {
     for (ComponentPort componentPort : list)
     {
-        if (Component::ComponentType::PowerSupply == componentPort.getComponent()->getComponentTypeInt())
+        if (Component::ComponentType::PowerSupply == componentPort.getComponent()->getComponentType())
         {
             return true;
         }
@@ -393,7 +393,7 @@ void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
     {
         for(Component* component : _components)
         {
-            if(1 == component->getComponentTypeInt())
+            if(Component::PowerSupply == component->getComponentType())
             {
                 component->setAmp(component->getVoltage() / _resistanceValue);
                 totalCurrent = component->getAmp();
@@ -403,7 +403,7 @@ void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
         {
         for(Component* component : rowpiece.getComponents())
         {
-            if(0 == component->getComponentTypeInt())
+            if(Component::Resistor == component->getComponentType())
             {
                 component->setAmp(totalCurrent);
                 component->setVoltage(totalCurrent * component->getValue());
@@ -415,7 +415,7 @@ void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
         {
         for(Component* component : _components)
         {
-            if(1 == component->getComponentTypeInt())
+            if(Component::PowerSupply == component->getComponentType())
             {
                 component->setAmp(component->getVoltage() / _resistanceValue);
                 _mergeList[ListSize].setAmp(component->getAmp());
@@ -425,7 +425,6 @@ void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
         {
         if(_mergeList[ListSize - 3*i].getIsMergedParallel())
         {
-            qDebug() << "yooo";
             RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
             RowPiece* rowpiece = &_mergeList[ListSize - 3*i - 1];
             RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i -2];
@@ -439,7 +438,6 @@ void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
         }
         else
         {
-            qDebug() << "rumpel";
             RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
             RowPiece* rowpiece = &_mergeList[ListSize - 3*i - 1];
             RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i - 2];
@@ -466,7 +464,7 @@ void PuzzleCalculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
 {
     for(Component* component : rowpiece->getComponents())
     {
-        if(0 == component->getComponentTypeInt())
+        if(Component::Resistor == component->getComponentType())
         {
             component->setAmp(rowpiece->getAmp());
             component->setVoltage(component->getAmp() * component->getValue());
@@ -582,8 +580,8 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                             RowPiece* searchedRowPieces = nullptr;
                             bool found = false;
 
-                            /*Zuerst wird geschaut, ob auch am Opposite Node mindestens 3 RowPieces angeschlossen sind
-             * Durchgehen aller ComponentPorts des gegenüberliegenden Nodes, schauen, wo der Component teil
+           /*Zuerst wird geschaut, ob auch am Opposite Node mindestens 3 RowPieces angeschlossen sind
+            * Durchgehen aller ComponentPorts des gegenüberliegenden Nodes, schauen, wo der Component teil
             * eines RowPieces ist, wenn eine angrenzendes RowPieces gefunden wurde, schauen, ob der gegenüberliegende Node gleich
             * dem anfangs gefundenen EqualNode ist, wenn ja rausspringen
             */

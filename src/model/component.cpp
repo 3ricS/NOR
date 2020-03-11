@@ -151,7 +151,7 @@ void Component::setPosition(QPointF gridPosition)
     _yPosition = gridPosition.toPoint().y();
 }
 
-void Component::set_isSelected(bool isSelected)
+void Component::setIsSelected(bool isSelected)
 {
     _isSelected = isSelected;
 

@@ -58,7 +58,7 @@ public:
     void setName(QString name) {_name = name;}
     void setValue(double newValue) { _value = newValue;}
     void setPosition(QPointF gridPosition);
-    void set_isSelected(bool isSelected);
+    void setIsSelected(bool isSelected);
     void setVoltage(double voltage) {_voltage = voltage;}
     void setAmp(double amp) {_amp = amp;}
 
@@ -79,7 +79,7 @@ protected:
     double _amp = 0.0;
 
     //virtuelle Methoden
-    virtual void paintInformations(QPainter* painter) = 0;
+    virtual void paintInformation(QPainter* painter) = 0;
 
 private:
     int getPortPositionXOrY(int positionValue, Port port, bool isX) const;

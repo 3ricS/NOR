@@ -30,7 +30,7 @@ public:
 
 private:
     QList<RowPiece> findRowPieces(QList<Node *> &nodes);
-    void findSameRowPieces(RowPiece rowpiece);
+    void findSameRowPieces(RowPiece rowpiece1);
     double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes);
     void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful,
                       QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);

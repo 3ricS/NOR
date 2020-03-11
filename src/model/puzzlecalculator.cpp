@@ -95,14 +95,14 @@ QList<RowPiece> PuzzleCalculator::findRowPieces(QList<Node*>& nodes)
     return rowPieces;
 }
 
-void PuzzleCalculator::findSameRowPieces(RowPiece rowpiece)
+void PuzzleCalculator::findSameRowPieces(RowPiece rowpiece1)
 {
     for(RowPiece& rowpiece2 : _mergeList)
     {
-        if(rowpiece.getComponents() == rowpiece2.getComponents())
+        if(rowpiece1.getComponents() == rowpiece2.getComponents())
         {
-            qDebug() << "gefunden" << rowpiece2.getAmp() << rowpiece.getAmp();
-            rowpiece2.setAmp(rowpiece.getAmp());
+            qDebug() << "gefunden" << rowpiece2.getAmp() << rowpiece1.getAmp();
+            rowpiece2.setAmp(rowpiece1.getAmp());
         }
     }
 }
@@ -427,25 +427,25 @@ void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
         if(_mergeList[ListSize - 3*i].getIsMergedParallel())
         {
             RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
-            RowPiece* rowpiece = &_mergeList[ListSize - 3*i - 1];
+            RowPiece* rowpiece1 = &_mergeList[ListSize - 3*i - 1];
             RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i -2];
 
-            rowpiece->setAmp(mergedRowpieces->getAmp() * (rowpiece2->getResistanceValue() / (rowpiece->getResistanceValue() + rowpiece2->getResistanceValue())));
-            findSameRowPieces(*rowpiece);
-            calculateVoltageAndAmpInResistor(rowpiece);
-            rowpiece2->setAmp(mergedRowpieces->getAmp() * (rowpiece->getResistanceValue() / (rowpiece->getResistanceValue() + rowpiece2->getResistanceValue())));
+            rowpiece1->setAmp(mergedRowpieces->getAmp() * (rowpiece2->getResistanceValue() / (rowpiece1->getResistanceValue() + rowpiece2->getResistanceValue())));
+            findSameRowPieces(*rowpiece1);
+            calculateVoltageAndAmpInResistor(rowpiece1);
+            rowpiece2->setAmp(mergedRowpieces->getAmp() * (rowpiece1->getResistanceValue() / (rowpiece1->getResistanceValue() + rowpiece2->getResistanceValue())));
             findSameRowPieces(*rowpiece2);
             calculateVoltageAndAmpInResistor(rowpiece2);
         }
         else
         {
             RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
-            RowPiece* rowpiece = &_mergeList[ListSize - 3*i - 1];
+            RowPiece* rowpiece1 = &_mergeList[ListSize - 3*i - 1];
             RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i - 2];
 
-            rowpiece->setAmp(mergedRowpieces->getAmp());
-            findSameRowPieces(*rowpiece);
-            calculateVoltageAndAmpInResistor(rowpiece);
+            rowpiece1->setAmp(mergedRowpieces->getAmp());
+            findSameRowPieces(*rowpiece1);
+            calculateVoltageAndAmpInResistor(rowpiece1);
 
             rowpiece2->setAmp(mergedRowpieces->getAmp());
             findSameRowPieces(*rowpiece2);

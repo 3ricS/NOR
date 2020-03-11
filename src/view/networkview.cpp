@@ -837,19 +837,19 @@ void NetworkView::multiselecting(void)
         _multiselectRect = nullptr;
         _multiselectRect = _model->addRect(firstClickedXPosition, firstClickedYPosition, lastClickedXPosition - firstClickedXPosition, lastClickedYPosition - firstClickedYPosition);
     }
-    if (firstClickedXPosition > lastClickedXPosition && lastClickedYPosition > firstClickedYPosition)
+    else if (firstClickedXPosition > lastClickedXPosition && lastClickedYPosition > firstClickedYPosition)
     {
         delete _multiselectRect;
         _multiselectRect = nullptr;
         _multiselectRect = _model->addRect(lastClickedXPosition, firstClickedYPosition, firstClickedXPosition - lastClickedXPosition, lastClickedYPosition - firstClickedYPosition);
     }
-    if (lastClickedXPosition > firstClickedXPosition && firstClickedYPosition > lastClickedYPosition)
+    else if (lastClickedXPosition > firstClickedXPosition && firstClickedYPosition > lastClickedYPosition)
     {
         delete _multiselectRect;
         _multiselectRect = nullptr;
         _multiselectRect = _model->addRect(firstClickedXPosition, lastClickedYPosition, lastClickedXPosition - firstClickedXPosition, firstClickedYPosition - lastClickedYPosition);
     }
-    if (firstClickedXPosition > lastClickedXPosition && firstClickedYPosition > lastClickedYPosition)
+    else if (firstClickedXPosition > lastClickedXPosition && firstClickedYPosition > lastClickedYPosition)
     {
         delete _multiselectRect;
         _multiselectRect = nullptr;

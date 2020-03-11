@@ -22,9 +22,6 @@ public:
 
     double calculate(QList<Connection*> connections, QList<Component*> components);
 
-    //setter
-    void setLists(QList<Connection*> connections, QList<Component*> components);
-
     //getter
     bool getUsedStarCalculation(void) {return _usedStarCalcutlation;}
 
@@ -44,7 +41,7 @@ private:
 
     QList<ComponentPort> findFirstComponentPort(void);
     Node* getOrCreateNode(ComponentPort componentPortForNewNode, QList<ComponentPort> connectedComponentPorts,
-                         bool& nodeIsKnown, QList<Node*>* knownNodes);
+                          QList<Node*>* knownNodes);
     bool isPowerSupplyinComponentPortList(QList<ComponentPort> list);
     bool isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces);
 

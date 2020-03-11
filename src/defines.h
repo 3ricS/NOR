@@ -14,7 +14,6 @@
 class Defines
 {
 public:
-    static constexpr int halfGridLength = 50;
-    static constexpr int gridLength     = 100;
+    static constexpr int gridLength = 120;
 };
 

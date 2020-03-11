@@ -12,7 +12,6 @@
 
 #include <QGraphicsItem>
 #include <QPainter>
-#include <QDebug>
 
 class DescriptionField : public QGraphicsItem
 {
@@ -32,7 +31,7 @@ public:
     //Setter
     void setText(const QString text) {_text = text;}
     void setPosition(QPointF gridPosition);
-    void set_isSelected(bool isSelected);
+    void setSelected(bool isSelected);
 
 private:
 

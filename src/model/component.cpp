@@ -24,8 +24,7 @@ Component::Component(int x, int y, bool isVertical, QString name, double voltage
  */
 QRectF Component::boundingRect(void) const
 {
-    //TODO: Zoomfaktor hier einfügen
-    return QRectF(_xPosition - Defines::gridLength, _yPosition - Defines::halfGridLength, 150, Defines::gridLength);
+    return QRectF(_xPosition - Defines::gridLength, _yPosition - (Defines::gridLength / 2), Defines::gridLength * 1.5, Defines::gridLength);
 }
 
 int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
@@ -48,8 +47,7 @@ int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
 
     if ((_isVertical && !isX) || (!_isVertical && isX))
     {
-        //TODO: Zoomfaktor einfügen
-        return positionValue + factor * 50;
+        return positionValue + factor * Defines::gridLength / 2;
     }
     else
     {
@@ -136,12 +134,11 @@ void Component::paintHighlightRect(QPainter *painter)
     brush.setColor(QColor(255, 0, 0, 55));
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     painter->setBrush(brush);
-    painter->drawRect(_xPosition - Defines::halfGridLength, _yPosition - Defines::halfGridLength, Defines::gridLength, Defines::gridLength);
+    painter->drawRect(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }
 
 QPointF Component::getPortPosition(Component::Port port) const
 {
-    //TODO: Zoomfaktor einfügen
     return QPointF(getPortPositionXOrY(_xPosition, port, true), getPortPositionXOrY(_yPosition, port, false));
 }
 
@@ -160,10 +157,5 @@ void Component::setIsSelected(bool isSelected)
 void Component::setOrientation(Component::Orientation newOrientation)
 {
     _orientation = newOrientation;
-    if (Orientation::left == newOrientation || Orientation::right == newOrientation)
-    {
-        _isVertical = false;
-    } else {
-        _isVertical = true;
-    }
+    _isVertical = !(Orientation::left == newOrientation || Orientation::right == newOrientation);
 }

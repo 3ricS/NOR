@@ -17,12 +17,10 @@
 #include <QPainter>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
-#include <QDebug>
 
 class Component : public QGraphicsItem
 {
 public:
-    //TODO: darf amn das groß schreiben?
     enum ComponentType{Resistor, PowerSupply};
     enum Port{A, B, null};
     enum Orientation{left, top, right, bottom};

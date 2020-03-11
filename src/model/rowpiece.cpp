@@ -36,11 +36,6 @@ bool RowPiece::hasEqualNodesOnBothSides(RowPiece otherRowPiece)
 {
     bool equalInDirection = (_nodeOne == otherRowPiece._nodeOne && _nodeTwo == otherRowPiece._nodeTwo);
     bool equalInOtherDirection = (_nodeTwo == otherRowPiece._nodeOne && _nodeOne == otherRowPiece._nodeTwo);
-    if(otherRowPiece._components.last()->getName() == "R5" || _components.last()->getName() == "R5")
-    {
-        qDebug() << equalInDirection << equalInOtherDirection;
-    }
-
     return equalInDirection || equalInOtherDirection;
 }
 
@@ -71,8 +66,6 @@ void RowPiece::parallelMerge(RowPiece otherRowPiece)
     {
         mergeNames += component->getName();
     }
-
-    qDebug() << mergeNames << " = " << name << " * " << otherName << " / " << name << " + " << otherName;
 
     //Werte zusammenrechnen
     double newResistanceValueCounter = _resistanceValue * otherRowPiece._resistanceValue;
@@ -145,8 +138,6 @@ void RowPiece::rowMerge(RowPiece otherRowPiece)
         }
         delete otherRowPiece._nodeTwo;
     }
-
-    qDebug() << mergeNames << " = " << name << " + " << otherName;
 
     //Widerstandswerte addieren
     _resistanceValue = _resistanceValue + otherRowPiece._resistanceValue;

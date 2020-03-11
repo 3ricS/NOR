@@ -171,7 +171,6 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
 void NetworkGraphics::save(void)
 {
     _manager->save();
-
 }
 
 void NetworkGraphics::load(void)
@@ -271,7 +270,6 @@ Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
     else if (Component::ComponentType::PowerSupply == componentType)
     {
         createdComponent = addPowerSupply("", gridPosition.x(), gridPosition.y(), componentIsVertical, 100, 0);
-
 
         emit powerSupplyIsAllowed(false);
 
@@ -737,7 +735,6 @@ void NetworkGraphics::updateCalc(void)
 void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     CommandAddConnection* commandAddConnection = new CommandAddConnection(this, componentPortA, componentPortB);
-    qDebug() << "Connection added";
     _undoStack->push(commandAddConnection);
 }
 

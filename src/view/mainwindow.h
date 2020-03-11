@@ -13,7 +13,6 @@
 #include <QListView>
 #include <QHBoxLayout>
 #include <QComboBox>
-#include <QDebug>
 
 #include <model/networkgraphics.h>
 #include "view/networkview.h"
@@ -36,31 +35,30 @@ public:
 
 public slots:
     //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüpft welches im Model emitted wird)
-    //TODO: warum ist hier überall ein set vor?
     void setSelectionMode(void);
     void setResistorMode(void);
     void setPowerSupplyMode(void);
     void setConnectionMode(void);
     void setDescriptionMode(void);
-    void setSaveFile(void);
-    void setOpenFile(void);
-    void setZoomIn(void);
-    void setZoomOut(void);
+    void openFile(void);
+    void saveFile(void);
+    void saveAsFile(void);
+    void zoomIn(void);
+    void zoomOut(void);
     void setZoom100Percent(void);
-    void setNewFile(void);
-    void setSaveAsFile(void);
+    void createNewFile(void);
     void openAboutWindow(void);
-    void setDuplicate(void);
-    void setCopy(void);
-    void setPaste(void);
-    void setRotate(void);
+    void duplicate(void);
+    void copy(void);
+    void paste(void);
+    void rotate(void);
     void deleteItem(void);
-    void setEdit(void);
+    void editItem(void);
     void undo(void);
     void redo(void);
     void print(void);
     void openCurrentVoltageWindow(void);
-    void setCurrentButtonHide(bool canShown);
+    void setCurrentButtonVisibility(bool visibility);
 
     void updateResistanceValue(void);
     void isPowerSupplyAllowed(bool isAllowed);
@@ -69,14 +67,13 @@ public slots:
 
 protected:
     void keyReleaseEvent(QKeyEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
 
 private:
     void createUpperMenu(void);
     void createToolTips(void);
     void setCheckedInCreateMenu(QAction* actualAction);
-    void setFlatModusButtonRight(QPushButton* actualPushed);
-    void createModusQPushButtonList(void);
+    void setSelectionOfModeButtons(QPushButton* actualPushed);
+    void createListOfModeButtons(void);
 
 //Konstanten
     static constexpr double _maximumZoom = 299;
@@ -114,7 +111,6 @@ private:
     QAction* _redo = nullptr;
 
     double _scalefactor = 1.0;
-    bool _ctrlIsPressed = false;
 };
 
 #endif // MAINWINDOW_H

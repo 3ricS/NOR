@@ -14,13 +14,13 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     setSelectionMode();
 
     //Zuerst Strom und Spannungs Button verstecken
-    setCurrentButtonHide(false);
+    setCurrentButtonVisibility(false);
 
     //Menuleisten Action wird erzeugt
     createUpperMenu();
 
     //Modus Buttons werden zu einer Liste hinzugefügt
-    createModusQPushButtonList();
+    createListOfModeButtons();
 
     //ToolTips werden erzeugt
     createToolTips();
@@ -34,22 +34,22 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->Undo, SIGNAL(released()), this, SLOT(undo()));
     connect(_ui->Redo, SIGNAL(released()), this, SLOT(redo()));
     connect(_ui->CurrentView, SIGNAL(released()), this, SLOT(openCurrentVoltageWindow()));
-    connect(_new, SIGNAL(triggered()), this, SLOT(setNewFile()));
-    connect(_saveAs, SIGNAL(triggered()), this, SLOT(setSaveAsFile()));
-    connect(_save, SIGNAL(triggered()), this, SLOT(setSaveFile()));
-    connect(_open, SIGNAL(triggered()), this, SLOT(setOpenFile()));
-    connect(_ui->PlusZoom, SIGNAL(released()), this, SLOT(setZoomIn()));
-    connect(_ui->MinusZoom, SIGNAL(released()), this, SLOT(setZoomOut()));
-    connect(_zoomIn, SIGNAL(triggered()), this, SLOT(setZoomIn()));
-    connect(_zoomOut, SIGNAL(triggered()), this, SLOT(setZoomOut()));
+    connect(_new, SIGNAL(triggered()), this, SLOT(createNewFile()));
+    connect(_saveAs, SIGNAL(triggered()), this, SLOT(saveAsFile()));
+    connect(_save, SIGNAL(triggered()), this, SLOT(saveFile()));
+    connect(_open, SIGNAL(triggered()), this, SLOT(openFile()));
+    connect(_ui->PlusZoom, SIGNAL(released()), this, SLOT(zoomIn()));
+    connect(_ui->MinusZoom, SIGNAL(released()), this, SLOT(zoomOut()));
+    connect(_zoomIn, SIGNAL(triggered()), this, SLOT(zoomIn()));
+    connect(_zoomOut, SIGNAL(triggered()), this, SLOT(zoomOut()));
     connect(_zoom100Percent, SIGNAL(triggered()), this, SLOT(setZoom100Percent()));
     connect(_about, SIGNAL(triggered()), this, SLOT(openAboutWindow()));
-    connect(_duplicate, SIGNAL(triggered()), this, SLOT(setDuplicate()));
-    connect(_copy, SIGNAL(triggered()), this, SLOT(setCopy()));
-    connect(_paste, SIGNAL(triggered()), this, SLOT(setPaste()));
-    connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(setRotate()));
+    connect(_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
+    connect(_copy, SIGNAL(triggered()), this, SLOT(copy()));
+    connect(_paste, SIGNAL(triggered()), this, SLOT(paste()));
+    connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(rotate()));
     connect(_deleteComponent, SIGNAL(triggered()), this, SLOT(deleteItem()));
-    connect(_edit, SIGNAL(triggered()), this, SLOT(setEdit()));
+    connect(_edit, SIGNAL(triggered()), this, SLOT(editItem()));
     connect(_selectionMode, SIGNAL(triggered()), this, SLOT(setSelectionMode()));
     connect(_powerSupplyMode, SIGNAL(triggered()), this, SLOT(setPowerSupplyMode()));
     connect(_resistorMode, SIGNAL(triggered()), this, SLOT(setResistorMode()));
@@ -61,7 +61,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_model, SIGNAL(powerSupplyIsAllowed(bool)), this, SLOT(isPowerSupplyAllowed(bool)));
     connect(_model->getUndoStack(), SIGNAL(canRedoChanged(bool)), this, SLOT(isRedoPossible(bool)));
     connect(_model->getUndoStack(), SIGNAL(canUndoChanged(bool)), this, SLOT(isUndoPossible(bool)));
-    connect(_model, SIGNAL(currentAndVoltageIsValid(bool)), this, SLOT(setCurrentButtonHide(bool)));
+    connect(_model, SIGNAL(currentAndVoltageIsValid(bool)), this, SLOT(setCurrentButtonVisibility(bool)));
 }
 
 /*!
@@ -71,7 +71,7 @@ void MainWindow::setSelectionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::SelectionMode);
 
-    setFlatModusButtonRight(_ui->Selection);
+    setSelectionOfModeButtons(_ui->Selection);
     setCheckedInCreateMenu(_selectionMode);
 }
 
@@ -82,7 +82,7 @@ void MainWindow::setResistorMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ResistorMode);
 
-    setFlatModusButtonRight(_ui->Resistor);
+    setSelectionOfModeButtons(_ui->Resistor);
     setCheckedInCreateMenu(_resistorMode);
 }
 
@@ -93,7 +93,7 @@ void MainWindow::setPowerSupplyMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::PowerSupplyMode);
 
-    setFlatModusButtonRight(_ui->PowerSupply);
+    setSelectionOfModeButtons(_ui->PowerSupply);
     setCheckedInCreateMenu(_powerSupplyMode);
 }
 
@@ -104,7 +104,7 @@ void MainWindow::setDescriptionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::DescriptionMode);
 
-    setFlatModusButtonRight(_ui->DescriptionField);
+    setSelectionOfModeButtons(_ui->DescriptionField);
     setCheckedInCreateMenu(_descriptionMode);
 }
 
@@ -115,17 +115,17 @@ void MainWindow::setConnectionMode(void)
 {
     _networkView->setMouseMode(NetworkView::MouseMode::ConnectionMode);
 
-    setFlatModusButtonRight(_ui->Connection);
+    setSelectionOfModeButtons(_ui->Connection);
     setCheckedInCreateMenu(_connectionMode);
 }
 
-void MainWindow::setSaveFile(void)
+void MainWindow::saveFile(void)
 {
     _model->save();
     setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
 }
 
-void MainWindow::setOpenFile(void)
+void MainWindow::openFile(void)
 {
     if (_model->getComponents().count() != 0)
     {
@@ -143,14 +143,14 @@ void MainWindow::setOpenFile(void)
     }
 }
 
-void MainWindow::setNewFile(void)
+void MainWindow::createNewFile(void)
 {
     NetworkGraphics* _model = new NetworkGraphics();
     MainWindow* window = new MainWindow(_model);
     window->show();
 }
 
-void MainWindow::setSaveAsFile(void)
+void MainWindow::saveAsFile(void)
 {
     _model->saveAs();
     setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
@@ -158,19 +158,10 @@ void MainWindow::setSaveAsFile(void)
 
 void MainWindow::keyReleaseEvent(QKeyEvent* event)
 {
-    _ctrlIsPressed = false;
     if (event->key() == Qt::Key::Key_Escape)
     {
         setSelectionMode();
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
-    }
-}
-
-void MainWindow::keyPressEvent(QKeyEvent* event)
-{
-    if (event->key() == Qt::Key::Key_Control)
-    {
-        _ctrlIsPressed = true;
     }
 }
 
@@ -305,33 +296,19 @@ void MainWindow::setCheckedInCreateMenu(QAction* actualAction)
 {
     for (QAction* a : _createActionGroup)
     {
-        if (a != actualAction)
-        {
-            a->setChecked(false);
-        }
-        else
-        {
-            a->setChecked(true);
-        }
+        a->setChecked(a == actualAction);
     }
 }
 
-void MainWindow::setFlatModusButtonRight(QPushButton* actualPushed)
+void MainWindow::setSelectionOfModeButtons(QPushButton* actualPushed)
 {
     for (QPushButton* pb : _modusButtons)
     {
-        if (pb != actualPushed)
-        {
-            pb->setDown(false);
-        }
-        else
-        {
-            pb->setDown(true);
-        }
+        pb->setDown(pb == actualPushed);
     }
 }
 
-void MainWindow::createModusQPushButtonList(void)
+void MainWindow::createListOfModeButtons(void)
 {
     _modusButtons.append(_ui->Selection);
     _modusButtons.append(_ui->PowerSupply);
@@ -340,9 +317,9 @@ void MainWindow::createModusQPushButtonList(void)
     _modusButtons.append(_ui->DescriptionField);
 }
 
-void MainWindow::setCurrentButtonHide(bool canShown)
+void MainWindow::setCurrentButtonVisibility(bool visibility)
 {
-    _ui->CurrentView->setHidden(!canShown);
+    _ui->CurrentView->setHidden(!visibility);
 }
 
 /*!
@@ -364,22 +341,22 @@ void MainWindow::openAboutWindow(void)
     );
 }
 
-void MainWindow::setDuplicate(void)
+void MainWindow::duplicate(void)
 {
     _networkView->duplicate();
 }
 
-void MainWindow::setCopy(void)
+void MainWindow::copy(void)
 {
     _networkView->copy();
 }
 
-void MainWindow::setPaste(void)
+void MainWindow::paste(void)
 {
     _networkView->paste();
 }
 
-void MainWindow::setRotate(void)
+void MainWindow::rotate(void)
 {
     _networkView->rotateComponentByShortcut();
 }
@@ -387,7 +364,7 @@ void MainWindow::setRotate(void)
 /*!
 * \brief Reinzoomen mit +10% Schritten
 */
-void MainWindow::setZoomIn(void)
+void MainWindow::zoomIn(void)
 {
     if ((_scalefactor * 100) < _maximumZoom)
     {
@@ -403,7 +380,7 @@ void MainWindow::setZoomIn(void)
 /*!
 * \brief Rauszoomen mit -10% Schritten
 */
-void MainWindow::setZoomOut(void)
+void MainWindow::zoomOut(void)
 {
     if ((_scalefactor * 100) > _minimumZoom)
     {
@@ -424,13 +401,12 @@ void MainWindow::setZoom100Percent(void)
     {
         if (_scalefactor > 1.0)
         {
-            setZoomOut();
+            zoomOut();
         }
         else if (_scalefactor < 1.0)
         {
-            setZoomIn();
+            zoomIn();
         }
-        qDebug() << _scalefactor;
     }
 }
 
@@ -462,26 +438,12 @@ void MainWindow::isPowerSupplyAllowed(bool isAllowed)
 
 void MainWindow::isUndoPossible(bool canUndo)
 {
-    if (canUndo)
-    {
-        _ui->Undo->setEnabled(true);
-    }
-    else
-    {
-        _ui->Undo->setEnabled(false);
-    }
+    _ui->Undo->setEnabled(canUndo);
 }
 
 void MainWindow::isRedoPossible(bool canRedo)
 {
-    if (canRedo)
-    {
-        _ui->Redo->setEnabled(true);
-    }
-    else
-    {
-        _ui->Redo->setEnabled(false);
-    }
+    _ui->Redo->setEnabled(canRedo);
 }
 
 void MainWindow::deleteItem(void)
@@ -489,7 +451,7 @@ void MainWindow::deleteItem(void)
     _networkView->deleteSelectedItem();
 }
 
-void MainWindow::setEdit(void)
+void MainWindow::editItem(void)
 {
     _networkView->editNetworkOrDescription();
 }

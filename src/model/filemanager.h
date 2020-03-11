@@ -14,6 +14,7 @@
 #include <QFileDialog>
 #include <QString>
 #include <QStandardPaths>
+#include <QTextStream>
 
 #include <model/networkgraphics.h>
 #include <model/connection.h>
@@ -38,9 +39,9 @@ public:
 private:
     bool saveData(void);
     QString createJson(void);
-    QJsonObject saveComponent(Component* component);
-    QJsonObject saveConnection(Connection* connection);
-    QJsonObject saveDescription(DescriptionField* description);
+    static QJsonObject saveComponent(Component* component);
+    static QJsonObject saveConnection(Connection* connection);
+    static QJsonObject saveDescription(DescriptionField* description);
     void loadComponent(QJsonArray array);
     void loadConnection(QJsonArray array);
     void loadDescription(QJsonArray array);

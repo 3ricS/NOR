@@ -10,7 +10,6 @@
 
 #include <QMouseEvent>
 #include <QGraphicsView>
-#include <QDebug>
 #include <QInputDialog>
 
 #include <model/networkgraphics.h>
@@ -45,7 +44,7 @@ protected:
 
 private:
 
-    QPointF scenePositionToGrid(QPointF scenePosition);
+    static QPointF scenePositionToGrid(QPointF scenePosition);
     void gridDisappears(void);
     void highlightRect(QPointF scenePositionOne, QColor _highlightColor);
     void removeHighlightSelectedRect(void);
@@ -66,11 +65,9 @@ private:
     bool _mouseIsPressed = false;
     bool _componentOrDescriptionIsGrabbed = false;
 
-    //TODO: gehört _connectionStarted & ConnectionStartPosition hierher?
-    QList<Component*>  _tempComponentListForConnections;
+    QList<Component*> _tempComponentListForConnections;
     ComponentPort*    _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
     QGraphicsItem*    _previousHighlightedRect = nullptr;
-    //TODO: _selectedComponentToMove durch _selectedComponent ersetzen
     Component*        _selectedComponentToMove = nullptr;
     DescriptionField* _selectedDescriptionToMove = nullptr;
     bool              _isVerticalComponentDefault = true;
@@ -85,7 +82,7 @@ private:
     QPointF           _lastPositionMultiselect;
 
     MouseMode         _mouseMode = SelectionMode;
-    QColor            _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
+    const QColor      _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
     QPointF           _actualMoveScenePosition;
 };
 

@@ -35,15 +35,15 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
     if(_isVertical)
     {
         //Resistor has length of 120 and width of 60
-        painter->drawRect(_xPosition - 20, _yPosition - 30, 40, 60);
-        painter->drawLine(_xPosition, _yPosition - 30, _xPosition, _yPosition - Defines::halfGridLength + Connection::_circleRadius);
-        painter->drawLine(_xPosition, _yPosition + 30, _xPosition, _yPosition + Defines::halfGridLength - Connection::_circleRadius);
+        painter->drawRect(_xPosition - (Defines::gridLength * 0.2), _yPosition - (Defines::gridLength * 0.3), (Defines::gridLength * 0.4), Defines::gridLength * 0.6);
+        painter->drawLine(_xPosition, _yPosition - (Defines::gridLength * 0.3), _xPosition, _yPosition - (Defines::gridLength / 2) + Connection::_circleRadius);
+        painter->drawLine(_xPosition, _yPosition + (Defines::gridLength * 0.3), _xPosition, _yPosition + (Defines::gridLength / 2) - Connection::_circleRadius);
     }
     else
     {
-        painter->drawRect(_xPosition - 30, _yPosition - 20, 60, 40);
-        painter->drawLine(_xPosition - 30, _yPosition + 0, _xPosition - Defines::halfGridLength + Connection::_circleRadius, _yPosition + 0);
-        painter->drawLine(_xPosition + 30, _yPosition + 0, _xPosition + Defines::halfGridLength - Connection::_circleRadius, _yPosition + 0);
+        painter->drawRect(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.2), (Defines::gridLength * 0.6), Defines::gridLength * 0.4);
+        painter->drawLine(_xPosition - (Defines::gridLength * 0.3), _yPosition + 0, _xPosition - (Defines::gridLength / 2) + Connection::_circleRadius, _yPosition + 0);
+        painter->drawLine(_xPosition + (Defines::gridLength * 0.3), _yPosition + 0, _xPosition + (Defines::gridLength / 2) - Connection::_circleRadius, _yPosition + 0);
     }
     if(_isSelected)
     {
@@ -58,11 +58,11 @@ void Resistor::paintInformation(QPainter* painter)
 {
     if(_isVertical)
     {
-        paintOrientationSensitiv(painter, _xPosition - 40, _yPosition - 30, _xPosition - 60, _yPosition);
+        paintOrientationSensitiv(painter, _xPosition - (Defines::gridLength * 0.4), _yPosition - (Defines::gridLength * 0.32), _xPosition - (Defines::gridLength * 0.45), _yPosition);
     }
     else
     {
-        paintOrientationSensitiv(painter, _xPosition - 5, _yPosition - 25, _xPosition - 5, _yPosition + 40);
+        paintOrientationSensitiv(painter, _xPosition - (Defines::gridLength * 0.05), _yPosition - (Defines::gridLength * 0.25), _xPosition - (Defines::gridLength * 0.05), _yPosition + (Defines::gridLength * 0.4));
     }
 }
 
@@ -81,11 +81,11 @@ void Resistor::paintOrientationSensitiv(QPainter* painter, int xPosText, int yPo
     }
     else if(_resistanceValue < 1000000)
     {
-        painter->drawText(xPosValue, yPosValue, QString::number((double)_resistanceValue / 1000) + "kΩ");
+        painter->drawText(xPosValue, yPosValue, QString::number(_resistanceValue / 1000) + "kΩ");
     }
     else
     {
-        painter->drawText(xPosValue, yPosValue, QString::number((double)_resistanceValue / 1000000) + "MΩ");
+        painter->drawText(xPosValue, yPosValue, QString::number(_resistanceValue / 1000000) + "MΩ");
     }
 
 }

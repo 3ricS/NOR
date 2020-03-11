@@ -1,3 +1,6 @@
+#include <QDebug>
+#include <utility>
+
 #include "puzzlecalculator.h"
 #include "model/node.h"
 #include "model/connection.h"
@@ -30,30 +33,9 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
     if (!rowPieces.isEmpty() && isNodeConnectedToPowerSupply(rowPieces))
     {
         _resistanceValue = calculateResistanceValueFromRowPieces(rowPieces, nodes);
-        qDebug() << "Widerstandswert Calculate" << _resistanceValue;
-        calculateVoltageAndAmp(rowPieces);
-            for(Component* component : _components)
-            {
-                qDebug() <<"moin" << component->getName() << component->getAmp() << "Ampere" << component->getVoltage() <<"Volt";
-            }
-            for(RowPiece rowpiece : _mergeList)
-            {
-                qDebug() << rowpiece.getAmp();
-                for(Component* componente : rowpiece.getComponents())
-                {
-                    qDebug() << "halli" << componente->getName();
-                }
-                qDebug() <<"___________________";
-            }
         return _resistanceValue;
     }
     return 0.0;
-}
-
-void PuzzleCalculator::setLists(QList<Connection*> connections, QList<Component*> components)
-{
-    _connections = connections;
-    _components = components;
 }
 
 QList<RowPiece> PuzzleCalculator::findRowPieces(QList<Node*>& nodes)
@@ -98,9 +80,9 @@ QList<RowPiece> PuzzleCalculator::findRowPieces(QList<Node*>& nodes)
 
 void PuzzleCalculator::findSameRowPieces(RowPiece rowpiece1)
 {
-    for(RowPiece& rowpiece2 : _mergeList)
+    for (RowPiece& rowpiece2 : _mergeList)
     {
-        if(rowpiece1.getComponents() == rowpiece2.getComponents())
+        if (rowpiece1.getComponents() == rowpiece2.getComponents())
         {
             qDebug() << "gefunden" << rowpiece2.getAmp() << rowpiece1.getAmp();
             rowpiece2.setAmp(rowpiece1.getAmp());
@@ -170,7 +152,7 @@ QList<ComponentPort> PuzzleCalculator::findFirstComponentPort(void)
     for (Connection* connection : _connections)
     {
         if (Component::ComponentType::PowerSupply ==
-                connection->getComponentPortOne().getComponent()->getComponentType())
+            connection->getComponentPortOne().getComponent()->getComponentType())
         {
             startOfSearch = connection->getComponentPortOne();
             break;
@@ -195,9 +177,6 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
                                     QList<RowPiece>* rowPieces, QList<Node*>* knownNodes)
 {
     //Wenn der Knoten bereits bekannt ist, ist die Abbruchbedingung erreicht
-    //TODO: NodeIsKnown entfernen
-    bool nodeIsKnown = false;
-
     QList<Component*> rowPiecesComponents;
     rowPiecesComponents.append(actualComponentPort.getComponent());
 
@@ -209,7 +188,7 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
          * So kann zwischen einer Reihen- und Parallelschaltung unterschieden werden.
          */
     QList<ComponentPort> neighbourComponentPortsOfStartNode = searchForNeighbours(actualComponentPort);
-    Node* startNode = getOrCreateNode(actualComponentPort, neighbourComponentPortsOfStartNode, nodeIsKnown, knownNodes);
+    Node* startNode = getOrCreateNode(actualComponentPort, neighbourComponentPortsOfStartNode, knownNodes);
 
     QList<ComponentPort> neighbourComponentPorts = searchForNeighbours(actualComponentPort.getOppisiteComponentPort());
 
@@ -264,8 +243,7 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
     else
     {
         //finde oder erstelle den Knoten für das Ende
-        bool nodeIsKnown = true;
-        Node* endNode = getOrCreateNode(actualComponentPort, neighbourComponentPorts, nodeIsKnown, knownNodes);
+        Node* endNode = getOrCreateNode(actualComponentPort, neighbourComponentPorts, knownNodes);
         //erstelle das neue RowPiece
         RowPiece rowPiece(startNode, endNode, resistanceValueOfRowPiece, rowPiecesComponents);
 
@@ -301,11 +279,11 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
 
 Node* PuzzleCalculator::getOrCreateNode(ComponentPort componentPortForNewNode,
                                         QList<ComponentPort> connectedComponentPorts,
-                                        bool& nodeIsKnown, QList<Node*>* knownNodes)
+                                        QList<Node*>* knownNodes)
 {
     for (Node* node : *knownNodes)
     {
-        nodeIsKnown = node->getComponentPorts().contains(componentPortForNewNode);
+        bool nodeIsKnown = node->getComponentPorts().contains(componentPortForNewNode);
         if (nodeIsKnown)
         {
             return node;
@@ -318,9 +296,9 @@ Node* PuzzleCalculator::getOrCreateNode(ComponentPort componentPortForNewNode,
      */
     connectedComponentPorts.append(componentPortForNewNode);
     bool isConnectedToPowerSupply = false;
-    for(ComponentPort cp : connectedComponentPorts)
+    for (ComponentPort cp : connectedComponentPorts)
     {
-        if(Component::ComponentType::PowerSupply == cp.getComponent()->getComponentType())
+        if (Component::ComponentType::PowerSupply == cp.getComponent()->getComponentType())
         {
             isConnectedToPowerSupply = true;
             break;
@@ -353,18 +331,18 @@ bool PuzzleCalculator::isPowerSupplyinComponentPortList(const QList<ComponentPor
 bool PuzzleCalculator::isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces)
 {
     QList<Node*> nodes;
-    for(RowPiece rp : rowPieces)
+    for (RowPiece rp : rowPieces)
     {
-        if(rp.getNodeOne()->isConnectedToPowerSupply())
+        if (rp.getNodeOne()->isConnectedToPowerSupply())
         {
-            if(!nodes.contains(rp.getNodeOne()))
+            if (!nodes.contains(rp.getNodeOne()))
             {
                 nodes.append(rp.getNodeOne());
             }
         }
-        if(rp.getNodeTwo()->isConnectedToPowerSupply())
+        if (rp.getNodeTwo()->isConnectedToPowerSupply())
         {
-            if(!nodes.contains(rp.getNodeTwo()))
+            if (!nodes.contains(rp.getNodeTwo()))
             {
                 nodes.append(rp.getNodeTwo());
             }
@@ -373,7 +351,8 @@ bool PuzzleCalculator::isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces)
     return (nodes.count() == 2);
 }
 
-QList<RowPiece> PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node* newNode)
+QList<RowPiece>
+PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node* newNode)
 {
     qDebug() << "RowA" << rowPieceA.getComponents()[0]->getName();
     qDebug() << "RowB" << rowPieceB.getComponents()[0]->getName();
@@ -387,7 +366,8 @@ QList<RowPiece> PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece row
     qDebug() << "Eq NodeC" << equalNodeC->getId();
 
     //Summe aller Widerstände
-    int additionValue = rowPieceA.getResistanceValue() + rowPieceB.getResistanceValue() + rowPieceC.getResistanceValue();
+    double additionValue =
+            rowPieceA.getResistanceValue() + rowPieceB.getResistanceValue() + rowPieceC.getResistanceValue();
 
     // Die drei Stern-Zweige
     double starValueA = ((rowPieceA.getResistanceValue() * rowPieceB.getResistanceValue()) / additionValue);
@@ -409,87 +389,85 @@ void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
 {
     int ListSize = _mergeList.count() - 1;
     double totalCurrent = 0.0;
-    if(_mergeList.isEmpty())
+    if (_mergeList.isEmpty())
     {
-        for(Component* component : _components)
+        for (Component* component : _components)
         {
-            if(Component::PowerSupply == component->getComponentType())
+            if (Component::PowerSupply == component->getComponentType())
             {
                 component->setAmp(component->getVoltage() / _resistanceValue);
                 totalCurrent = component->getAmp();
             }
         }
-        for(RowPiece rowpiece : rowpieces)
+        for (RowPiece rowpiece : rowpieces)
         {
-        for(Component* component : rowpiece.getComponents())
-        {
-            if(Component::Resistor == component->getComponentType())
+            for (Component* component : rowpiece.getComponents())
             {
-                component->setAmp(totalCurrent);
-                Resistor* resistor = dynamic_cast<Resistor*>(component);
-                bool isResistor = (nullptr != resistor);
-                if (isResistor)
+                if (Component::Resistor == component->getComponentType())
                 {
-                    component->setVoltage(totalCurrent * resistor->getResistanceValue());
+                    component->setAmp(totalCurrent);
+                    Resistor* resistor = dynamic_cast<Resistor*>(component);
+                    bool isResistor = (nullptr != resistor);
+                    if (isResistor)
+                    {
+                        component->setVoltage(totalCurrent * resistor->getResistanceValue());
+                    }
                 }
             }
         }
-        }
     }
     else
+    {
+        for (Component* component : _components)
         {
-        for(Component* component : _components)
-        {
-            if(Component::PowerSupply == component->getComponentType())
+            if (Component::PowerSupply == component->getComponentType())
             {
                 component->setAmp(component->getVoltage() / _resistanceValue);
                 _mergeList[ListSize].setAmp(component->getAmp());
             }
         }
-        for(int i = 0; i < (ListSize +1) / 3; i++)
+        for (int i = 0; i < (ListSize + 1) / 3; i++)
         {
-        if(_mergeList[ListSize - 3*i].getIsMergedParallel())
-        {
-            RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
-            RowPiece* rowpiece1 = &_mergeList[ListSize - 3*i - 1];
-            RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i -2];
+            if (_mergeList[ListSize - 3 * i].getIsMergedParallel())
+            {
+                RowPiece* mergedRowpieces = &_mergeList[ListSize - 3 * i];
+                RowPiece* rowpiece1 = &_mergeList[ListSize - 3 * i - 1];
+                RowPiece* rowpiece2 = &_mergeList[ListSize - 3 * i - 2];
 
-            rowpiece1->setAmp(mergedRowpieces->getAmp() * (rowpiece2->getResistanceValue() / (rowpiece1->getResistanceValue() + rowpiece2->getResistanceValue())));
-            findSameRowPieces(*rowpiece1);
-            calculateVoltageAndAmpInResistor(rowpiece1);
-            rowpiece2->setAmp(mergedRowpieces->getAmp() * (rowpiece1->getResistanceValue() / (rowpiece1->getResistanceValue() + rowpiece2->getResistanceValue())));
-            findSameRowPieces(*rowpiece2);
-            calculateVoltageAndAmpInResistor(rowpiece2);
-        }
-        else
-        {
-            RowPiece* mergedRowpieces = &_mergeList[ListSize - 3*i];
-            RowPiece* rowpiece1 = &_mergeList[ListSize - 3*i - 1];
-            RowPiece* rowpiece2 = &_mergeList[ListSize - 3*i - 2];
-
-            rowpiece1->setAmp(mergedRowpieces->getAmp());
-            findSameRowPieces(*rowpiece1);
-            calculateVoltageAndAmpInResistor(rowpiece1);
-
-            rowpiece2->setAmp(mergedRowpieces->getAmp());
-            findSameRowPieces(*rowpiece2);
-            calculateVoltageAndAmpInResistor(rowpiece2);
-            bool hallo = false;
-            if(_mergeList[ListSize - 2].getAmp() == _mergeList[ListSize - 3].getAmp())
-                    {
-                hallo = true;
+                rowpiece1->setAmp(mergedRowpieces->getAmp() * (rowpiece2->getResistanceValue() /
+                                                               (rowpiece1->getResistanceValue() +
+                                                                rowpiece2->getResistanceValue())));
+                findSameRowPieces(*rowpiece1);
+                calculateVoltageAndAmpInResistor(rowpiece1);
+                rowpiece2->setAmp(mergedRowpieces->getAmp() * (rowpiece1->getResistanceValue() /
+                                                               (rowpiece1->getResistanceValue() +
+                                                                rowpiece2->getResistanceValue())));
+                findSameRowPieces(*rowpiece2);
+                calculateVoltageAndAmpInResistor(rowpiece2);
             }
-            qDebug() << hallo << "kaka" << _mergeList[ListSize - 2].getAmp() << _mergeList[ListSize - 3].getAmp();
-        }
+            else
+            {
+                RowPiece* mergedRowpieces = &_mergeList[ListSize - 3 * i];
+                RowPiece* rowpiece1 = &_mergeList[ListSize - 3 * i - 1];
+                RowPiece* rowpiece2 = &_mergeList[ListSize - 3 * i - 2];
+
+                rowpiece1->setAmp(mergedRowpieces->getAmp());
+                findSameRowPieces(*rowpiece1);
+                calculateVoltageAndAmpInResistor(rowpiece1);
+
+                rowpiece2->setAmp(mergedRowpieces->getAmp());
+                findSameRowPieces(*rowpiece2);
+                calculateVoltageAndAmpInResistor(rowpiece2);
+            }
         }
     }
 }
 
 void PuzzleCalculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
 {
-    for(Component* component : rowpiece->getComponents())
+    for (Component* component : rowpiece->getComponents())
     {
-        if(Component::Resistor == component->getComponentType())
+        if (Component::Resistor == component->getComponentType())
         {
             component->setAmp(rowpiece->getAmp());
             Resistor* resistor = dynamic_cast<Resistor*>(component);
@@ -504,14 +482,13 @@ void PuzzleCalculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
 
 double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node*> nodes)
 {
-    //_rowPieceListForCalculateAmp = rowPieces;
     while (1 < rowPieces.count())
     {
         bool changedSomething = false;
         for (RowPiece& rowPieceA : rowPieces)
         {
             //Widerstand kurzgeschlossen
-            if(rowPieceA.getNodeOne() == rowPieceA.getNodeTwo())
+            if (rowPieceA.getNodeOne() == rowPieceA.getNodeTwo())
             {
                 rowPieces.removeOne(rowPieceA);
                 break;
@@ -526,7 +503,6 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                     rowPieceA.setIsMergedParallel(true);
                     _mergeList.append(rowPieceA);
                     rowPieceA.setIsMergedParallel(false);
-                    //_rowPieceListForCalculateAmp.append(rowPieceA);
                     rowPieces.removeOne(rowPieceB);
                     changedSomething = true;
                     break;
@@ -536,7 +512,7 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                     Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
                     if (equalNode != nullptr && !equalNode->isConnectedToPowerSupply())
                     {
-                        if(changedSomething)
+                        if (changedSomething)
                         {
                             break;
                         }
@@ -569,9 +545,9 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
             }
         }
 
-        for(RowPiece& rowPieceA : rowPieces)
+        for (RowPiece& rowPieceA : rowPieces)
         {
-            for(RowPiece& rowPieceB : rowPieces)
+            for (RowPiece& rowPieceB : rowPieces)
             {
                 if (rowPieceA != rowPieceB && rowPieceA.hasOneEqualNode(rowPieceB))
                 {
@@ -581,62 +557,64 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                         //Wenn die Anzahl der Node ComponentPort größer 3 ist, klingt es nach Stern-Dreieck, RowPieces werden nach Anbindung zum Node
                         //durchsucht
                         int count = 0;
-                        for(RowPiece rs : rowPieces)
+                        for (RowPiece rs : rowPieces)
                         {
-                            if(rs.getNodeOne()->getId() == equalNode->getId())
-                            {
-                                count++;
-                            }
-                            else if(rs.getNodeTwo()->getId() == equalNode->getId())
+                            if (rs.getNodeOne()->getId() == equalNode->getId() ||
+                                rs.getNodeTwo()->getId() == equalNode->getId())
                             {
                                 count++;
                             }
                         }
-                        if(count >= 3 && !changedSomething)
+                        if (count >= 3 && !changedSomething)
                         {
                             //Nun schauen auf der gegenüberliegenden Seite vom gleichen Node
                             Node* oppositeNode = rowPieceB.getOppositeNode(equalNode);
                             RowPiece* searchedRowPieces = nullptr;
                             bool found = false;
 
-           /*Zuerst wird geschaut, ob auch am Opposite Node mindestens 3 RowPieces angeschlossen sind
-            * Durchgehen aller ComponentPorts des gegenüberliegenden Nodes, schauen, wo der Component teil
-            * eines RowPieces ist, wenn eine angrenzendes RowPieces gefunden wurde, schauen, ob der gegenüberliegende Node gleich
-            * dem anfangs gefundenen EqualNode ist, wenn ja rausspringen
-            */
+                            /*Zuerst wird geschaut, ob auch am Opposite Node mindestens 3 RowPieces angeschlossen sind
+                             * Durchgehen aller ComponentPorts des gegenüberliegenden Nodes, schauen, wo der Component teil
+                             * eines RowPieces ist, wenn eine angrenzendes RowPieces gefunden wurde, schauen, ob der gegenüberliegende Node gleich
+                             * dem anfangs gefundenen EqualNode ist, wenn ja rausspringen
+                             */
                             int count = 0;
-                            for(RowPiece rs : rowPieces)
+                            for (RowPiece rs : rowPieces)
                             {
-                                if(rs.getNodeOne()->getId() == oppositeNode->getId())
-                                {
-                                    count++;
-                                }
-                                else if(rs.getNodeTwo()->getId() == oppositeNode->getId())
+                                if (rs.getNodeOne()->getId() == oppositeNode->getId() ||
+                                    rs.getNodeTwo()->getId() == oppositeNode->getId())
                                 {
                                     count++;
                                 }
                             }
-                            if(count >= 3)
+                            if (count >= 3)
                             {
-                                for(ComponentPort cp :  oppositeNode->getComponentPorts())
+                                for (ComponentPort cp :  oppositeNode->getComponentPorts())
                                 {
-                                    for(RowPiece rs : rowPieces)
+                                    for (RowPiece rs : rowPieces)
                                     {
-                                        for(Component* c : rs.getComponents())
+                                        for (Component* c : rs.getComponents())
                                         {
-                                            if(c == cp.getComponent())
+                                            if (c == cp.getComponent())
                                             {
-                                                if(rs.getOppositeNode(oppositeNode) == rowPieceA.getOppositeNode(equalNode))
-                                                    searchedRowPieces = new RowPiece(rs.getNodeOne(), rs.getNodeTwo(), rs.getResistanceValue(), rs.getComponents());
+                                                if (rs.getOppositeNode(oppositeNode) ==
+                                                    rowPieceA.getOppositeNode(equalNode))
+                                                {
+                                                    searchedRowPieces = new RowPiece(rs.getNodeOne(), rs.getNodeTwo(),
+                                                                                     rs.getResistanceValue(),
+                                                                                     rs.getComponents());
+                                                }
                                                 break;
                                             }
                                         }
-                                        if(found){break;}
+                                        if (found)
+                                        { break; }
                                     }
-                                    if(found){break;}
+                                    if (found)
+                                    { break; }
                                 }
 
-                                if(oppositeNode != nullptr && searchedRowPieces != nullptr && *searchedRowPieces != rowPieceA && *searchedRowPieces != rowPieceB)
+                                if (oppositeNode != nullptr && searchedRowPieces != nullptr &&
+                                    *searchedRowPieces != rowPieceA && *searchedRowPieces != rowPieceB)
                                 {
                                     _usedStarCalcutlation = true;
                                     //rp ist rowPieceC
@@ -646,35 +624,31 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                                     nodes.append(newNode);
 
                                     //Erstellen der Stern-RowPieces und alte removen
-                                    QList<RowPiece> listOfNewRowPieces = calculateStar(rowPieceA, rowPieceB, *searchedRowPieces, newNode);
+                                    QList<RowPiece> listOfNewRowPieces = calculateStar(rowPieceA, rowPieceB,
+                                                                                       *searchedRowPieces, newNode);
                                     rowPieces.removeOne(rowPieceA);
                                     rowPieces.removeOne(rowPieceB);
                                     rowPieces.removeOne(*searchedRowPieces);
                                     rowPieces.append(listOfNewRowPieces);
                                     changedSomething = true;
-
-                                    for(RowPiece r : listOfNewRowPieces)
-                                    {
-                                        qDebug() << "List of RowPiece" << r.getResistanceValue() << "Von" << r.getNodeOne()->getId() << "nach" << r.getNodeTwo()->getId();
-                                    }
-                                    qDebug() << "SternDreieck";
                                 }
                             }
                         }
 
                     }
                 }
-                if(changedSomething)
+                if (changedSomething)
                 {
                     break;
                 }
             }
-            if(changedSomething)
+            if (changedSomething)
             {
                 break;
             }
         }
     }
+
     return rowPieces.last().getResistanceValue();
 }
 

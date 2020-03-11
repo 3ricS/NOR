@@ -30,12 +30,12 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
     if (_isVertical)
     {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
-        painter->drawLine(_xPosition, _yPosition + Defines::halfGridLength, _xPosition, _yPosition - Defines::halfGridLength);
+        painter->drawLine(_xPosition, _yPosition + (Defines::gridLength / 2), _xPosition, _yPosition - (Defines::gridLength / 2));
     }
     else
     {
         painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
-        painter->drawLine(_xPosition - Defines::halfGridLength, _yPosition, _xPosition + Defines::halfGridLength, _yPosition);
+        painter->drawLine(_xPosition - (Defines::gridLength / 2), _yPosition, _xPosition + (Defines::gridLength / 2), _yPosition);
     }
     if(_isSelected)
     {

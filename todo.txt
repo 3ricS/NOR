@@ -5,4 +5,7 @@ ___________________________________________________________________
 
 - Multiselect der Bauteile (Move)
 - NetworkGraphics hat 600 Zeilen
-
+- MergeList in PuzzleCalculator darf keine Membervariable sein (wir haben sonst alles extra ohne Membervariable gemacht)
+- connection.cpp: in dodgeComponent wird die Variable hitbox doppelt erzeugt (sind das das zwei Hitboxen? Soll das so?)
+- PuzzleCalculator: calculateResistanceValueFromRowPieces() vereinfachen / auslagern
+- powersupply vom GridSize abhängig machen

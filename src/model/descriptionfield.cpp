@@ -19,7 +19,7 @@ void DescriptionField::setPosition(QPointF gridPosition)
 
 QRectF DescriptionField::boundingRect() const
 {
-    return QRectF (_xPosition - Defines::gridLength, _yPosition - Defines::halfGridLength, 150, Defines::gridLength);
+    return QRectF (_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }
 
 void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)
@@ -27,7 +27,7 @@ void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOpti
     QFont q;
     q.setPixelSize(13);
     painter->setFont(q);
-    painter->drawText(QRectF (_xPosition - 40, _yPosition - 40, 80, 80), _text);
+    painter->drawText(QRectF (_xPosition - (Defines::gridLength * 0.4), _yPosition - (Defines::gridLength * 0.4), (Defines::gridLength * 0.8), (Defines::gridLength * 0.8)), _text);
 
     if(_isSelected)
     {
@@ -48,10 +48,10 @@ void DescriptionField::paintHighlightRect(QPainter *painter)
     brush.setColor(QColor(255, 0, 0, 55));
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     painter->setBrush(brush);
-    painter->drawRect(_xPosition - Defines::halfGridLength, _yPosition - Defines::halfGridLength, Defines::gridLength, Defines::gridLength);
+    painter->drawRect(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }
 
-void DescriptionField::set_isSelected(bool isSelected)
+void DescriptionField::setSelected(bool isSelected)
 {
     _isSelected = isSelected;
 

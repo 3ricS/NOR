@@ -30,7 +30,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
     QPointF gridPosition = scenePositionToGrid(scenePosition);
 
     //Merken des zuletzt geklickten Bereichs, wird beim Paste benötigt
-    _lastPositionMultiselect = gridPosition;
+    _lastClickedPosition = gridPosition;
 
     if(_multiselectRect != nullptr)
     {
@@ -734,16 +734,16 @@ void NetworkView::copy(void)
  */
 void NetworkView::paste(void)
 {
-    if (!_model->isThereAComponentOrADescription(scenePositionToGrid(_lastPositionMultiselect)))
+    if (!_model->isThereAComponentOrADescription(scenePositionToGrid(_lastClickedPosition)))
     {
         if(_copiedComponent != nullptr)
         {
 
-            _model->duplicateComponent(_copiedComponent, scenePositionToGrid(_lastPositionMultiselect).x(), scenePositionToGrid(_lastPositionMultiselect).y());
+            _model->duplicateComponent(_copiedComponent, _lastClickedPosition.x(), _lastClickedPosition.y());
         }
         else if(_copiedDescription != nullptr)
         {
-            _model->duplicateDescription(_copiedDescription, scenePositionToGrid(_lastPositionMultiselect).x(), scenePositionToGrid(_lastPositionMultiselect).y());
+            _model->duplicateDescription(_copiedDescription, _lastClickedPosition.x(), _lastClickedPosition.y());
         }
     }
 }

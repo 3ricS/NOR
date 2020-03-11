@@ -78,10 +78,11 @@ private:
     DescriptionField* _sampleDescriptionOnMoveEvent = nullptr;
     Component*        _copiedComponent = nullptr;
     DescriptionField* _copiedDescription = nullptr;
-    QPointF           _lastPositionMultiselect;
+    QPointF           _lastClickedPosition;
     QGraphicsRectItem*_multiselectRect = nullptr;
 
     QPointF           _firstPositionMultiselect;
+    QPointF           _lastPositionMultiselect;
 
     MouseMode         _mouseMode = SelectionMode;
     QColor            _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz

@@ -165,6 +165,31 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
     }
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    //MessageBox bevor geschlossen wird
+    QMessageBox msgBox;
+    msgBox.setText("Möchten Sie ihre Änderungen im Widerstandsnetzwerk sichern?");
+    msgBox.setInformativeText("Ihre Änderungen gehen verloren, wenn Sie sie nicht sichern.");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+    switch (ret) {
+      case QMessageBox::Save:
+          _model->save();
+          break;
+      case QMessageBox::Discard:
+          event->accept();
+          break;
+      case QMessageBox::Cancel:
+          event->ignore();
+          break;
+      default:
+
+          break;
+    }
+}
+
 void MainWindow::createUpperMenu(void)
 {
     //Datei Menu

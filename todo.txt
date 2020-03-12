@@ -9,3 +9,7 @@ ___________________________________________________________________
 - connection.cpp: in dodgeComponent wird die Variable hitbox doppelt erzeugt (sind das das zwei Hitboxen? Soll das so?)
 - PuzzleCalculator: calculateResistanceValueFromRowPieces() vereinfachen / auslagern
 - powersupply vom GridSize abhängig machen
+
+- Spannung und Strom im EditView anzeigen
+- Ströme und Spannungen mit scrollbarem View anzeigen
+- beim Beenden nach Speichern fragen

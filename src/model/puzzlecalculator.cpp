@@ -33,6 +33,7 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
     if (!rowPieces.isEmpty() && isNodeConnectedToPowerSupply(rowPieces))
     {
         _resistanceValue = calculateResistanceValueFromRowPieces(rowPieces, nodes);
+        calculateVoltageAndAmp(rowPieces);
         return _resistanceValue;
     }
     return 0.0;

@@ -29,12 +29,12 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
 
     if (_isVertical)
     {
-        painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
+        painter->drawEllipse(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.3), Defines::gridLength * 0.6, Defines::gridLength * 0.6);
         painter->drawLine(_xPosition, _yPosition + (Defines::gridLength / 2), _xPosition, _yPosition - (Defines::gridLength / 2));
     }
     else
     {
-        painter->drawEllipse(_xPosition - 30, _yPosition - 30, 60, 60);
+        painter->drawEllipse(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.3), Defines::gridLength * 0.6, Defines::gridLength * 0.6);
         painter->drawLine(_xPosition - (Defines::gridLength / 2), _yPosition, _xPosition + (Defines::gridLength / 2), _yPosition);
     }
     if(_isSelected)
@@ -50,13 +50,13 @@ void PowerSupply::paintInformation(QPainter* painter)
     QFont q;
     q.setPixelSize(13);
     painter->setFont(q);
-    painter->drawText(_xPosition - 40, _yPosition - 30, _name);
+    painter->drawText(_xPosition - (Defines::gridLength * 0.4), _yPosition - (Defines::gridLength * 0.3), _name);
     if(_voltage > 1000)
     {
-        painter->drawText(_xPosition + 10, _yPosition - 30, QString::number(_voltage / 1000) + "kV");
+        painter->drawText(_xPosition + (Defines::gridLength * 0.1), _yPosition - (Defines::gridLength * 0.3), QString::number(_voltage / 1000) + "kV");
     }
     else
     {
-        painter->drawText(_xPosition + 10, _yPosition - 30, QString::number(_voltage) + "V");
+        painter->drawText(_xPosition + (Defines::gridLength * 0.1), _yPosition - (Defines::gridLength * 0.3), QString::number(_voltage) + "V");
     }
 }

@@ -95,11 +95,17 @@ public:
     PuzzleCalculator getPuzzleCalculator(void) {return _puzzleCalculator;}
     QString getVoltageAndCurrentInformation(void);
 
+    bool hasChangedDocument();
+
+public slots:
+    void hasChangedDocument(int idx);
+
 signals:
     void resistanceValueChanged(void);
     void newNetworkIsLoad(void);
     void powerSupplyIsAllowed(bool isAllowed);
     void currentAndVoltageIsValid(bool isValid);
+
 
 private:
     static constexpr int _defaultSceneSize = 6000;
@@ -120,6 +126,7 @@ private:
     QUndoStack*              _undoStack;
 
     bool _isLoading = false;
+    bool _hasChangedDocument = true;
     double _resistanceValue;
 };
 

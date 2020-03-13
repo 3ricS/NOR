@@ -3,6 +3,8 @@
 MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow),
                                                                   _model(model)
 {
+    setLocale(QLocale::system());
+
     _ui->setupUi(this);
     setWindowTitle("NOR - Network of Resistance");
     resize(1080, 720);
@@ -167,26 +169,31 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    //MessageBox bevor geschlossen wird
-    QMessageBox msgBox;
-    msgBox.setText("Möchten Sie ihre Änderungen im Widerstandsnetzwerk sichern?");
-    msgBox.setInformativeText("Ihre Änderungen gehen verloren, wenn Sie sie nicht sichern.");
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Save);
-    int ret = msgBox.exec();
-    switch (ret) {
-      case QMessageBox::Save:
-          _model->save();
-          break;
-      case QMessageBox::Discard:
-          event->accept();
-          break;
-      case QMessageBox::Cancel:
-          event->ignore();
-          break;
-      default:
+    if(_model->hasChangedDocument())
+    {
+        //MessageBox bevor geschlossen wird
+        QMessageBox msgBox;
+        msgBox.setLocale(QLocale::system());
+        msgBox.setText("Möchten Sie ihre Änderungen im Widerstandsnetzwerk sichern?");
+        msgBox.setInformativeText("Ihre Änderungen gehen verloren, wenn Sie sie nicht sichern.");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+        switch (ret)
+        {
+            case QMessageBox::Save:
+                _model->save();
+                break;
+            case QMessageBox::Discard:
+                event->accept();
+                break;
+            case QMessageBox::Cancel:
+                event->ignore();
+                break;
+            default:
 
-          break;
+                break;
+        }
     }
 }
 
@@ -442,7 +449,7 @@ MainWindow::~MainWindow(void)
 
 void MainWindow::updateResistanceValue(void)
 {
-    _ui->CalculatedValue->setText(_countryConverter.toString(_model->getResistanceValue(), 'f', 2) + " Ω");
+    _ui->CalculatedValue->setText(QLocale::system().toString(_model->getResistanceValue(), 'f', 2) + " Ω");
 }
 
 void MainWindow::isPowerSupplyAllowed(bool isAllowed)

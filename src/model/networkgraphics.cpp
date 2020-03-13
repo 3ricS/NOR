@@ -5,6 +5,7 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
     // die Anfangsgröße wird initialisiert
     setSceneRect(-_defaultSceneSize, -_defaultSceneSize, _defaultSceneSize, _defaultSceneSize);
     _manager = new FileManager(this);
+    connect(_undoStack, SIGNAL(indexChanged(int)), this, SLOT(hasChangedDocument(int)));
 }
 
 /*!
@@ -171,6 +172,7 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
 void NetworkGraphics::save(void)
 {
     _manager->save();
+    _hasChangedDocument = false;
 }
 
 void NetworkGraphics::load(void)
@@ -178,6 +180,7 @@ void NetworkGraphics::load(void)
     _isLoading = true;
     _manager->load();
     _isLoading = false;
+    _hasChangedDocument = false;
 
     updateCalc();
     emit resistanceValueChanged();
@@ -1014,4 +1017,14 @@ QString NetworkGraphics::getVoltageAndCurrentInformation(void)
                        "<br><br> Vielen Dank für Ihr Vertändnis!";
     }
     return information;
+}
+
+void NetworkGraphics::hasChangedDocument(int idx)
+{
+    _hasChangedDocument = true;
+}
+
+bool NetworkGraphics::hasChangedDocument()
+{
+    return _hasChangedDocument;
 }

@@ -13,6 +13,7 @@
 #include <QListView>
 #include <QHBoxLayout>
 #include <QComboBox>
+#include <QLocale>
 
 #include <model/networkgraphics.h>
 #include "view/networkview.h"
@@ -104,7 +105,6 @@ private:
     QAction* _descriptionMode = nullptr;
     QAction* _selectionMode = nullptr;
     QAction* _print;
-    QLocale _countryConverter = QLocale::system();
 
     QList<QAction*> _createActionGroup;
     QList<QPushButton*> _modusButtons;

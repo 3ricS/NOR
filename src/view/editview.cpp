@@ -39,9 +39,13 @@ void EditView::setupView(void)
     {
         valueDescription = "Widerstandswert [Ohm]:";
         valuePlaceHolder = "Widerstandswert hier eingeben";
+
+        _editViewUi->actualVoltageView->setText(QLocale::system().toString(_component->getVoltage(), 'f', 2) + "V");
+        _editViewUi->actualCurrentView->setText(QLocale::system().toString(_component->getAmp(), 'f', 2) + "A");
     }
     else if (_component->getComponentTypeInt() == Component::ComponentType::PowerSupply)
     {
+        hideCurrentAndVoltageLabels();
         valueDescription = "Spannung [V]:";
     }
 
@@ -104,6 +108,16 @@ void EditView::setupInitilizingView(void)
 {
     _editViewUi->buttonTurnLeftComponent->close();
     _editViewUi->buttonTurnRightComponent->close();
+
+    hideCurrentAndVoltageLabels();
+}
+
+void EditView::hideCurrentAndVoltageLabels()
+{
+    _editViewUi->CurrentLabel->close();
+    _editViewUi->actualCurrentView->close();
+    _editViewUi->voltageLabel->close();
+    _editViewUi->actualVoltageView->close();
 }
 
 void EditView::turnRight(void)

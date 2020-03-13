@@ -481,6 +481,98 @@ void PuzzleCalculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
     }
 }
 
+void PuzzleCalculator::starMerge(bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB, Node* equalNode, QList<Node*> nodes)
+{
+    //Nun schauen auf der gegenüberliegenden Seite vom gleichen Node
+    Node* oppositeNode = rowPieceB.getOppositeNode(equalNode);
+    RowPiece* searchedRowPieces = nullptr;
+    bool found = false;
+
+    /*Zuerst wird geschaut, ob auch am Opposite Node mindestens 3 RowPieces angeschlossen sind
+     * Durchgehen aller ComponentPorts des gegenüberliegenden Nodes, schauen, wo der Component teil
+     * eines RowPieces ist, wenn eine angrenzendes RowPieces gefunden wurde, schauen, ob der gegenüberliegende Node gleich
+     * dem anfangs gefundenen EqualNode ist, wenn ja rausspringen
+     */
+    int count = 0;
+    for (RowPiece rs : rowPieces)
+    {
+        if (rs.getNodeOne()->getId() == oppositeNode->getId() ||
+            rs.getNodeTwo()->getId() == oppositeNode->getId())
+        {
+            count++;
+        }
+    }
+    if (count >= 3)
+    {
+        for (ComponentPort cp :  oppositeNode->getComponentPorts())
+        {
+            for (RowPiece rs : rowPieces)
+            {
+                for (Component* c : rs.getComponents())
+                {
+                    if (c == cp.getComponent())
+                    {
+                        if (rs.getOppositeNode(oppositeNode) ==
+                            rowPieceA.getOppositeNode(equalNode))
+                        {
+                            searchedRowPieces = new RowPiece(rs.getNodeOne(), rs.getNodeTwo(),
+                                                             rs.getResistanceValue(),
+                                                             rs.getComponents());
+                        }
+                        break;
+                    }
+                }
+                if (found)
+                { break; }
+            }
+            if (found)
+            { break; }
+        }
+
+        if (oppositeNode != nullptr && searchedRowPieces != nullptr &&
+            *searchedRowPieces != rowPieceA && *searchedRowPieces != rowPieceB)
+        {
+            _usedStarCalcutlation = true;
+            //rp ist rowPieceC
+            //Dreieck zu Stern
+            QList<ComponentPort> componentPorts;
+            Node* newNode = new Node(nodes.count(), componentPorts, false);
+            nodes.append(newNode);
+
+            //Erstellen der Stern-RowPieces und alte removen
+            QList<RowPiece> listOfNewRowPieces = calculateStar(rowPieceA, rowPieceB,
+                                                               *searchedRowPieces, newNode);
+            rowPieces.removeOne(rowPieceA);
+            rowPieces.removeOne(rowPieceB);
+            rowPieces.removeOne(*searchedRowPieces);
+            rowPieces.append(listOfNewRowPieces);
+            changedSomething = true;
+        }
+    }
+}
+
+void PuzzleCalculator::paralleMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPiece> &rowPieces, bool &changedSomething)
+{
+    _mergeList.append(rowPieceA);
+    _mergeList.append(rowPieceB);
+    rowPieceA.parallelMerge(rowPieceB);
+    rowPieceA.setIsMergedParallel(true);
+    _mergeList.append(rowPieceA);
+    rowPieceA.setIsMergedParallel(false);
+    rowPieces.removeOne(rowPieceB);
+    changedSomething = true;
+}
+
+void PuzzleCalculator::rowMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPiece> &rowPieces, bool &changedSomething)
+{
+    _mergeList.append(rowPieceA);
+    _mergeList.append(rowPieceB);
+    rowPieceA.rowMerge(rowPieceB);
+    _mergeList.append(rowPieceA);
+    rowPieces.removeOne(rowPieceB);
+    changedSomething = true;
+}
+
 double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node*> nodes)
 {
     while (1 < rowPieces.count())
@@ -498,14 +590,7 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
             {
                 if (rowPieceA != rowPieceB && rowPieceA.hasEqualNodesOnBothSides(rowPieceB))
                 {
-                    _mergeList.append(rowPieceA);
-                    _mergeList.append(rowPieceB);
-                    rowPieceA.parallelMerge(rowPieceB);
-                    rowPieceA.setIsMergedParallel(true);
-                    _mergeList.append(rowPieceA);
-                    rowPieceA.setIsMergedParallel(false);
-                    rowPieces.removeOne(rowPieceB);
-                    changedSomething = true;
+                    paralleMerge(rowPieceA, rowPieceB, rowPieces, changedSomething);
                     break;
                 }
                 else if (rowPieceA != rowPieceB && rowPieceA.hasOneEqualNode(rowPieceB))
@@ -520,12 +605,7 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
 
                         if (2 == countNodesInRowPieces(equalNode, rowPieces))
                         {
-                            _mergeList.append(rowPieceA);
-                            _mergeList.append(rowPieceB);
-                            rowPieceA.rowMerge(rowPieceB);
-                            _mergeList.append(rowPieceA);
-                            rowPieces.removeOne(rowPieceB);
-                            changedSomething = true;
+                            rowMerge(rowPieceA, rowPieceB, rowPieces, changedSomething);
                             break;
                         }
                         else if (1 == countNodesInRowPieces(equalNode, rowPieces))
@@ -568,74 +648,8 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
                         }
                         if (count >= 3 && !changedSomething)
                         {
-                            //Nun schauen auf der gegenüberliegenden Seite vom gleichen Node
-                            Node* oppositeNode = rowPieceB.getOppositeNode(equalNode);
-                            RowPiece* searchedRowPieces = nullptr;
-                            bool found = false;
-
-                            /*Zuerst wird geschaut, ob auch am Opposite Node mindestens 3 RowPieces angeschlossen sind
-                             * Durchgehen aller ComponentPorts des gegenüberliegenden Nodes, schauen, wo der Component teil
-                             * eines RowPieces ist, wenn eine angrenzendes RowPieces gefunden wurde, schauen, ob der gegenüberliegende Node gleich
-                             * dem anfangs gefundenen EqualNode ist, wenn ja rausspringen
-                             */
-                            int count = 0;
-                            for (RowPiece rs : rowPieces)
-                            {
-                                if (rs.getNodeOne()->getId() == oppositeNode->getId() ||
-                                    rs.getNodeTwo()->getId() == oppositeNode->getId())
-                                {
-                                    count++;
-                                }
-                            }
-                            if (count >= 3)
-                            {
-                                for (ComponentPort cp :  oppositeNode->getComponentPorts())
-                                {
-                                    for (RowPiece rs : rowPieces)
-                                    {
-                                        for (Component* c : rs.getComponents())
-                                        {
-                                            if (c == cp.getComponent())
-                                            {
-                                                if (rs.getOppositeNode(oppositeNode) ==
-                                                    rowPieceA.getOppositeNode(equalNode))
-                                                {
-                                                    searchedRowPieces = new RowPiece(rs.getNodeOne(), rs.getNodeTwo(),
-                                                                                     rs.getResistanceValue(),
-                                                                                     rs.getComponents());
-                                                }
-                                                break;
-                                            }
-                                        }
-                                        if (found)
-                                        { break; }
-                                    }
-                                    if (found)
-                                    { break; }
-                                }
-
-                                if (oppositeNode != nullptr && searchedRowPieces != nullptr &&
-                                    *searchedRowPieces != rowPieceA && *searchedRowPieces != rowPieceB)
-                                {
-                                    _usedStarCalcutlation = true;
-                                    //rp ist rowPieceC
-                                    //Dreieck zu Stern
-                                    QList<ComponentPort> componentPorts;
-                                    Node* newNode = new Node(nodes.count(), componentPorts, false);
-                                    nodes.append(newNode);
-
-                                    //Erstellen der Stern-RowPieces und alte removen
-                                    QList<RowPiece> listOfNewRowPieces = calculateStar(rowPieceA, rowPieceB,
-                                                                                       *searchedRowPieces, newNode);
-                                    rowPieces.removeOne(rowPieceA);
-                                    rowPieces.removeOne(rowPieceB);
-                                    rowPieces.removeOne(*searchedRowPieces);
-                                    rowPieces.append(listOfNewRowPieces);
-                                    changedSomething = true;
-                                }
-                            }
+                           starMerge(changedSomething, rowPieces, rowPieceA, rowPieceB, equalNode, nodes);
                         }
-
                     }
                 }
                 if (changedSomething)
@@ -649,7 +663,6 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
             }
         }
     }
-
     return rowPieces.last().getResistanceValue();
 }
 

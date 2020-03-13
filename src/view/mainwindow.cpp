@@ -513,6 +513,8 @@ void MainWindow::openCurrentVoltageWindow()
     QString information = _model->getVoltageAndCurrentInformation();
     QMessageBox* m = new QMessageBox("Strom und Spannung", information, QMessageBox::NoIcon, QMessageBox::Ok,
                                      QMessageBox::NoButton, QMessageBox::NoButton, this);
+
+
     m->resize(700, 500);
     m->show();
 

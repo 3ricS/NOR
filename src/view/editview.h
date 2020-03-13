@@ -42,6 +42,7 @@ private:
     //Methoden
     void setupView(void);
     void setupInitilizingView(void);
+    void hideCurrentAndVoltageLabels(void);
 
     //Variablen
     Ui::EditView*          _editViewUi;

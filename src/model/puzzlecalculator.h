@@ -50,6 +50,9 @@ private:
 
     void calculateVoltageAndAmp(QList<RowPiece> rowpieces);
     void calculateVoltageAndAmpInResistor(RowPiece* rowpiece);
+    void starMerge(bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB, Node* equalNode, QList<Node*> nodes);
+    void paralleMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething);
+    void rowMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething);
 
     QList<RowPiece> _mergeList;
     double _resistanceValue = 0;

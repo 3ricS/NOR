@@ -177,6 +177,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
         msgBox.setText("Möchten Sie ihre Änderungen im Widerstandsnetzwerk sichern?");
         msgBox.setInformativeText("Ihre Änderungen gehen verloren, wenn Sie sie nicht sichern.");
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+        //Überschreiben der Button Texte
+        msgBox.setButtonText(QMessageBox::Save, tr("Sichern ... "));
+        msgBox.setButtonText(QMessageBox::Discard, tr("Nicht sichern"));
+        msgBox.setButtonText(QMessageBox::Cancel, tr("Abbrechen"));
         msgBox.setDefaultButton(QMessageBox::Save);
         int ret = msgBox.exec();
         switch (ret)

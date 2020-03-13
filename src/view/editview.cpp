@@ -16,6 +16,8 @@ EditView::EditView(Component* component, NetworkGraphics* model, bool isInitiali
     {
         setupInitilizingView();
     }
+
+    _editViewUi->buttonBox->button(QDialogButtonBox::Cancel)->setText("Abbrechen");
 }
 
 void EditView::setupView(void)

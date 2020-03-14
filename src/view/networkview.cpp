@@ -91,6 +91,15 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                 }
             }
             _tempComponentListForConnections.clear();
+            if (nullptr != _previousHighlightedPort)
+            {
+                gridDisappears();
+                _model->removeItem(_previousHighlightedPort);
+                delete _previousHighlightedPort;
+                _previousHighlightedPort = nullptr;
+
+                _model->update();
+            }
         }
             break;
         case MouseMode::SelectionMode:
@@ -194,6 +203,20 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
             _connectionStartComponentPort = _model->getComponentPortAtPosition(scenePosition);
             if (_connectionStartComponentPort != nullptr)
             {
+                gridDisappears();
+                Component* foundComponent = _connectionStartComponentPort->getComponent();
+                Component::Port port = _connectionStartComponentPort->getPort();
+
+                int hitBoxHighlight = Component::_hitBoxSize / 1.5;
+                int positionX = foundComponent->getPortPosition(port).x() - hitBoxHighlight;
+                int positionY = foundComponent->getPortPosition(port).y() - hitBoxHighlight;
+                QColor color = QColor(255, 0, 0, 55);
+
+                QGraphicsItem* highlightedRect = _model->addRect(positionX, positionY, 2 * hitBoxHighlight,
+                                                                 2 * hitBoxHighlight, Qt::NoPen,
+                                                                 color);
+                _previousHighlightedPort = highlightedRect;
+
                 Component* tempComponentForConnection = _connectionStartComponentPort->getComponent();
                 _tempComponentListForConnections = _model->getComponents();
                 _tempComponentListForConnections.removeOne(tempComponentForConnection);
@@ -257,7 +280,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
     //Notwendig für den Rechtsklick per Shortcut
     _actualMoveScenePosition = scenePosition;
     //MemoryLeak vermeiden
-    gridDisappears();
+        gridDisappears();
 
     switch (_mouseMode)
     {
@@ -298,10 +321,22 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
                 int positionX = foundComponent->getPortPosition(port).x() - hitBoxHighlight;
                 int positionY = foundComponent->getPortPosition(port).y() - hitBoxHighlight;
 
-                QGraphicsItem* highlightedRect = _model->addRect(positionX, positionY, 2 * hitBoxHighlight,
-                                                                 2 * hitBoxHighlight, Qt::NoPen,
-                                                                 _highlightColor);
-                _previousHighlightedRect = highlightedRect;
+                if(!_mouseIsPressed)
+                {
+                    QGraphicsItem* highlightedRect = _model->addRect(positionX, positionY, 2 * hitBoxHighlight,
+                                                                     2 * hitBoxHighlight, Qt::NoPen,
+                                                                     _highlightColor);
+                    _previousHighlightedRect = highlightedRect;
+                }
+                else if(_mouseIsPressed && _connectionStartComponentPort != nullptr && foundComponentPort->getComponent() != _connectionStartComponentPort->getComponent())
+                {
+                    gridDisappears();
+                    QColor color = QColor(255, 0, 0, 55);
+                    QGraphicsItem* highlightedRect = _model->addRect(positionX, positionY, 2 * hitBoxHighlight,
+                                                                     2 * hitBoxHighlight, Qt::NoPen,
+                                                                     color);
+                    _previousHighlightedRect = highlightedRect;
+                }
                 _model->update();
             }
         }

@@ -68,6 +68,7 @@ private:
     QList<Component*> _tempComponentListForConnections;
     ComponentPort*    _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
     QGraphicsItem*    _previousHighlightedRect = nullptr;
+    QGraphicsItem*    _previousHighlightedPort = nullptr;
     Component*        _selectedComponentToMove = nullptr;
     DescriptionField* _selectedDescriptionToMove = nullptr;
     bool              _isVerticalComponentDefault = true;

@@ -26,15 +26,13 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, double vol
  */
 void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
 {
-
+    painter->drawEllipse(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.3), Defines::gridLength * 0.6, Defines::gridLength * 0.6);
     if (_isVertical)
     {
-        painter->drawEllipse(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.3), Defines::gridLength * 0.6, Defines::gridLength * 0.6);
         painter->drawLine(_xPosition, _yPosition + (Defines::gridLength / 2), _xPosition, _yPosition - (Defines::gridLength / 2));
     }
     else
     {
-        painter->drawEllipse(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.3), Defines::gridLength * 0.6, Defines::gridLength * 0.6);
         painter->drawLine(_xPosition - (Defines::gridLength / 2), _yPosition, _xPosition + (Defines::gridLength / 2), _yPosition);
     }
     if(_isSelected)

@@ -3,7 +3,6 @@ Doku: wenn Fehler oder Mängel auffallen bitte bescheid geben
 
 ___________________________________________________________________
 
-- Multiselect der Bauteile (Move)
 - NetworkGraphics hat 900 Zeilen
 - MergeList in PuzzleCalculator darf keine Membervariable sein (wir haben sonst alles extra ohne Membervariable gemacht)
 	Leonel: Warum darf es keine Membervariable sein? Diese Liste wird für die Stromberechnung gebraucht.

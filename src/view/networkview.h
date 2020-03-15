@@ -64,6 +64,7 @@ private:
 
     bool _mouseIsPressed = false;
     bool _componentOrDescriptionIsGrabbed = false;
+    bool _isMoved = false;
 
     QList<Component*> _tempComponentListForConnections;
     ComponentPort*    _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);

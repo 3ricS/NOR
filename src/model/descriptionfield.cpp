@@ -51,7 +51,7 @@ void DescriptionField::paintHighlightRect(QPainter *painter)
     painter->drawRect(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }
 
-void DescriptionField::setSelected(bool isSelected)
+void DescriptionField::setIsSelected(bool isSelected)
 {
     _isSelected = isSelected;
 

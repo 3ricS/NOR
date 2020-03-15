@@ -91,7 +91,7 @@ bool Connection::hasComponent(Component* searchedComponent)
 
 }
 
-void Connection::set_isSelected(bool isSelected)
+void Connection::setIsSelected(bool isSelected)
 {
      _isSelected = isSelected;
 }
@@ -203,8 +203,8 @@ DescriptionField *Connection::getDescriptionAtPosition(int x, int y)
 {
     for (DescriptionField* description : _model->getDescriptions())
     {
-        bool equalX = (description->getXPos() == x);
-        bool equalY = (description->getYPos() == y);
+        bool equalX = (description->getXPosition() == x);
+        bool equalY = (description->getYPosition() == y);
         if (equalX && equalY)
         {
             return description;

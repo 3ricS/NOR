@@ -98,8 +98,8 @@ DescriptionField* NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition
 {
     for (DescriptionField* description : _descriptions)
     {
-        bool equalX = (description->getXPos() == gridPosition.toPoint().x());
-        bool equalY = (description->getYPos() == gridPosition.toPoint().y());
+        bool equalX = (description->getXPosition() == gridPosition.toPoint().x());
+        bool equalY = (description->getYPosition() == gridPosition.toPoint().y());
         if (equalX && equalY)
         {
             return description;

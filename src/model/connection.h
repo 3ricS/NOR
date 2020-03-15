@@ -48,7 +48,7 @@ public:
     bool hasComponent(Component* searchedComponent);
     static constexpr int _circleRadius = 5;
 
-    void set_isSelected(bool isSelected);
+    void setIsSelected(bool isSelected);
     bool isSelected(void) const { return  _isSelected;}
 
 private:

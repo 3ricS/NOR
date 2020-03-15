@@ -128,8 +128,8 @@ QJsonObject FileManager::saveDescription(DescriptionField *description)
     QJsonObject df;
     df.insert("type", "DescriptionField");
     df.insert("id", description->getId());
-    df.insert("xPos", description->getXPos());
-    df.insert("yPos", description->getYPos());
+    df.insert("xPos", description->getXPosition());
+    df.insert("yPos", description->getYPosition());
     df.insert("text", description->getText());
     return df;
 }

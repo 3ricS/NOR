@@ -2,7 +2,7 @@
 #include "model/component.h"
 #include "model/node.h"
 
-RowPiece::RowPiece(Node* nodeOne, Node* nodeTwo, double resistanceValue, QList<Component*> includedComponents) :
+RowPiece::RowPiece(Node* nodeOne, Node* nodeTwo, long double resistanceValue, QList<Component*> includedComponents) :
     _nodeOne(nodeOne), _nodeTwo(nodeTwo), _resistanceValue(resistanceValue), _components(includedComponents)
 {
 }
@@ -68,8 +68,8 @@ void RowPiece::parallelMerge(RowPiece otherRowPiece)
     }
 
     //Werte zusammenrechnen
-    double newResistanceValueCounter = _resistanceValue * otherRowPiece._resistanceValue;
-    double newResistanceValueDenominator = _resistanceValue + otherRowPiece._resistanceValue;
+    long double newResistanceValueCounter = _resistanceValue * otherRowPiece._resistanceValue;
+    long double newResistanceValueDenominator = _resistanceValue + otherRowPiece._resistanceValue;
     if(newResistanceValueDenominator != 0)
     {
         _resistanceValue = (newResistanceValueCounter / newResistanceValueDenominator);

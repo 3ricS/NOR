@@ -20,7 +20,7 @@ class Calculator
 {
 public:
     static Calculator& calculator(void);
-    double calculate(QList<Connection*> connections, QList<Component*> components);
+    long double calculate(QList<Connection*> connections, QList<Component*> components);
 
     //getter
     bool hasUsedStarCalculation(void) {return _hasUsedStarCalculation;}
@@ -34,7 +34,7 @@ private:
 
     QList<RowPiece> findRowPieces(QList<Node *> &nodes);
     void findSameRowPieces(RowPiece rowpiece1);
-    double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes);
+    long double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes);
     void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful,
                       QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
 

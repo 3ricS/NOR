@@ -16,7 +16,7 @@
  *
  * Es wenn die Spannungsquelle verbunden ist, kann der Gesamtwiderstandswert berechnet werden.
  */
-double Calculator::calculate(QList<Connection*> connections, QList<Component*> components)
+long double Calculator::calculate(QList<Connection*> connections, QList<Component*> components)
 {
     _hasUsedStarCalculation = false;
     _connections = connections;
@@ -58,7 +58,7 @@ QList<RowPiece> Calculator::findRowPieces(QList<Node*>& nodes)
             //test
             for (RowPiece rp : rowPieces)
             {
-                qDebug() << "Widerstand RowPiece" << rp.getResistanceValue() << " von " << rp.getNodeOne()->getId()
+                qDebug() << "Widerstand RowPiece" << static_cast<double>(rp.getResistanceValue()) << " von " << rp.getNodeOne()->getId()
                          << " nach " << rp.getNodeTwo()->getId();
             }
             for (Node* n : nodes)
@@ -363,13 +363,13 @@ Calculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPi
     qDebug() << "Eq NodeC" << equalNodeC->getId();
 
     //Summe aller Widerstände
-    double additionValue =
+    long double additionValue =
             rowPieceA.getResistanceValue() + rowPieceB.getResistanceValue() + rowPieceC.getResistanceValue();
 
     // Die drei Stern-Zweige
-    double starValueA = ((rowPieceA.getResistanceValue() * rowPieceB.getResistanceValue()) / additionValue);
-    double starValueB = ((rowPieceB.getResistanceValue() * rowPieceC.getResistanceValue()) / additionValue);
-    double starValueC = ((rowPieceA.getResistanceValue() * rowPieceC.getResistanceValue()) / additionValue);
+    long double starValueA = ((rowPieceA.getResistanceValue() * rowPieceB.getResistanceValue()) / additionValue);
+    long double starValueB = ((rowPieceB.getResistanceValue() * rowPieceC.getResistanceValue()) / additionValue);
+    long double starValueC = ((rowPieceA.getResistanceValue() * rowPieceC.getResistanceValue()) / additionValue);
 
     RowPiece rowPieceAB(newNode, equalNodeA, starValueA, rowPieceA.getComponents());
     RowPiece rowPieceBC(newNode, equalNodeB, starValueB, rowPieceB.getComponents());
@@ -385,7 +385,7 @@ Calculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPi
 void Calculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
 {
     int ListSize = _mergeList.count() - 1;
-    double totalCurrent = 0.0;
+    long double totalCurrent = 0.0;
     if (_mergeList.isEmpty())
     {
         for (Component* component : _components)
@@ -569,7 +569,7 @@ void Calculator::rowMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPie
     changedSomething = true;
 }
 
-double Calculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node*> nodes)
+long double Calculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node*> nodes)
 {
     while (1 < rowPieces.count())
     {

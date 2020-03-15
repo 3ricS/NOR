@@ -458,7 +458,8 @@ MainWindow::~MainWindow(void)
 
 void MainWindow::updateResistanceValue(void)
 {
-    _ui->CalculatedValue->setText(QLocale::system().toString(_model->getResistanceValue(), 'f', 2) + " Ω");
+    double resistance = static_cast<double>(_model->getResistanceValue());
+    _ui->CalculatedValue->setText(QLocale::system().toString(resistance, 'f', 2) + " Ω");
 }
 
 void MainWindow::isPowerSupplyAllowed(bool isAllowed)

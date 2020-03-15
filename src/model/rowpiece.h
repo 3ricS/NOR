@@ -21,12 +21,12 @@ class Node;
 class RowPiece
 {
 public:
-    RowPiece(Node* nodeOne, Node* nodeTwo, double resistanceValue, QList<Component *> includedComponents);
+    RowPiece(Node* nodeOne, Node* nodeTwo, long double resistanceValue, QList<Component *> includedComponents);
 
     void parallelMerge(RowPiece otherRowPiece);
     void rowMerge(RowPiece otherRowPiece);
 
-    double getResistanceValue(void) {return _resistanceValue;}
+    long double getResistanceValue(void) {return _resistanceValue;}
 
     Node* getNodeOne(void) {return _nodeOne;}
     Node* getNodeTwo(void) {return _nodeTwo;}
@@ -50,7 +50,7 @@ public:
     bool hasNode(Node* node);
 
 private:
-    double _resistanceValue;
+    long double _resistanceValue;
     double _amp = 0.0;
     Node* _nodeOne;
     Node* _nodeTwo;

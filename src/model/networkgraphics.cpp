@@ -988,6 +988,7 @@ void NetworkGraphics::editDescription(DescriptionField* descriptionToEdit, QStri
 void NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QList<DescriptionField*> descriptionList,
                                                 Component* componentToMove, DescriptionField* descriptionToMove, int diffXAfterMoving, int diffYAfterMoving)
 {
+    bool terminationCondition = false;
     QList<Component*> notMovedComponents;
     QList<DescriptionField*> notMovedDescriptions;
     for(Component* component : componentList)
@@ -997,6 +998,14 @@ void NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList,
             QPointF* newPosition = new QPointF(component->getXPosition() + diffXAfterMoving, component->getYPosition() + diffYAfterMoving);
             if(isThereAComponentOrADescription(*newPosition))
             {
+                if(getComponentAtPosition(*newPosition) != nullptr && !getComponentAtPosition(*newPosition)->isSelected())
+                {
+                    terminationCondition = true;
+                }
+                if(getDescriptionAtPosition(*newPosition) != nullptr && !getDescriptionAtPosition(*newPosition)->isSelected())
+                {
+                    terminationCondition = true;
+                }
                 notMovedComponents.append(component);
             }
             DescriptionField* placeholder = nullptr;
@@ -1011,12 +1020,24 @@ void NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList,
             QPointF* newPosition = new QPointF(descriptionfield->getXPosition() + diffXAfterMoving, descriptionfield->getYPosition() + diffYAfterMoving);
             if(isThereAComponentOrADescription(*newPosition))
             {
+                if(getComponentAtPosition(*newPosition) != nullptr && !getComponentAtPosition(*newPosition)->isSelected())
+                {
+                    terminationCondition = true;
+                }
+                if(getDescriptionAtPosition(*newPosition) != nullptr && !getDescriptionAtPosition(*newPosition)->isSelected())
+                {
+                    terminationCondition = true;
+                }
                 notMovedDescriptions.append(descriptionfield);
             }
             Resistor* placeholder = nullptr;
             moveComponent(placeholder, descriptionfield, *newPosition);
             delete placeholder;
         }
+    }
+    if(terminationCondition)
+    {
+        return;
     }
     if(!notMovedComponents.isEmpty() || !notMovedDescriptions.isEmpty())
     {

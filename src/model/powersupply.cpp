@@ -1,5 +1,9 @@
 #include "defines.h"
 #include "powersupply.h"
+#include "connection.h"
+
+#include <QLocale>
+
 /*!
  * \brief Erzeugt ein neues Spannungsquellenobjekt
  *
@@ -24,16 +28,20 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, double vol
  *
  * Die Methode zeichnet abhängig von der räumlichen Ausrichtung die Spannungsquelle auf zwei Weisen.
  */
-void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option, [[maybe_unused]] QWidget* widget)
+void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option,
+                        [[maybe_unused]] QWidget* widget)
 {
-    painter->drawEllipse(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.3), Defines::gridLength * 0.6, Defines::gridLength * 0.6);
-    if (_isVertical)
+    painter->drawEllipse(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.3),
+                         Defines::gridLength * 0.6, Defines::gridLength * 0.6);
+    if(_isVertical)
     {
-        painter->drawLine(_xPosition, _yPosition + (Defines::gridLength / 2), _xPosition, _yPosition - (Defines::gridLength / 2));
+        painter->drawLine(_xPosition, _yPosition + (Defines::gridLength / 2) - Connection::_circleRadius,
+                _xPosition,_yPosition - (Defines::gridLength / 2) + Connection::_circleRadius);
     }
     else
     {
-        painter->drawLine(_xPosition - (Defines::gridLength / 2), _yPosition, _xPosition + (Defines::gridLength / 2), _yPosition);
+        painter->drawLine(_xPosition - (Defines::gridLength / 2) + Connection::_circleRadius, _yPosition,
+                          _xPosition + (Defines::gridLength / 2) - Connection::_circleRadius, _yPosition);
     }
     if(_isSelected)
     {
@@ -48,13 +56,41 @@ void PowerSupply::paintInformation(QPainter* painter)
     QFont q;
     q.setPixelSize(13);
     painter->setFont(q);
-    painter->drawText(_xPosition - (Defines::gridLength * 0.4), _yPosition - (Defines::gridLength * 0.3), _name);
-    if(_voltage > 1000)
+
+    QRectF posName(QPointF(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.43)),
+                   QSize(Defines::gridLength * 0.7, 20));
+    painter->drawText(posName, Qt::AlignLeft, _name);
+    double voltageWithoutUnit;
+    QString unitString = "";
+    // Darstellung des Widerstandwertes
+    if(_voltage < 1000)
     {
-        painter->drawText(_xPosition + (Defines::gridLength * 0.1), _yPosition - (Defines::gridLength * 0.3), QString::number(_voltage / 1000) + "kV");
+        voltageWithoutUnit = _voltage;
+    }
+    else if(_voltage < 1000000)
+    {
+        voltageWithoutUnit = _voltage / 1000;
+        unitString = "k";
     }
     else
     {
-        painter->drawText(_xPosition + (Defines::gridLength * 0.1), _yPosition - (Defines::gridLength * 0.3), QString::number(_voltage) + "V");
+        unitString = "M";
+        voltageWithoutUnit = _voltage / 1000000;
     }
+    voltageWithoutUnit = int(voltageWithoutUnit * 100) / 100.0;
+    QString valueString = QLocale::system().toString(voltageWithoutUnit);
+    valueString.replace(".", "");
+    QString displayString = valueString + " " + unitString + "Ω";
+    QRectF posValue;
+    if(_isVertical)
+    {
+        posValue = QRectF(QPointF(_xPosition - (Defines::gridLength * 0.4), _yPosition + (Defines::gridLength * 0.32)),
+                          QSize(Defines::gridLength * 0.8, 20));
+    }
+    else
+    {
+        posValue = QRectF(QPointF(_xPosition - (Defines::gridLength * 0.4), _yPosition + (Defines::gridLength * 0.32)),
+                          QSize(Defines::gridLength * 0.7, 20));
+    }
+    painter->drawText(posValue, Qt::AlignRight, displayString);
 }

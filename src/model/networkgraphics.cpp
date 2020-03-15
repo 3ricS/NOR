@@ -338,7 +338,7 @@ Component* NetworkGraphics::duplicateComponentWithoutUndo(Component* componentTo
     bool componentIsVertical = componentToDuplicate->isVertical();
     if (isResistor)
     {
-        double resistance = resistor->getVoltage();
+        long double resistance = resistor->getVoltage();
         duplicatedComponent = addResistor(name, resistance, xPosition, yPosition, componentIsVertical);
     }
     else
@@ -381,7 +381,7 @@ NetworkGraphics::duplicateDescription(DescriptionField* descriptionToDuplicate, 
  * Es wird nach dem hinzufügen der Widerstandswert neu berechnet.
  */
 Component*
-NetworkGraphics::addResistor(QString name, double valueResistance, int xPosition, int yPosition, bool isVertical,
+NetworkGraphics::addResistor(QString name, long double valueResistance, int xPosition, int yPosition, bool isVertical,
                              int id)
 {
     _resistorCount++;
@@ -794,7 +794,7 @@ NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* des
  * \param newName           ist der neue Name der zu bearbeitenden Komponente
  * \param newValue          ist der neue Wert der zu bearbeitenden Komponente
  */
-void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QString newName, double newValue)
+void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QString newName, long double newValue)
 {
     componentToEdit->setName(newName);
     Resistor* resistor = dynamic_cast<Resistor*>(componentToEdit);

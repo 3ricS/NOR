@@ -1,6 +1,7 @@
 #include "view/editview.h"
 
 #include <QMessageBox>
+#include <QLocale>
 #include <model/networkgraphics.h>
 
 EditView::EditView(Component* component, NetworkGraphics* model, bool isInitializingWindow, QWidget* parent,
@@ -50,7 +51,7 @@ void EditView::setupView(void)
         _editViewUi->actualCurrentView->setText(QLocale::system().toString(_component->getAmp(), 'f', 2) + "A");
     }
 
-    QRegExp regExp("(([1-9][0-9]*)|0).[0-9]*$");
+    QRegExp regExp("(([1-9][0-9]*|0)(\\,[0-9]*[1-9])?)");
     QRegExpValidator* validator = new QRegExpValidator(regExp, this);
     _editViewUi->textEditValue->setValidator(validator);
     _editViewUi->textEditValue->setFocus();
@@ -61,7 +62,10 @@ void EditView::setupView(void)
     bool isResistor = (nullptr != resistor);
     if (isResistor)
     {
-        _editViewUi->textEditValue->setText(QString::number(resistor->getResistanceValue()));
+        double resistance = static_cast<double>(resistor->getResistanceValue());
+        QString valueString = QLocale::system().toString(resistance);
+        valueString.replace(".", "");
+        _editViewUi->textEditValue->setText(valueString);
     }
     else
     {

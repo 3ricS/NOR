@@ -102,7 +102,7 @@ QJsonObject FileManager::saveComponent(Component* component)
     bool isResistor = (nullptr != resistor);
     if (isResistor)
     {
-        r.insert("value", resistor->getResistanceValue());
+        r.insert("value", static_cast<double>(resistor->getResistanceValue()));
     }
     else
     {
@@ -217,7 +217,7 @@ void FileManager::loadComponent(QJsonArray array)
                 int xPos = obj.value("xPos").toInt();
                 int yPos = obj.value("yPos").toInt();
                 bool isVertical = obj.value("isVertical").toBool();
-                double value = obj.value("value").toDouble();
+                long double value = obj.value("value").toDouble();
                 Component::ComponentType componentType = Component::integerToComponentType(obj.value("type").toInt());
                 if(Component::ComponentType::Resistor == componentType)
                 {

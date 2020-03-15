@@ -61,7 +61,7 @@ public:
     DescriptionField* duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
 
 
-    Component* addResistor(QString name, double valueResistance, int xPosition, int yPosition, bool isVertical, int id = 0);
+    Component* addResistor(QString name, long double valueResistance, int xPosition, int yPosition, bool isVertical, int id = 0);
     Component* addPowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id = 0);
 
 
@@ -78,7 +78,7 @@ public:
     void deleteConnectionWithoutUndo(Connection* connection);
     void deleteDescriptionWithoutUndo(DescriptionField* description);
     void moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove , QPointF gridPosition);
-    void editComponentWithoutUndo(Component* componentToEdit, QString newName, double newValue);
+    void editComponentWithoutUndo(Component* componentToEdit, QString newName, long double newValue);
     void turnComponentRightWithoutUndo(Component* componentToTurn);
 
     //getter
@@ -91,7 +91,7 @@ public:
     QList<Connection*> getConnections(void) {return _connectionList;}
     QList<DescriptionField*> getDescriptions(void) {return _descriptionList;}
     QString getFileName(void);
-    double getResistanceValue(void) {return _resistanceValue;}
+    long double getResistanceValue(void) {return _resistanceValue;}
     bool isLoading(void) {return _isLoading;}
     QUndoStack* getUndoStack(void) {return _undoStack;}
     QString getVoltageAndCurrentInformation(void);
@@ -129,7 +129,7 @@ private:
 
     bool _isLoading = false;
     bool _hasChangedDocument = true;
-    double _resistanceValue;
+    long double _resistanceValue;
 };
 
 #endif // NETWORKGRAPHICS_H

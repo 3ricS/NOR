@@ -15,3 +15,4 @@ ___________________________________________________________________
 - Ausschneiden
 - Multiselect: Kopieren
 - QClipboard einbauen
+- Multiselect auf ein anderes Bauteil drauf schieben -> Absturz

@@ -117,8 +117,8 @@ private:
     Component*          _editedComponent = nullptr;
     QString             _newName;
     QString             _oldName;
-    double              _newValue;
-    double              _oldValue;
+    long double              _newValue;
+    long double              _oldValue;
     Component::Orientation  _oldOrientation;
     Component::Orientation  _newOrientation;
 };

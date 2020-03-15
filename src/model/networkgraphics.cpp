@@ -942,6 +942,48 @@ void NetworkGraphics::editDescription(DescriptionField* descriptionToEdit, QStri
     _undoStack->push(commandEditDescription);
 }
 
+#include <QtDebug>
+void NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QList<DescriptionField*> descriptionList,
+                                                Component* componentToMove, DescriptionField* descriptionToMove, int diffXAfterMoving, int diffYAfterMoving)
+{
+    QList<Component*> notMovedComponents;
+    QList<DescriptionField*> notMovedDescriptions;
+    for(Component* component : componentList)
+    {
+        if(component->isSelected() && component != componentToMove)
+        {
+            QPointF* newPosition = new QPointF(component->getXPosition() + diffXAfterMoving, component->getYPosition() + diffYAfterMoving);
+            if(isThereAComponentOrADescription(*newPosition))
+            {
+                notMovedComponents.append(component);
+            }
+            DescriptionField* placeholder = nullptr;
+            moveComponent(component, placeholder, *newPosition);
+            delete placeholder;
+        }
+    }
+    for(DescriptionField* descriptionfield : descriptionList)
+    {
+        if(descriptionfield->isSelected() && descriptionfield != descriptionToMove)
+        {
+            QPointF* newPosition = new QPointF(descriptionfield->getXPosition() + diffXAfterMoving, descriptionfield->getYPosition() + diffYAfterMoving);
+            if(isThereAComponentOrADescription(*newPosition))
+            {
+                notMovedDescriptions.append(descriptionfield);
+            }
+            Resistor* placeholder = nullptr;
+            moveComponent(placeholder, descriptionfield, *newPosition);
+            delete placeholder;
+        }
+    }
+    qDebug() << notMovedComponents.isEmpty() << notMovedDescriptions.isEmpty();
+    if(!notMovedComponents.isEmpty() || !notMovedDescriptions.isEmpty())
+    {
+        qDebug() << "hallo";
+        moveMultiselectComponents(notMovedComponents, notMovedDescriptions, componentToMove, descriptionToMove, diffXAfterMoving, diffYAfterMoving);
+    }
+}
+
 /*!
  * \brief Fügt ein Textfeld hinzu.
  *

@@ -53,6 +53,8 @@ public:
     void deleteConnection(Connection* connectionToDelete);
     void deleteDescription(DescriptionField* descriptionFieldToDelete);
     void editDescription(DescriptionField* descriptionToEdit, QString newText);
+    void moveMultiselectComponents(QList<Component*> componentList, QList<DescriptionField*> descriptionList,
+                                   Component* componentToMove, DescriptionField* descriptionToMove, int diffXAfterMoving, int diffYAfterMoving);
 
 
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);

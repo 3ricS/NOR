@@ -137,26 +137,8 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                     diffYAfterMoving = _selectedDescriptionToMove->getYPosition() - previousComoponentYPosition;
                 }
 
-                for(Component* component : _model->getComponents())
-                {
-                    if(component->isSelected() && component != _selectedComponentToMove)
-                    {
-                        QPointF* newPosition = new QPointF(component->getXPosition() + diffXAfterMoving, component->getYPosition() + diffYAfterMoving);
-                        DescriptionField* placeholder = nullptr;
-                        _model->moveComponent(component, placeholder, *newPosition);
-                        delete placeholder;
-                    }
-                }
-                for(DescriptionField* descriptionfield : _model->getDescriptions())
-                {
-                    if(descriptionfield->isSelected() && descriptionfield != _selectedDescriptionToMove)
-                    {
-                        QPointF* newPosition = new QPointF(descriptionfield->getXPosition() + diffXAfterMoving, descriptionfield->getYPosition() + diffYAfterMoving);
-                        Resistor* placeholder = nullptr;
-                        _model->moveComponent(placeholder, descriptionfield, *newPosition);
-                        delete placeholder;
-                    }
-                }
+                _model->moveMultiselectComponents(_model->getComponents(), _model->getDescriptions(),
+                                                  _selectedComponentToMove, _selectedDescriptionToMove, diffXAfterMoving, diffYAfterMoving);
             }
             if(!_isMoved)
             {

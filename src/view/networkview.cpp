@@ -104,6 +104,8 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         case MouseMode::SelectionMode:
         {
             //Move Event nur auslösen, wenn Objekt an neuer GridPosition
+        if(!_model->isThereAComponentOrADescription(gridPosition))
+        {
             if ((_selectedComponentToMove != nullptr && _selectedComponentToMove->getPosition() != gridPosition) ||
                 (_selectedDescriptionToMove != nullptr &&
                  QPointF(_selectedDescriptionToMove->getXPosition(), _selectedDescriptionToMove->getYPosition()) != gridPosition))
@@ -140,6 +142,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                 _model->moveMultiselectComponents(_model->getComponents(), _model->getDescriptions(),
                                                   _selectedComponentToMove, _selectedDescriptionToMove, diffXAfterMoving, diffYAfterMoving);
             }
+        }
             if(!_isMoved)
             {
                 removeHighlightSelectedRect();

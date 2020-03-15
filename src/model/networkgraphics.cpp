@@ -942,7 +942,6 @@ void NetworkGraphics::editDescription(DescriptionField* descriptionToEdit, QStri
     _undoStack->push(commandEditDescription);
 }
 
-#include <QtDebug>
 void NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QList<DescriptionField*> descriptionList,
                                                 Component* componentToMove, DescriptionField* descriptionToMove, int diffXAfterMoving, int diffYAfterMoving)
 {
@@ -976,10 +975,8 @@ void NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList,
             delete placeholder;
         }
     }
-    qDebug() << notMovedComponents.isEmpty() << notMovedDescriptions.isEmpty();
     if(!notMovedComponents.isEmpty() || !notMovedDescriptions.isEmpty())
     {
-        qDebug() << "hallo";
         moveMultiselectComponents(notMovedComponents, notMovedDescriptions, componentToMove, descriptionToMove, diffXAfterMoving, diffYAfterMoving);
     }
 }

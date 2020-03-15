@@ -1,4 +1,5 @@
 #include "model/networkgraphics.h"
+#include "model/calculator.h"
 
 NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsScene()), _undoStack(new QUndoStack(this))
 {
@@ -731,7 +732,7 @@ void NetworkGraphics::updateCalc(void)
 {
     if (!_isLoading)
     {
-        _resistanceValue = _puzzleCalculator.calculate(_connectionList, _componentList);
+        _resistanceValue = Calculator::calculator().calculate(_connectionList, _componentList);
 
         update();
         emit resistanceValueChanged();
@@ -1057,7 +1058,7 @@ DescriptionField* NetworkGraphics::addDescriptionField(QPointF gridPosition, boo
 QString NetworkGraphics::getVoltageAndCurrentInformation(void)
 {
     QString information;
-    if (!getPuzzleCalculator().getUsedStarCalculation())
+    if (!Calculator::calculator().hasUsedStarCalculation())
     {
         for (Component* c : getComponents())
         {

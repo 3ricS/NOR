@@ -1,7 +1,8 @@
 /*!
  * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
  *
- * \brief   Der PuzzleCalculator berechnet den Gesamtwiderstandswert des Netztwerkes.
+ * \brief   Der Calculator berechnet den Gesamtwiderstandswert des Netztwerkes.
+ * Die Klasse ist ein Singleton.
  *
  *
  */
@@ -15,17 +16,22 @@
 class Connection;
 class Component;
 
-class PuzzleCalculator
+class Calculator
 {
 public:
-    PuzzleCalculator();
-
+    static Calculator& calculator(void);
     double calculate(QList<Connection*> connections, QList<Component*> components);
 
     //getter
-    bool getUsedStarCalculation(void) {return _usedStarCalcutlation;}
+    bool hasUsedStarCalculation(void) {return _hasUsedStarCalculation;}
 
 private:
+    //Singleton
+    Calculator(void) = default;
+    ~Calculator(void) = default;
+    Calculator(const Calculator&) = delete;
+    Calculator&operator=(const Calculator&) = delete;
+
     QList<RowPiece> findRowPieces(QList<Node *> &nodes);
     void findSameRowPieces(RowPiece rowpiece1);
     double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes);
@@ -58,7 +64,8 @@ private:
     double _resistanceValue = 0;
     QList<Component*> _components;
     QList<Connection*> _connections;
-    bool _usedStarCalcutlation = false;
+    bool _hasUsedStarCalculation = false;
+
 };
 
 

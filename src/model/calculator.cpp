@@ -1,15 +1,11 @@
 #include <QDebug>
 #include <utility>
 
-#include "puzzlecalculator.h"
+#include "calculator.h"
 #include "model/node.h"
 #include "model/connection.h"
 #include "model/component.h"
 #include "model/resistor.h"
-
-PuzzleCalculator::PuzzleCalculator()
-{
-}
 
 /*!
  * \brief Ruft das Berechnen des Widerstandes auf.
@@ -20,9 +16,9 @@ PuzzleCalculator::PuzzleCalculator()
  *
  * Es wenn die Spannungsquelle verbunden ist, kann der Gesamtwiderstandswert berechnet werden.
  */
-double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Component*> components)
+double Calculator::calculate(QList<Connection*> connections, QList<Component*> components)
 {
-    _usedStarCalcutlation = false;
+    _hasUsedStarCalculation = false;
     _connections = connections;
     _components = components;
     _mergeList.clear();
@@ -39,7 +35,7 @@ double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Compone
     return 0.0;
 }
 
-QList<RowPiece> PuzzleCalculator::findRowPieces(QList<Node*>& nodes)
+QList<RowPiece> Calculator::findRowPieces(QList<Node*>& nodes)
 {
     //Anfang suchen
     QList<ComponentPort> startOfSearchComponentsPorts = findFirstComponentPort();
@@ -79,7 +75,7 @@ QList<RowPiece> PuzzleCalculator::findRowPieces(QList<Node*>& nodes)
     return rowPieces;
 }
 
-void PuzzleCalculator::findSameRowPieces(RowPiece rowpiece1)
+void Calculator::findSameRowPieces(RowPiece rowpiece1)
 {
     for (RowPiece& rowpiece2 : _mergeList)
     {
@@ -91,7 +87,7 @@ void PuzzleCalculator::findSameRowPieces(RowPiece rowpiece1)
     }
 }
 
-void PuzzleCalculator::searchingForIndirectParallelNeighbours(QList<ComponentPort>& foundComponentPorts)
+void Calculator::searchingForIndirectParallelNeighbours(QList<ComponentPort>& foundComponentPorts)
 {
     QList<ComponentPort> newFound;
 
@@ -121,8 +117,8 @@ void PuzzleCalculator::searchingForIndirectParallelNeighbours(QList<ComponentPor
 }
 
 void
-PuzzleCalculator::searchingForDirectParallelNeighbours(ComponentPort actualComPort,
-                                                       QList<ComponentPort>& foundComponentPorts)
+Calculator::searchingForDirectParallelNeighbours(ComponentPort actualComPort,
+                                                 QList<ComponentPort>& foundComponentPorts)
 {
     for (Connection* c : _connections)
     {
@@ -147,7 +143,7 @@ PuzzleCalculator::searchingForDirectParallelNeighbours(ComponentPort actualComPo
     foundComponentPorts.removeAll(actualComPort);
 }
 
-QList<ComponentPort> PuzzleCalculator::findFirstComponentPort(void)
+QList<ComponentPort> Calculator::findFirstComponentPort(void)
 {
     ComponentPort startOfSearch(nullptr, Component::Port::null);
     for (Connection* connection : _connections)
@@ -174,8 +170,8 @@ QList<ComponentPort> PuzzleCalculator::findFirstComponentPort(void)
     return searchForNeighbours(startOfSearch);
 }
 
-void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful,
-                                    QList<RowPiece>* rowPieces, QList<Node*>* knownNodes)
+void Calculator::pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful,
+                              QList<RowPiece>* rowPieces, QList<Node*>* knownNodes)
 {
     //Wenn der Knoten bereits bekannt ist, ist die Abbruchbedingung erreicht
     QList<Component*> rowPiecesComponents;
@@ -278,9 +274,9 @@ void PuzzleCalculator::pathAnalysis(ComponentPort actualComponentPort, bool& has
 
 }
 
-Node* PuzzleCalculator::getOrCreateNode(ComponentPort componentPortForNewNode,
-                                        QList<ComponentPort> connectedComponentPorts,
-                                        QList<Node*>* knownNodes)
+Node* Calculator::getOrCreateNode(ComponentPort componentPortForNewNode,
+                                  QList<ComponentPort> connectedComponentPorts,
+                                  QList<Node*>* knownNodes)
 {
     for (Node* node : *knownNodes)
     {
@@ -310,14 +306,14 @@ Node* PuzzleCalculator::getOrCreateNode(ComponentPort componentPortForNewNode,
     return createdNode;
 }
 
-QList<ComponentPort> PuzzleCalculator::searchForNeighbours(ComponentPort componentPortForSearch)
+QList<ComponentPort> Calculator::searchForNeighbours(ComponentPort componentPortForSearch)
 {
     QList<ComponentPort> neighbours;
     searchingForDirectParallelNeighbours(componentPortForSearch, neighbours);
     return neighbours;
 }
 
-bool PuzzleCalculator::isPowerSupplyinComponentPortList(const QList<ComponentPort> list)
+bool Calculator::isPowerSupplyinComponentPortList(const QList<ComponentPort> list)
 {
     for (ComponentPort componentPort : list)
     {
@@ -329,7 +325,7 @@ bool PuzzleCalculator::isPowerSupplyinComponentPortList(const QList<ComponentPor
     return false;
 }
 
-bool PuzzleCalculator::isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces)
+bool Calculator::isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces)
 {
     QList<Node*> nodes;
     for (RowPiece rp : rowPieces)
@@ -353,7 +349,7 @@ bool PuzzleCalculator::isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces)
 }
 
 QList<RowPiece>
-PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node* newNode)
+Calculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node* newNode)
 {
     qDebug() << "RowA" << rowPieceA.getComponents()[0]->getName();
     qDebug() << "RowB" << rowPieceB.getComponents()[0]->getName();
@@ -386,7 +382,7 @@ PuzzleCalculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece
     return listOfNewRowPieces;
 }
 
-void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
+void Calculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
 {
     int ListSize = _mergeList.count() - 1;
     double totalCurrent = 0.0;
@@ -464,7 +460,7 @@ void PuzzleCalculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces)
     }
 }
 
-void PuzzleCalculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
+void Calculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
 {
     for (Component* component : rowpiece->getComponents())
     {
@@ -481,7 +477,7 @@ void PuzzleCalculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
     }
 }
 
-void PuzzleCalculator::starMerge(bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB, Node* equalNode, QList<Node*> nodes)
+void Calculator::starMerge(bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB, Node* equalNode, QList<Node*> nodes)
 {
     //Nun schauen auf der gegenüberliegenden Seite vom gleichen Node
     Node* oppositeNode = rowPieceB.getOppositeNode(equalNode);
@@ -532,7 +528,7 @@ void PuzzleCalculator::starMerge(bool& changedSomething, QList<RowPiece>& rowPie
         if (oppositeNode != nullptr && searchedRowPieces != nullptr &&
             *searchedRowPieces != rowPieceA && *searchedRowPieces != rowPieceB)
         {
-            _usedStarCalcutlation = true;
+            _hasUsedStarCalculation = true;
             //rp ist rowPieceC
             //Dreieck zu Stern
             QList<ComponentPort> componentPorts;
@@ -551,7 +547,7 @@ void PuzzleCalculator::starMerge(bool& changedSomething, QList<RowPiece>& rowPie
     }
 }
 
-void PuzzleCalculator::paralleMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPiece> &rowPieces, bool &changedSomething)
+void Calculator::paralleMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPiece> &rowPieces, bool &changedSomething)
 {
     _mergeList.append(rowPieceA);
     _mergeList.append(rowPieceB);
@@ -563,7 +559,7 @@ void PuzzleCalculator::paralleMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QL
     changedSomething = true;
 }
 
-void PuzzleCalculator::rowMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPiece> &rowPieces, bool &changedSomething)
+void Calculator::rowMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPiece> &rowPieces, bool &changedSomething)
 {
     _mergeList.append(rowPieceA);
     _mergeList.append(rowPieceB);
@@ -573,7 +569,7 @@ void PuzzleCalculator::rowMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<
     changedSomething = true;
 }
 
-double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node*> nodes)
+double Calculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node*> nodes)
 {
     while (1 < rowPieces.count())
     {
@@ -666,7 +662,7 @@ double PuzzleCalculator::calculateResistanceValueFromRowPieces(QList<RowPiece> r
     return rowPieces.last().getResistanceValue();
 }
 
-int PuzzleCalculator::countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces)
+int Calculator::countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces)
 {
     int counter = 0;
     for (RowPiece rowPiece : listOfRowPieces)
@@ -677,4 +673,10 @@ int PuzzleCalculator::countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> l
         }
     }
     return counter;
+}
+
+Calculator &Calculator::calculator(void)
+{
+    static Calculator calculator;
+    return calculator;
 }

@@ -2910,7 +2910,7 @@
 											"top": 287,
 											"width": 104.025390625,
 											"height": 13,
-											"text": "PuzzleCalculator"
+											"text": "Calculator"
 										},
 										{
 											"_type": "LabelView",
@@ -6813,7 +6813,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "PuzzleCalculator",
+					"name": "Calculator",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",

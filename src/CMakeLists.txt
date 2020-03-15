@@ -39,7 +39,7 @@ set(MOC_HEADERS
         view/powerview.h
         model/componentport.h
         model/node.h
-        model/puzzlecalculator.h
+        model/calculator.h
         model/rowpiece.h
         model/commands.h
         )
@@ -59,7 +59,7 @@ set(SOURCES
         view/networkview.cpp
         view/powerview.cpp
         model/componentport.cpp
-        model/puzzlecalculator.cpp
+        model/calculator.cpp
         model/rowpiece.cpp
         model/commands.cpp
         )

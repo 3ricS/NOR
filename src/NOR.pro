@@ -28,6 +28,7 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
+        model/calculator.cpp \
         model/component.cpp \
         model/connection.cpp \
         model/descriptionfield.cpp \
@@ -39,13 +40,13 @@ SOURCES += \
         model/networkgraphics.cpp \
         view/networkview.cpp \
         model/componentport.cpp \
-        model/puzzlecalculator.cpp \
         model/rowpiece.cpp \
         model/commands.cpp \
         view/powerview.cpp
 
 HEADERS += \
         defines.h \
+        model/calculator.h \
         model/component.h \
         model/connection.h \
         model/descriptionfield.h \
@@ -58,7 +59,6 @@ HEADERS += \
         view/networkview.h \
         model/componentport.h \
         model/node.h \
-        model/puzzlecalculator.h \
         model/rowpiece.h \
         model/commands.h \
         view/powerview.h

@@ -20,7 +20,7 @@
 #include <model/powersupply.h>
 #include <model/connection.h>
 #include <model/filemanager.h>
-#include <model/puzzlecalculator.h>
+#include <model/calculator.h>
 #include <model/commands.h>
 
 class FileManager;
@@ -94,7 +94,6 @@ public:
     double getResistanceValue(void) {return _resistanceValue;}
     bool isLoading(void) {return _isLoading;}
     QUndoStack* getUndoStack(void) {return _undoStack;}
-    PuzzleCalculator getPuzzleCalculator(void) {return _puzzleCalculator;}
     QString getVoltageAndCurrentInformation(void);
     QList<Component*> getSelectedComponents(void);
     QList<DescriptionField*> getSelectedDescriptionFields(void);
@@ -126,7 +125,6 @@ private:
     QList<DescriptionField*> _descriptionList;
     QGraphicsScene*          _graphics = nullptr;
     FileManager*             _manager = nullptr;
-    PuzzleCalculator         _puzzleCalculator = PuzzleCalculator();
     QUndoStack*              _undoStack;
 
     bool _isLoading = false;

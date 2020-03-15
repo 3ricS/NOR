@@ -31,6 +31,7 @@ public:
     void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
     void deleteSelectedItem(void);
     void editNetworkOrDescription(void);
+    void deselectAllItems(void);
 
 public slots:
     void focus(void);
@@ -47,7 +48,6 @@ private:
     static QPointF scenePositionToGrid(QPointF scenePosition);
     void gridDisappears(void);
     void highlightRect(QPointF scenePositionOne, QColor _highlightColor);
-    void removeHighlightSelectedRect(void);
     void rotateComponent(QPointF gridPosition, QPointF scenePosition);
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
     QPointF findScrollPosition(void);

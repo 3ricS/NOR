@@ -82,6 +82,7 @@ void MainWindow::setSelectionMode(void)
 */
 void MainWindow::setResistorMode(void)
 {
+    _networkView->deselectAllItems();
     _networkView->setMouseMode(NetworkView::MouseMode::ResistorMode);
 
     setSelectionOfModeButtons(_ui->Resistor);
@@ -93,6 +94,7 @@ void MainWindow::setResistorMode(void)
 */
 void MainWindow::setPowerSupplyMode(void)
 {
+    _networkView->deselectAllItems();
     _networkView->setMouseMode(NetworkView::MouseMode::PowerSupplyMode);
 
     setSelectionOfModeButtons(_ui->PowerSupply);
@@ -104,6 +106,7 @@ void MainWindow::setPowerSupplyMode(void)
 */
 void MainWindow::setDescriptionMode(void)
 {
+    _networkView->deselectAllItems();
     _networkView->setMouseMode(NetworkView::MouseMode::DescriptionMode);
 
     setSelectionOfModeButtons(_ui->DescriptionField);
@@ -115,6 +118,7 @@ void MainWindow::setDescriptionMode(void)
 */
 void MainWindow::setConnectionMode(void)
 {
+    _networkView->deselectAllItems();
     _networkView->setMouseMode(NetworkView::MouseMode::ConnectionMode);
 
     setSelectionOfModeButtons(_ui->Connection);

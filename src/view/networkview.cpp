@@ -145,7 +145,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         }
             if(!_isMoved)
             {
-                removeHighlightSelectedRect();
+                deselectAllItems();
             }
             //Multiselection der Bauteile
             if ((_firstPositionMultiselect != gridPosition) &&
@@ -513,7 +513,7 @@ void NetworkView::deleteSelectedItem(void)
             _model->deleteConnection(connection);
         }
     }
-    removeHighlightSelectedRect();
+    deselectAllItems();
 }
 
 /*!
@@ -553,7 +553,7 @@ void NetworkView::focus(void)
     centerOn(findScrollPosition());
 }
 
-void NetworkView::removeHighlightSelectedRect(void)
+void NetworkView::deselectAllItems(void)
 {
     for (Component* component : _model->getComponents())
     {
@@ -861,7 +861,7 @@ void NetworkView::keyPressEvent(QKeyEvent* event)
     {
         setMouseMode(NetworkView::MouseMode::SelectionMode);
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
-        removeHighlightSelectedRect();
+        deselectAllItems();
         gridDisappears();
 
         //Alle selected Objekte auf nullptr setzten, sonst ungewolltes Löschen

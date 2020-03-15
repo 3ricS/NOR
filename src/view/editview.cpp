@@ -45,8 +45,9 @@ void EditView::setupView(void)
     }
     else if (_component->getComponentTypeInt() == Component::ComponentType::PowerSupply)
     {
-        hideCurrentAndVoltageLabels();
+        hideVoltageLabels();
         valueDescription = "Spannung [V]:";
+        _editViewUi->actualCurrentView->setText(QLocale::system().toString(_component->getAmp(), 'f', 2) + "A");
     }
 
     QRegExp regExp("(([1-9][0-9]*)|0).[0-9]*$");
@@ -116,6 +117,13 @@ void EditView::hideCurrentAndVoltageLabels()
 {
     _editViewUi->CurrentLabel->close();
     _editViewUi->actualCurrentView->close();
+    _editViewUi->voltageLabel->close();
+    _editViewUi->actualVoltageView->close();
+}
+
+void EditView::hideVoltageLabels()
+{
+    _editViewUi->CurrentLabel->setText("Gesamtstrom:");
     _editViewUi->voltageLabel->close();
     _editViewUi->actualVoltageView->close();
 }

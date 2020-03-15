@@ -96,7 +96,7 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF gridPosition)
  */
 DescriptionField* NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition)
 {
-    for (DescriptionField* description : _descriptions)
+    for (DescriptionField* description : _descriptionList)
     {
         bool equalX = (description->getXPosition() == gridPosition.toPoint().x());
         bool equalY = (description->getYPosition() == gridPosition.toPoint().y());
@@ -501,7 +501,7 @@ NetworkGraphics::addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoa
  */
 void NetworkGraphics::addDescriptionFieldWithoutUndo(DescriptionField* descriptionFieldToAdd)
 {
-    _descriptions.append(descriptionFieldToAdd);
+    _descriptionList.append(descriptionFieldToAdd);
     addItem(descriptionFieldToAdd);
 
     update();
@@ -571,7 +571,7 @@ void NetworkGraphics::deleteDescriptionWithoutUndo(DescriptionField* description
     if (description != nullptr)
     {
         removeItem(description);
-        _descriptions.removeOne(description);
+        _descriptionList.removeOne(description);
         _descriptionCount--;
     }
 }
@@ -1108,4 +1108,30 @@ void NetworkGraphics::hasChangedDocument(int idx)
 bool NetworkGraphics::hasChangedDocument(void)
 {
     return _hasChangedDocument;
+}
+
+QList<Component*> NetworkGraphics::getSelectedComponents(void)
+{
+    QList<Component*> selectedComponents;
+    for (Component* component : _componentList)
+    {
+        if (component->isSelected())
+        {
+            selectedComponents.append(component);
+        }
+    }
+    return selectedComponents;
+}
+
+QList<DescriptionField*> NetworkGraphics::getSelectedDescriptionFields(void)
+{
+    QList<DescriptionField*> selectedDescriptionFields;
+    for (DescriptionField* description : _descriptionList)
+    {
+        if (description->isSelected())
+        {
+            selectedDescriptionFields.append(description);
+        }
+    }
+    return selectedDescriptionFields;
 }

@@ -17,6 +17,7 @@
 
 #include <model/networkgraphics.h>
 #include "view/networkview.h"
+#include "view/powerview.h"
 #include "ui_mainwindow.h"
 
 class Model;

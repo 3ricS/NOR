@@ -41,7 +41,8 @@ SOURCES += \
         model/componentport.cpp \
         model/puzzlecalculator.cpp \
         model/rowpiece.cpp \
-        model/commands.cpp
+        model/commands.cpp \
+        view/powerview.cpp
 
 HEADERS += \
         defines.h \
@@ -59,11 +60,13 @@ HEADERS += \
         model/node.h \
         model/puzzlecalculator.h \
         model/rowpiece.h \
-        model/commands.h
+        model/commands.h \
+        view/powerview.h
 
 FORMS += \
         view/editview.ui \
-        view/mainwindow.ui
+        view/mainwindow.ui \
+        view/powerview.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

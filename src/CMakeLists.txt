@@ -36,6 +36,7 @@ set(MOC_HEADERS
         view/mainwindow.h
         model/networkgraphics.h
         view/networkview.h
+        view/powerview.h
         model/componentport.h
         model/node.h
         model/puzzlecalculator.h
@@ -56,6 +57,7 @@ set(SOURCES
         view/mainwindow.cpp
         model/networkgraphics.cpp
         view/networkview.cpp
+        view/powerview.cpp
         model/componentport.cpp
         model/puzzlecalculator.cpp
         model/rowpiece.cpp
@@ -66,6 +68,7 @@ set(SOURCES
 set(UIS
         src/view/editview.ui
         src/view/mainwindow.ui
+        src/view/powerview.ui
         )
 
 # set ressources

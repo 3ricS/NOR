@@ -11,3 +11,7 @@ ___________________________________________________________________
 		p.S ja man könnte einfach hitbox weiterverwenden, aber ich finde so wird klarer, das es eine neue Hitbox ist, aber kannst es auch rausschmeißen, wenn du es willst.
 
 - Ströme und Spannungen mit scrollbarem View anzeigen
+- Maus ändert sich bei Änderung des Modes über die Tastenkombination nicht
+- Ausschneiden
+- Multiselect: Kopieren
+- QClipboard einbauen

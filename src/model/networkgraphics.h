@@ -89,13 +89,15 @@ public:
     Connection* getConnectionAtPosition(QPointF gridposition);
     QList<Component*> getComponents(void) {return _componentList;}
     QList<Connection*> getConnections(void) {return _connectionList;}
-    QList<DescriptionField*> getDescriptions(void) {return _descriptions;}
+    QList<DescriptionField*> getDescriptions(void) {return _descriptionList;}
     QString getFileName(void);
     double getResistanceValue(void) {return _resistanceValue;}
     bool isLoading(void) {return _isLoading;}
     QUndoStack* getUndoStack(void) {return _undoStack;}
     PuzzleCalculator getPuzzleCalculator(void) {return _puzzleCalculator;}
     QString getVoltageAndCurrentInformation(void);
+    QList<Component*> getSelectedComponents(void);
+    QList<DescriptionField*> getSelectedDescriptionFields(void);
 
     bool hasChangedDocument(void);
 
@@ -121,7 +123,7 @@ private:
 
     QList<Component*>        _componentList;
     QList<Connection*>       _connectionList;
-    QList<DescriptionField*> _descriptions;
+    QList<DescriptionField*> _descriptionList;
     QGraphicsScene*          _graphics = nullptr;
     FileManager*             _manager = nullptr;
     PuzzleCalculator         _puzzleCalculator = PuzzleCalculator();

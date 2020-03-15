@@ -400,27 +400,8 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
 
 void NetworkView::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    QPointF scenePosition = mapToScene(event->pos());
-
-    if (_mouseMode == SelectionMode)
+    if(_mouseMode == SelectionMode)
     {
-        QPointF gridPosition = scenePositionToGrid(scenePosition);
-
-        for (Component* component : _model->getComponents())
-        {
-            if (component->isSelected())
-            {
-                _model->getComponentAtPosition(gridPosition);
-            }
-        }
-
-        for (DescriptionField* description : _model->getDescriptions())
-        {
-            if (description->isSelected())
-            {
-                _model->getDescriptionAtPosition(gridPosition);
-            }
-        }
         editNetworkOrDescription();
     }
 }
@@ -523,26 +504,23 @@ void NetworkView::deleteSelectedItem(void)
  */
 void NetworkView::editNetworkOrDescription(void)
 {
-    for (Component* component : _model->getComponents())
+    QList<Component*> selectedComponents = _model->getSelectedComponents();
+    QList<DescriptionField*> selectedDescriptionFields = _model->getSelectedDescriptionFields();
+
+    for (Component* component : selectedComponents)
     {
-        if (component->isSelected())
-        {
-            EditView* editView = new EditView(component, _model, false, this, _model->getUndoStack());
-            editView->show();
-        }
+        EditView* editView = new EditView(component, _model, false, this, _model->getUndoStack());
+        editView->show();
     }
 
-    for (DescriptionField* description : _model->getDescriptions())
+    for (DescriptionField* description : selectedDescriptionFields)
     {
-        if (description->isSelected())
+        bool ok = false;
+        QString text = QInputDialog::getMultiLineText(this, "Textfeld bearbeiten", "Text eingeben:",
+                                                      description->getText(), &ok, Qt::WindowCloseButtonHint);
+        if(ok)
         {
-            bool ok = false;
-            QString text = QInputDialog::getMultiLineText(this, "Textfeld bearbeiten", "Text eingeben:",
-                                                          description->getText(), &ok, Qt::WindowCloseButtonHint);
-            if (ok)
-            {
-                _model->editDescription(description, text);
-            }
+            _model->editDescription(description, text);
         }
     }
 }

@@ -2,6 +2,8 @@
  * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
  *
  * \brief   Eine Node ist Knoten, an dem Connections abzweigen.
+ *
+ * Ein Node besitzt eine Id, eine Liste von ComponentPorts und ob der Knoten mit der Spannungsquelle verbunden ist.
  */
 
 #ifndef NOR_NODE_H

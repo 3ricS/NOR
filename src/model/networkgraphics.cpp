@@ -169,12 +169,17 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
     return nullptr;
 }
 
+/*!
+ * \brief Speichert das erstellte Netzwerk ab.
+ */
 void NetworkGraphics::save(void)
 {
     _manager->save();
     _hasChangedDocument = false;
 }
-
+/*!
+ * \brief Lädt ein gespeichertes Netzwek.
+ */
 void NetworkGraphics::load(void)
 {
     _isLoading = true;
@@ -201,16 +206,18 @@ void NetworkGraphics::load(void)
     }
 }
 
+/*!
+ * \brief Speichert ein erstelltes Netzwerk ab.
+ */
 void NetworkGraphics::saveAs(void)
 {
     _manager->saveAs();
 }
 
 /*!
- * \brief
+ * \brief   Spiegelt eine ausgewählte Komponente.
  *
- * \param   component  Port der Komponente 1
- *
+ * \param   component   ist die zu spiegelde Komponente
  */
 void NetworkGraphics::mirrorComponent(Component* component)
 {
@@ -226,9 +233,9 @@ void NetworkGraphics::mirrorComponent(Component* component)
 /*!
  * \brief Erzeugt eine neue Komponente im Netzwerk.
  *
- * \param   gridPosition           ist die zu prüfende Gitterposition
- * \param   componentType
- * \param   componentIsVertical    ist die räumliche Ausrichtung der Komponente
+ * \param   gridPosition            ist die zu prüfende Gitterposition
+ * \param   componentType           ist der typ der Komponente
+ * \param   componentIsVertical     ist die räumliche Ausrichtung der Komponente
  * \return Gibt eine neue Komponente zurück.
  *
  * Zu Beginn wird geprüft ob sich an der ausgewählten Position bereits eine Komponente befindet.
@@ -288,9 +295,9 @@ Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
 /*!
  * \brief Dupliziert eine ausgewählte Komponente.
  *
- * \param   componentToDuplicate ist die zu duplizierende Komponente
- * \param   xPosition ist die X-Koordinate der übergebenden Komponente
- * \param   yPosition ist die Y-Koordinate der übergebenden Komponente
+ * \param   componentToDuplicate    ist die zu duplizierende Komponente
+ * \param   xPosition               ist die X-Koordinate der übergebenden Komponente
+ * \param   yPosition               ist die Y-Koordinate der übergebenden Komponente
  * \return Gibt die duplizierte Komponente zurück.
  *
  * Zuerst wird der Name, Wert und die räumliche Ausrichtung der zu kopierenden Komponente erfragt.
@@ -307,6 +314,18 @@ Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, 
     return createdComponent;
 }
 
+/*!
+ * \brief Dupliziert eine ausgewählte Komponente.
+ *
+ * \param   componentToDuplicate    ist die zu duplizierende Komponente
+ * \param   xPosition               ist die X-Koordinate der übergebenden Komponente
+ * \param   yPosition               ist die Y-Koordinate der übergebenden Komponente
+ * \return Gibt die duplizierte Komponente zurück.
+ *
+ * Zuerst wird der Name, Wert und die räumliche Ausrichtung der zu kopierenden Komponente erfragt.
+ * Anschließend wird abhängig vom Typ der Komponente ein Widerstand oder ein Spannungsquelle erzeugt.
+ * Dann wird der Gesamtwiderstand aktualisiert.
+ */
 Component* NetworkGraphics::duplicateComponentWithoutUndo(Component* componentToDuplicate, int xPosition, int yPosition)
 {
     Component* duplicatedComponent = nullptr;
@@ -730,8 +749,8 @@ void NetworkGraphics::updateCalc(void)
 /*!
  * \brief Fügt eine Verbindung der Schaltung hinzu.
  *
- * \param   componentPortA
- * \param   componentPortB
+ * \param   componentPortA ist der Startpunkt der Verbindung
+ * \param   componentPortB ist der Endpunkt der Verbindung
  *
  * Fügt eine Verbindung zwischen den beiden Ports hinzu.
  */
@@ -767,6 +786,13 @@ NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* des
     }
 }
 
+/*!
+ * \brief Bearbeiten eine Komponente.
+ *
+ * \param componentToEdit   ist die zu bearbeitende Komponente
+ * \param newName           ist der neue Name der zu bearbeitenden Komponente
+ * \param newValue          ist der neue Wert der zu bearbeitenden Komponente
+ */
 void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QString newName, double newValue)
 {
     componentToEdit->setName(newName);
@@ -784,6 +810,11 @@ void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QStri
     updateCalc();
 }
 
+/*!
+ * \brief Dreht eine ausgewählte Komponente.
+ *
+ * \param componentToTurn ist die zu drehende Komponente
+ */
 void NetworkGraphics::turnComponentRightWithoutUndo(Component* componentToTurn)
 {
     switch (componentToTurn->getOrientation())
@@ -816,14 +847,12 @@ void NetworkGraphics::turnComponentRightWithoutUndo(Component* componentToTurn)
 }
 
 /*!
- * \brief Bearbeiten einer Komponente
+ * \brief Bearbeiten einer Komponente.
  *
  * \param   componentToEdite    ist die zu bearbeitende Komponente
  * \param   newName             ist der neue name für die Komponente
  * \param   newValue            ist der neue Widerstandswert
  * \param   originalOrientation ist die vorherige ausrichtung
- *
- *
  */
 void NetworkGraphics::editComponent(Component* componentToEdit, QString newName, double newValue,
                                     Component::Orientation originalOrientation)
@@ -876,7 +905,6 @@ void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
  * \brief Entfernt eine Komponente.
  *
  * \param   componentToDelete   ist die zu entfernende Komponete
- *
  */
 void NetworkGraphics::deleteComponent(Component* componentToDelete)
 {
@@ -916,7 +944,6 @@ void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
  * \brief Entfernt eine ausgewählte Verbindung.
  *
  * \param   connectionToDelete  ist die zu entfernende Verbindung
- *
  */
 void NetworkGraphics::deleteConnection(Connection* connectionToDelete)
 {
@@ -928,7 +955,6 @@ void NetworkGraphics::deleteConnection(Connection* connectionToDelete)
  * \brief Entfernt ein Textfeld.
  *
  * \param   descriptionFieldToDelete    ist das zu entfernende Textfeld
- *
  */
 void NetworkGraphics::deleteDescription(DescriptionField* descriptionFieldToDelete)
 {
@@ -936,12 +962,28 @@ void NetworkGraphics::deleteDescription(DescriptionField* descriptionFieldToDele
     _undoStack->push(commandDeleteDescription);
 }
 
+/*!
+ * \brief Bearbeit ein Textfeldes.
+ *
+ * \param descriptionToEdit ist das zu bearbeitende Textfeld
+ * \param newText           ist der neue Text des Textfeldes
+ */
 void NetworkGraphics::editDescription(DescriptionField* descriptionToEdit, QString newText)
 {
     CommandEditDescription* commandEditDescription = new CommandEditDescription(this, descriptionToEdit, newText);
     _undoStack->push(commandEditDescription);
 }
 
+/*!
+ * \brief Verschiebt zusammengefasste Komponente an eine andere Gitterposition.
+ *
+ * \param componentList     ist die Liste der zusammengefassten Komponenten
+ * \param descriptionList   ist die Liste der zusammengefassten Textfelder
+ * \param componentToMove   ist die ausgewählte Komponente
+ * \param descriptionToMove ist das ausgewählte Textfeld
+ * \param diffXAfterMoving  ist die Differenz zwischen der Ausgangs und der End X-Koordinate
+ * \param diffYAfterMoving  ist die Differenz zwischen der Ausgangs und der End Y-Koordinate
+ */
 void NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QList<DescriptionField*> descriptionList,
                                                 Component* componentToMove, DescriptionField* descriptionToMove, int diffXAfterMoving, int diffYAfterMoving)
 {
@@ -1063,7 +1105,7 @@ void NetworkGraphics::hasChangedDocument(int idx)
     _hasChangedDocument = true;
 }
 
-bool NetworkGraphics::hasChangedDocument()
+bool NetworkGraphics::hasChangedDocument(void)
 {
     return _hasChangedDocument;
 }

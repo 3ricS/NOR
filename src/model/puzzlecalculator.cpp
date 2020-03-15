@@ -14,11 +14,11 @@ PuzzleCalculator::PuzzleCalculator()
 /*!
  * \brief Ruft das Berechnen des Widerstandes auf.
  *
- * \param   connections
- * \param   components
+ * \param   connections ist die Liste von Verbindungen des Netzwerkes
+ * \param   components  ist die Liste von Kommponenten des Netzwerkes
  * \return Gibt den Widerstandswert als double zurück.
  *
- *
+ * Es wenn die Spannungsquelle verbunden ist, kann der Gesamtwiderstandswert berechnet werden.
  */
 double PuzzleCalculator::calculate(QList<Connection*> connections, QList<Component*> components)
 {

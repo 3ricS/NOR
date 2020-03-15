@@ -97,7 +97,7 @@ public:
     PuzzleCalculator getPuzzleCalculator(void) {return _puzzleCalculator;}
     QString getVoltageAndCurrentInformation(void);
 
-    bool hasChangedDocument();
+    bool hasChangedDocument(void);
 
 public slots:
     void hasChangedDocument(int idx);

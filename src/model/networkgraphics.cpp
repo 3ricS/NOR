@@ -178,6 +178,7 @@ void NetworkGraphics::save(void)
     _manager->save();
     _hasChangedDocument = false;
 }
+
 /*!
  * \brief Lädt ein gespeichertes Netzwek.
  */
@@ -461,7 +462,12 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
     return nullptr;
 }
 
-void NetworkGraphics::cutWithoutUndo(Component *componentToCut)
+/*!
+ * \brief Schneidet ausgewählte Komponenten aus.
+ *
+ * \param componentToCut ist die Komponente die Ausgeschnitten werden soll
+ */
+void NetworkGraphics::cutComponentWithoutUndo(Component *componentToCut)
 {
     removeItem(componentToCut);
     _componentList.removeOne(componentToCut);
@@ -470,6 +476,13 @@ void NetworkGraphics::cutWithoutUndo(Component *componentToCut)
         emit powerSupplyIsAllowed(true);
         _powerSupplyCount--;
     }
+    update();
+}
+
+void NetworkGraphics::cutDescriptionWithoutUndo(DescriptionField *descriptionToCut)
+{
+    removeItem(descriptionToCut);
+    _descriptionList.removeOne(descriptionToCut);
     update();
 }
 
@@ -564,7 +577,6 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
                 deletedConnections.append(connection);
             }
         }
-
         updateCalc();
     }
     update();
@@ -1058,10 +1070,21 @@ void NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList,
     }
 }
 
-void NetworkGraphics::cut(Component *componentToCut)
+/*!
+ * \brief Schneidet eine ausgewählte Komponente aus.
+ *
+ * \param componentToCut ist die ausgewählte Komponente, die ausgeschnitten werden soll
+ */
+void NetworkGraphics::cutComponent(Component *componentToCut)
 {
     CommandCutComponents* commandCutComponent = new CommandCutComponents(this, componentToCut);
     _undoStack->push(commandCutComponent);
+}
+
+void NetworkGraphics::cutDescription(DescriptionField *descriptionToCut)
+{
+    CommandCutDescriptionField* commandCutDescriptionField = new CommandCutDescriptionField(this, descriptionToCut);
+    _undoStack->push(commandCutDescriptionField);
 }
 
 /*!

@@ -727,7 +727,7 @@ void NetworkView::cut()
     _copiedDescription = findSelectedDescription();
     if(_copiedComponent != nullptr)
     {
-        _model->cut(_copiedComponent);
+        _model->cutComponent(_copiedComponent);
     }
     if(_copiedDescription != nullptr)
     {

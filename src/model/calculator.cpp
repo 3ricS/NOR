@@ -14,7 +14,7 @@
  * \param   components  ist die Liste von Kommponenten des Netzwerkes
  * \return Gibt den Widerstandswert als double zurück.
  *
- * Es wenn die Spannungsquelle verbunden ist, kann der Gesamtwiderstandswert berechnet werden.
+ * Wenn die Spannungsquelle verbunden ist, kann der Gesamtwiderstandswert berechnet werden.
  */
 long double Calculator::calculate(QList<Connection*> connections, QList<Component*> components)
 {

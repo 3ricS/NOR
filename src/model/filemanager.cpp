@@ -75,9 +75,9 @@ QString FileManager::createJson(void)
         array.append(saveComponent(component));
     }
 
-    for (Connection* c : _model->getConnections())
+    for (Connection* connection : _model->getConnections())
     {
-        array.append(saveConnection(c));
+        array.append(saveConnection(connection));
     }
 
     for (DescriptionField* description : _model->getDescriptions())
@@ -91,25 +91,25 @@ QString FileManager::createJson(void)
 
 QJsonObject FileManager::saveComponent(Component* component)
 {
-    QJsonObject r;
-    r.insert("type", component->getComponentTypeInt());
-    r.insert("id", component->getId());
-    r.insert("name", component->getName());
-    r.insert("xPos", component->getXPosition());
-    r.insert("yPos", component->getYPosition());
-    r.insert("isVertical", component->isVertical());
+    QJsonObject c;
+    c.insert("type", component->getComponentTypeInt());
+    c.insert("id", component->getId());
+    c.insert("name", component->getName());
+    c.insert("xPos", component->getXPosition());
+    c.insert("yPos", component->getYPosition());
+    c.insert("isVertical", component->isVertical());
     Resistor* resistor = dynamic_cast<Resistor*>(component);
     bool isResistor = (nullptr != resistor);
     if (isResistor)
     {
-        r.insert("value", static_cast<double>(resistor->getResistanceValue()));
+        c.insert("value", static_cast<double>(resistor->getResistanceValue()));
     }
     else
     {
-        r.insert("value", component->getVoltage());
+        c.insert("value", component->getVoltage());
     }
 
-    return r;
+    return c;
 }
 
 QJsonObject FileManager::saveConnection(Connection* connection)
@@ -190,7 +190,6 @@ void FileManager::load(void)
         if (!json.isEmpty() && json.isArray())
         {
             array = json.array();
-
             //Zuerst Components laden, da die Connections auf diese zugreifen / zeigen
             loadComponent(array);
             //Jetzt Connections zeichnen

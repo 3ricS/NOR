@@ -235,7 +235,22 @@ public:
 
 private:
     NetworkGraphics*    _model = nullptr;
-    Component*         _componentToCut = nullptr;
+    Component*          _componentToCut = nullptr;
+    bool                _hasDoneUndo = false;
+};
+
+class CommandCutDescriptionField : public QUndoCommand
+{
+public:
+    CommandCutDescriptionField(NetworkGraphics* model, DescriptionField* descriptionToCut);
+    ~CommandCutDescriptionField(void){};
+
+    void undo(void) override;
+    void redo(void) override;
+
+private:
+    NetworkGraphics*    _model = nullptr;
+    DescriptionField*   _descriptionFieldToCut;
     bool                _hasDoneUndo = false;
 };
 

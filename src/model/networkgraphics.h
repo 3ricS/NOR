@@ -55,7 +55,8 @@ public:
     void editDescription(DescriptionField* descriptionToEdit, QString newText);
     void moveMultiselectComponents(QList<Component*> componentList, QList<DescriptionField*> descriptionList,
                                    Component* componentToMove, DescriptionField* descriptionToMove, int diffXAfterMoving, int diffYAfterMoving);
-    void cut(Component* componentToCut);
+    void cutComponent(Component* componentToCut);
+    void cutDescription(DescriptionField* descriptionToCut);
 
 
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
@@ -67,7 +68,8 @@ public:
 
 
     //only for QUndoCommands
-    void cutWithoutUndo(Component* componentToCut);
+    void cutComponentWithoutUndo(Component* componentToCut);
+    void cutDescriptionWithoutUndo(DescriptionField* descriptionToCut);
     Component* createNewComponentWithoutUndo(QPointF gridPosition,
                                              Component::ComponentType componentType, bool componentIsVertical);
     void addComponentWithoutUndo(Component* componentToAdd);

@@ -43,7 +43,7 @@ private:
 
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    QRectF boundingRect() const override;
+    QRectF boundingRect(void) const override;
 };
 
 #endif // DESCRIPTIONFIELD_H

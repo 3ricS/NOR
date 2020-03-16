@@ -147,7 +147,8 @@ void Connection::changePortOfComponentPortWithComponent(Component* componentOfCo
     if(componentOfComponentPortToChangePortOf == _componentPortOne.getComponent())
     {
         _componentPortOne.invertPort();
-    } else if(componentOfComponentPortToChangePortOf == _componentPortTwo.getComponent())
+    }
+    else if(componentOfComponentPortToChangePortOf == _componentPortTwo.getComponent())
     {
         _componentPortTwo.invertPort();
     }

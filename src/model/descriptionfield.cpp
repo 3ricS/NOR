@@ -17,7 +17,7 @@ void DescriptionField::setPosition(QPointF gridPosition)
     _yPosition = gridPosition.y();
 }
 
-QRectF DescriptionField::boundingRect() const
+QRectF DescriptionField::boundingRect(void) const
 {
     return QRectF (_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }
@@ -54,5 +54,4 @@ void DescriptionField::paintHighlightRect(QPainter *painter)
 void DescriptionField::setIsSelected(bool isSelected)
 {
     _isSelected = isSelected;
-
 }

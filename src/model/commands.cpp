@@ -465,7 +465,7 @@ CommandCutComponents::CommandCutComponents(NetworkGraphics* model, Component* co
 /*!
  * \brief Undo des Ausschneiden einer Komponente.
  */
-void CommandCutComponents::undo()
+void CommandCutComponents::undo(void)
 {
     _model->addComponentWithoutUndo(_componentToCut);
     _hasDoneUndo = true;
@@ -474,7 +474,28 @@ void CommandCutComponents::undo()
 /*!
  * \brief Redo des Ausschneiden einer Komponente.
  */
-void CommandCutComponents::redo()
+void CommandCutComponents::redo(void)
 {
-    _model->cutWithoutUndo(_componentToCut);
+    _model->cutComponentWithoutUndo(_componentToCut);
+}
+
+/*
+ * _______________________________________________________________________
+ * CommandCutDescriptionField
+ */
+
+CommandCutDescriptionField::CommandCutDescriptionField(NetworkGraphics *model, DescriptionField *descriptionToCut) :
+    _model(model), _descriptionFieldToCut(descriptionToCut)
+{
+}
+
+void CommandCutDescriptionField::undo(void)
+{
+    _model->addDescriptionFieldWithoutUndo(_descriptionFieldToCut);
+    _hasDoneUndo = true;
+}
+
+void CommandCutDescriptionField::redo(void)
+{
+    _model->cutDescriptionWithoutUndo(_descriptionFieldToCut);
 }

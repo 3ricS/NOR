@@ -4,8 +4,6 @@ Doku: wenn Fehler oder Mängel auffallen bitte bescheid geben
 ___________________________________________________________________
 
 - NetworkGraphics hat 900 Zeilen
-- MergeList in Calculator darf keine Membervariable sein (wir haben sonst alles extra ohne Membervariable gemacht)
-	Leonel: Warum darf es keine Membervariable sein? Diese Liste wird für die Stromberechnung gebraucht.
 - connection.cpp: in dodgeComponent wird die Variable hitbox doppelt erzeugt (sind das das zwei Hitboxen? Soll das so?)
 	Leonel: Ja sind zwei hitboxen und sie werden einer HitboxListe hinzugefügt. Wenn deine Frage geklärt ist einfach diesen Punkt rauslöschen.
 		p.S ja man könnte einfach hitbox weiterverwenden, aber ich finde so wird klarer, das es eine neue Hitbox ist, aber kannst es auch rausschmeißen, wenn du es willst.

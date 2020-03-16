@@ -33,10 +33,14 @@ private:
     Calculator&operator=(const Calculator&) = delete;
 
     QList<RowPiece> findRowPieces(QList<Node *> &nodes);
-    void findSameRowPieces(RowPiece rowpiece1);
-    long double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes);
-    void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful,
-                      QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
+    void findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeList);
+    long double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes, QList<RowPiece>& mergeList);
+    void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful, QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
+    void addingResistorsInRowToOneRowPiece(QList<Component*>& rowPiecesComponents, ComponentPort actualComponentPort,
+                                           QList<ComponentPort>& neighbourComponentPorts, bool neighbourComponentPortsContainPowerSupply,
+                                           int& resistanceValueOfRowPiece);
+    void triangleToStar(QList<Node*>& nodes, bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB,
+                        RowPiece* searchedRowPieces);
 
     //Suche nach Nachbarn, die nicht direkt mit dem aktuellen ComponentPort verbunden sind
     void searchingForIndirectParallelNeighbours(QList<ComponentPort> &foundComponentPorts);
@@ -54,13 +58,12 @@ private:
     int countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
     QList<RowPiece> calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node *newNode);
 
-    void calculateVoltageAndAmp(QList<RowPiece> rowpieces);
+    void calculateVoltageAndAmp(QList<RowPiece> rowpieces, QList<RowPiece> &mergeList);
     void calculateVoltageAndAmpInResistor(RowPiece* rowpiece);
     void starMerge(bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB, Node* equalNode, QList<Node*> nodes);
-    void paralleMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething);
-    void rowMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething);
+    void paralleMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething, QList<RowPiece> &mergeList);
+    void rowMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething, QList<RowPiece> &mergeList);
 
-    QList<RowPiece> _mergeList;
     double _resistanceValue = 0;
     QList<Component*> _components;
     QList<Connection*> _connections;

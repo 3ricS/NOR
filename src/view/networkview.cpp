@@ -731,7 +731,7 @@ void NetworkView::cut()
     }
     if(_copiedDescription != nullptr)
     {
-        _model->removeItem(_copiedDescription);
+        _model->cutDescription(_copiedDescription);
     }
 }
 

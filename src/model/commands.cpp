@@ -499,3 +499,19 @@ void CommandCutDescriptionField::redo(void)
 {
     _model->cutDescriptionWithoutUndo(_descriptionFieldToCut);
 }
+
+CommandDuplicateDescription::CommandDuplicateDescription(NetworkGraphics *model, DescriptionField *descriptionToDuplicate, int xPosition, int yPosition) :
+    _model(model), _descriptionToDuplicate(descriptionToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
+{
+}
+
+void CommandDuplicateDescription::undo()
+{
+    _model->deleteDescriptionWithoutUndo(_createdDescription);
+}
+
+void CommandDuplicateDescription::redo()
+{
+
+   _createdDescription = _model->addDescriptionFieldWithoutUndo(QPointF(_xPosition,_yPosition), false, _descriptionToDuplicate->getText());
+}

@@ -10,7 +10,6 @@ ___________________________________________________________________
 	Leonel: Ja sind zwei hitboxen und sie werden einer HitboxListe hinzugefügt. Wenn deine Frage geklärt ist einfach diesen Punkt rauslöschen.
 		p.S ja man könnte einfach hitbox weiterverwenden, aber ich finde so wird klarer, das es eine neue Hitbox ist, aber kannst es auch rausschmeißen, wenn du es willst.
 
-- Ausschneiden es fehlt noch die Description (ist hinzugefügt funktioniert bei redo nicht beim ersten mal, vielleicht habt ihr schnell eine Idee?)
 - Multiselect: Kopieren
 - QClipboard einbauen
 - Multiselect auf ein anderes Bauteil drauf schieben -> Absturz

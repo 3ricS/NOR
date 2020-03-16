@@ -363,7 +363,10 @@ Component* NetworkGraphics::duplicateComponentWithoutUndo(Component* componentTo
 DescriptionField*
 NetworkGraphics::duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition)
 {
-    return addDescriptionFieldWithoutUndo(QPointF(xPosition, yPosition), false, descriptionToDuplicate->getText());
+    CommandDuplicateDescription* commandDuplicateDescription = new CommandDuplicateDescription(this, descriptionToDuplicate, xPosition, yPosition);
+    _undoStack->push(commandDuplicateDescription);
+    //return addDescriptionFieldWithoutUndo(QPointF(xPosition, yPosition), false, descriptionToDuplicate->getText());
+    return commandDuplicateDescription->getCreatedDescription();
 }
 
 /*!

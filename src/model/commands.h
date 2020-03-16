@@ -193,6 +193,25 @@ private:
     int                         _yPosition;
 };
 
+class CommandDuplicateDescription : public QUndoCommand
+{
+public:
+    CommandDuplicateDescription(NetworkGraphics* model, DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
+    ~CommandDuplicateDescription() {};
+
+    void undo(void) override;
+    void redo(void) override;
+
+    DescriptionField* getCreatedDescription() {return _createdDescription;}
+
+private:
+    DescriptionField*           _createdDescription = nullptr;
+    NetworkGraphics*            _model = nullptr;
+    DescriptionField*           _descriptionToDuplicate = nullptr;
+    int                         _xPosition;
+    int                         _yPosition;
+};
+
 class CommandEditDescription : public QUndoCommand
 {
 public:

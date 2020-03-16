@@ -59,6 +59,7 @@ public slots:
     void undo(void);
     void redo(void);
     void print(void);
+    void cut();
     void openCurrentVoltageWindow(void);
     void setCurrentButtonVisibility(bool visibility);
 
@@ -105,7 +106,8 @@ private:
     QAction* _connectionMode = nullptr;
     QAction* _descriptionMode = nullptr;
     QAction* _selectionMode = nullptr;
-    QAction* _print;
+    QAction* _print = nullptr;
+    QAction* _cut = nullptr;
 
     QList<QAction*> _createActionGroup;
     QList<QPushButton*> _modusButtons;

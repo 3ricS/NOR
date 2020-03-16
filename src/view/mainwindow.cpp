@@ -47,6 +47,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_zoom100Percent, SIGNAL(triggered()), this, SLOT(setZoom100Percent()));
     connect(_about, SIGNAL(triggered()), this, SLOT(openAboutWindow()));
     connect(_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
+    connect(_cut, SIGNAL(triggered()), this, SLOT(cut()));
     connect(_copy, SIGNAL(triggered()), this, SLOT(copy()));
     connect(_paste, SIGNAL(triggered()), this, SLOT(paste()));
     connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(rotate()));
@@ -266,6 +267,10 @@ void MainWindow::createUpperMenu(void)
     _redo = _model->getUndoStack()->createRedoAction(_model, tr("Wiederholen"));
     _redo->setShortcut(QKeySequence::Redo);
     _ui->menuBearbeiten->addAction(_redo);
+
+    _cut = new QAction("Ausschneiden");
+    _cut->setShortcut(QKeySequence::Cut);
+    _ui->menuBearbeiten->addAction(_cut);
 
     _copy = new QAction("Kopieren");
     _copy->setShortcut(QKeySequence::Copy);
@@ -511,6 +516,11 @@ void MainWindow::redo(void)
 void MainWindow::print(void)
 {
     _networkView->print();
+}
+
+void MainWindow::cut()
+{
+    _networkView->cut();
 }
 
 void MainWindow::openCurrentVoltageWindow()

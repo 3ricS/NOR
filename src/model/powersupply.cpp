@@ -80,7 +80,7 @@ void PowerSupply::paintInformation(QPainter* painter)
     voltageWithoutUnit = int(voltageWithoutUnit * 100) / 100.0;
     QString valueString = QLocale::system().toString(voltageWithoutUnit);
     valueString.replace(".", "");
-    QString displayString = valueString + " " + unitString + "Ω";
+    QString displayString = valueString + " " + unitString + "V";
     QRectF posValue;
     if(_isVertical)
     {

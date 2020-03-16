@@ -3,6 +3,7 @@
 
 #include <QPrintDialog>
 #include <QPrinter>
+#include <QDebug>
 
 NetworkView::NetworkView(QWidget* parent) :
         QGraphicsView(parent)
@@ -398,7 +399,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-void NetworkView::mouseDoubleClickEvent(QMouseEvent* event)
+void NetworkView::mouseDoubleClickEvent([[maybe_unused]]QMouseEvent* event)
 {
     if(_mouseMode == SelectionMode)
     {
@@ -474,7 +475,10 @@ void NetworkView::deleteSelectedItem(void)
         if (component->isSelected())
         {
             _model->deleteComponent(component);
-            _copiedComponent = nullptr;
+            if(component == _copiedComponent)
+            {
+                _copiedComponent = nullptr;
+            }
         }
     }
 
@@ -483,7 +487,10 @@ void NetworkView::deleteSelectedItem(void)
         if (description->isSelected())
         {
             _model->deleteDescription(description);
-            _copiedDescription = nullptr;
+            if(description == _copiedDescription)
+            {
+                _copiedDescription = nullptr;
+            }
         }
     }
 
@@ -714,6 +721,31 @@ void NetworkView::print(void)
     }
 }
 
+void NetworkView::cut()
+{
+    _copiedComponent = findSelectedComponent();
+    _copiedDescription = findSelectedDescription();
+    if(_copiedComponent != nullptr)
+    {
+        _model->cut(_copiedComponent);
+    }
+    if(_copiedDescription != nullptr)
+    {
+        _model->removeItem(_copiedDescription);
+    }
+}
+
+void NetworkView::setMouseMode(NetworkView::MouseMode newMode)
+{
+    _mouseMode = newMode;
+
+    //Entfernen der Beispiel Objekte
+    gridDisappears();
+
+    //Angezeigte Cursor ändern
+    changeOverrideCursor();
+}
+
 /*!
  * \brief Dupliziert eine Komponente.
  *
@@ -755,23 +787,8 @@ void NetworkView::duplicate(void)
  */
 void NetworkView::copy(void)
 {
-    for (Component* component : _model->getComponents())
-    {
-        if (component->isSelected())
-        {
-            _copiedComponent = component;
-            _copiedDescription = nullptr;
-        }
-    }
-
-    for (DescriptionField* description : _model->getDescriptions())
-    {
-        if (description->isSelected())
-        {
-            _copiedDescription = description;
-            _copiedComponent = nullptr;
-        }
-    }
+    _copiedComponent = findSelectedComponent();
+    _copiedDescription = findSelectedDescription();
 }
 
 /*!
@@ -797,31 +814,7 @@ void NetworkView::paste(void)
 
 void NetworkView::enterEvent(QEvent* event)
 {
-    switch (_mouseMode)
-    {
-        case ConnectionMode:
-        {
-            QApplication::setOverrideCursor(Qt::CrossCursor);
-        }
-            break;
-        case SelectionMode:
-        {
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-        }
-            break;
-        case PowerSupplyMode:
-        {
-        }
-            break;
-        case ResistorMode:
-        {
-        }
-            break;
-        case DescriptionMode:
-        {
-        }
-            break;
-    }
+    changeOverrideCursor();
     QWidget::enterEvent(event);
 }
 
@@ -983,4 +976,60 @@ void NetworkView::multiselecting(void)
         }
     }
     _model->update();
+}
+
+void NetworkView::changeOverrideCursor()
+{
+    switch (_mouseMode)
+    {
+        case ConnectionMode:
+        {
+            QApplication::setOverrideCursor(Qt::CrossCursor);
+        }
+            break;
+        case SelectionMode:
+        {
+            QApplication::setOverrideCursor(Qt::OpenHandCursor);
+        }
+            break;
+        case PowerSupplyMode:
+        {
+            QApplication::setOverrideCursor(Qt::ArrowCursor);
+        }
+            break;
+        case ResistorMode:
+        {
+            QApplication::setOverrideCursor(Qt::ArrowCursor);
+        }
+            break;
+        case DescriptionMode:
+        {
+            QApplication::setOverrideCursor(Qt::ArrowCursor);
+        }
+            break;
+    }
+}
+
+Component *NetworkView::findSelectedComponent()
+{
+    for (Component* component : _model->getComponents())
+    {
+        if (component->isSelected())
+        {
+            return component;
+        }
+    }
+    return nullptr;
+}
+
+DescriptionField *NetworkView::findSelectedDescription()
+{
+    for (DescriptionField* description : _model->getDescriptions())
+    {
+        if (description->isSelected())
+        {
+            return description;
+        }
+    }
+    return nullptr;
 }

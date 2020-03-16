@@ -338,7 +338,7 @@ Component* NetworkGraphics::duplicateComponentWithoutUndo(Component* componentTo
     bool componentIsVertical = componentToDuplicate->isVertical();
     if (isResistor)
     {
-        long double resistance = resistor->getVoltage();
+        long double resistance = resistor->getResistanceValue();
         duplicatedComponent = addResistor(name, resistance, xPosition, yPosition, componentIsVertical);
     }
     else
@@ -451,6 +451,7 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
         Component* powerSupply = new PowerSupply(name, x, y,
                                                  isVertical, voltage, id);
         addObject(powerSupply);
+        emit powerSupplyIsAllowed(false);
         return powerSupply;
     }
     else
@@ -458,6 +459,18 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
         QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
     }
     return nullptr;
+}
+
+void NetworkGraphics::cutWithoutUndo(Component *componentToCut)
+{
+    removeItem(componentToCut);
+    _componentList.removeOne(componentToCut);
+    if(componentToCut->getComponentType() == Component::PowerSupply)
+    {
+        emit powerSupplyIsAllowed(true);
+        _powerSupplyCount--;
+    }
+    update();
 }
 
 /*!
@@ -1045,6 +1058,12 @@ void NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList,
     }
 }
 
+void NetworkGraphics::cut(Component *componentToCut)
+{
+    CommandCutComponents* commandCutComponent = new CommandCutComponents(this, componentToCut);
+    _undoStack->push(commandCutComponent);
+}
+
 /*!
  * \brief Fügt ein Textfeld hinzu.
  *
@@ -1122,7 +1141,7 @@ QString NetworkGraphics::getVoltageAndCurrentInformation(void)
     return information;
 }
 
-void NetworkGraphics::hasChangedDocument(int idx)
+void NetworkGraphics::hasChangedDocument([[maybe_unused]]int idx)
 {
     _hasChangedDocument = true;
 }

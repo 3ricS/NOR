@@ -222,8 +222,21 @@ public:
 private:
     Component*           _componentToTurn = nullptr;
     NetworkGraphics*            _model = nullptr;
-    Component::Orientation      _newOrientation;
-    Component::Orientation      _oldOrientation;
+};
+
+class CommandCutComponents : public QUndoCommand
+{
+public:
+    CommandCutComponents(NetworkGraphics* model, Component* componentToCut);
+    ~CommandCutComponents(void){};
+
+    void undo(void) override;
+    void redo(void) override;
+
+private:
+    NetworkGraphics*    _model = nullptr;
+    Component*         _componentToCut = nullptr;
+    bool                _hasDoneUndo = false;
 };
 
 

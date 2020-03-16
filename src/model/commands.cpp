@@ -1,4 +1,4 @@
-#include "commands.h"
+#include "model/commands.h"
 #include <model/networkgraphics.h>
 
 CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPosition,
@@ -424,11 +424,11 @@ void CommandEditDescription::redo(void)
 
 /*
  * _______________________________________________________________________
- * CommandEditDescription
+ * CommandRotateDescription
  */
 
 CommandRotateComponent::CommandRotateComponent(Component* componentToTurn, NetworkGraphics* model) :
-        _componentToTurn(componentToTurn), _model(model), _oldOrientation(componentToTurn->getOrientation())
+        _componentToTurn(componentToTurn), _model(model)
 {
 }
 
@@ -450,4 +450,31 @@ void CommandRotateComponent::undo(void)
 void CommandRotateComponent::redo(void)
 {
     _model->turnComponentRightWithoutUndo(_componentToTurn);
+}
+
+/*
+ * _______________________________________________________________________
+ * CommandRotateDescription
+ */
+
+CommandCutComponents::CommandCutComponents(NetworkGraphics* model, Component* componentToCut) :
+    _model(model), _componentToCut(componentToCut)
+{
+}
+
+/*!
+ * \brief Undo des Ausschneiden einer Komponente.
+ */
+void CommandCutComponents::undo()
+{
+    _model->addComponentWithoutUndo(_componentToCut);
+    _hasDoneUndo = true;
+}
+
+/*!
+ * \brief Redo des Ausschneiden einer Komponente.
+ */
+void CommandCutComponents::redo()
+{
+    _model->cutWithoutUndo(_componentToCut);
 }

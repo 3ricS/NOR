@@ -27,8 +27,9 @@ public:
     void paste(void);
     void rotateComponentByShortcut(void);
     void print(void);
+    void cut(void);
 
-    void setMouseMode(MouseMode newMode) {_mouseMode = newMode;}
+    void setMouseMode(MouseMode newMode);
     void deleteSelectedItem(void);
     void editNetworkOrDescription(void);
     void deselectAllItems(void);
@@ -53,6 +54,9 @@ private:
     QPointF findScrollPosition(void);
     void focusForPrint(void);
     void multiselecting(void);
+    void changeOverrideCursor(void);
+    Component* findSelectedComponent(void);
+    DescriptionField* findSelectedDescription(void);
 
 protected:
     void leaveEvent(QEvent* event) override;

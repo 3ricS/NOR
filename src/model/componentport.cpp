@@ -27,7 +27,7 @@ ComponentPort ComponentPort::getOppisiteComponentPort(void)
     return ComponentPort(_component, getOppisitePort());
 }
 
-Component::Port ComponentPort::getOppisitePort()
+Component::Port ComponentPort::getOppisitePort(void)
 {
     if (_port == Component::Port::A)
     {

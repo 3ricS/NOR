@@ -59,9 +59,7 @@ int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
  * \brief Liefert den Port der Komponente.
  *
  * \param   position ist die zu prüfende Position
- * \return  Gibt Port der Komponente an der Position zurück
- *
- *
+ * \return  Gibt den Port der Komponente an der Position zurück
  */
 Component::Port Component::getPort(QPointF position) const
 {
@@ -89,7 +87,7 @@ Component::Port Component::getPort(QPointF position) const
 }
 
 /*!
- * \brief Prüft ob sich an der ausgewählten Position ein Port befindet
+ * \brief Prüft ob sich an der ausgewählten Position ein Port befindet.
  *
  * \param   position ist die zu prüfende Position
  * \return  Liefert einen bool zurück, ob sich an der zu prüfenden Position ein Port befindet
@@ -103,7 +101,7 @@ bool Component::hasPortAtPosition(QPointF position) const
 }
 
 /*!
- * \brief Wandelt den Integer in einen Komponententyp
+ * \brief Wandelt den Integer in einen Komponententyp.
  *
  * \param   componentType ist ein int, der für einen Komponententyp steht
  * \return  Gibt den ComponentType der zu prüfenden Komponente zurück

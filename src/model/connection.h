@@ -39,6 +39,8 @@ public:
     //Methoden
     int pathAnalyse(bool horizontalFirst);
     void paintHitbox(QPainter* painter);
+
+    //getter
     bool isThereAComponentOrADescription(int x, int y);
     Component* getComponentAtPosition(int x, int y);
     DescriptionField* getDescriptionAtPosition(int x, int y);
@@ -46,10 +48,12 @@ public:
     ComponentPort getComponentPortOne(void) const {return _componentPortOne;}
     ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}
     bool hasComponent(Component* searchedComponent);
-    static constexpr int _circleRadius = 5;
-
-    void setIsSelected(bool isSelected);
     bool isSelected(void) const { return  _isSelected;}
+
+    //setter
+    void setIsSelected(bool isSelected);
+
+    static constexpr int _circleRadius = 5;
 
 private:
     void drawHorizontalLines(void);

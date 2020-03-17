@@ -10,6 +10,7 @@ Connection::Connection(ComponentPort componentPortA, ComponentPort componentPort
 
 /*!
  * \brief   Zeichnet die Verbindung in der QGraphicsScene.
+ *
  * \param   painter Objekt, das die einzelnen Elemente zeichnet
  * \param   option
  * \param   widget
@@ -97,9 +98,9 @@ void Connection::setIsSelected(bool isSelected)
 }
 
 /*!
- * \brief   Gibt ein Rechteck an, in dem sich die Verbindung in der QGraphicsScene befindet
+ * \brief   Gibt ein Rechteck an, in dem sich die Verbindung in der QGraphicsScene befindet.
  *
- * \return  Gibt Rechteck zurück, in dem sich die Verbindung in der QGraphicsScene befindet
+ * \return  Gibt ein Rechteck zurück, in dem sich die Verbindung in der QGraphicsScene befindet
  */
 QRectF Connection::boundingRect(void) const
 {
@@ -134,7 +135,7 @@ QRectF Connection::boundingRect(void) const
 }
 
 /*!
- * \brief   Wechselt den Port, mit welchem die Verbindung verbunden ist, bei dem übergebenen Component.
+ * \brief   Wechselt den Port des übergebenen Component, mit welchem die Verbindung verbunden ist.
  *
  * \param   componentOfComponentPortToChangePortOf Komponente der Schaltung, an dem der Port der Verbindung getauscht werden soll
  *
@@ -154,6 +155,12 @@ void Connection::changePortOfComponentPortWithComponent(Component* componentOfCo
     }
 }
 
+/*!
+ * \brief Analysiert den den Weg, den auf dem die Verbindung gezeichnet werden soll.
+ *
+ * \param horizontalFirst
+ * \return Gibt die Länge der Verbindung zurück
+ */
 int Connection::pathAnalyse(bool horizontalFirst)
 {
    int howManyConnections = 0;
@@ -168,6 +175,11 @@ int Connection::pathAnalyse(bool horizontalFirst)
 
 }
 
+/*!
+ * \brief Zeichnet eine HitBox um die Verbindung herum.
+ *
+ * \param painter
+ */
 void Connection::paintHitbox(QPainter *painter)
 {
     for(QRect* hitbox : _connectionHitbox)

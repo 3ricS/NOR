@@ -489,28 +489,45 @@ CommandCutDescriptionField::CommandCutDescriptionField(NetworkGraphics *model, D
 {
 }
 
+/*!
+ * \brief Undo des Ausschneiden eines Textfeldes.
+ */
 void CommandCutDescriptionField::undo(void)
 {
     _model->addDescriptionFieldWithoutUndo(_descriptionFieldToCut);
     _hasDoneUndo = true;
 }
 
+/*!
+ * \brief Redo des Ausschneiden eines Textfeldes.
+ */
 void CommandCutDescriptionField::redo(void)
 {
     _model->cutDescriptionWithoutUndo(_descriptionFieldToCut);
 }
+
+/*
+ * _______________________________________________________________________
+ * CommandDuplicateDescription
+ */
 
 CommandDuplicateDescription::CommandDuplicateDescription(NetworkGraphics *model, DescriptionField *descriptionToDuplicate, int xPosition, int yPosition) :
     _model(model), _descriptionToDuplicate(descriptionToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
 {
 }
 
-void CommandDuplicateDescription::undo()
+/*!
+ * \brief Undo des Duplizieren eines Textfeldes.
+ */
+void CommandDuplicateDescription::undo(void)
 {
     _model->deleteDescriptionWithoutUndo(_createdDescription);
 }
 
-void CommandDuplicateDescription::redo()
+/*!
+ * \brief Redo des Duplizieren eines Textfeldes.
+ */
+void CommandDuplicateDescription::redo(void)
 {
 
    _createdDescription = _model->addDescriptionFieldWithoutUndo(QPointF(_xPosition,_yPosition), false, _descriptionToDuplicate->getText());

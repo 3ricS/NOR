@@ -43,6 +43,8 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void leaveEvent(QEvent* event) override;
+    void enterEvent(QEvent* event) override;
 
 private:
 
@@ -55,41 +57,38 @@ private:
     void focusForPrint(void);
     void multiselecting(void);
     void changeOverrideCursor(void);
-    Component* findSelectedComponent(void);
-    DescriptionField* findSelectedDescription(void);
+    QList<Component*> findSelectedComponent(void);
+    QList<DescriptionField*> findSelectedDescription(void);
+    void calculateDistanceToNextComponent(int& i, Component* firstComp, int& xSpace, int& ySpace);
+    void calculateDistanceToNextDescription(int& i, Component* firstComp, int& xSpace, int& ySpace);
 
-protected:
-    void leaveEvent(QEvent* event) override;
-    void enterEvent(QEvent* event) override;
 
-private:
+    NetworkGraphics*         _model  = nullptr;
 
-    NetworkGraphics* _model  = nullptr;
+    bool                     _mouseIsPressed = false;
+    bool                     _componentOrDescriptionIsGrabbed = false;
+    bool                     _isMoved = false;
 
-    bool _mouseIsPressed = false;
-    bool _componentOrDescriptionIsGrabbed = false;
-    bool _isMoved = false;
+    QList<Component*>        _tempComponentListForConnections;
+    ComponentPort*           _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
+    QGraphicsItem*           _previousHighlightedRect = nullptr;
+    QGraphicsItem*           _previousHighlightedPort = nullptr;
+    Component*               _selectedComponentToMove = nullptr;
+    DescriptionField*        _selectedDescriptionToMove = nullptr;
+    bool                     _isVerticalComponentDefault = true;
+    Component*               _sampleComponentOnMoveEvent = nullptr;
+    DescriptionField*        _sampleDescriptionOnMoveEvent = nullptr;
+    QList<Component*>        _copiedComponents;
+    QList<DescriptionField*> _copiedDescriptions;
+    QPointF                  _lastClickedPosition;
+    QGraphicsRectItem*       _multiselectRect = nullptr;
 
-    QList<Component*> _tempComponentListForConnections;
-    ComponentPort*    _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
-    QGraphicsItem*    _previousHighlightedRect = nullptr;
-    QGraphicsItem*    _previousHighlightedPort = nullptr;
-    Component*        _selectedComponentToMove = nullptr;
-    DescriptionField* _selectedDescriptionToMove = nullptr;
-    bool              _isVerticalComponentDefault = true;
-    Component*        _sampleComponentOnMoveEvent = nullptr;
-    DescriptionField* _sampleDescriptionOnMoveEvent = nullptr;
-    Component*        _copiedComponent = nullptr;
-    DescriptionField* _copiedDescription = nullptr;
-    QPointF           _lastClickedPosition;
-    QGraphicsRectItem*_multiselectRect = nullptr;
+    QPointF                  _firstPositionMultiselect;
+    QPointF                  _lastPositionMultiselect;
 
-    QPointF           _firstPositionMultiselect;
-    QPointF           _lastPositionMultiselect;
-
-    MouseMode         _mouseMode = SelectionMode;
-    const QColor      _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
-    QPointF           _actualMoveScenePosition;
+    MouseMode                _mouseMode = SelectionMode;
+    const QColor             _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
+    QPointF                  _actualMoveScenePosition;
 };
 
 #endif // NETWORKVIEW_H

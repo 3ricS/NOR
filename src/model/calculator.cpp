@@ -21,9 +21,8 @@ long double Calculator::calculate(QList<Connection*> connections, QList<Componen
     _hasUsedStarCalculation = false;
     _connections = connections;
     _components = components;
-   // _mergeList.clear();
-    QList<RowPiece> mergeList;
 
+    QList<RowPiece> mergeList;
     QList<Node*> nodes;
     QList<RowPiece> rowPieces = findRowPieces(nodes);
 

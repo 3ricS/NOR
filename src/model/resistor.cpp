@@ -108,8 +108,8 @@ void Resistor::paintInformation(QPainter* painter)
         resistanceWithoutUnit = resistance / 1000000;
     }
     resistanceWithoutUnit = int(resistanceWithoutUnit * 100) / 100.0;
-    QString valueString = QLocale::system().toString(resistanceWithoutUnit);
-    valueString.replace(".", "");
-    QString displayString = valueString + " " + unitString + "Ω";
-    painter->drawText(posValue, Qt::AlignRight, displayString);
+    QString value = QLocale::system().toString(resistanceWithoutUnit);
+    value.replace(".", "");
+    QString displayedString = value + " " + unitString + "Ω";
+    painter->drawText(posValue, Qt::AlignRight, displayedString);
 }

@@ -468,6 +468,10 @@ CommandCutComponents::CommandCutComponents(NetworkGraphics* model, Component* co
 void CommandCutComponents::undo(void)
 {
     _model->addComponentWithoutUndo(_componentToCut);
+    for (Connection* connection : _deletedConnections)
+    {
+        _model->addConnectionWithoutUndo(connection);
+    }
     _hasDoneUndo = true;
 }
 
@@ -476,7 +480,21 @@ void CommandCutComponents::undo(void)
  */
 void CommandCutComponents::redo(void)
 {
-    _model->cutComponentWithoutUndo(_componentToCut);
+    _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_componentToCut);
+    _hasDoneUndo = false;
+}
+
+CommandCutComponents::~CommandCutComponents(void)
+{
+    //TODO: hier die Connections und den Component nicht löschen, aber dennoch kein Memory Leak
+    if(!_hasDoneUndo)
+    {
+        delete _componentToCut;
+        for (Connection* connection : _deletedConnections)
+        {
+            delete connection;
+        }
+    }
 }
 
 /*
@@ -504,6 +522,7 @@ void CommandCutDescriptionField::undo(void)
 void CommandCutDescriptionField::redo(void)
 {
     _model->cutDescriptionWithoutUndo(_descriptionFieldToCut);
+    _hasDoneUndo = false;
 }
 
 /*

@@ -32,7 +32,6 @@ public:
     void setMouseMode(MouseMode newMode);
     void deleteSelectedItem(void);
     void editNetworkOrDescription(void);
-    void deselectAllItems(void);
 
 public slots:
     void focus(void);
@@ -49,7 +48,7 @@ protected:
 private:
 
     static QPointF scenePositionToGrid(QPointF scenePosition);
-    void gridDisappears(void);
+    void deleteSampleObjects(void);
     void highlightRect(QPointF scenePositionOne, QColor _highlightColor);
     void rotateComponent(QPointF gridPosition, QPointF scenePosition);
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
@@ -61,6 +60,8 @@ private:
     QList<DescriptionField*> findSelectedDescription(void);
     void calculateDistanceToNextComponent(int& i, Component* firstComp, int& xSpace, int& ySpace);
     void calculateDistanceToNextDescription(int& i, Component* firstComp, int& xSpace, int& ySpace);
+
+    QGraphicsItem* deleteGraphicsItem(QGraphicsItem* graphicsItem);
 
 
     NetworkGraphics*         _model  = nullptr;

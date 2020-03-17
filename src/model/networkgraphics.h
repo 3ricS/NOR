@@ -32,15 +32,31 @@ class NetworkGraphics : public QGraphicsScene
 public:
     NetworkGraphics();
 
+    QPointF scenePositionToGridPosition(QPointF scenePosition);
+
+
     void save(void);
     void load(void);
     void saveAs(void);
 
     void updateCalc(void);
 
+    //Selection
+    void deselectAllItems(void);
+    void selectObjectsAtPosition(QPointF scenePosition);
+    QList<Component*> findSelectedComponent(void);
+    QList<DescriptionField*> findSelectedDescription(void);
+
+
     void mirrorComponent(Component* component);
     void turnComponentLeft(Component* componentToTurn);
     void setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation);
+
+    //Copy-Paste
+    void cutComponent(Component* componentToCut);
+    void cutComponent(QList<Component*> components);
+    void cutDescription(DescriptionField* descriptionToCut);
+    void cutDescription(QList<DescriptionField*> descriptions);
 
     //with Undo
     void turnComponentRight(Component* componentToTurn);
@@ -55,8 +71,7 @@ public:
     void editDescription(DescriptionField* descriptionToEdit, QString newText);
     void moveMultiselectComponents(QList<Component*> componentList, QList<DescriptionField*> descriptionList,
                                    Component* componentToMove, DescriptionField* descriptionToMove, int diffXAfterMoving, int diffYAfterMoving);
-    void cutComponent(Component* componentToCut);
-    void cutDescription(DescriptionField* descriptionToCut);
+
 
 
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
@@ -85,9 +100,11 @@ public:
     void editComponentWithoutUndo(Component* componentToEdit, QString newName, long double newValue);
     void turnComponentRightWithoutUndo(Component* componentToTurn);
 
+
+
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
-    Component* getComponentAtPosition(QPointF gridPosition);
+    Component* getComponentAtPosition(QPointF scenePosition);
     DescriptionField* getDescriptionAtPosition(QPointF gridPosition);
     bool isThereAComponentOrADescription(QPointF gridPosition);
     Connection* getConnectionAtPosition(QPointF gridposition);

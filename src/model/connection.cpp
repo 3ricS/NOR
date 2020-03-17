@@ -452,11 +452,6 @@ void Connection::dodgeComponent(void)
     }
 }
 
-bool Connection::isStartComponentVertical(void)
-{
-    return _startPoint.toPoint().y() % 100 == 0;
-}
-
 void Connection::initializeValues(void)
 {
     _countChangeDirection = 0;

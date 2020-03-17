@@ -247,7 +247,7 @@ class CommandCutComponents : public QUndoCommand
 {
 public:
     CommandCutComponents(NetworkGraphics* model, Component* componentToCut);
-    ~CommandCutComponents(void){};
+    ~CommandCutComponents(void);
 
     void undo(void) override;
     void redo(void) override;
@@ -255,6 +255,7 @@ public:
 private:
     NetworkGraphics*    _model = nullptr;
     Component*          _componentToCut = nullptr;
+    QList<Connection*>  _deletedConnections;
     bool                _hasDoneUndo = false;
 };
 

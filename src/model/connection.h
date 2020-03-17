@@ -66,7 +66,6 @@ private:
     int verticalPathAnalysis(int howManyConnections, bool horizontalFirst);
     int upOrDownPathAnalysis(int howManyConnections, bool horizontalFirst, int upOrDown);
     int pathAnalyseDodgeComponent(int howManyConnections);
-    bool isStartComponentVertical(void);
     void initializeValues(void);
 
     int _diffX = 0;

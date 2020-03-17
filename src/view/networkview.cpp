@@ -104,6 +104,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             break;
         case MouseMode::SelectionMode:
         {
+            QApplication::restoreOverrideCursor();
             //Move Event nur auslösen, wenn Objekt an neuer GridPosition
             if(!_model->isThereAComponentOrADescription(gridPosition))
             {
@@ -150,7 +151,6 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                 _multiselectRect = nullptr;
             }
 
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
             _selectedComponentToMove = nullptr;
             _selectedDescriptionToMove = nullptr;
 
@@ -251,18 +251,6 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
                 _selectedComponentToMove = nullptr;
                 _selectedDescriptionToMove = nullptr;
             }
-        }
-            break;
-        case ResistorMode:
-        {
-        }
-            break;
-        case PowerSupplyMode:
-        {
-        }
-            break;
-        case DescriptionMode:
-        {
         }
             break;
     }
@@ -782,7 +770,7 @@ void NetworkView::enterEvent(QEvent* event)
 
 void NetworkView::leaveEvent(QEvent* event)
 {
-    QApplication::setOverrideCursor(Qt::CustomCursor);
+    QApplication::restoreOverrideCursor();
     QWidget::leaveEvent(event);
 
     deleteSampleObjects();
@@ -792,12 +780,9 @@ void NetworkView::keyPressEvent(QKeyEvent* event)
 {
     if(event->key() == Qt::Key_Escape)
     {
-        setMouseMode(NetworkView::MouseMode::SelectionMode);
-        QApplication::setOverrideCursor(Qt::OpenHandCursor);
+        QApplication::restoreOverrideCursor();
         _model->deselectAllItems();
         deleteSampleObjects();
-
-        _model->deselectAllItems();
     }
     QGraphicsView::keyPressEvent(event);
 }
@@ -882,33 +867,10 @@ void NetworkView::multiselecting(void)
 
 void NetworkView::changeOverrideCursor()
 {
-    switch (_mouseMode)
+    QApplication::restoreOverrideCursor();
+    if(_mouseMode == ConnectionMode)
     {
-        case ConnectionMode:
-        {
-            QApplication::setOverrideCursor(Qt::CrossCursor);
-        }
-            break;
-        case SelectionMode:
-        {
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-        }
-            break;
-        case PowerSupplyMode:
-        {
-            QApplication::setOverrideCursor(Qt::ArrowCursor);
-        }
-            break;
-        case ResistorMode:
-        {
-            QApplication::setOverrideCursor(Qt::ArrowCursor);
-        }
-            break;
-        case DescriptionMode:
-        {
-            QApplication::setOverrideCursor(Qt::ArrowCursor);
-        }
-            break;
+        QApplication::setOverrideCursor(Qt::CrossCursor);
     }
 }
 

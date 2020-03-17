@@ -168,7 +168,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
     if (event->key() == Qt::Key::Key_Escape)
     {
         setSelectionMode();
-        QApplication::setOverrideCursor(Qt::OpenHandCursor);
     }
 }
 

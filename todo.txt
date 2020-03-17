@@ -10,3 +10,4 @@ ___________________________________________________________________
 
 -Ausschneiden noch für Multiselect
 - QClipboard einbauen
+- Verschieben funktioniert nicht mehr

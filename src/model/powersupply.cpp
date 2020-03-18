@@ -12,7 +12,6 @@
  * \param   y               ist die Y-Koordinate der zugewiesenen Position
  * \param   isVertical      ist die räumliche Ausrichtung im Netzwerk
  * \param   id              ist die intern zugewiesene Id
- *
  */
 PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id) :
         Component(x, y, isVertical, name, voltage, Component::ComponentType::PowerSupply, id)
@@ -62,7 +61,7 @@ void PowerSupply::paintInformation(QPainter* painter)
     painter->drawText(posName, Qt::AlignLeft, _name);
     double voltageWithoutUnit;
     QString unitString = "";
-    // Darstellung des Widerstandwertes
+    // Darstellung des Spannungswertes
     if(_voltage < 1000)
     {
         voltageWithoutUnit = _voltage;

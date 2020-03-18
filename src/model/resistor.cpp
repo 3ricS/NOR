@@ -13,7 +13,6 @@
  * \param   y               ist die Y-Koordinate der zugewiesenen Position
  * \param   isVertical      ist die räumliche Ausrichtung im Netzwerk
  * \param   id              ist die intern zugewiesene Id
- *
  */
 Resistor::Resistor(QString name, long double valueResistance, int x, int y, bool isVertical, int id)
         : Component(x, y, isVertical, name, 0.0, Component::ComponentType::Resistor, id),

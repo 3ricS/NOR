@@ -33,7 +33,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(NetworkGraphics* model, QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow(void);
 
 public slots:
     //Slots die im View etwas aktualisieren (diese werden mit dem Siganl verknüpft welches im Model emitted wird)

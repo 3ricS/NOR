@@ -7,7 +7,6 @@
  * Die Methoden werden entsprechend für die einzelnen Aktionen, die beim Bearbeiten des Netzwerkes getätigt werden, überladen.
  * Die Zeiger auf entfernte Elemente bleiben so lange erhalten, bis die QUndoCommands vom QUndoStack entfernt werden.
  */
-
 #ifndef NOR_COMMANDS_H
 #define NOR_COMMANDS_H
 
@@ -63,7 +62,6 @@ private:
 
 
 
-
 class CommandAddDescriptionField : public QUndoCommand
 {
 public:
@@ -78,7 +76,6 @@ private:
     DescriptionField*   _createdDescriptionField = nullptr;
     bool                _hasDoneUndo = false;
 };
-
 
 
 
@@ -123,6 +120,8 @@ private:
     Component::Orientation  _newOrientation;
 };
 
+
+
 class CommandDeleteComponent : public QUndoCommand
 {
 public:
@@ -138,6 +137,7 @@ private:
     QList<Connection*>  _deletedConnections;
     bool                _hasDoneUndo = false;
 };
+
 
 
 class CommandDeleteConnection : public QUndoCommand
@@ -157,7 +157,6 @@ private:
 
 
 
-
 class CommandDeleteDescription : public QUndoCommand
 {
 public:
@@ -174,16 +173,17 @@ private:
 };
 
 
+
 class CommandDuplicateComponent : public QUndoCommand
 {
 public:
     CommandDuplicateComponent(NetworkGraphics* model, Component* componentToDuplicate, int xPosition, int yPosition);
-    ~CommandDuplicateComponent() {};
+    ~CommandDuplicateComponent(void) {};
 
     void undo(void) override;
     void redo(void) override;
 
-    Component* getCreatedComponent() {return _createdComponent;}
+    Component* getCreatedComponent(void) {return _createdComponent;}
 
 private:
     Component*                  _createdComponent = nullptr;
@@ -193,11 +193,13 @@ private:
     int                         _yPosition;
 };
 
+
+
 class CommandDuplicateDescription : public QUndoCommand
 {
 public:
     CommandDuplicateDescription(NetworkGraphics* model, DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
-    ~CommandDuplicateDescription() {};
+    ~CommandDuplicateDescription(void) {};
 
     void undo(void) override;
     void redo(void) override;
@@ -212,11 +214,13 @@ private:
     int                         _yPosition;
 };
 
+
+
 class CommandEditDescription : public QUndoCommand
 {
 public:
     CommandEditDescription(NetworkGraphics* model, DescriptionField* descriptionFieldToEdit, QString newText);
-    ~CommandEditDescription() {};
+    ~CommandEditDescription(void) {};
 
     void undo(void) override;
     void redo(void) override;
@@ -228,11 +232,13 @@ private:
     QString                     _oldText;
 };
 
+
+
 class CommandRotateComponent : public QUndoCommand
 {
 public:
     CommandRotateComponent(Component* ComponentToTurn, NetworkGraphics* model);
-    ~CommandRotateComponent() {};
+    ~CommandRotateComponent(void) {};
 
     void undo(void) override;
     void redo(void) override;
@@ -242,6 +248,8 @@ private:
     Component*           _componentToTurn = nullptr;
     NetworkGraphics*            _model = nullptr;
 };
+
+
 
 class CommandCutComponents : public QUndoCommand
 {
@@ -259,11 +267,13 @@ private:
     bool                _hasDoneUndo = false;
 };
 
+
+
 class CommandCutDescriptionField : public QUndoCommand
 {
 public:
     CommandCutDescriptionField(NetworkGraphics* model, DescriptionField* descriptionToCut);
-    ~CommandCutDescriptionField(void){};
+    ~CommandCutDescriptionField(void) {};
 
     void undo(void) override;
     void redo(void) override;

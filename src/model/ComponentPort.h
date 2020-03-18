@@ -7,7 +7,6 @@
  * Will man genau spezifizieren, mit welchem Ende der Komponente eine Verbindung verbunden ist, ist ein ComponentPort nötig.
  * Hiermit kann man den Port und den Component zu einem Element zusammenfassen.
  */
-
 #ifndef NOR_COMPONENTPORT_H
 #define NOR_COMPONENTPORT_H
 

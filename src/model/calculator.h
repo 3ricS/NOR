@@ -2,9 +2,10 @@
  * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
  *
  * \brief   Der Calculator berechnet den Gesamtwiderstandswert des Netztwerkes.
+ *
  * Die Klasse ist ein Singleton.
- *
- *
+ * Unter Verwendung der RowPieces berchnet der Calculator den Widerstandswert.
+ * Die einzelnen RowPieces werden von innen nach ausßen zusammengefasst und deren Widerstandswerte zusammen gerechnet.
  */
 #ifndef NOR_PUZZLECALCULATOR_H
 #define NOR_PUZZLECALCULATOR_H

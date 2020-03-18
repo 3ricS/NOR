@@ -9,7 +9,6 @@
  * Wenn sich mehrere Rowpieces in reihe zueinander befinden werden diese zusammengefasst.
  * Entsprechend passiert dies, wenn sich die RowPieces parallel zueinander befinden.
  */
-
 #ifndef NOR_ROWPIECE_H
 #define NOR_ROWPIECE_H
 
@@ -26,15 +25,21 @@ public:
     void parallelMerge(RowPiece otherRowPiece);
     void rowMerge(RowPiece otherRowPiece);
 
+    //getter
     long double getResistanceValue(void) {return _resistanceValue;}
 
     Node* getNodeOne(void) {return _nodeOne;}
     Node* getNodeTwo(void) {return _nodeTwo;}
 
-    bool getIsMergedParallel() {return _isMergedParallel;}
+    bool getIsMergedParallel(void) {return _isMergedParallel;}
     void setIsMergedParallel(bool isMergedParallel) {_isMergedParallel = isMergedParallel;}
 
     double getAmp(void) {return _amp;}
+    QList<Component*> getComponents(void) {return _components;}
+    Node* getEqualNode(RowPiece otherRowPiece);
+    Node* getOppositeNode(Node* node);
+
+    //setter
     void setAmp(double amp) {_amp = amp;}
 
     bool operator==(const RowPiece& rhs);
@@ -42,18 +47,13 @@ public:
 
     bool hasEqualNodesOnBothSides(RowPiece otherRowPiece);
     bool hasOneEqualNode(RowPiece otherRowPiece);
-
-    QList<Component*> getComponents(void) {return _components;}
-    Node* getEqualNode(RowPiece otherRowPiece);
-    Node* getOppositeNode(Node* node);
-
     bool hasNode(Node* node);
 
 private:
-    long double _resistanceValue;
-    double _amp = 0.0;
     Node* _nodeOne;
     Node* _nodeTwo;
+    long double _resistanceValue;
+    double _amp = 0.0;
     QList<Component*> _components;
     bool _isMergedParallel = false;
 };

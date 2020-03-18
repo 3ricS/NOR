@@ -12,11 +12,18 @@ PowerView::PowerView(QWidget *parent) :
     ui->buttonBox->button(QDialogButtonBox::Close)->setText("Schließen");
 }
 
-PowerView::~PowerView()
+PowerView::~PowerView(void)
 {
     delete ui;
 }
 
+/*!
+ * \brief Initialisiert den dargestellten Text.
+ *
+ * \param text ist der darzustellende Text
+ *
+ * Der darzustellende Text wird in das Label geschrieben.
+ */
 void PowerView::setText(QString text)
 {
     ui->label->setText(text);

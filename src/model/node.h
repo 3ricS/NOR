@@ -5,7 +5,6 @@
  *
  * Ein Node besitzt eine Id, eine Liste von ComponentPorts und ob der Knoten mit der Spannungsquelle verbunden ist.
  */
-
 #ifndef NOR_NODE_H
 #define NOR_NODE_H
 

@@ -1,3 +1,14 @@
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Der PowerView ist die Oberfläche, auf der die Ströme angezeigt.
+ *
+ * Es wird dargestellt:
+ *      Der Spannungswert, der Spannungsquelle
+ *      Der Gesamtstrom
+ *      Die Spannungen, die an den Widerständen abfallen
+ *      Der Strom, der an jedem Widerstand fließt
+ */
 #ifndef POWERVIEW_H
 #define POWERVIEW_H
 
@@ -13,7 +24,7 @@ class PowerView : public QDialog
 
 public:
     explicit PowerView(QWidget *parent = nullptr);
-    ~PowerView();
+    ~PowerView(void);
 
     void setText(QString text);
 

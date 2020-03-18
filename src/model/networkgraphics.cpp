@@ -68,7 +68,7 @@ void NetworkGraphics::addObject(Component* component)
  * \brief Gibt ein Component aus der ComponentList aus, welches an den Soll-Koordinaten x und y ist.
  *
  * \param   scenePosition   ist die zu überprüfende Gitterposition
- * \return
+ * \return Gibt die Komponente an der gesuchten Position zurück.
  *
  * Es werden nacheinander Components aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
  * Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
@@ -150,7 +150,7 @@ QString NetworkGraphics::getFileName(void)
 /*!
  * \brief Gibt einen Componentport aus der ComponentList aus, welcher sich an den Soll-Position in der Scene befinden.
  *
- * \param   scenePosition
+ * \param   scenePosition ist die Position in der Scene
  * \return Gibt den ComponentPort an der Position zurück.
  *
  * Es wird in der Componentlist nach einem Port an der Sceneposition gesucht.

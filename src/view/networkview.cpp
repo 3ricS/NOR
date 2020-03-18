@@ -14,7 +14,7 @@ NetworkView::NetworkView(QWidget* parent) :
 /*!
  * \brief Verbindet den View mit dem Model
  *
- * \param   model
+ * \param   model ist das zu setzende Model
  *
  * Der View bekommt das Model übergeben, damit dieses bekannt ist.
  */
@@ -450,7 +450,7 @@ void NetworkView::deleteSelectedItem(void)
 /*!
  * \brief Bearbeiten des Netzwerkes oder eines Textfeldes.
  *
- *
+ * Es werden entweder eine Komponente oder ein Textfeld in dem Netzwerk bearbeitet.
  */
 void NetworkView::editNetworkOrDescription(void)
 {
@@ -580,7 +580,6 @@ void NetworkView::focusForPrint(void)
 
 /*!
  * \brief Bereitet die Scene und GridPosition für das Rotieren per Shortcut auf.
- *
  */
 void NetworkView::rotateComponentByShortcut(void)
 {
@@ -643,7 +642,10 @@ void NetworkView::print(void)
     }
 }
 
-void NetworkView::cut()
+/*!
+ * \brief Ausschneiden einer Komponente oder eines Textfeldes.
+ */
+void NetworkView::cut(void)
 {
     _copiedComponents = _model->findSelectedComponent();
     _copiedDescriptions = _model->findSelectedDescription();

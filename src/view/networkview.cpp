@@ -32,7 +32,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
     //Merken des zuletzt geklickten Bereichs, wird beim Paste benötigt
     _lastClickedPosition = gridPosition;
 
-    if(_multiselectRect != nullptr)
+    if (_multiselectRect != nullptr)
     {
         delete _multiselectRect;
     }
@@ -73,6 +73,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             bool connectionStarted = (nullptr != _connectionStartComponentPort);
             if(connectionStarted)
             {
+                //TODO: entferne _tempComponentListForConnections
                 ComponentPort* connectionComponentPortEnd = nullptr;
                 for (Component* component : _tempComponentListForConnections)
                 {
@@ -108,17 +109,21 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             //Move Event nur auslösen, wenn Objekt an neuer GridPosition
             if(!_model->isThereAComponentOrADescription(gridPosition))
             {
-                if((_selectedComponentToMove != nullptr && _selectedComponentToMove->getPosition() != gridPosition) ||
-                   (_selectedDescriptionToMove != nullptr &&
-                    QPointF(_selectedDescriptionToMove->getXPosition(), _selectedDescriptionToMove->getYPosition()) !=
-                    gridPosition))
+                if ((_selectedComponentToMove != nullptr && _selectedComponentToMove->getPosition() != gridPosition) ||
+                    (_selectedDescriptionToMove != nullptr &&
+                     QPointF(_selectedDescriptionToMove->getXPosition(), _selectedDescriptionToMove->getYPosition()) != gridPosition))
                 {
                     int previousComoponentXPosition = 0;
                     int previousComoponentYPosition = 0;
                     int diffXAfterMoving = 0;
                     int diffYAfterMoving = 0;
 
-                    if((_selectedComponentToMove != nullptr) || (_selectedDescriptionToMove != nullptr))
+                    if(_selectedComponentToMove != nullptr)
+                    {
+                        previousComoponentXPosition = _selectedComponentToMove->getXPosition();
+                        previousComoponentYPosition = _selectedComponentToMove->getYPosition();
+                    }
+                    else if (_selectedDescriptionToMove != nullptr)
                     {
                         previousComoponentXPosition = _selectedDescriptionToMove->getXPosition();
                         previousComoponentYPosition = _selectedDescriptionToMove->getYPosition();
@@ -126,15 +131,19 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
                     _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
 
-                    if((_selectedComponentToMove != nullptr) || (_selectedDescriptionToMove != nullptr))
+                    if(_selectedComponentToMove != nullptr)
+                    {
+                        diffXAfterMoving = _selectedComponentToMove->getXPosition() - previousComoponentXPosition;
+                        diffYAfterMoving = _selectedComponentToMove->getYPosition() - previousComoponentYPosition;
+                    }
+                    else if (_selectedDescriptionToMove != nullptr)
                     {
                         diffXAfterMoving = _selectedDescriptionToMove->getXPosition() - previousComoponentXPosition;
                         diffYAfterMoving = _selectedDescriptionToMove->getYPosition() - previousComoponentYPosition;
                     }
 
                     _model->moveMultiselectComponents(_model->getComponents(), _model->getDescriptions(),
-                                                      _selectedComponentToMove, _selectedDescriptionToMove,
-                                                      diffXAfterMoving, diffYAfterMoving);
+                                                      _selectedComponentToMove, _selectedDescriptionToMove, diffXAfterMoving, diffYAfterMoving);
                 }
             }
             if(!_isMoved)

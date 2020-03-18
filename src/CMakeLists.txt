@@ -6,7 +6,7 @@ project(NOR)
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.14.1\\5.14.1\\mingw73_64")
+set(CMAKE_PREFIX_PATH "/usr/lib/qt5/bin")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -73,7 +73,7 @@ set(UIS
 
 # set ressources
 set(RESOURCES
-        rsrc/resources.qrc)
+        ./pictures.qdrc)
 
 
 add_executable(NOR

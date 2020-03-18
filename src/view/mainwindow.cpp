@@ -517,7 +517,7 @@ void MainWindow::print(void)
     _networkView->print();
 }
 
-void MainWindow::cut()
+void MainWindow::cut(void)
 {
     _networkView->cut();
 }

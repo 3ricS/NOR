@@ -389,7 +389,7 @@ bool NetworkView::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWayto
 }
 
 //Sucht nach der DurchschnittsXPosition und der DurchschnittsYPosition
-QPointF NetworkView::findScrollPosition()
+QPointF NetworkView::findScrollPosition(void)
 {
     int averageX = 0;
     int averageY = 0;
@@ -421,6 +421,7 @@ QPointF NetworkView::findScrollPosition()
         averageY /= anzahlResistorAndDescriptions;
         averageX /= anzahlResistorAndDescriptions;
     }
+    _model->update();
     return QPointF(averageX, averageY);
 }
 

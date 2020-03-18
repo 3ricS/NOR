@@ -59,7 +59,7 @@ public slots:
     void undo(void);
     void redo(void);
     void print(void);
-    void cut();
+    void cut(void);
     void openCurrentVoltageWindow(void);
     void setCurrentButtonVisibility(bool visibility);
 

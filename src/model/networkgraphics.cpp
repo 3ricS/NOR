@@ -75,7 +75,7 @@ void NetworkGraphics::addObject(Component* component)
  */
 Component* NetworkGraphics::getComponentAtPosition(QPointF scenePosition)
 {
-    QPointF gridPosition = scenePositionToGridPosition(scenePosition);
+    QPointF gridPosition = mapSceneToGrid(scenePosition);
     for (Component* component : _componentList)
     {
         bool equalX = (component->getXPosition() == gridPosition.toPoint().x());
@@ -91,14 +91,15 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF scenePosition)
 /*!
  * \brief Gibt eine Describtion aus der Liste aus Descriptions aus, welches an den Soll-Koordinaten x und y ist.
  *
- * \param   gridPosition   ist die zu überprüfende Gitterposition
+ * \param   scenePosition   ist die zu überprüfende Gitterposition
  * \return
  *
  * Es werden nacheinander Description aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
  * Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
  */
-DescriptionField* NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition)
+DescriptionField* NetworkGraphics::getDescriptionAtPosition(QPointF scenePosition)
 {
+    QPointF gridPosition = mapSceneToGrid(scenePosition);
     for (DescriptionField* description : _descriptionList)
     {
         bool equalX = (description->getXPosition() == gridPosition.toPoint().x());
@@ -114,13 +115,13 @@ DescriptionField* NetworkGraphics::getDescriptionAtPosition(QPointF gridPosition
 /*!
  * \brief Prüft ob sich an einer bestimmten Koordinate, eine Komponente oder Textfeld befindet.
  *
- * \param   gridPosition    ist die zu überprüfende GitterPositon
+ * \param   scenePosition    ist die zu überprüfende GitterPositon
  * \return Gibt zurück, ob sich an der Gitterposition eine Komponente oder Textfeld befindet.
  *
  */
-bool NetworkGraphics::isThereAComponentOrADescription(QPointF gridPosition)
+bool NetworkGraphics::hasObjectAtPosition(QPointF scenePosition)
 {
-    return getComponentAtPosition(gridPosition) != nullptr || getDescriptionAtPosition(gridPosition) != nullptr;
+    return getComponentAtPosition(scenePosition) != nullptr || getDescriptionAtPosition(scenePosition) != nullptr;
 }
 
 Connection* NetworkGraphics::getConnectionAtPosition(QPointF gridposition)
@@ -271,7 +272,7 @@ Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
 {
     Component* createdComponent = nullptr;
 
-    if(isThereAComponentOrADescription(gridPosition))
+    if(hasObjectAtPosition(gridPosition))
     {
         return nullptr;
     }
@@ -520,7 +521,7 @@ NetworkGraphics::addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoa
 {
     if(!isLoad)
     {
-        if(isThereAComponentOrADescription(gridPosition))
+        if(hasObjectAtPosition(gridPosition))
         {
             return nullptr;
         }
@@ -649,7 +650,7 @@ void
 NetworkGraphics::moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove,
                                           QPointF gridPosition)
 {
-    bool isComponentAtPosition = isThereAComponentOrADescription(gridPosition);
+    bool isComponentAtPosition = hasObjectAtPosition(gridPosition);
     if(isComponentAtPosition)
     {
         return;
@@ -913,7 +914,7 @@ void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
     QPointF gridPosition = componentToAdd->getPosition();
     Component::ComponentType componentType = componentToAdd->getComponentType();
 
-    if(isThereAComponentOrADescription(gridPosition))
+    if(hasObjectAtPosition(gridPosition))
     {
         return;
     }
@@ -1037,7 +1038,7 @@ NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QLis
         {
             QPointF* newPosition = new QPointF(component->getXPosition() + diffXAfterMoving,
                                                component->getYPosition() + diffYAfterMoving);
-            if(isThereAComponentOrADescription(*newPosition))
+            if(hasObjectAtPosition(*newPosition))
             {
                 if(getComponentAtPosition(*newPosition) != nullptr &&
                    !getComponentAtPosition(*newPosition)->isSelected())
@@ -1062,7 +1063,7 @@ NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QLis
         {
             QPointF* newPosition = new QPointF(descriptionfield->getXPosition() + diffXAfterMoving,
                                                descriptionfield->getYPosition() + diffYAfterMoving);
-            if(isThereAComponentOrADescription(*newPosition))
+            if(hasObjectAtPosition(*newPosition))
             {
                 if(getComponentAtPosition(*newPosition) != nullptr &&
                    !getComponentAtPosition(*newPosition)->isSelected())
@@ -1125,7 +1126,7 @@ DescriptionField* NetworkGraphics::addDescriptionField(QPointF gridPosition, boo
 {
     if(!isLoad)
     {
-        if(isThereAComponentOrADescription(gridPosition))
+        if(hasObjectAtPosition(gridPosition))
         {
             return nullptr;
         }
@@ -1266,14 +1267,14 @@ void NetworkGraphics::selectObjectsAtPosition(QPointF scenePosition)
     }
 }
 
-QPointF NetworkGraphics::scenePositionToGridPosition(QPointF scenePosition)
+QPointF NetworkGraphics::mapSceneToGrid(QPointF scenePosition)
 {
     qreal xPos = scenePosition.toPoint().x() / Defines::gridLength * Defines::gridLength - (Defines::gridLength / 2);
     qreal yPos = scenePosition.toPoint().y() / Defines::gridLength * Defines::gridLength - (Defines::gridLength / 2);
     return QPointF(xPos, yPos);
 }
 
-QList<Component*> NetworkGraphics::findSelectedComponent(void)
+QList<Component*> NetworkGraphics::findSelectedComponents(void)
 {
     QList<Component*> componentList;
     for (Component* component : getComponents())
@@ -1312,5 +1313,14 @@ void NetworkGraphics::cutDescription(QList<DescriptionField*> descriptions)
     for (DescriptionField* descriptionToCut : descriptions)
     {
         cutDescription(descriptionToCut);
+    }
+}
+
+void NetworkGraphics::turnSelectedComponentsRight(void)
+{
+    QList<Component*> selectedComponents = findSelectedComponents();
+    for (Component* component : selectedComponents)
+    {
+        turnComponentRight(component);
     }
 }

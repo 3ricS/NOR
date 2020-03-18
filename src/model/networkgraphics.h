@@ -32,7 +32,7 @@ class NetworkGraphics : public QGraphicsScene
 public:
     NetworkGraphics();
 
-    QPointF scenePositionToGridPosition(QPointF scenePosition);
+    QPointF mapSceneToGrid(QPointF scenePosition);
 
 
     void save(void);
@@ -44,8 +44,9 @@ public:
     //Selection
     void deselectAllItems(void);
     void selectObjectsAtPosition(QPointF scenePosition);
-    QList<Component*> findSelectedComponent(void);
+    QList<Component*> findSelectedComponents(void);
     QList<DescriptionField*> findSelectedDescription(void);
+    void turnSelectedComponentsRight(void);
 
 
     void mirrorComponent(Component* component);
@@ -105,8 +106,8 @@ public:
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
     Component* getComponentAtPosition(QPointF scenePosition);
-    DescriptionField* getDescriptionAtPosition(QPointF gridPosition);
-    bool isThereAComponentOrADescription(QPointF gridPosition);
+    DescriptionField* getDescriptionAtPosition(QPointF scenePosition);
+    bool hasObjectAtPosition(QPointF scenePosition);
     Connection* getConnectionAtPosition(QPointF gridposition);
     QList<Component*> getComponents(void) {return _componentList;}
     QList<Connection*> getConnections(void) {return _connectionList;}

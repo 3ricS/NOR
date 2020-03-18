@@ -1,8 +1,11 @@
 #include "view/mainwindow.h"
 
-#include <model/networkgraphics.h>
 #include <QApplication>
 
+#include <model/networkgraphics.h>
+#include <defines.h>
+
+const QColor Defines::highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
 
 int main(int argc, char *argv[])
 {

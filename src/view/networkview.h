@@ -48,9 +48,7 @@ protected:
 private:
 
     static QPointF scenePositionToGrid(QPointF scenePosition);
-    void deleteSampleObjects(void);
-    void highlightRect(QPointF scenePositionOne, QColor _highlightColor);
-    void rotateComponent(QPointF gridPosition, QPointF scenePosition);
+    void rotateComponent(QPointF scenePosition);
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
     QPointF findScrollPosition(void);
     void focusForPrint(void);
@@ -60,9 +58,21 @@ private:
     QList<DescriptionField*> findSelectedDescription(void);
     void calculateDistanceToNextComponent(int& i, Component* firstComp, int& xSpace, int& ySpace);
     void calculateDistanceToNextDescription(int& i, Component* firstComp, int& xSpace, int& ySpace);
-
     QGraphicsItem* deleteGraphicsItem(QGraphicsItem* graphicsItem);
 
+    //for Key/MouseEvents
+    void startConnection(QPointF scenePosition);
+    //TODO: benenne connectionMoveEvent um
+    void connectionMoveEvent(QPointF scenePosition);
+    void startSelection(QPointF scenePosition);
+
+
+    //Highlighting
+    void deleteSampleObjectsAndHighlights(void);
+    void showSampleComponent(QPointF scenePosition, Component::ComponentType componentType);
+    void showSampleComponent(QPointF scenePosition, const MouseMode mouseMode);
+    void highlightRect(QPointF scenePositionOne, QColor _highlightColor);
+    void highlightComponentPort(ComponentPort* componentPortToHighlight, QColor highlightColor);
 
     NetworkGraphics*         _model  = nullptr;
 
@@ -71,7 +81,7 @@ private:
     bool                     _isMoved = false;
 
     QList<Component*>        _tempComponentListForConnections;
-    ComponentPort*           _connectionStartComponentPort = new ComponentPort(nullptr, Component::Port::null);
+    ComponentPort*           _connectionStartComponentPort = nullptr;
     QGraphicsItem*           _previousHighlightedRect = nullptr;
     QGraphicsItem*           _previousHighlightedPort = nullptr;
     Component*               _selectedComponentToMove = nullptr;
@@ -88,7 +98,6 @@ private:
     QPointF                  _lastPositionMultiselect;
 
     MouseMode                _mouseMode = SelectionMode;
-    const QColor             _highlightColor = QColor(136, 136, 136, 55);  //3 mal 136 ist grau und 55 ist die Transparenz
     QPointF                  _actualMoveScenePosition;
 };
 

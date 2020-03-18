@@ -7,8 +7,8 @@
  * Ein Description ist ein QGraphicsItem, damit ein Element der QGraphicsScene und kann sich selbst in die QGraphicsScene
  * zeichnen.
  */
-#ifndef DESCRIPTIONFIELD_H
-#define DESCRIPTIONFIELD_H
+#ifndef DESCRIPTION_H
+#define DESCRIPTION_H
 
 #include <QGraphicsItem>
 #include <QPainter>

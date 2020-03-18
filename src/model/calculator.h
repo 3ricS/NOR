@@ -12,7 +12,7 @@
 
 #include <QList>
 #include <model/rowpiece.h>
-#include <model/componentport.h>
+#include <model/ComponentPort.h>
 
 class Connection;
 class Component;
@@ -37,7 +37,7 @@ private:
     void findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeList);
     long double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes, QList<RowPiece>& mergeList);
     void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful, QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
-    void addingResistorsInRowToOneRowPiece(QList<Component*>& rowPiecesComponents, ComponentPort actualComponentPort,
+    void addingResistorsInRowToOneRowPiece(QList<Component*>& rowPiecesComponents, ComponentPort& actualComponentPort,
                                            QList<ComponentPort>& neighbourComponentPorts, bool neighbourComponentPortsContainPowerSupply,
                                            int& resistanceValueOfRowPiece);
     void triangleToStar(QList<Node*>& nodes, bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB,

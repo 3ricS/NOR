@@ -20,7 +20,7 @@
 #include <model/connection.h>
 #include <model/powersupply.h>
 #include <model/resistor.h>
-#include <model/descriptionfield.h>
+#include <model/description.h>
 
 class NetworkGraphics;
 

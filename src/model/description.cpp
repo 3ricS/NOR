@@ -1,5 +1,5 @@
 #include "defines.h"
-#include "descriptionfield.h"
+#include "description.h"
 
 Description::Description(int x, int y, int id, QString text)
     : QGraphicsItem(nullptr),

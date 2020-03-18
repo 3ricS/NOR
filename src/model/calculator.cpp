@@ -237,7 +237,7 @@ void Calculator::pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalys
     }
 }
 
-void Calculator::addingResistorsInRowToOneRowPiece(QList<Component *> &rowPiecesComponents, ComponentPort actualComponentPort,
+void Calculator::addingResistorsInRowToOneRowPiece(QList<Component *> &rowPiecesComponents, ComponentPort &actualComponentPort,
                                                    QList<ComponentPort> &neighbourComponentPorts, bool neighbourComponentPortsContainPowerSupply,
                                                    int &resistanceValueOfRowPiece)
 {

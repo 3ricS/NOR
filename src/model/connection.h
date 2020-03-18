@@ -15,7 +15,7 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <model/componentport.h>
+#include <model/ComponentPort.h>
 
 #include <QPainter>
 #include <algorithm>

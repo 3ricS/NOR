@@ -8,7 +8,7 @@
 #ifndef NOR_NODE_H
 #define NOR_NODE_H
 
-#include <model/componentport.h>
+#include <model/ComponentPort.h>
 
 class Node
 {

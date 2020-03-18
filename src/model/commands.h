@@ -14,7 +14,7 @@
 #include <QPointF>
 
 #include <model/component.h>
-#include <model/componentport.h>
+#include <model/ComponentPort.h>
 
 class NetworkGraphics;
 class Connection;

@@ -195,25 +195,19 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     _selectedComponentToMove = nullptr;
     _selectedDescriptionToMove = nullptr;
 
-    switch (_mouseMode)
+    if(ConnectionMode == _mouseMode)
     {
-        case ConnectionMode:
-        {
-            startConnection(scenePosition);
-        }
-            break;
-        case SelectionMode:
-        {
-            startSelection(scenePosition);
-        }
-            break;
+        startConnection(scenePosition);
+    }
+    else if(SelectionMode == _mouseMode)
+    {
+        startSelection(scenePosition);
     }
 }
 
 void NetworkView::mouseMoveEvent(QMouseEvent* event)
 {
     QPointF scenePosition = mapToScene(event->pos());
-    QPointF gridPosition = scenePositionToGrid(scenePosition);
 
     //Notwendig für den Rechtsklick per Shortcut
     _actualMoveScenePosition = scenePosition;
@@ -372,6 +366,7 @@ void NetworkView::rotateComponent(QPointF scenePosition)
     if (MouseMode::SelectionMode != _mouseMode)
     {
         _isVerticalComponentDefault = !_isVerticalComponentDefault;
+        showSampleComponent(scenePosition, _mouseMode);
     }
     else if (MouseMode::SelectionMode == _mouseMode)
     {

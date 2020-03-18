@@ -814,7 +814,6 @@ void NetworkGraphics::turnComponentRightWithoutUndo(Component* componentToTurn)
         case Component::Orientation::left:
         {
             componentToTurn->setOrientation(Component::Orientation::top);
-            //mirrorComponent(componentToTurn);
         }
             break;
         case Component::Orientation::top:

@@ -15,7 +15,7 @@
 #include <QMouseEvent>
 #include <QUndoStack>
 
-#include <model/descriptionfield.h>
+#include <model/description.h>
 #include <model/resistor.h>
 #include <model/powersupply.h>
 #include <model/connection.h>

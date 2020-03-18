@@ -26,7 +26,8 @@ Component::Component(int x, int y, bool isVertical, QString name, double voltage
  */
 QRectF Component::boundingRect(void) const
 {
-    return QRectF(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
+    return QRectF(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength,
+                  Defines::gridLength);
 }
 
 int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
@@ -128,13 +129,14 @@ Component::ComponentType Component::integerToComponentType(int componentType)
  *
  * Färbt das Gitterfeld um die Komponente an der ausgewählten Position, mit der eingestelten Farbe, ein.
  */
-void Component::paintHighlightRect(QPainter *painter)
+void Component::paintHighlightRect(QPainter* painter)
 {
     QBrush brush;
     brush.setColor(QColor(255, 0, 0, 55));
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     painter->setBrush(brush);
-    painter->drawRect(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
+    painter->drawRect(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2),
+                      Defines::gridLength, Defines::gridLength);
 }
 
 QPointF Component::getPortPosition(Component::Port port) const
@@ -158,4 +160,68 @@ void Component::setOrientation(Component::Orientation newOrientation)
 {
     _orientation = newOrientation;
     _isVertical = !(Orientation::left == newOrientation || Orientation::right == newOrientation);
+}
+
+void
+Component::paintInformation(QPainter* painter, QString name, double value, QRectF namePosition, QRectF valuePosition,
+                            ComponentType componentType)
+{
+    QFont q;
+    q.setPixelSize(13);
+    painter->setFont(q);
+
+    QString displayedValueString = getDisplayedValueString(value, componentType);
+
+    painter->drawText(namePosition, Qt::AlignLeft, name);
+    painter->drawText(valuePosition, Qt::AlignRight, displayedValueString);
+}
+
+QString Component::getDisplayedValueString(double value, Component::ComponentType componentType)
+{
+    double valueWithoutUnit = value;
+    QString unitString = getScaledValue(valueWithoutUnit);
+
+    if (ComponentType::Resistor == componentType)
+    {
+        unitString.append("Ω");
+    }
+    else
+    {
+        unitString.append("V");
+    }
+
+    QString valueWithLocalApperance = QLocale::system().toString(valueWithoutUnit);
+    valueWithLocalApperance.replace(".", "");
+    QString displayedString = valueWithLocalApperance + " " + unitString;
+
+    return displayedString;
+}
+
+QString Component::getScaledValue(double& valueWithoutUnit)
+{
+    QString unitString = "";
+    double value = valueWithoutUnit;
+    
+    if (value < 1e3)
+    {
+        valueWithoutUnit = value;
+    }
+    else if (value < 1e6)
+    {
+        valueWithoutUnit = value / 1e3;
+        unitString = "k";
+    }
+    else if (value < 1e9)
+    {
+        unitString = "M";
+        valueWithoutUnit = value / 1e6;
+    }
+    else
+    {
+        unitString = "G";
+        valueWithoutUnit = value / 1e9;
+    }
+
+    valueWithoutUnit = int(valueWithoutUnit * 100) / 100.0;
+    return unitString;
 }

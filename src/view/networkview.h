@@ -78,7 +78,6 @@ private:
     NetworkGraphics*         _model  = nullptr;
 
     bool                     _mouseIsPressed = false;
-    bool                     _componentOrDescriptionIsGrabbed = false;
 
     QList<Component*>        _tempComponentListForConnections;
     ComponentPort*           _connectionStartComponentPort = nullptr;

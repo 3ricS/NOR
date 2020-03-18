@@ -23,7 +23,7 @@ public:
 private:
 
     //Methodenn
-    virtual void paintInformation(QPainter* painter) override;
+    virtual void setLabelPositions(QPainter* painter) override;
 };
 
 #endif // POWERSUPPLY_H

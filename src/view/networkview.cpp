@@ -39,7 +39,6 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
     _multiselectRect = nullptr;
 
     _mouseIsPressed = false;
-    _componentOrDescriptionIsGrabbed = false;
 
     Component::ComponentType componentType = Component::ComponentType::PowerSupply;
 
@@ -188,7 +187,6 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
 
     _mouseIsPressed = true;
     QPointF gridPosition = scenePositionToGrid(scenePosition);
-    _componentOrDescriptionIsGrabbed = _model->hasObjectAtPosition(gridPosition);
 
     //Keine Verbindung begonnen: _connectionStartComponentPort muss auf Nullptr zeigen
     _connectionStartComponentPort = nullptr;

@@ -61,16 +61,11 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
     }
 
     //Zeichnen der Informationen (Name und Wert) in Abhängigkeit ob vertikal oder horizontal
-    paintInformation(painter);
+    setLabelPositions(painter);
 }
 
-void Resistor::paintInformation(QPainter* painter)
+void Resistor::setLabelPositions(QPainter* painter)
 {
-    // Zeichnen des Namens
-    QFont q;
-    q.setPixelSize(13);
-    painter->setFont(q);
-
     QRectF posText;
     QRectF posValue;
     if(_isVertical)
@@ -88,29 +83,5 @@ void Resistor::paintInformation(QPainter* painter)
                         QSizeF(Defines::gridLength * 0.6, Defines::gridLength * 0.2));
     }
 
-    painter->drawText(posText, Qt::AlignLeft, _name);
-
-    double resistance = static_cast<double>(_resistanceValue);
-    double resistanceWithoutUnit;
-    QString unitString = "";
-    // Darstellung des Widerstandwertes
-    if(resistance < 1000)
-    {
-        resistanceWithoutUnit = resistance;
-    }
-    else if(resistance < 1000000)
-    {
-        resistanceWithoutUnit = resistance / 1000;
-        unitString = "k";
-    }
-    else
-    {
-        unitString = "M";
-        resistanceWithoutUnit = resistance / 1000000;
-    }
-    resistanceWithoutUnit = int(resistanceWithoutUnit * 100) / 100.0;
-    QString value = QLocale::system().toString(resistanceWithoutUnit);
-    value.replace(".", "");
-    QString displayedString = value + " " + unitString + "Ω";
-    painter->drawText(posValue, Qt::AlignRight, displayedString);
+    paintInformation(painter, _name, static_cast<double>(_resistanceValue), posText, posValue, ComponentType::Resistor);
 }

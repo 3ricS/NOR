@@ -25,7 +25,7 @@ public:
 private:
 
     //Methoden
-    virtual void paintInformation(QPainter* painter) override;
+    virtual void setLabelPositions(QPainter* painter) override;
 
     long double _resistanceValue;
 };

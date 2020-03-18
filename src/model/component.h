@@ -73,10 +73,14 @@ protected:
     double _amp = 0.0;
 
     //virtuelle Methoden
-    virtual void paintInformation(QPainter* painter) = 0;
+    virtual void setLabelPositions(QPainter* painter) = 0;
+    void paintInformation(QPainter* painter, QString name, double value, QRectF namePosition, QRectF valuePosition,
+                          ComponentType componentType);
 
 private:
     int getPortPositionXOrY(int positionValue, Port port, bool isX) const;
+    QString getDisplayedValueString(double value, ComponentType componentType);
+    QString getScaledValue(double& valueWithoutUnit);
 
     const int _id;
 

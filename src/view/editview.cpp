@@ -2,6 +2,8 @@
 
 #include <QMessageBox>
 #include <QLocale>
+#include <QDebug>
+
 #include <model/networkgraphics.h>
 
 EditView::EditView(Component* component, NetworkGraphics* model, bool isInitializingWindow, QWidget* parent,
@@ -58,19 +60,21 @@ void EditView::setupView(void)
 
     _editViewUi->labelValue->setText(valueDescription);
     _editViewUi->textEditName->setText(_component->getName());
+
+    double value;
     Resistor* resistor = dynamic_cast<Resistor*>(_component);
     bool isResistor = (nullptr != resistor);
     if (isResistor)
     {
-        double resistance = static_cast<double>(resistor->getResistanceValue());
-        QString valueString = QLocale::system().toString(resistance);
-        valueString.replace(".", "");
-        _editViewUi->textEditValue->setText(valueString);
+        value = resistor->getResistanceValue();
     }
     else
     {
-        _editViewUi->textEditValue->setText(QString::number(_component->getVoltage()));
+        value = _component->getVoltage();
     }
+    QString displayedValue = QLocale::system().toString(value, 'g', 10);
+    displayedValue.replace(".", "");
+    _editViewUi->textEditValue->setText(displayedValue);
     _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
 }
 
@@ -88,7 +92,7 @@ void EditView::ok(void)
         if (convertSuccsessful)
         {
             QString newName = _editViewUi->textEditName->text();
-            if(_isInitializingWindow)
+            if (_isInitializingWindow)
             {
                 _model->editComponentWithoutUndo(_component, newName, newValue);
             }

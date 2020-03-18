@@ -47,10 +47,10 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
         paintHighlightRect(painter);
     }
 
-    paintInformation(painter);
+    setLabelPositions(painter);
 }
 
-void PowerSupply::paintInformation(QPainter* painter)
+void PowerSupply::setLabelPositions(QPainter* painter)
 {
     QFont q;
     q.setPixelSize(13);
@@ -91,5 +91,7 @@ void PowerSupply::paintInformation(QPainter* painter)
         posValue = QRectF(QPointF(_xPosition - (Defines::gridLength * 0.4), _yPosition + (Defines::gridLength * 0.32)),
                           QSize(Defines::gridLength * 0.7, 20));
     }
-    painter->drawText(posValue, Qt::AlignRight, displayString);
+
+
+    paintInformation(painter, _name, _voltage, posName, posValue, ComponentType::PowerSupply);
 }

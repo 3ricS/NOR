@@ -1,10 +1,10 @@
 /*!
  * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
  *
- * \brief   Ein DescriptionField ist ein Textfeld um Notizen und Information zum Netzwerk an die Schaltung zu schreiben.
+ * \brief   Ein Description ist ein Textfeld um Notizen und Information zum Netzwerk an die Schaltung zu schreiben.
  *
  * Ein Textfeld besitz die Größe einse Gitters, in dem ein ausgewählter Text stehen kann.
- * Ein DescriptionField ist ein QGraphicsItem, damit ein Element der QGraphicsScene und kann sich selbst in die QGraphicsScene
+ * Ein Description ist ein QGraphicsItem, damit ein Element der QGraphicsScene und kann sich selbst in die QGraphicsScene
  * zeichnen.
  */
 #ifndef DESCRIPTIONFIELD_H
@@ -13,11 +13,12 @@
 #include <QGraphicsItem>
 #include <QPainter>
 
-class DescriptionField : public QGraphicsItem
+class Description : public QGraphicsItem
 {
 public:
-    DescriptionField(int x, int y, int id, QString text = 0);
+    Description(int x, int y, int id, QString text = 0);
 
+    QRectF boundingRect(void) const override;
     void paintHighlightRect(QPainter* painter);
 
     //Getter
@@ -43,7 +44,7 @@ private:
 
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    QRectF boundingRect(void) const override;
+
 };
 
 #endif // DESCRIPTIONFIELD_H

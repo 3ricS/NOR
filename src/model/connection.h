@@ -21,7 +21,7 @@
 #include <algorithm>
 
 class NetworkGraphics;
-class DescriptionField;
+class Description;
 class ComponentPort;
 
 class Connection : public QGraphicsItem
@@ -43,7 +43,7 @@ public:
     //getter
     bool isThereAComponentOrADescription(int x, int y);
     Component* getComponentAtPosition(int x, int y);
-    DescriptionField* getDescriptionAtPosition(int x, int y);
+    Description* getDescriptionAtPosition(int x, int y);
     QList<QRect*> getHitboxList(void) const {return _connectionHitbox;}
     ComponentPort getComponentPortOne(void) const {return _componentPortOne;}
     ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}

@@ -53,7 +53,7 @@ public:
     void setOrientation(Component::Orientation newOrientation);
     void setName(QString name) {_name = name;}
     void setPosition(QPointF gridPosition);
-    void setIsSelected(bool isSelected);
+    void setSelected(bool isSelected);
     void setVoltage(double voltage) {_voltage = voltage;}
     void setAmp(double amp) {_amp = amp;}
 

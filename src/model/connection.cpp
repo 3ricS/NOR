@@ -212,9 +212,9 @@ Component *Connection::getComponentAtPosition(int x, int y)
     return nullptr;
 }
 
-DescriptionField *Connection::getDescriptionAtPosition(int x, int y)
+Description *Connection::getDescriptionAtPosition(int x, int y)
 {
-    for (DescriptionField* description : _model->getDescriptions())
+    for (Description* description : _model->getDescriptions())
     {
         bool equalX = (description->getXPosition() == x);
         bool equalY = (description->getYPosition() == y);

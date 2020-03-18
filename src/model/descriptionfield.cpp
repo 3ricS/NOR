@@ -1,7 +1,7 @@
 #include "defines.h"
 #include "descriptionfield.h"
 
-DescriptionField::DescriptionField(int x, int y, int id, QString text)
+Description::Description(int x, int y, int id, QString text)
     : QGraphicsItem(nullptr),
     _xPosition(x), _yPosition(y), _id(id)
 {
@@ -11,18 +11,18 @@ DescriptionField::DescriptionField(int x, int y, int id, QString text)
     }
 }
 
-void DescriptionField::setPosition(QPointF gridPosition)
+void Description::setPosition(QPointF gridPosition)
 {
     _xPosition = gridPosition.x();
     _yPosition = gridPosition.y();
 }
 
-QRectF DescriptionField::boundingRect(void) const
+QRectF Description::boundingRect(void) const
 {
     return QRectF (_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }
 
-void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)
+void Description::paint(QPainter *painter, [[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)
 {
     QFont q;
     q.setPixelSize(13);
@@ -42,7 +42,7 @@ void DescriptionField::paint(QPainter *painter,[[maybe_unused]] const QStyleOpti
  *
  * Färbt das Textfeld an der ausgewählten Position, mit der eingestelten Farbe, ein.
  */
-void DescriptionField::paintHighlightRect(QPainter *painter)
+void Description::paintHighlightRect(QPainter *painter)
 {
     QBrush brush;
     brush.setColor(QColor(255, 0, 0, 55));
@@ -51,7 +51,7 @@ void DescriptionField::paintHighlightRect(QPainter *painter)
     painter->drawRect(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }
 
-void DescriptionField::setIsSelected(bool isSelected)
+void Description::setIsSelected(bool isSelected)
 {
     _isSelected = isSelected;
 }

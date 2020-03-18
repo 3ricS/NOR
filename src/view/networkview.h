@@ -52,10 +52,10 @@ private:
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
     QPointF findScrollPosition(void);
     void focusForPrint(void);
-    void multiselecting(void);
+    void multiselect(QPointF endOfSelectionPosition, bool isEndOfSelection = false);
     void changeOverrideCursor(void);
     QList<Component*> findSelectedComponent(void);
-    QList<DescriptionField*> findSelectedDescription(void);
+    QList<Description*> findSelectedDescription(void);
     void calculateDistanceToNextComponent(int& i, Component* firstComp, int& xSpace, int& ySpace);
     void calculateDistanceToNextDescription(int& i, Component* firstComp, int& xSpace, int& ySpace);
     QGraphicsItem* deleteGraphicsItem(QGraphicsItem* graphicsItem);
@@ -71,6 +71,7 @@ private:
     void deleteSampleObjectsAndHighlights(void);
     void showSampleComponent(QPointF scenePosition, Component::ComponentType componentType);
     void showSampleComponent(QPointF scenePosition, const MouseMode mouseMode);
+    void showSampleDescription(QPointF scenePosition);
     void highlightRect(QPointF scenePositionOne, QColor _highlightColor);
     void highlightComponentPort(ComponentPort* componentPortToHighlight, QColor highlightColor);
 
@@ -78,19 +79,18 @@ private:
 
     bool                     _mouseIsPressed = false;
     bool                     _componentOrDescriptionIsGrabbed = false;
-    bool                     _isMoved = false;
 
     QList<Component*>        _tempComponentListForConnections;
     ComponentPort*           _connectionStartComponentPort = nullptr;
     QGraphicsItem*           _previousHighlightedRect = nullptr;
     QGraphicsItem*           _previousHighlightedPort = nullptr;
     Component*               _selectedComponentToMove = nullptr;
-    DescriptionField*        _selectedDescriptionToMove = nullptr;
+    Description*        _selectedDescriptionToMove = nullptr;
     bool                     _isVerticalComponentDefault = true;
     Component*               _sampleComponentOnMoveEvent = nullptr;
-    DescriptionField*        _sampleDescriptionOnMoveEvent = nullptr;
+    Description*        _sampleDescriptionOnMoveEvent = nullptr;
     QList<Component*>        _copiedComponents;
-    QList<DescriptionField*> _copiedDescriptions;
+    QList<Description*> _copiedDescriptions;
     QPointF                  _lastClickedPosition;
     QGraphicsRectItem*       _multiselectRect = nullptr;
 

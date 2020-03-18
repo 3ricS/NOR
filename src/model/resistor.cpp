@@ -3,6 +3,7 @@
 #include "connection.h"
 
 #include <QLocale>
+#include <QDebug>
 
 /*!
  * \brief Erzeugt ein neues Widerstandsobjekt
@@ -53,6 +54,7 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
         painter->drawLine(_xPosition + (Defines::gridLength * 0.3), _yPosition + 0,
                           _xPosition + (Defines::gridLength / 2) - Connection::_circleRadius, _yPosition + 0);
     }
+
     if(_isSelected)
     {
         paintHighlightRect(painter);

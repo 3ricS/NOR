@@ -18,7 +18,7 @@
 
 class NetworkGraphics;
 class Connection;
-class DescriptionField;
+class Description;
 
 class CommandAddComponent : public QUndoCommand
 {
@@ -65,7 +65,7 @@ private:
 class CommandAddDescriptionField : public QUndoCommand
 {
 public:
-    CommandAddDescriptionField(NetworkGraphics* model, DescriptionField* descriptionField);
+    CommandAddDescriptionField(NetworkGraphics* model, Description* descriptionField);
     ~CommandAddDescriptionField(void);
 
     void undo(void) override;
@@ -73,7 +73,7 @@ public:
 
 private:
     NetworkGraphics*    _model = nullptr;
-    DescriptionField*   _createdDescriptionField = nullptr;
+    Description*   _createdDescriptionField = nullptr;
     bool                _hasDoneUndo = false;
 };
 
@@ -84,7 +84,7 @@ class CommandMoveComponent : public QUndoCommand
 {
 public:
     CommandMoveComponent(NetworkGraphics* model, Component* componentToMove,
-                         DescriptionField* descriptionToMove, QPointF gridPosition);
+                         Description* descriptionToMove, QPointF gridPosition);
 
     void undo(void) override;
     void redo(void) override;
@@ -92,7 +92,7 @@ public:
 private:
     NetworkGraphics*    _model = nullptr;
     Component*          _componentToMove = nullptr;
-    DescriptionField*   _descriptionToMove = nullptr;
+    Description*   _descriptionToMove = nullptr;
     QPointF             _gridEndPosition;
     QPointF             _gridComponentStartPosition;
     QPointF             _gridDescriptionStartPosition;
@@ -160,7 +160,7 @@ private:
 class CommandDeleteDescription : public QUndoCommand
 {
 public:
-    CommandDeleteDescription(NetworkGraphics* model, DescriptionField* descriptionField);
+    CommandDeleteDescription(NetworkGraphics* model, Description* descriptionField);
     ~CommandDeleteDescription(void);
 
     void undo(void) override;
@@ -168,7 +168,7 @@ public:
 
 private:
     NetworkGraphics*    _model = nullptr;
-    DescriptionField*    _deletedDescription = nullptr;
+    Description*    _deletedDescription = nullptr;
     bool                _hasDoneUndo = false;
 };
 
@@ -198,18 +198,18 @@ private:
 class CommandDuplicateDescription : public QUndoCommand
 {
 public:
-    CommandDuplicateDescription(NetworkGraphics* model, DescriptionField* descriptionToDuplicate, int xPosition, int yPosition);
+    CommandDuplicateDescription(NetworkGraphics* model, Description* descriptionToDuplicate, int xPosition, int yPosition);
     ~CommandDuplicateDescription(void) {};
 
     void undo(void) override;
     void redo(void) override;
 
-    DescriptionField* getCreatedDescription() {return _createdDescription;}
+    Description* getCreatedDescription() {return _createdDescription;}
 
 private:
-    DescriptionField*           _createdDescription = nullptr;
+    Description*           _createdDescription = nullptr;
     NetworkGraphics*            _model = nullptr;
-    DescriptionField*           _descriptionToDuplicate = nullptr;
+    Description*           _descriptionToDuplicate = nullptr;
     int                         _xPosition;
     int                         _yPosition;
 };
@@ -219,14 +219,14 @@ private:
 class CommandEditDescription : public QUndoCommand
 {
 public:
-    CommandEditDescription(NetworkGraphics* model, DescriptionField* descriptionFieldToEdit, QString newText);
+    CommandEditDescription(NetworkGraphics* model, Description* descriptionFieldToEdit, QString newText);
     ~CommandEditDescription(void) {};
 
     void undo(void) override;
     void redo(void) override;
 
 private:
-    DescriptionField*                  _editDescription = nullptr;
+    Description*                  _editDescription = nullptr;
     NetworkGraphics*            _model = nullptr;
     QString                     _newText;
     QString                     _oldText;
@@ -272,7 +272,7 @@ private:
 class CommandCutDescriptionField : public QUndoCommand
 {
 public:
-    CommandCutDescriptionField(NetworkGraphics* model, DescriptionField* descriptionToCut);
+    CommandCutDescriptionField(NetworkGraphics* model, Description* descriptionToCut);
     ~CommandCutDescriptionField(void) {};
 
     void undo(void) override;
@@ -280,7 +280,7 @@ public:
 
 private:
     NetworkGraphics*    _model = nullptr;
-    DescriptionField*   _descriptionFieldToCut;
+    Description*   _descriptionFieldToCut;
     bool                _hasDoneUndo = false;
 };
 

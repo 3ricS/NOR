@@ -80,7 +80,7 @@ QString FileManager::createJson(void)
         array.append(saveConnection(connection));
     }
 
-    for (DescriptionField* description : _model->getDescriptions())
+    for (Description* description : _model->getDescriptions())
     {
         array.append(saveDescription(description));
     }
@@ -123,10 +123,10 @@ QJsonObject FileManager::saveConnection(Connection* connection)
     return c;
 }
 
-QJsonObject FileManager::saveDescription(DescriptionField *description)
+QJsonObject FileManager::saveDescription(Description *description)
 {
     QJsonObject df;
-    df.insert("type", "DescriptionField");
+    df.insert("type", "Description");
     df.insert("id", description->getId());
     df.insert("xPos", description->getXPosition());
     df.insert("yPos", description->getYPosition());
@@ -265,7 +265,7 @@ void FileManager::loadDescription(QJsonArray array)
         {
             QJsonObject obj = array[i].toObject();
 
-            if (obj.value("type") == "DescriptionField")
+            if (obj.value("type") == "Description")
             {
                 int id = obj.value("id").toInt();
                 int xPos = obj.value("xPos").toInt();

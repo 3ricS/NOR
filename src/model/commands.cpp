@@ -95,7 +95,7 @@ CommandAddConnection::~CommandAddConnection(void)
  * CommandAddDescriptionField
  */
 
-CommandAddDescriptionField::CommandAddDescriptionField(NetworkGraphics* model, DescriptionField* descriptionField) :
+CommandAddDescriptionField::CommandAddDescriptionField(NetworkGraphics* model, Description* descriptionField) :
         _model(model), _createdDescriptionField(descriptionField)
 {
 }
@@ -132,7 +132,7 @@ CommandAddDescriptionField::~CommandAddDescriptionField(void)
  */
 
 CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* componentToMove,
-                                           DescriptionField* descriptionToMove, QPointF gridPosition) :
+                                           Description* descriptionToMove, QPointF gridPosition) :
         _model(model), _componentToMove(componentToMove), _descriptionToMove(descriptionToMove),
         _gridEndPosition(gridPosition)
 {
@@ -328,7 +328,7 @@ CommandDeleteConnection::~CommandDeleteConnection(void)
  * CommandDeleteDescription
  */
 
-CommandDeleteDescription::CommandDeleteDescription(NetworkGraphics* model, DescriptionField* descriptionField) :
+CommandDeleteDescription::CommandDeleteDescription(NetworkGraphics* model, Description* descriptionField) :
         _model(model), _deletedDescription(descriptionField)
 {
 }
@@ -397,7 +397,7 @@ void CommandDuplicateComponent::redo(void)
  * CommandEditDescription
  */
 
-CommandEditDescription::CommandEditDescription(NetworkGraphics* model, DescriptionField* descriptionFieldToEdit,
+CommandEditDescription::CommandEditDescription(NetworkGraphics* model, Description* descriptionFieldToEdit,
                                                QString newText) :
         _editDescription(descriptionFieldToEdit), _model(model), _newText(newText),
         _oldText(descriptionFieldToEdit->getText())
@@ -502,7 +502,7 @@ CommandCutComponents::~CommandCutComponents(void)
  * CommandCutDescriptionField
  */
 
-CommandCutDescriptionField::CommandCutDescriptionField(NetworkGraphics *model, DescriptionField *descriptionToCut) :
+CommandCutDescriptionField::CommandCutDescriptionField(NetworkGraphics *model, Description *descriptionToCut) :
     _model(model), _descriptionFieldToCut(descriptionToCut)
 {
 }
@@ -530,7 +530,7 @@ void CommandCutDescriptionField::redo(void)
  * CommandDuplicateDescription
  */
 
-CommandDuplicateDescription::CommandDuplicateDescription(NetworkGraphics *model, DescriptionField *descriptionToDuplicate, int xPosition, int yPosition) :
+CommandDuplicateDescription::CommandDuplicateDescription(NetworkGraphics *model, Description *descriptionToDuplicate, int xPosition, int yPosition) :
     _model(model), _descriptionToDuplicate(descriptionToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
 {
 }

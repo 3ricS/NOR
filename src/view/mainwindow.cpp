@@ -32,7 +32,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_ui->Resistor, SIGNAL(released()), this, SLOT(setResistorMode()));
     connect(_ui->PowerSupply, SIGNAL(released()), this, SLOT(setPowerSupplyMode()));
     connect(_ui->Connection, SIGNAL(released()), this, SLOT(setConnectionMode()));
-    connect(_ui->DescriptionField, SIGNAL(released()), this, SLOT(setDescriptionMode()));
+    connect(_ui->Description, SIGNAL(released()), this, SLOT(setDescriptionMode()));
     connect(_ui->Undo, SIGNAL(released()), this, SLOT(undo()));
     connect(_ui->Redo, SIGNAL(released()), this, SLOT(redo()));
     connect(_ui->CurrentView, SIGNAL(released()), this, SLOT(openCurrentVoltageWindow()));
@@ -110,7 +110,7 @@ void MainWindow::setDescriptionMode(void)
     _model->deselectAllItems();
     _networkView->setMouseMode(NetworkView::MouseMode::DescriptionMode);
 
-    setSelectionOfModeButtons(_ui->DescriptionField);
+    setSelectionOfModeButtons(_ui->Description);
     setCheckedInCreateMenu(_descriptionMode);
 }
 
@@ -294,32 +294,32 @@ void MainWindow::createUpperMenu(void)
 
     //Erstellen Menü
     _selectionMode = new QAction("Auswahl Maus");
-    _selectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    _selectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
     _selectionMode->setCheckable(true);
     _ui->menuErstellen->addAction(_selectionMode);
     _createActionGroup.append(_selectionMode);
     _selectionMode->setChecked(true);
 
     _powerSupplyMode = new QAction("Spannungsquelle erstellen");
-    _powerSupplyMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
+    _powerSupplyMode->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Q));
     _powerSupplyMode->setCheckable(true);
     _ui->menuErstellen->addAction(_powerSupplyMode);
     _createActionGroup.append(_powerSupplyMode);
 
     _resistorMode = new QAction("Widerstand erstellen");
-    _resistorMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
+    _resistorMode->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT +  Qt::Key_R));
     _resistorMode->setCheckable(true);
     _ui->menuErstellen->addAction(_resistorMode);
     _createActionGroup.append(_resistorMode);
 
     _connectionMode = new QAction("Verbindung zeichnen");
-    _connectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    _connectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     _connectionMode->setCheckable(true);
     _ui->menuErstellen->addAction(_connectionMode);
     _createActionGroup.append(_connectionMode);
 
     _descriptionMode = new QAction("Textfeld erstellen");
-    _descriptionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+    _descriptionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
     _descriptionMode->setCheckable(true);
     _ui->menuErstellen->addAction(_descriptionMode);
     _createActionGroup.append(_descriptionMode);
@@ -333,7 +333,7 @@ void MainWindow::createToolTips(void)
     _ui->PowerSupply->setToolTip("Spannugsquelle einzeichnen");
     _ui->Resistor->setToolTip("Widerstand einzeichnen");
     _ui->Connection->setToolTip("Bauteile verbinden");
-    _ui->DescriptionField->setToolTip("Textfeld erstellen");
+    _ui->Description->setToolTip("Textfeld erstellen");
     _ui->Selection->setToolTip("Auswahl Maus");
 }
 
@@ -359,7 +359,7 @@ void MainWindow::createListOfModeButtons(void)
     _modusButtons.append(_ui->PowerSupply);
     _modusButtons.append(_ui->Resistor);
     _modusButtons.append(_ui->Connection);
-    _modusButtons.append(_ui->DescriptionField);
+    _modusButtons.append(_ui->Description);
 }
 
 void MainWindow::setCurrentButtonVisibility(bool visibility)

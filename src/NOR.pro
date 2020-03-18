@@ -31,7 +31,7 @@ SOURCES += \
         model/calculator.cpp \
         model/component.cpp \
         model/connection.cpp \
-        model/descriptionfield.cpp \
+        model/description.cpp \
         model/filemanager.cpp \
         model/powersupply.cpp \
         model/resistor.cpp \
@@ -49,7 +49,7 @@ HEADERS += \
         model/calculator.h \
         model/component.h \
         model/connection.h \
-        model/descriptionfield.h \
+        model/description.h \
         model/filemanager.h \
         model/powersupply.h \
         model/resistor.h \

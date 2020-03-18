@@ -2,6 +2,8 @@
 #include "model/networkgraphics.h"
 #include "model/calculator.h"
 
+#include <QDebug>
+
 NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsScene()), _undoStack(new QUndoStack(this))
 {
     // die Anfangsgröße wird initialisiert
@@ -24,7 +26,7 @@ Connection* NetworkGraphics::addConnectionWithoutUndo(ComponentPort componentPor
     Connection* connection = new Connection(componentPortA, componentPortB, this);
     Connection* createdConnection = nullptr;
     bool isAlreadyExisting = false;
-    for (Connection* otherConnection : _connectionList)
+    for (Connection* otherConnection : _connections)
     {
         if(*otherConnection == *connection)
         {
@@ -35,7 +37,7 @@ Connection* NetworkGraphics::addConnectionWithoutUndo(ComponentPort componentPor
     }
     if(!isAlreadyExisting)
     {
-        _connectionList.append(connection);
+        _connections.append(connection);
         createdConnection = connection;
         addItem(connection);
         update();
@@ -56,7 +58,7 @@ Connection* NetworkGraphics::addConnectionWithoutUndo(ComponentPort componentPor
 
 void NetworkGraphics::addObject(Component* component)
 {
-    _componentList.append(component);
+    _components.append(component);
     //Hier kann der Widerstand direkt mit den Nachbarn bzw. angrenzenden Widerständen verbunden werden
     //connectComponentToNeighbours(component);
     addItem(component);
@@ -76,7 +78,7 @@ void NetworkGraphics::addObject(Component* component)
 Component* NetworkGraphics::getComponentAtPosition(QPointF scenePosition)
 {
     QPointF gridPosition = mapSceneToGrid(scenePosition);
-    for (Component* component : _componentList)
+    for (Component* component : _components)
     {
         bool equalX = (component->getXPosition() == gridPosition.toPoint().x());
         bool equalY = (component->getYPosition() == gridPosition.toPoint().y());
@@ -97,10 +99,10 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF scenePosition)
  * Es werden nacheinander Description aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
  * Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
  */
-DescriptionField* NetworkGraphics::getDescriptionAtPosition(QPointF scenePosition)
+Description* NetworkGraphics::getDescriptionAtPosition(QPointF scenePosition)
 {
     QPointF gridPosition = mapSceneToGrid(scenePosition);
-    for (DescriptionField* description : _descriptionList)
+    for (Description* description : _descriptions)
     {
         bool equalX = (description->getXPosition() == gridPosition.toPoint().x());
         bool equalY = (description->getYPosition() == gridPosition.toPoint().y());
@@ -126,7 +128,7 @@ bool NetworkGraphics::hasObjectAtPosition(QPointF scenePosition)
 
 Connection* NetworkGraphics::getConnectionAtPosition(QPointF gridposition)
 {
-    for (Connection* connection : _connectionList)
+    for (Connection* connection : _connections)
     {
         for (QRect* hitBox : connection->getHitboxList())
         {
@@ -160,7 +162,7 @@ QString NetworkGraphics::getFileName(void)
  */
 ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition)
 {
-    for (Component* component : _componentList)
+    for (Component* component : _components)
     {
         bool hasFoundPort = component->hasPortAtPosition(scenePosition);
         if(hasFoundPort)
@@ -194,10 +196,10 @@ void NetworkGraphics::load(void)
 
     updateCalc();
     emit resistanceValueChanged();
-    if(_componentList.count() != 0)
+    if(_components.count() != 0)
     {
         bool powerSupplyFound = false;
-        for (Component* component : _componentList)
+        for (Component* component : _components)
         {
             if(component->getComponentType() == Component::PowerSupply)
             {
@@ -226,7 +228,7 @@ void NetworkGraphics::saveAs(void)
  */
 void NetworkGraphics::mirrorComponent(Component* component)
 {
-    for (Connection* connection : _connectionList)
+    for (Connection* connection : _connections)
     {
         if(connection->hasComponent(component))
         {
@@ -363,8 +365,8 @@ Component* NetworkGraphics::duplicateComponentWithoutUndo(Component* componentTo
  * \param   yPosition               ist die Y-Koordinate, an der das Textfeld erzeugt werden soll
  * \return Gibt ein neues Textfeld zurück.
  */
-DescriptionField*
-NetworkGraphics::duplicateDescription(DescriptionField* descriptionToDuplicate, int xPosition, int yPosition)
+Description*
+NetworkGraphics::duplicateDescription(Description* descriptionToDuplicate, int xPosition, int yPosition)
 {
     CommandDuplicateDescription* commandDuplicateDescription = new CommandDuplicateDescription(this,
                                                                                                descriptionToDuplicate,
@@ -406,7 +408,7 @@ NetworkGraphics::addResistor(QString name, long double valueResistance, int xPos
         while (!isSetId)
         {
             bool isIdValid = true;
-            for (Component* component : _componentList)
+            for (Component* component : _components)
             {
                 if(component->getId() == newId)
                 {
@@ -480,7 +482,7 @@ void NetworkGraphics::cutComponentWithoutUndo(Component* componentToCut)
     if(nullptr != componentToCut)
     {
         removeItem(componentToCut);
-        _componentList.removeOne(componentToCut);
+        _components.removeOne(componentToCut);
         if(componentToCut->getComponentType() == Component::PowerSupply)
         {
             emit powerSupplyIsAllowed(true);
@@ -490,12 +492,12 @@ void NetworkGraphics::cutComponentWithoutUndo(Component* componentToCut)
     }
 }
 
-void NetworkGraphics::cutDescriptionWithoutUndo(DescriptionField* descriptionToCut)
+void NetworkGraphics::cutDescriptionWithoutUndo(Description* descriptionToCut)
 {
     if (nullptr != descriptionToCut)
     {
         removeItem(descriptionToCut);
-        _descriptionList.removeOne(descriptionToCut);
+        _descriptions.removeOne(descriptionToCut);
         update();
     }
 }
@@ -515,7 +517,7 @@ void NetworkGraphics::cutDescriptionWithoutUndo(DescriptionField* descriptionToC
  * Wenn das Textfeld bereits geladen wurde entfallen die beiden oberen Schritte.
  * Anschließend wird ein neues Textfeld erzeugt und der descriptionCount um eins erhöht.
  */
-DescriptionField*
+Description*
 NetworkGraphics::addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoad, [[maybe_unused]] QString text,
                                                 [[maybe_unused]] int id)
 {
@@ -528,7 +530,7 @@ NetworkGraphics::addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoa
         id = _descriptionCount;
     }
 
-    DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id, text);
+    Description* description = new Description(gridPosition.x(), gridPosition.y(), id, text);
     addDescriptionFieldWithoutUndo(description);
 
     return description;
@@ -540,9 +542,9 @@ NetworkGraphics::addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoa
  * \param   descriptionFieldToAdd   ist das Textfeld, welches hinzugefügt wird
  *
  */
-void NetworkGraphics::addDescriptionFieldWithoutUndo(DescriptionField* descriptionFieldToAdd)
+void NetworkGraphics::addDescriptionFieldWithoutUndo(Description* descriptionFieldToAdd)
 {
-    _descriptionList.append(descriptionFieldToAdd);
+    _descriptions.append(descriptionFieldToAdd);
     addItem(descriptionFieldToAdd);
 
     update();
@@ -568,7 +570,7 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
     if(component != nullptr)
     {
         removeItem(component);
-        _componentList.removeOne(component);
+        _components.removeOne(component);
 
         //ResistorCount und PowerSupplyCount setzen
         if(Component::ComponentType::Resistor == component->getComponentTypeInt())
@@ -582,12 +584,12 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
         }
 
         //Lösche Verbindungen vom Component
-        for (Connection* connection : _connectionList)
+        for (Connection* connection : _connections)
         {
             if(connection->hasComponent(component))
             {
                 removeItem(connection);
-                _connectionList.removeOne(connection);
+                _connections.removeOne(connection);
                 deletedConnections.append(connection);
             }
         }
@@ -606,12 +608,12 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
  * Dannach wird das Textfeld aus der Liste descriptions entfernt.
  * Der descriptionCount wird um eins reduziert.
  */
-void NetworkGraphics::deleteDescriptionWithoutUndo(DescriptionField* description)
+void NetworkGraphics::deleteDescriptionWithoutUndo(Description* description)
 {
     if(description != nullptr)
     {
         removeItem(description);
-        _descriptionList.removeOne(description);
+        _descriptions.removeOne(description);
         _descriptionCount--;
     }
 }
@@ -629,7 +631,7 @@ void NetworkGraphics::deleteConnectionWithoutUndo(Connection* connection)
     if(connection != nullptr)
     {
         removeItem(connection);
-        _connectionList.removeOne(connection);
+        _connections.removeOne(connection);
     }
 
     updateCalc();
@@ -647,7 +649,7 @@ void NetworkGraphics::deleteConnectionWithoutUndo(Connection* connection)
  * Befindet sich an der Position nichts, wird die ausgewählte Komponente an die neu Position verschoben.
  */
 void
-NetworkGraphics::moveComponentWithoutUndo(Component* componentToMove, DescriptionField* descriptionToMove,
+NetworkGraphics::moveComponentWithoutUndo(Component* componentToMove, Description* descriptionToMove,
                                           QPointF gridPosition)
 {
     bool isComponentAtPosition = hasObjectAtPosition(gridPosition);
@@ -664,56 +666,6 @@ NetworkGraphics::moveComponentWithoutUndo(Component* componentToMove, Descriptio
         descriptionToMove->setPosition(gridPosition);
     }
     update();
-}
-
-void NetworkGraphics::connectComponentToNeighbours(Component* componentToConnectWithNeighbours)
-{
-    QPointF portPositionAOfComponent = componentToConnectWithNeighbours->getPortPosition(Component::Port::A);
-    QPointF portPositionBOfComponent = componentToConnectWithNeighbours->getPortPosition(Component::Port::B);
-
-    for (Component* anotherComponent : _componentList)
-    {
-        if(anotherComponent != componentToConnectWithNeighbours)
-        {
-            QPointF portPositionAOfanotherComponent = anotherComponent->getPortPosition(Component::Port::A);
-            QPointF portPositionBOfanotherComponent = anotherComponent->getPortPosition(Component::Port::B);
-
-            bool equalPortAtoA = (portPositionAOfComponent == portPositionAOfanotherComponent);
-            bool equalPortAtoB = (portPositionAOfComponent == portPositionBOfanotherComponent);
-            bool equalPortBtoA = (portPositionBOfComponent == portPositionAOfanotherComponent);
-            bool equalPortBtoB = (portPositionBOfComponent == portPositionBOfanotherComponent);
-
-            ComponentPort componentPortSelf(nullptr, Component::Port::null);
-            ComponentPort componentPortOther(nullptr, Component::Port::null);
-
-            if(equalPortAtoA)
-            {
-                componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::A);
-                componentPortOther = ComponentPort(anotherComponent, Component::Port::A);
-            }
-            else if(equalPortAtoB)
-            {
-                componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::A);
-                componentPortOther = ComponentPort(anotherComponent, Component::Port::B);
-            }
-            else if(equalPortBtoA)
-            {
-                componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::B);
-                componentPortOther = ComponentPort(anotherComponent, Component::Port::A);
-            }
-            else if(equalPortBtoB)
-            {
-                componentPortSelf = ComponentPort(componentToConnectWithNeighbours, Component::Port::B);
-                componentPortOther = ComponentPort(anotherComponent, Component::Port::B);
-            }
-
-            bool foundEqualPort = (equalPortAtoA || equalPortAtoB || equalPortBtoA || equalPortBtoB);
-            if(foundEqualPort)
-            {
-                addConnection(componentPortSelf, componentPortOther);
-            }
-        }
-    }
 }
 
 /*!
@@ -764,14 +716,14 @@ void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Comp
 /*!
  * \brief Aktualisiert den Widerstandswert.
  *
- * Die aktuellen _connectionList und _componentList werden dem Calculator übergeben.
+ * Die aktuellen _connections und _components werden dem Calculator übergeben.
  * Anschließend wird der aktualisierte Widerstandswert ausgegeben.
  */
 void NetworkGraphics::updateCalc(void)
 {
     if(!_isLoading)
     {
-        _resistanceValue = Calculator::calculator().calculate(_connectionList, _componentList);
+        _resistanceValue = Calculator::calculator().calculate(_connections, _components);
 
         update();
         emit resistanceValueChanged();
@@ -810,7 +762,7 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
  * Wenn eine Komponente ausgewählt ist, wird die Komponente verschoben.
  */
 void
-NetworkGraphics::moveComponent(Component* componentToMove, DescriptionField* descriptionToMove, QPointF gridPosition)
+NetworkGraphics::moveComponent(Component* componentToMove, Description* descriptionToMove, QPointF gridPosition)
 {
     if(componentToMove != nullptr)
     {
@@ -963,7 +915,7 @@ void NetworkGraphics::deleteComponent(Component* componentToDelete)
 void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
 {
     bool isAlreadyExisting = false;
-    for (Connection* otherConnection : _connectionList)
+    for (Connection* otherConnection : _connections)
     {
         if(*otherConnection == *connection)
         {
@@ -973,7 +925,7 @@ void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
     }
     if(!isAlreadyExisting && nullptr != connection)
     {
-        _connectionList.append(connection);
+        _connections.append(connection);
         addItem(connection);
     }
 
@@ -996,7 +948,7 @@ void NetworkGraphics::deleteConnection(Connection* connectionToDelete)
  *
  * \param   descriptionFieldToDelete    ist das zu entfernende Textfeld
  */
-void NetworkGraphics::deleteDescription(DescriptionField* descriptionFieldToDelete)
+void NetworkGraphics::deleteDescription(Description* descriptionFieldToDelete)
 {
     CommandDeleteDescription* commandDeleteDescription = new CommandDeleteDescription(this, descriptionFieldToDelete);
     _undoStack->push(commandDeleteDescription);
@@ -1008,7 +960,7 @@ void NetworkGraphics::deleteDescription(DescriptionField* descriptionFieldToDele
  * \param descriptionToEdit ist das zu bearbeitende Textfeld
  * \param newText           ist der neue Text des Textfeldes
  */
-void NetworkGraphics::editDescription(DescriptionField* descriptionToEdit, QString newText)
+void NetworkGraphics::editDescription(Description* descriptionToEdit, QString newText)
 {
     CommandEditDescription* commandEditDescription = new CommandEditDescription(this, descriptionToEdit, newText);
     _undoStack->push(commandEditDescription);
@@ -1025,13 +977,13 @@ void NetworkGraphics::editDescription(DescriptionField* descriptionToEdit, QStri
  * \param diffYAfterMoving  ist die Differenz zwischen der Ausgangs und der End Y-Koordinate
  */
 void
-NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QList<DescriptionField*> descriptionList,
-                                           Component* componentToMove, DescriptionField* descriptionToMove,
+NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QList<Description*> descriptionList,
+                                           Component* componentToMove, Description* descriptionToMove,
                                            int diffXAfterMoving, int diffYAfterMoving)
 {
     bool terminationCondition = false;
     QList<Component*> notMovedComponents;
-    QList<DescriptionField*> notMovedDescriptions;
+    QList<Description*> notMovedDescriptions;
     for (Component* component : componentList)
     {
         if(component->isSelected() && component != componentToMove)
@@ -1052,12 +1004,12 @@ NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QLis
                 }
                 notMovedComponents.append(component);
             }
-            DescriptionField* placeholder = nullptr;
+            Description* placeholder = nullptr;
             moveComponent(component, placeholder, *newPosition);
             delete placeholder;
         }
     }
-    for (DescriptionField* descriptionfield : descriptionList)
+    for (Description* descriptionfield : descriptionList)
     {
         if(descriptionfield->isSelected() && descriptionfield != descriptionToMove)
         {
@@ -1104,7 +1056,7 @@ void NetworkGraphics::cutComponent(Component* componentToCut)
     _undoStack->push(commandCutComponent);
 }
 
-void NetworkGraphics::cutDescription(DescriptionField* descriptionToCut)
+void NetworkGraphics::cutDescription(Description* descriptionToCut)
 {
     CommandCutDescriptionField* commandCutDescriptionField = new CommandCutDescriptionField(this, descriptionToCut);
     _undoStack->push(commandCutDescriptionField);
@@ -1122,7 +1074,7 @@ void NetworkGraphics::cutDescription(DescriptionField* descriptionToCut)
  * Wenn das Textfeld nicht geladen wird, wird überprüft, ob sich eine Komponente oder ein Textfeld an der Position befindet und die Id neu vergeben.
  * Anschließend wird das Textfeld erstellt.
  */
-DescriptionField* NetworkGraphics::addDescriptionField(QPointF gridPosition, bool isLoad, QString text, int id)
+Description* NetworkGraphics::addDescriptionField(QPointF gridPosition, bool isLoad, QString text, int id)
 {
     if(!isLoad)
     {
@@ -1133,7 +1085,7 @@ DescriptionField* NetworkGraphics::addDescriptionField(QPointF gridPosition, boo
         id = _descriptionCount;
     }
 
-    DescriptionField* description = new DescriptionField(gridPosition.x(), gridPosition.y(), id, text);
+    Description* description = new Description(gridPosition.x(), gridPosition.y(), id, text);
 
     CommandAddDescriptionField* commandAddDescriptionField = new CommandAddDescriptionField(this, description);
     _undoStack->push(commandAddDescriptionField);
@@ -1200,7 +1152,7 @@ bool NetworkGraphics::hasChangedDocument(void)
 QList<Component*> NetworkGraphics::getSelectedComponents(void)
 {
     QList<Component*> selectedComponents;
-    for (Component* component : _componentList)
+    for (Component* component : _components)
     {
         if(component->isSelected())
         {
@@ -1210,10 +1162,10 @@ QList<Component*> NetworkGraphics::getSelectedComponents(void)
     return selectedComponents;
 }
 
-QList<DescriptionField*> NetworkGraphics::getSelectedDescriptionFields(void)
+QList<Description*> NetworkGraphics::getSelectedDescriptionFields(void)
 {
-    QList<DescriptionField*> selectedDescriptionFields;
-    for (DescriptionField* description : _descriptionList)
+    QList<Description*> selectedDescriptionFields;
+    for (Description* description : _descriptions)
     {
         if(description->isSelected())
         {
@@ -1227,10 +1179,10 @@ void NetworkGraphics::deselectAllItems(void)
 {
     for (Component* component : getComponents())
     {
-        component->setIsSelected(false);
+        component->setSelected(false);
     }
 
-    for (DescriptionField* descriptionfield : getDescriptions())
+    for (Description* descriptionfield : getDescriptions())
     {
         descriptionfield->setIsSelected(false);
     }
@@ -1246,7 +1198,7 @@ void NetworkGraphics::deselectAllItems(void)
 void NetworkGraphics::selectObjectsAtPosition(QPointF scenePosition)
 {
     Component* foundComponent = getComponentAtPosition(scenePosition);
-    DescriptionField* foundDescription = getDescriptionAtPosition(scenePosition);
+    Description* foundDescription = getDescriptionAtPosition(scenePosition);
     Connection* foundConnection = getConnectionAtPosition(scenePosition);
 
     bool hasFoundComponent = nullptr != foundComponent;
@@ -1255,7 +1207,7 @@ void NetworkGraphics::selectObjectsAtPosition(QPointF scenePosition)
 
     if(hasFoundComponent)
     {
-        foundComponent->setIsSelected(true);
+        foundComponent->setSelected(true);
     }
     else if(hasFoundDescription)
     {
@@ -1287,10 +1239,10 @@ QList<Component*> NetworkGraphics::findSelectedComponents(void)
     return componentList;
 }
 
-QList<DescriptionField*> NetworkGraphics::findSelectedDescription(void)
+QList<Description*> NetworkGraphics::findSelectedDescription(void)
 {
-    QList<DescriptionField*> descriptionList;
-    for (DescriptionField* description : getDescriptions())
+    QList<Description*> descriptionList;
+    for (Description* description : getDescriptions())
     {
         if(description->isSelected())
         {
@@ -1308,9 +1260,9 @@ void NetworkGraphics::cutComponent(QList<Component*> components)
     }
 }
 
-void NetworkGraphics::cutDescription(QList<DescriptionField*> descriptions)
+void NetworkGraphics::cutDescription(QList<Description*> descriptions)
 {
-    for (DescriptionField* descriptionToCut : descriptions)
+    for (Description* descriptionToCut : descriptions)
     {
         cutDescription(descriptionToCut);
     }
@@ -1323,4 +1275,20 @@ void NetworkGraphics::turnSelectedComponentsRight(void)
     {
         turnComponentRight(component);
     }
+}
+
+void NetworkGraphics::selectObjectsInArea(QRectF selectionArea)
+{
+    for (Component* component : _components)
+    {
+        bool isInSelectionArea = selectionArea.intersects(component->boundingRect());
+        component->setSelected(isInSelectionArea);
+    }
+
+    for (Description* description : _descriptions)
+    {
+        bool isInSelectionArea = selectionArea.intersects(description->boundingRect());
+        description->setSelected(isInSelectionArea);
+    }
+    update();
 }

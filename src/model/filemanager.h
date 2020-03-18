@@ -41,7 +41,7 @@ private:
     QString createJson(void);
     static QJsonObject saveComponent(Component* component);
     static QJsonObject saveConnection(Connection* connection);
-    static QJsonObject saveDescription(DescriptionField* description);
+    static QJsonObject saveDescription(Description* description);
     void loadComponent(QJsonArray array);
     void loadConnection(QJsonArray array);
     void loadDescription(QJsonArray array);

@@ -1,6 +1,8 @@
 #include "defines.h"
 #include "component.h"
 
+#include <QDebug>
+
 Component::Component(int x, int y, bool isVertical, QString name, double voltage, ComponentType componentTyp, int id)
         : QGraphicsItem(nullptr),
           _xPosition(x), _yPosition(y), _isVertical(isVertical),
@@ -24,7 +26,7 @@ Component::Component(int x, int y, bool isVertical, QString name, double voltage
  */
 QRectF Component::boundingRect(void) const
 {
-    return QRectF(_xPosition - Defines::gridLength, _yPosition - (Defines::gridLength / 2), Defines::gridLength * 1.5, Defines::gridLength);
+    return QRectF(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }
 
 int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
@@ -146,7 +148,7 @@ void Component::setPosition(QPointF gridPosition)
     _yPosition = gridPosition.toPoint().y();
 }
 
-void Component::setIsSelected(bool isSelected)
+void Component::setSelected(bool isSelected)
 {
     _isSelected = isSelected;
 

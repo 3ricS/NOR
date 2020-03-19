@@ -3,6 +3,8 @@
  *
  * \brief   Der EditView ist für die Veränderung des dargestellten Netzwerkes zuständig.
  *
+ * Der editView bekommt die Komponenten, das Model,
+ * ob das Fenster initialisiert wurde und den UndoStack übergeben.
  */
 #ifndef EDITINGVIEW_H
 #define EDITINGVIEW_H

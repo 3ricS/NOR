@@ -142,6 +142,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
             _model->selectObjectsAtPosition(scenePosition);
             _model->update();
+            changeOverrideCursor();
         }
             break;
         case MouseMode::DescriptionMode:
@@ -501,6 +502,11 @@ void NetworkView::cut(void)
     }
 }
 
+/*!
+ * \brief Setzt den Mausmodus
+ *
+ * \param newMode ist der neue Mausmodus
+ */
 void NetworkView::setMouseMode(NetworkView::MouseMode newMode)
 {
     _mouseMode = newMode;
@@ -674,16 +680,20 @@ void NetworkView::multiselect(QPointF endOfSelectionPosition, bool isEndOfSelect
     _model->update();
 }
 
-void NetworkView::changeOverrideCursor()
+void NetworkView::changeOverrideCursor(void)
 {
     QApplication::restoreOverrideCursor();
     if (_mouseMode == ConnectionMode)
     {
         QApplication::setOverrideCursor(Qt::CrossCursor);
     }
+    else if (_mouseMode == SelectionMode)
+    {
+        QApplication::setOverrideCursor(Qt::OpenHandCursor);
+    }
 }
 
-QList<Component*> NetworkView::findSelectedComponent()
+QList<Component*> NetworkView::findSelectedComponent(void)
 {
     QList<Component*> componentList;
     for (Component* component : _model->getComponents())
@@ -696,7 +706,7 @@ QList<Component*> NetworkView::findSelectedComponent()
     return componentList;
 }
 
-QList<Description*> NetworkView::findSelectedDescription()
+QList<Description*> NetworkView::findSelectedDescription(void)
 {
     QList<Description*> descriptionList;
     for (Description* description : _model->getDescriptions())

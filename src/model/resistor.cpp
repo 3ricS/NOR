@@ -5,16 +5,6 @@
 #include <QLocale>
 #include <QDebug>
 
-/*!
- * \brief Erzeugt ein neues Widerstandsobjekt
- *
- * \param   name            ist der Name des Widerstandsobjektes
- * \param   valueResistance ist der zugewiesene Widerstandswertes
- * \param   x               ist die X-Koordinate der zugewiesenen Position
- * \param   y               ist die Y-Koordinate der zugewiesenen Position
- * \param   isVertical      ist die räumliche Ausrichtung im Netzwerk
- * \param   id              ist die intern zugewiesene Id
- */
 Resistor::Resistor(QString name, long double valueResistance, int x, int y, bool isVertical, int id)
         : Component(x, y, isVertical, name, 0.0, Component::ComponentType::Resistor, id),
           _resistanceValue(valueResistance)

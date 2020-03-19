@@ -4,15 +4,6 @@
 
 #include <QLocale>
 
-/*!
- * \brief Erzeugt ein neues Spannungsquellenobjekt
- *
- * \param   name            ist der Name des Spannungsquellenobjektes
- * \param   x               ist die X-Koordinate der zugewiesenen Position
- * \param   y               ist die Y-Koordinate der zugewiesenen Position
- * \param   isVertical      ist die räumliche Ausrichtung im Netzwerk
- * \param   id              ist die intern zugewiesene Id
- */
 PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id) :
         Component(x, y, isVertical, name, voltage, Component::ComponentType::PowerSupply, id)
 {

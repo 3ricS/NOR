@@ -533,7 +533,7 @@ void MainWindow::cut(void)
     _networkView->cut();
 }
 
-void MainWindow::openCurrentVoltageWindow()
+void MainWindow::openCurrentVoltageWindow(void)
 {
     QString information = _model->getVoltageAndCurrentInformation();
     PowerView* powerView = new PowerView(this);

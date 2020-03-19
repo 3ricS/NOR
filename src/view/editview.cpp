@@ -121,7 +121,7 @@ void EditView::setupInitilizingView(void)
     hideCurrentAndVoltageLabels();
 }
 
-void EditView::hideCurrentAndVoltageLabels()
+void EditView::hideCurrentAndVoltageLabels(void)
 {
     _editViewUi->CurrentLabel->close();
     _editViewUi->actualCurrentView->close();
@@ -129,7 +129,7 @@ void EditView::hideCurrentAndVoltageLabels()
     _editViewUi->actualVoltageView->close();
 }
 
-void EditView::hideVoltageLabels()
+void EditView::hideVoltageLabels(void)
 {
     _editViewUi->CurrentLabel->setText("Gesamtstrom:");
     _editViewUi->voltageLabel->close();

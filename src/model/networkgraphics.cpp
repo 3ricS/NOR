@@ -18,6 +18,7 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
  *
  * \param   componentPortA  Port der Komponente 1.
  * \param   componentPortB  Port der Komponente 2.
+ * \return  Gibt die Connection zwischen den ComponentPorts zurück.
  *
  * Zuerst wird geprüft, ob die Verbindung bereits der connectionList hinzugefügt wurde.
  * Ist noch keine Verbindung vorhanden, wird diese hinzugefügt.
@@ -68,13 +69,10 @@ void NetworkGraphics::addObject(GridObject* gridObject)
 }
 
 /*!
- * \brief Gibt eine Describtion aus der Liste aus Descriptions aus, welches an den Soll-Koordinaten x und y ist.
+ * \brief Liefert ein GridObject, welches an der Soll-Position ist.
  *
  * \param   scenePosition   ist die zu überprüfende Gitterposition
- * \return
- *
- * Es werden nacheinander Description aus der Liste genommen und verglichen, ob ihre Koordinaten mit den Soll-Koordinaten übereinstimmen.
- * Wenn ein Component mit den Soll-Koordinaten gefunden wurde, wird dieses zurückgegeben, ansonsten wird der Nullpointer zurückgegeben.
+ * \return  Gibt ein das GridObject an der Position zurück.
  */
 GridObject* NetworkGraphics::getObjectAtPosition(QPointF scenePosition)
 {
@@ -1051,6 +1049,9 @@ QList<GridObject*> NetworkGraphics::getSelectedObjects(void)
     return selectedObjects;
 }
 
+/*!
+ * \brief Wählt alle makierten Objekte ab.
+ */
 void NetworkGraphics::deselectAllItems(void)
 {
     for (GridObject* gridObject : _objects)
@@ -1066,6 +1067,11 @@ void NetworkGraphics::deselectAllItems(void)
     update();
 }
 
+/*!
+ * \brief Wählt alle makierten Objekte aus.
+ *
+ * \param scenePosition ist die geklikte Position.
+ */
 void NetworkGraphics::selectObjectsAtPosition(QPointF scenePosition)
 {
     GridObject* foundObject = getObjectAtPosition(scenePosition);

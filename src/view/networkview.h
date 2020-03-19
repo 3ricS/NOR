@@ -33,6 +33,8 @@ public:
     void deleteSelectedItem(void);
     void editNetworkOrDescription(void);
 
+    bool isAllowedToChangeMode(void);
+
     signals:
     void changeToSelectionMode();
 
@@ -56,7 +58,7 @@ private:
     QPointF findScrollPosition(void);
     void focusForPrint(void);
     void multiselect(QPointF endOfSelectionPosition, bool isEndOfSelection = false);
-    void changeOverrideCursor(void);
+    void updateOverrideCursor(void);
     QList<Component*> findSelectedComponent(void);
     QList<Description*> findSelectedDescription(void);
     void calculateDistanceToNextComponent(int& i, Component* firstComp, int& xSpace, int& ySpace);
@@ -79,7 +81,9 @@ private:
     void showSampleComponent(QPointF scenePosition, const MouseMode mouseMode);
     void showSampleDescription(QPointF scenePosition);
     void highlightRect(QPointF scenePositionOne, QColor _highlightColor);
-    void highlightComponentPort(ComponentPort* componentPortToHighlight, QColor highlightColor);
+    void highlightComponentPort(ComponentPort* componentPortToHighlight, QColor highlightColor);;
+
+
 
     NetworkGraphics*         _model  = nullptr;
 
@@ -89,17 +93,16 @@ private:
     ComponentPort*           _connectionStartComponentPort = nullptr;
     QGraphicsItem*           _previousHighlightedRect = nullptr;
     QGraphicsItem*           _previousHighlightedPort = nullptr;
-    GridObject*               _selectedObjectToMove = nullptr;
+    GridObject*              _selectedObjectToMove = nullptr;
     bool                     _isVerticalComponentDefault = true;
     Component*               _sampleComponentOnMoveEvent = nullptr;
-    Description*        _sampleDescriptionOnMoveEvent = nullptr;
+    Description*             _sampleDescriptionOnMoveEvent = nullptr;
     QList<Component*>        _copiedComponents;
-    QList<Description*> _copiedDescriptions;
+    QList<Description*>      _copiedDescriptions;
     QPointF                  _lastClickedPosition;
     QGraphicsRectItem*       _multiselectRect = nullptr;
 
     QPointF                  _firstPositionMultiselect;
-    QPointF                  _lastPositionMultiselect;
 
     MouseMode                _mouseMode = SelectionMode;
     QPointF                  _actualMoveScenePosition;

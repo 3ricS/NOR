@@ -76,10 +76,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
 */
 void MainWindow::setSelectionMode(void)
 {
-    _networkView->setMouseMode(NetworkView::MouseMode::SelectionMode);
-
-    setSelectionOfModeButtons(_ui->Selection);
-    setCheckedInCreateMenu(_selectionMode);
+    setMouseMode(NetworkView::SelectionMode);
 }
 
 /*!
@@ -87,11 +84,7 @@ void MainWindow::setSelectionMode(void)
 */
 void MainWindow::setResistorMode(void)
 {
-    _model->deselectAllItems();
-    _networkView->setMouseMode(NetworkView::MouseMode::ResistorMode);
-
-    setSelectionOfModeButtons(_ui->Resistor);
-    setCheckedInCreateMenu(_resistorMode);
+    setMouseMode(NetworkView::ResistorMode);
 }
 
 /*!
@@ -99,11 +92,7 @@ void MainWindow::setResistorMode(void)
 */
 void MainWindow::setPowerSupplyMode(void)
 {
-    _model->deselectAllItems();
-    _networkView->setMouseMode(NetworkView::MouseMode::PowerSupplyMode);
-
-    setSelectionOfModeButtons(_ui->PowerSupply);
-    setCheckedInCreateMenu(_powerSupplyMode);
+    setMouseMode(NetworkView::PowerSupplyMode);
 }
 
 /*!
@@ -111,11 +100,7 @@ void MainWindow::setPowerSupplyMode(void)
 */
 void MainWindow::setDescriptionMode(void)
 {
-    _model->deselectAllItems();
-    _networkView->setMouseMode(NetworkView::MouseMode::DescriptionMode);
-
-    setSelectionOfModeButtons(_ui->Description);
-    setCheckedInCreateMenu(_descriptionMode);
+    setMouseMode(NetworkView::DescriptionMode);
 }
 
 /*!
@@ -123,11 +108,7 @@ void MainWindow::setDescriptionMode(void)
 */
 void MainWindow::setConnectionMode(void)
 {
-    _model->deselectAllItems();
-    _networkView->setMouseMode(NetworkView::MouseMode::ConnectionMode);
-
-    setSelectionOfModeButtons(_ui->Connection);
-    setCheckedInCreateMenu(_connectionMode);
+    setMouseMode(NetworkView::ConnectionMode);
 }
 
 void MainWindow::saveFile(void)
@@ -167,9 +148,9 @@ void MainWindow::saveAsFile(void)
     setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent* event)
 {
-    if(_model->hasChangedDocument())
+    if (_model->hasChangedDocument())
     {
         //MessageBox bevor geschlossen wird
         QMessageBox msgBox;
@@ -303,7 +284,7 @@ void MainWindow::createUpperMenu(void)
     _createActionGroup.append(_powerSupplyMode);
 
     _resistorMode = new QAction("Widerstand erstellen");
-    _resistorMode->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT +  Qt::Key_R));
+    _resistorMode->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     _resistorMode->setCheckable(true);
     _ui->menuErstellen->addAction(_resistorMode);
     _createActionGroup.append(_resistorMode);
@@ -535,5 +516,57 @@ void MainWindow::openCurrentVoltageWindow(void)
     PowerView* powerView = new PowerView(this);
     powerView->setText(information);
     powerView->show();
+}
+
+void MainWindow::setMouseMode(NetworkView::MouseMode newMouseMode)
+{
+    if (_networkView->isAllowedToChangeMode())
+    {
+        _model->deselectAllItems();
+
+        switch (newMouseMode)
+        {
+            case NetworkView::SelectionMode:
+            {
+                _networkView->setMouseMode(NetworkView::MouseMode::SelectionMode);
+
+                setSelectionOfModeButtons(_ui->Selection);
+                setCheckedInCreateMenu(_selectionMode);
+            }
+                break;
+            case NetworkView::PowerSupplyMode:
+            {
+                _networkView->setMouseMode(NetworkView::MouseMode::PowerSupplyMode);
+
+                setSelectionOfModeButtons(_ui->PowerSupply);
+                setCheckedInCreateMenu(_powerSupplyMode);
+            }
+                break;
+            case NetworkView::ResistorMode:
+            {
+                _networkView->setMouseMode(NetworkView::MouseMode::ResistorMode);
+
+                setSelectionOfModeButtons(_ui->Resistor);
+                setCheckedInCreateMenu(_resistorMode);
+            }
+                break;
+            case NetworkView::ConnectionMode:
+            {
+                _networkView->setMouseMode(NetworkView::MouseMode::ConnectionMode);
+
+                setSelectionOfModeButtons(_ui->Connection);
+                setCheckedInCreateMenu(_connectionMode);
+            }
+                break;
+            case NetworkView::DescriptionMode:
+            {
+                _networkView->setMouseMode(NetworkView::MouseMode::DescriptionMode);
+
+                setSelectionOfModeButtons(_ui->Description);
+                setCheckedInCreateMenu(_descriptionMode);
+            }
+                break;
+        }
+    }
 }
 

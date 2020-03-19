@@ -84,6 +84,7 @@ private:
     void setCheckedInCreateMenu(QAction* actualAction);
     void setSelectionOfModeButtons(QPushButton* actualPushed);
     void createListOfModeButtons(void);
+    void setMouseMode(NetworkView::MouseMode newMouseMode);
 
 //Konstanten
     static constexpr double _maximumZoom = 299;

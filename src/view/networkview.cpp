@@ -84,11 +84,15 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                     }
                 }
 
-                if (connectionComponentPortEnd != nullptr)
+                bool foundComponentPortAtEnd = (connectionComponentPortEnd != nullptr);
+                if (foundComponentPortAtEnd)
                 {
                     _model->addConnection(*_connectionStartComponentPort, *connectionComponentPortEnd);
-                    _connectionStartComponentPort = nullptr;
                 }
+
+                delete _connectionStartComponentPort;
+                _connectionStartComponentPort = nullptr;
+                _previousHighlightedPort = deleteGraphicsItem(_previousHighlightedPort);
             }
             _tempComponentListForConnections.clear();
             if (nullptr != _previousHighlightedPort)
@@ -141,7 +145,6 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             _selectedObjectToMove = nullptr;
 
             _model->update();
-            changeOverrideCursor();
         }
             break;
         case MouseMode::DescriptionMode:
@@ -508,13 +511,13 @@ void NetworkView::cut(void)
  */
 void NetworkView::setMouseMode(NetworkView::MouseMode newMode)
 {
-    _mouseMode = newMode;
+    if(isAllowedToChangeMode())
+    {
+        _mouseMode = newMode;
 
-    //Entfernen der Beispiel Objekte
-    deleteSampleObjectsAndHighlights();
-
-    //Angezeigte Cursor ändern
-    changeOverrideCursor();
+        deleteSampleObjectsAndHighlights();
+        updateOverrideCursor();
+    }
 }
 
 /*!
@@ -627,7 +630,7 @@ void NetworkView::paste(void)
 
 void NetworkView::enterEvent(QEvent* event)
 {
-    changeOverrideCursor();
+    updateOverrideCursor();
     QWidget::enterEvent(event);
 }
 
@@ -671,15 +674,17 @@ void NetworkView::multiselect(QPointF endOfSelectionPosition, bool isEndOfSelect
     _model->update();
 }
 
-void NetworkView::changeOverrideCursor(void)
+void NetworkView::updateOverrideCursor(void)
 {
     QApplication::restoreOverrideCursor();
+    qDebug() << _mouseMode;
     if (_mouseMode == ConnectionMode)
     {
         QApplication::setOverrideCursor(Qt::CrossCursor);
     }
     else if (_mouseMode == SelectionMode)
     {
+        qDebug() << "changed To Selection Cursur" << _mouseMode;
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
     }
 }
@@ -904,10 +909,15 @@ void NetworkView::keyReleaseEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Escape)
     {
-        QApplication::restoreOverrideCursor();
-        _model->deselectAllItems();
-        deleteSampleObjectsAndHighlights();
         emit changeToSelectionMode();
     }
+}
+
+bool NetworkView::isAllowedToChangeMode(void)
+{
+    bool startedMove = (nullptr != _selectedObjectToMove);
+    bool startedConnection = (nullptr != _connectionStartComponentPort || nullptr != _previousHighlightedPort);
+    bool isAllowedToChangeMode = !startedMove && !startedConnection;
+    return isAllowedToChangeMode;
 }
 

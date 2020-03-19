@@ -51,7 +51,6 @@ public:
     QList<Description*> findSelectedDescription(void);
     void turnSelectedComponentsRight(void);
 
-
     void mirrorComponent(Component* component);
     void turnComponentLeft(Component* componentToTurn);
     void setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation);

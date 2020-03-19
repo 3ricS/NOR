@@ -141,8 +141,6 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                                                       diffYAfterMoving);
                 }
             }
-            //Multiselection der Bauteile
-            multiselect(scenePosition, true);
 
             _selectedObjectToMove = nullptr;
             _selectedDescriptionToMove = nullptr;

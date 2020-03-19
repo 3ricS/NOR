@@ -322,7 +322,8 @@
         <item>
          <widget class="QPushButton" name="CurrentView">
           <property name="text">
-           <string>Ströme und Spannungen</string>
+           <string>Ströme und
+Spannungen</string>
           </property>
          </widget>
         </item>

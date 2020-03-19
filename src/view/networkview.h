@@ -81,7 +81,7 @@ private:
     void showSampleComponent(QPointF scenePosition, Component::ComponentType componentType);
     void showSampleComponent(QPointF scenePosition, const MouseMode mouseMode);
     void showSampleDescription(QPointF scenePosition);
-    void highlightRect(QPointF scenePositionOne, QColor _highlightColor);
+    void highlightGrid(QPointF scenePosition, QColor highlightColor);
     void highlightComponentPort(ComponentPort* componentPortToHighlight, QColor highlightColor);;
 
 

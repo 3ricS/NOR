@@ -155,7 +155,7 @@ private:
     QUndoStack*              _undoStack;
 
     bool _isLoading = false;
-    bool _hasChangedDocument = true;
+    bool _hasChangedDocument = false;
     long double _resistanceValue;
 };
 

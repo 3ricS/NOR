@@ -3,7 +3,6 @@
 
 #include <QPrintDialog>
 #include <QPrinter>
-#include <QDebug>
 
 NetworkView::NetworkView(QWidget* parent) :
         QGraphicsView(parent)
@@ -252,7 +251,7 @@ void NetworkView::deleteSampleObjectsAndHighlights(void)
     _sampleDescriptionOnMoveEvent = dynamic_cast<Description*>(deleteGraphicsItem(_sampleDescriptionOnMoveEvent));
 }
 
-void NetworkView::highlightRect(QPointF scenePosition, QColor highlightColor)
+void NetworkView::highlightGrid(QPointF scenePosition, QColor highlightColor)
 {
     QPointF gridPositionOne = scenePositionToGrid(scenePosition);
     int positionX = gridPositionOne.toPoint().x();
@@ -677,14 +676,12 @@ void NetworkView::multiselect(QPointF endOfSelectionPosition, bool isEndOfSelect
 void NetworkView::updateOverrideCursor(void)
 {
     QApplication::restoreOverrideCursor();
-    qDebug() << _mouseMode;
     if (_mouseMode == ConnectionMode)
     {
         QApplication::setOverrideCursor(Qt::CrossCursor);
     }
     else if (_mouseMode == SelectionMode)
     {
-        qDebug() << "changed To Selection Cursur" << _mouseMode;
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
     }
 }
@@ -807,21 +804,21 @@ void NetworkView::showSampleComponent(QPointF scenePosition, Component::Componen
     QPointF gridPosition = _model->mapSceneToGrid(scenePosition);
     if (!_model->hasObjectAtPosition(scenePosition))
     {
-        Component* sampleResistor;
+        Component* sampleComponent;
         if (componentType == Component::ComponentType::Resistor)
         {
-            sampleResistor = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                          gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+            sampleComponent = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
+                                           gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
         }
         else
         {
-            sampleResistor = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                             gridPosition.toPoint().y(), _isVerticalComponentDefault, 0,
-                                             0);
+            sampleComponent = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
+                                              gridPosition.toPoint().y(), _isVerticalComponentDefault, 0,
+                                              0);
         }
-        _sampleComponentOnMoveEvent = sampleResistor;
+        _sampleComponentOnMoveEvent = sampleComponent;
         _model->addItem(_sampleComponentOnMoveEvent);
-        highlightRect(scenePosition, Defines::highlightColor);
+        highlightGrid(scenePosition, Defines::highlightColor);
     }
 }
 
@@ -890,7 +887,7 @@ void NetworkView::showSampleDescription(QPointF scenePosition)
         QPointF gridPosition = _model->mapSceneToGrid(scenePosition);
         _sampleDescriptionOnMoveEvent = new Description(gridPosition.x(), gridPosition.y(), 0);
         _model->addItem(_sampleDescriptionOnMoveEvent);
-        highlightRect(scenePosition, Defines::highlightColor);
+        highlightGrid(scenePosition, Defines::highlightColor);
     }
 }
 

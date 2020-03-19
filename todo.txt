@@ -9,4 +9,4 @@ ___________________________________________________________________
 		p.S ja man könnte einfach hitbox weiterverwenden, aber ich finde so wird klarer, das es eine neue Hitbox ist, aber kannst es auch rausschmeißen, wenn du es willst.
 
 - QClipboard einbauen
-- Verschieben funktioniert nicht mehr
+- Verschieben funktioniert bei Multiselect nicht mehr

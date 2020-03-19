@@ -14,7 +14,10 @@ CommandAddComponent::CommandAddComponent(NetworkGraphics* model, QPointF gridPos
  */
 void CommandAddComponent::undo(void)
 {
-    _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_createdComponent);
+    if (nullptr != _createdComponent)
+    {
+        _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_createdComponent);
+    }
     _hasDoneUndo = true;
 }
 
@@ -456,10 +459,13 @@ CommandCutComponents::CommandCutComponents(NetworkGraphics* model, Component* co
  */
 void CommandCutComponents::undo(void)
 {
-    _model->addComponentWithoutUndo(_componentToCut);
-    for (Connection* connection : _deletedConnections)
+    if (_componentToCut != nullptr)
     {
-        _model->addConnectionWithoutUndo(connection);
+        _model->addComponentWithoutUndo(_componentToCut);
+        for (Connection* connection : _deletedConnections)
+        {
+            _model->addConnectionWithoutUndo(connection);
+        }
     }
     _hasDoneUndo = true;
 }
@@ -510,7 +516,7 @@ void CommandCutDescriptionField::undo(void)
  */
 void CommandCutDescriptionField::redo(void)
 {
-    _model->cutDescriptionWithoutUndo(_descriptionFieldToCut);
+    _model->deleteDescriptionWithoutUndo(_descriptionFieldToCut);
     _hasDoneUndo = false;
 }
 

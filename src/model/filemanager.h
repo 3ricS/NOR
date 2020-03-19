@@ -39,23 +39,24 @@ public:
 private:
     bool saveData(void);
     QString createJson(void);
-    static QJsonObject saveComponent(Component* component);
-    static QJsonObject saveConnection(Connection* connection);
-    static QJsonObject saveDescription(Description* description);
+
+    QJsonObject saveComponent(Component* component);
+    QJsonObject saveConnection(Connection* connection);
+    QJsonObject saveDescription(Description* description);
     void loadComponent(QJsonArray array);
     void loadConnection(QJsonArray array);
     void loadDescription(QJsonArray array);
-    Component* getComponentById(int id);
+
     Component::Port toPort(int componentPort);
 
     QFile    _actualFile;
-    QString  _fileFilter  = "Json (*.json);;Text (*.txt)";
+    const QString  _fileFilter  = "Json (*.json);;Text (*.txt)";
     QDir     _homePath;
     bool     _isSaved = false;
 
     NetworkGraphics* _model = nullptr;
     QDir             _dirFilePath;
-    QString const    _defaultFileName = "/Widerstandsnetzwerk";
+    const QString    _defaultFileName = "/Widerstandsnetzwerk";
 
 
 };

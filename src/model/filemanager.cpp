@@ -134,18 +134,6 @@ QJsonObject FileManager::saveDescription(Description *description)
     return df;
 }
 
-Component* FileManager::getComponentById(int id)
-{
-    for (Component* component : _model->getComponents())
-    {
-        if (component->getId() == id)
-        {
-            return component;
-        }
-    }
-    return nullptr;
-}
-
 Component::Port FileManager::toPort(int componentPort)
 {
     Component::Port port = Component::null;
@@ -242,13 +230,15 @@ void FileManager::loadConnection(QJsonArray array)
             if (obj.value("type") == "Connection")
             {
                 int idA = obj.value("componentIdOne").toInt();
-                Component* componentA = getComponentById(idA);
-                Component::Port portA = toPort(obj.value("portA").toInt());
+                int portIntA = obj.value("portA").toInt();
+                Component* componentA = _model->getComponentById(idA);
+                Component::Port portA = toPort(portIntA);
                 ComponentPort componentPortA(componentA, portA);
 
                 int idB = obj.value("componentIdTwo").toInt();
-                Component* componentB = getComponentById(idB);
-                Component::Port portB = toPort(obj.value("portB").toInt());
+                int portIntB = obj.value("portB").toInt();
+                Component* componentB = _model->getComponentById(idB);
+                Component::Port portB = toPort(portIntB);
                 ComponentPort componentPortB(componentB, portB);
 
                 _model->addConnectionWithoutUndo(componentPortA, componentPortB);

@@ -1,3 +1,10 @@
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Das MainWindow ist die Oberfläche das Hauptfenster des Programmes dargestellt wird.
+ *
+ * Auf diesr Oberfläche können funktionen in der Toolbox und in der Menüleiste ausgewählt werden.
+ */
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

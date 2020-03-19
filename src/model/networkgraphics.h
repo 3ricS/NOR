@@ -84,12 +84,10 @@ public:
     Component* addPowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id = 0);
 
 
-    //only for QUndoCommands
-    void cutComponentWithoutUndo(Component* componentToCut);
-    void cutDescriptionWithoutUndo(Description* descriptionToCut);
+    //only for QUndoComamnds
     Component* createNewComponentWithoutUndo(QPointF gridPosition,
                                              Component::ComponentType componentType, bool componentIsVertical);
-    void addComponentWithoutUndo(Component* componentToAdd);
+    Component* addComponentWithoutUndo(Component* componentToAdd);
     Component* duplicateComponentWithoutUndo(Component* componentToDuplicate, int xPosition, int yPosition);
     void addConnectionWithoutUndo(Connection* connection);
     Connection* addConnectionWithoutUndo(ComponentPort componentPortA, ComponentPort componentPortB);
@@ -105,23 +103,26 @@ public:
 
 
     //getter
-    ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
 
-    GridObject* getObjectAtPosition(QPointF scenePosition);
-    bool hasObjectAtPosition(QPointF scenePosition);
-    Connection* getConnectionAtPosition(QPointF gridposition);
     QList<Component*> getComponents(void);
     QList<Description*> getDescriptions(void);
     QList<GridObject*> getObjects(void) {return _objects;}
     QList<Connection*> getConnections(void) {return _connections;}
+
+    GridObject* getObjectAtPosition(QPointF scenePosition);
+    ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
+    bool hasObjectAtPosition(QPointF scenePosition);
+    Connection* getConnectionAtPosition(QPointF gridposition);
+
     QString getFileName(void);
     long double getResistanceValue(void) {return _resistanceValue;}
-    bool isLoading(void) {return _isLoading;}
     QUndoStack* getUndoStack(void) {return _undoStack;}
     QString getVoltageAndCurrentInformation(void);
     QList<GridObject*> getSelectedObjects(void);
 
-    bool hasChangedDocument(void);
+    Component* getComponentById(int id);
+
+    bool hasChangedDocument(void) {return _hasChangedDocument;}
 
 public slots:
     void hasChangedDocument(int idx);
@@ -134,8 +135,6 @@ signals:
 
 
 private:
-    static constexpr int _defaultSceneSize = 6000;
-
     int _resistorCount = 0;
     int _powerSupplyCount = 0;
     int _descriptionCount = 0;

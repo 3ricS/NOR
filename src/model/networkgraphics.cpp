@@ -1052,16 +1052,8 @@ QList<GridObject*> NetworkGraphics::getSelectedObjects(void)
  */
 void NetworkGraphics::deselectAllItems(void)
 {
-    for (GridObject* gridObject : _objects)
-    {
-        gridObject->setSelected(false);
-    }
-
-    for (Connection* connection : getConnections())
-    {
-        connection->setSelected(false);
-    }
-
+    deselctAllGridObjects();
+    deselectAllConnections();
     update();
 }
 
@@ -1220,6 +1212,7 @@ void NetworkGraphics::deselectAllConnections(void)
     {
         connection->setSelected(false);
     }
+    update();
 }
 
 QList<GridObject*> NetworkGraphics::getGridObjectsInArea(QRectF selectionArea)
@@ -1259,4 +1252,20 @@ void NetworkGraphics::deselctAllGridObjects(void)
     {
         gridObject->setSelected(false);
     }
+    update();
+}
+
+void NetworkGraphics::selectAll(void)
+{
+    deselectAllConnections();
+    selectAllGridObjects();
+}
+
+void NetworkGraphics::selectAllGridObjects(void)
+{
+    for (GridObject* gridObject : _objects)
+    {
+        gridObject->setSelected(true);
+    }
+    update();
 }

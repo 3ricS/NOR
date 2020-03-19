@@ -42,6 +42,8 @@ public:
     void updateCalc(void);
 
     //Selection
+    void selectAll(void);
+    void selectAllGridObjects(void);
     void deselectAllItems(void);
     void deselectAllConnections(void);
     void deselctAllGridObjects(void);

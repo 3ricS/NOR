@@ -29,6 +29,9 @@ public:
     void print(void);
     void cut(void);
 
+    void selectAll();
+    void selectNothing();
+
     void setMouseMode(MouseMode newMode);
     void deleteSelectedItem(void);
     void editNetworkOrDescription(void);
@@ -71,8 +74,6 @@ private:
     void connectionMoveEvent(QPointF scenePosition);
     void startSelection(QPointF scenePosition);
     void startMultiSelection(QPointF scenePosition);
-
-private:
 
 
     //Highlighting

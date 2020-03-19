@@ -921,3 +921,13 @@ bool NetworkView::isAllowedToChangeMode(void)
     return isAllowedToChangeMode;
 }
 
+void NetworkView::selectAll()
+{
+    _model->selectAll();
+}
+
+void NetworkView::selectNothing()
+{
+    _model->deselectAllItems();
+}
+

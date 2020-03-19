@@ -61,6 +61,8 @@ public slots:
     void copy(void);
     void paste(void);
     void rotate(void);
+    void selectAll(void);
+    void selectNothing(void);
     void deleteItem(void);
     void editItem(void);
     void undo(void);
@@ -102,9 +104,11 @@ private:
     QAction* _zoomOut = nullptr;
     QAction* _zoom100Percent = nullptr;
     QAction* _about = nullptr;
-    QAction* _duplicate = nullptr;
     QAction* _copy = nullptr;
     QAction* _paste = nullptr;
+    QAction* _selectAll = nullptr;
+    QAction* _selectNothing = nullptr;
+    QAction* _duplicate = nullptr;
     QAction* _rotateComponent = nullptr;
     QAction* _deleteComponent = nullptr;
     QAction* _edit = nullptr;

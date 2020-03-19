@@ -48,10 +48,12 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_zoomOut, SIGNAL(triggered()), this, SLOT(zoomOut()));
     connect(_zoom100Percent, SIGNAL(triggered()), this, SLOT(setZoom100Percent()));
     connect(_about, SIGNAL(triggered()), this, SLOT(openAboutWindow()));
-    connect(_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
     connect(_cut, SIGNAL(triggered()), this, SLOT(cut()));
     connect(_copy, SIGNAL(triggered()), this, SLOT(copy()));
     connect(_paste, SIGNAL(triggered()), this, SLOT(paste()));
+    connect(_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
+    connect(_selectNothing, SIGNAL(triggered()), this, SLOT(selectNothing()));
+    connect(_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
     connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(rotate()));
     connect(_deleteComponent, SIGNAL(triggered()), this, SLOT(deleteItem()));
     connect(_edit, SIGNAL(triggered()), this, SLOT(editItem()));
@@ -256,6 +258,14 @@ void MainWindow::createUpperMenu(void)
     _paste->setShortcut(QKeySequence::Paste);
     _ui->menuBearbeiten->addAction(_paste);
 
+    _selectAll = new QAction("Alles auswählen");
+    _selectAll->setShortcut(QKeySequence::SelectAll);
+    _ui->menuBearbeiten->addAction(_selectAll);
+
+    _selectNothing = new QAction("Nichts auswählen");
+    _selectNothing->setShortcut(QKeySequence::Deselect);
+    _ui->menuBearbeiten->addAction(_selectNothing);
+
     _duplicate = new QAction("Duplizieren");
     _duplicate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
     _ui->menuBearbeiten->addAction(_duplicate);
@@ -382,6 +392,18 @@ void MainWindow::rotate(void)
 {
     _networkView->rotateComponentByShortcut();
 }
+
+
+void MainWindow::selectAll(void)
+{
+    _networkView->selectAll();
+}
+
+void MainWindow::selectNothing(void)
+{
+    _networkView->selectNothing();
+}
+
 
 /*!
 * \brief Reinzoomen mit +10% Schritten
@@ -569,4 +591,3 @@ void MainWindow::setMouseMode(NetworkView::MouseMode newMouseMode)
         }
     }
 }
-

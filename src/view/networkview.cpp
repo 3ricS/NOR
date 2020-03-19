@@ -108,11 +108,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             //Move Event nur auslösen, wenn Objekt an neuer GridPosition
             if (!_model->hasObjectAtPosition(gridPosition))
             {
-                if ((_selectedObjectToMove != nullptr && _selectedObjectToMove->getPosition() != gridPosition) ||
-                    (_selectedDescriptionToMove != nullptr &&
-                     QPointF(_selectedDescriptionToMove->getPosition().x(),
-                             _selectedDescriptionToMove->getPosition().y()) !=
-                     gridPosition))
+                if (_selectedObjectToMove != nullptr && _selectedObjectToMove->getPosition() != gridPosition)
                 {
                     int previousComoponentXPosition = 0;
                     int previousComoponentYPosition = 0;
@@ -123,11 +119,6 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                     {
                         previousComoponentXPosition = _selectedObjectToMove->getPosition().x();
                         previousComoponentYPosition = _selectedObjectToMove->getPosition().y();
-                    }
-                    else if (_selectedDescriptionToMove != nullptr)
-                    {
-                        previousComoponentXPosition = _selectedDescriptionToMove->getPosition().x();
-                        previousComoponentYPosition = _selectedDescriptionToMove->getPosition().y();
                     }
 
                     _model->moveObject(_selectedObjectToMove, gridPosition);
@@ -142,8 +133,12 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                 }
             }
 
+            if (_selectedObjectToMove == nullptr)
+            {
+                //Multiselection der Bauteile
+                multiselect(scenePosition, true);
+            }
             _selectedObjectToMove = nullptr;
-            _selectedDescriptionToMove = nullptr;
 
             _model->selectObjectsAtPosition(scenePosition);
             _model->update();
@@ -182,7 +177,6 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     //Keine Verbindung begonnen: _connectionStartComponentPort muss auf Nullptr zeigen
     _connectionStartComponentPort = nullptr;
     _selectedObjectToMove = nullptr;
-    _selectedDescriptionToMove = nullptr;
 
     if (ConnectionMode == _mouseMode)
     {
@@ -218,7 +212,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
             break;
         case SelectionMode:
         {
-            if (_mouseIsPressed && _selectedObjectToMove == nullptr && _selectedDescriptionToMove == nullptr)
+            if (_mouseIsPressed && _selectedObjectToMove == nullptr)
             {
                 multiselect(scenePosition, false);
             }
@@ -648,6 +642,12 @@ void NetworkView::keyPressEvent(QKeyEvent* event)
         _model->deselectAllItems();
         deleteSampleObjectsAndHighlights();
     }
+    else if (event->key() == Qt::Key_Control)
+    {
+        qDebug() << "Sttrg gedrückt";
+        _controlIsPressed = true;
+    }
+
     QGraphicsView::keyPressEvent(event);
 }
 
@@ -666,6 +666,10 @@ void NetworkView::multiselect(QPointF endOfSelectionPosition, bool isEndOfSelect
         _multiselectRect = _model->addRect(selectionArea);
     }
 
+    if (!_controlIsPressed)
+    {
+        _model->deselectAllItems();
+    }
     _model->selectObjectsInArea(selectionArea);
     _model->update();
 }
@@ -887,8 +891,20 @@ void NetworkView::showSampleDescription(QPointF scenePosition)
 void NetworkView::startMultiSelection(QPointF scenePosition)
 {
     _firstPositionMultiselect = scenePosition;
-    _model->deselectAllItems();
+    qDebug() << _controlIsPressed;
+    if (!_controlIsPressed)
+    {
+        _model->deselectAllItems();
+    }
     _selectedObjectToMove = nullptr;
-    _selectedDescriptionToMove = nullptr;
+}
+
+void NetworkView::keyReleaseEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Control)
+    {
+        qDebug() << "Strg losgelassen";
+        _controlIsPressed = false;
+    }
 }
 

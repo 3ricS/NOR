@@ -67,6 +67,7 @@ private:
     int upOrDownPathAnalysis(int howManyConnections, bool horizontalFirst, int upOrDown);
     int pathAnalysisDodgeComponent(int howManyConnections);
     void initializeValues(void);
+    void paintStartAndEndPoint(QPainter* painter);
 
     int signum(int checkedNumber);
 

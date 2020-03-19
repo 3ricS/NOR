@@ -1147,7 +1147,10 @@ void NetworkGraphics::selectObjectsInArea(QRectF selectionArea)
     for (GridObject* gridObject : _objects)
     {
         bool isInSelectionArea = selectionArea.intersects(gridObject->boundingRect());
-        gridObject->setSelected(isInSelectionArea);
+        if(isInSelectionArea)
+        {
+            gridObject->setSelected(isInSelectionArea);
+        }
     }
     update();
 }

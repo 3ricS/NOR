@@ -38,6 +38,7 @@ public slots:
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
     void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -67,6 +68,8 @@ private:
     void startSelection(QPointF scenePosition);
     void startMultiSelection(QPointF scenePosition);
 
+private:
+
 
     //Highlighting
     void deleteSampleObjectsAndHighlights(void);
@@ -79,13 +82,13 @@ private:
     NetworkGraphics*         _model  = nullptr;
 
     bool                     _mouseIsPressed = false;
+    bool                     _controlIsPressed = false;
 
     QList<Component*>        _tempComponentListForConnections;
     ComponentPort*           _connectionStartComponentPort = nullptr;
     QGraphicsItem*           _previousHighlightedRect = nullptr;
     QGraphicsItem*           _previousHighlightedPort = nullptr;
     GridObject*               _selectedObjectToMove = nullptr;
-    Description*        _selectedDescriptionToMove = nullptr;
     bool                     _isVerticalComponentDefault = true;
     Component*               _sampleComponentOnMoveEvent = nullptr;
     Description*        _sampleDescriptionOnMoveEvent = nullptr;

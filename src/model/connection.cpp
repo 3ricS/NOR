@@ -27,11 +27,6 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     _startPoint = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
     _endPoint = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
 
-    //Punkte an Enden zeichnen
-    painter->setBrush(QBrush(Qt::black));
-    painter->drawEllipse(_startPoint.toPoint(), _circleRadius, _circleRadius);
-    painter->drawEllipse(_endPoint.toPoint(), _circleRadius, _circleRadius);
-
     _painter = painter;
     _isDodgedBefore = false;
 
@@ -77,6 +72,9 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
     {
         paintHitbox(painter);
     }
+
+
+    paintStartAndEndPoint(painter);
 }
 
 /*!
@@ -692,4 +690,12 @@ int Connection::signum(int checkedNumber)
     {
         return 0;
     }
+}
+
+void Connection::paintStartAndEndPoint(QPainter* painter)
+{
+    //Punkte an Enden zeichnen
+    painter->setBrush(QBrush(Qt::black));
+    painter->drawEllipse(_startPoint.toPoint(), _circleRadius, _circleRadius);
+    painter->drawEllipse(_endPoint.toPoint(), _circleRadius, _circleRadius);
 }

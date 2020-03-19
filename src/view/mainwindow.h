@@ -76,7 +76,6 @@ public slots:
     void isUndoPossible(bool canUndo);
 
 protected:
-    void keyReleaseEvent(QKeyEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
 
 private:

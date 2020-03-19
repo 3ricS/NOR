@@ -1,5 +1,7 @@
 #include "view/mainwindow.h"
 
+#include <QDebug>
+
 MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow),
                                                                   _model(model)
 {
@@ -65,6 +67,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_model->getUndoStack(), SIGNAL(canRedoChanged(bool)), this, SLOT(isRedoPossible(bool)));
     connect(_model->getUndoStack(), SIGNAL(canUndoChanged(bool)), this, SLOT(isUndoPossible(bool)));
     connect(_model, SIGNAL(currentAndVoltageIsValid(bool)), this, SLOT(setCurrentButtonVisibility(bool)));
+
+    connect(_networkView, SIGNAL(changeToSelectionMode()), this, SLOT(setSelectionMode()));
 }
 
 /*!
@@ -161,14 +165,6 @@ void MainWindow::saveAsFile(void)
 {
     _model->saveAs();
     setWindowTitle("NOR - Network of Resistance ~ " + _model->getFileName());
-}
-
-void MainWindow::keyReleaseEvent(QKeyEvent* event)
-{
-    if (event->key() == Qt::Key::Key_Escape)
-    {
-        setSelectionMode();
-    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

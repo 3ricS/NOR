@@ -470,13 +470,24 @@ void MainWindow::isPowerSupplyAllowed(bool isAllowed)
 {
     if (isAllowed)
     {
+        //Button rechte Seite
         _ui->PowerSupply->setFlat(false);
         _ui->PowerSupply->setEnabled(true);
+
+        //Menü Leiste oben
+        _powerSupplyMode->setDisabled(false);
+        _powerSupplyMode->setVisible(true);
+
     }
     else
     {
+        //Button rechte Seite
         _ui->PowerSupply->setFlat(true);
         _ui->PowerSupply->setEnabled(false);
+
+        //Menü Leiste oben
+        _powerSupplyMode->setVisible(false);
+        _powerSupplyMode->setDisabled(true);
 
         setSelectionMode();
     }

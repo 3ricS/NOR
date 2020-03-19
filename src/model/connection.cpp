@@ -357,31 +357,30 @@ void Connection::dodgeComponent(void)
     {
         if (!_isDodgedBefore)
         {
-            QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, 55, 10);
+            QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, Defines::gridLength / 2, 10);
             _connectionHitbox.append(hitbox);
 
-            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() + 55, _currentPoint.y());
-            _currentPoint.setX(_currentPoint.x() + 55);
+            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() + (Defines::gridLength / 2), _currentPoint.y());
+            _currentPoint.setX(_currentPoint.x() + (Defines::gridLength / 2));
             _isDodgedBefore = true;
         }
         if (_diffY < 0)
         {
-            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - Defines::gridLength, 10,
-                                      Defines::gridLength);
+            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - Defines::gridLength, 10, Defines::gridLength);
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(),
                                _currentPoint.y() - Defines::gridLength);
             _currentPoint.setY(_currentPoint.y() - Defines::gridLength);
             _diffY += Defines::gridLength;
-            if (!isThereAComponentOrADescription(_currentPoint.x() - 55,
+            if (!isThereAComponentOrADescription(_currentPoint.x() - (Defines::gridLength / 2),
                                                  _currentPoint.y() - (Defines::gridLength / 2)) || _diffY == 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - 55, _currentPoint.y() - 5, 55, 10);
+                QRect* hitbox = new QRect(_currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y() - 5, (Defines::gridLength / 2), 10);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - 55, _currentPoint.y());
-                _currentPoint.setX(_currentPoint.x() - 55);
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y());
+                _currentPoint.setX(_currentPoint.x() - (Defines::gridLength / 2));
             }
             else
             {
@@ -397,14 +396,14 @@ void Connection::dodgeComponent(void)
                                _currentPoint.y() + Defines::gridLength);
             _currentPoint.setY(_currentPoint.y() + Defines::gridLength);
             _diffY -= Defines::gridLength;
-            if (!isThereAComponentOrADescription(_currentPoint.x() - 55,
+            if (!isThereAComponentOrADescription(_currentPoint.x() - (Defines::gridLength / 2),
                                                  _currentPoint.y() + (Defines::gridLength / 2)) || _diffY == 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - 55, _currentPoint.y() - 5, 55, 10);
+                QRect* hitbox = new QRect(_currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y() - 5, (Defines::gridLength / 2), 10);
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - 55, _currentPoint.y());
-                _currentPoint.setX(_currentPoint.x() - 55);
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y());
+                _currentPoint.setX(_currentPoint.x() - (Defines::gridLength / 2));
             }
             else
             {
@@ -416,11 +415,11 @@ void Connection::dodgeComponent(void)
     {
         if (!_isDodgedBefore)
         {
-            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, 55);
+            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, (Defines::gridLength / 2));
             _connectionHitbox.append(hitbox);
 
-            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() + 55);
-            _currentPoint.setY(_currentPoint.y() + 55);
+            _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() + (Defines::gridLength / 2));
+            _currentPoint.setY(_currentPoint.y() + (Defines::gridLength / 2));
             _isDodgedBefore = true;
         }
         if (_diffX < 0)
@@ -434,13 +433,13 @@ void Connection::dodgeComponent(void)
             _currentPoint.setX(_currentPoint.x() - Defines::gridLength);
             _diffX += Defines::gridLength;
             if (!isThereAComponentOrADescription(_currentPoint.x() - (Defines::gridLength / 2),
-                                                 _currentPoint.y() - 55) || _diffX == 0)
+                                                 _currentPoint.y() - (Defines::gridLength / 2)) || _diffX == 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - 55, 10, 55);
+                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - (Defines::gridLength / 2), 10, (Defines::gridLength / 2));
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - 55);
-                _currentPoint.setY(_currentPoint.y() - 55);
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - (Defines::gridLength / 2));
+                _currentPoint.setY(_currentPoint.y() - (Defines::gridLength / 2));
             }
             else
             {
@@ -457,13 +456,13 @@ void Connection::dodgeComponent(void)
             _currentPoint.setX(_currentPoint.x() + Defines::gridLength);
             _diffX -= Defines::gridLength;
             if (!isThereAComponentOrADescription(_currentPoint.x() + (Defines::gridLength / 2),
-                                                 _currentPoint.y() - 55) || _diffX == 0)
+                                                 _currentPoint.y() - (Defines::gridLength / 2)) || _diffX == 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - 55, 10, 55);
+                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - (Defines::gridLength / 2), 10, (Defines::gridLength / 2));
                 _connectionHitbox.append(hitbox);
 
-                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - 55);
-                _currentPoint.setY(_currentPoint.y() - 55);
+                _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - (Defines::gridLength / 2));
+                _currentPoint.setY(_currentPoint.y() - (Defines::gridLength / 2));
             }
             else
             {
@@ -599,7 +598,7 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
         if (!_isDodgedBeforePathAnalyse)
         {
             howManyConnections += 1;
-            _currentPoint.setX(_currentPoint.x() + 55);
+            _currentPoint.setX(_currentPoint.x() + (Defines::gridLength / 2));
             _isDodgedBeforePathAnalyse = true;
         }
         if (_diffY < 0)
@@ -607,11 +606,11 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
             howManyConnections += 2;
             _currentPoint.setY(_currentPoint.y() - Defines::gridLength);
             _diffY += Defines::gridLength;
-            if (!isThereAComponentOrADescription(_currentPoint.x() - 55,
+            if (!isThereAComponentOrADescription(_currentPoint.x() - (Defines::gridLength / 2),
                                                  _currentPoint.y() - (Defines::gridLength / 2)) || _diffY == 0)
             {
                 howManyConnections += 1;
-                _currentPoint.setX(_currentPoint.x() - 55);
+                _currentPoint.setX(_currentPoint.x() - (Defines::gridLength / 2));
             }
             else
             {
@@ -623,11 +622,11 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
             howManyConnections += 2;
             _currentPoint.setY(_currentPoint.y() + Defines::gridLength);
             _diffY -= Defines::gridLength;
-            if (!isThereAComponentOrADescription(_currentPoint.x() - 55,
+            if (!isThereAComponentOrADescription(_currentPoint.x() - (Defines::gridLength / 2),
                                                  _currentPoint.y() + (Defines::gridLength / 2)) || _diffY == 0)
             {
                 howManyConnections += 1;
-                _currentPoint.setX(_currentPoint.x() - 55);
+                _currentPoint.setX(_currentPoint.x() - (Defines::gridLength / 2));
             }
             else
             {
@@ -640,7 +639,7 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
         if (!_isDodgedBeforePathAnalyse)
         {
             howManyConnections += 1;
-            _currentPoint.setY(_currentPoint.y() + 55);
+            _currentPoint.setY(_currentPoint.y() + (Defines::gridLength / 2));
             _isDodgedBeforePathAnalyse = true;
         }
         if (_diffX < 0)
@@ -649,10 +648,10 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
             _currentPoint.setX(_currentPoint.x() - Defines::gridLength);
             _diffX += Defines::gridLength;
             if (!isThereAComponentOrADescription(_currentPoint.x() - (Defines::gridLength / 2),
-                                                 _currentPoint.y() - 55) || _diffX == 0)
+                                                 _currentPoint.y() - (Defines::gridLength / 2)) || _diffX == 0)
             {
                 howManyConnections += 1;
-                _currentPoint.setY(_currentPoint.y() - 55);
+                _currentPoint.setY(_currentPoint.y() - (Defines::gridLength / 2));
             }
             else
             {
@@ -665,10 +664,10 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
             _currentPoint.setX(_currentPoint.x() + Defines::gridLength);
             _diffX -= Defines::gridLength;
             if (!isThereAComponentOrADescription(_currentPoint.x() + (Defines::gridLength / 2),
-                                                 _currentPoint.y() - 55) || _diffX == 0)
+                                                 _currentPoint.y() - (Defines::gridLength / 2)) || _diffX == 0)
             {
                 howManyConnections += 1;
-                _currentPoint.setY(_currentPoint.y() - 55);
+                _currentPoint.setY(_currentPoint.y() - (Defines::gridLength / 2));
             }
             else
             {

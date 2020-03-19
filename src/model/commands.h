@@ -83,19 +83,16 @@ private:
 class CommandMoveComponent : public QUndoCommand
 {
 public:
-    CommandMoveComponent(NetworkGraphics* model, Component* componentToMove,
-                         Description* descriptionToMove, QPointF gridPosition);
+    CommandMoveComponent(NetworkGraphics* model, GridObject* objectToMove, QPointF newGridPosition);
 
     void undo(void) override;
     void redo(void) override;
 
 private:
     NetworkGraphics*    _model = nullptr;
-    Component*          _componentToMove = nullptr;
-    Description*   _descriptionToMove = nullptr;
+    GridObject*          _objectToMove = nullptr;
     QPointF             _gridEndPosition;
-    QPointF             _gridComponentStartPosition;
-    QPointF             _gridDescriptionStartPosition;
+    QPointF             _gridStartPosition;
 };
 
 

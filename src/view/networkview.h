@@ -65,6 +65,7 @@ private:
     //TODO: benenne connectionMoveEvent um
     void connectionMoveEvent(QPointF scenePosition);
     void startSelection(QPointF scenePosition);
+    void startMultiSelection(QPointF scenePosition);
 
 
     //Highlighting
@@ -83,7 +84,7 @@ private:
     ComponentPort*           _connectionStartComponentPort = nullptr;
     QGraphicsItem*           _previousHighlightedRect = nullptr;
     QGraphicsItem*           _previousHighlightedPort = nullptr;
-    Component*               _selectedComponentToMove = nullptr;
+    GridObject*               _selectedObjectToMove = nullptr;
     Description*        _selectedDescriptionToMove = nullptr;
     bool                     _isVerticalComponentDefault = true;
     Component*               _sampleComponentOnMoveEvent = nullptr;

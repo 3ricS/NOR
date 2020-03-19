@@ -114,7 +114,7 @@ void CommandAddDescriptionField::undo(void)
  */
 void CommandAddDescriptionField::redo(void)
 {
-    _model->addDescriptionFieldWithoutUndo(_createdDescriptionField);
+    _model->addDescriptionWithoutUndo(_createdDescriptionField);
     _hasDoneUndo = false;
 }
 
@@ -131,18 +131,12 @@ CommandAddDescriptionField::~CommandAddDescriptionField(void)
  * CommandMoveComponnet
  */
 
-CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* componentToMove,
-                                           Description* descriptionToMove, QPointF gridPosition) :
-        _model(model), _componentToMove(componentToMove), _descriptionToMove(descriptionToMove),
-        _gridEndPosition(gridPosition)
+CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, GridObject* objectToMove, QPointF newGridPosition) :
+        _model(model), _objectToMove(objectToMove), _gridEndPosition(newGridPosition)
 {
-    if (componentToMove != nullptr)
+    if (objectToMove != nullptr)
     {
-        _gridComponentStartPosition = _componentToMove->getPosition();
-    }
-    else if (descriptionToMove != nullptr)
-    {
-        _gridDescriptionStartPosition = descriptionToMove->getPosition();
+        _gridStartPosition = _objectToMove->getPosition();
     }
 }
 
@@ -151,14 +145,9 @@ CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* co
  */
 void CommandMoveComponent::undo(void)
 {
-    if (_componentToMove != nullptr)
+    if (_objectToMove != nullptr)
     {
-        _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridComponentStartPosition);
-    }
-
-    if (_descriptionToMove != nullptr)
-    {
-        _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridDescriptionStartPosition);
+        _model->moveComponentWithoutUndo(_objectToMove, _gridStartPosition);
     }
 }
 
@@ -167,7 +156,7 @@ void CommandMoveComponent::undo(void)
  */
 void CommandMoveComponent::redo(void)
 {
-    _model->moveComponentWithoutUndo(_componentToMove, _descriptionToMove, _gridEndPosition);
+    _model->moveComponentWithoutUndo(_objectToMove, _gridEndPosition);
 }
 
 /*
@@ -347,7 +336,7 @@ CommandDeleteDescription::~CommandDeleteDescription(void)
 void CommandDeleteDescription::undo(void)
 {
     _hasDoneUndo = true;
-    _model->addDescriptionFieldWithoutUndo(_deletedDescription);
+    _model->addDescriptionWithoutUndo(_deletedDescription);
 }
 
 /*!
@@ -512,7 +501,7 @@ CommandCutDescriptionField::CommandCutDescriptionField(NetworkGraphics *model, D
  */
 void CommandCutDescriptionField::undo(void)
 {
-    _model->addDescriptionFieldWithoutUndo(_descriptionFieldToCut);
+    _model->addDescriptionWithoutUndo(_descriptionFieldToCut);
     _hasDoneUndo = true;
 }
 
@@ -549,5 +538,6 @@ void CommandDuplicateDescription::undo(void)
 void CommandDuplicateDescription::redo(void)
 {
 
-   _createdDescription = _model->addDescriptionFieldWithoutUndo(QPointF(_xPosition,_yPosition), false, _descriptionToDuplicate->getText());
+   _createdDescription = _model->addDescriptionWithoutUndo(QPointF(_xPosition, _yPosition), false,
+                                                           _descriptionToDuplicate->getText());
 }

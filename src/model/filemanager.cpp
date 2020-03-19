@@ -272,7 +272,7 @@ void FileManager::loadDescription(QJsonArray array)
                 int yPos = obj.value("yPos").toInt();
                 QString text = obj.value("text").toString();
 
-                _model->addDescriptionFieldWithoutUndo(QPointF(xPos, yPos), true, text, id);
+                _model->addDescriptionWithoutUndo(QPointF(xPos, yPos), true, text, id);
             }
         }
     }

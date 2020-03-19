@@ -65,14 +65,14 @@ public:
     Component* addComponent(QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
     Description* addDescriptionField(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
-    void moveComponent(Component* componentToMove, Description* descriptionToMove , QPointF gridPosition);
+    void moveObject(GridObject* objectToMove, QPointF gridPosition);
     void editComponent(Component* componentToEdit, QString newName, double newValue, Component::Orientation originalOrientation);
     void deleteComponent(Component* componentToDelete);
     void deleteConnection(Connection* connectionToDelete);
     void deleteDescription(Description* descriptionFieldToDelete);
     void editDescription(Description* descriptionToEdit, QString newText);
-    void moveMultiselectComponents(QList<Component*> componentList, QList<Description*> descriptionList,
-                                   Component* componentToMove, Description* descriptionToMove, int diffXAfterMoving, int diffYAfterMoving);
+    void moveMultiselectComponents(QList<GridObject*> objects, GridObject* objectToMove,
+                                   int diffXAfterMoving, int diffYAfterMoving);
 
 
 
@@ -93,12 +93,12 @@ public:
     Component* duplicateComponentWithoutUndo(Component* componentToDuplicate, int xPosition, int yPosition);
     void addConnectionWithoutUndo(Connection* connection);
     Connection* addConnectionWithoutUndo(ComponentPort componentPortA, ComponentPort componentPortB);
-    Description* addDescriptionFieldWithoutUndo(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
-    void addDescriptionFieldWithoutUndo(Description* descriptionFieldToAdd);
+    Description* addDescriptionWithoutUndo(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
+    void addDescriptionWithoutUndo(Description* descriptionFieldToAdd);
     QList<Connection*> deleteComponentWithoutUndoAndGetDeletedConnections(Component* component);
     void deleteConnectionWithoutUndo(Connection* connection);
     void deleteDescriptionWithoutUndo(Description* description);
-    void moveComponentWithoutUndo(Component* componentToMove, Description* descriptionToMove , QPointF gridPosition);
+    void moveComponentWithoutUndo(GridObject* objectToMove, QPointF gridPosition);
     void editComponentWithoutUndo(Component* componentToEdit, QString newName, long double newValue);
     void turnComponentRightWithoutUndo(Component* componentToTurn);
 
@@ -106,19 +106,20 @@ public:
 
     //getter
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
-    Component* getComponentAtPosition(QPointF scenePosition);
-    Description* getDescriptionAtPosition(QPointF scenePosition);
+
+    GridObject* getObjectAtPosition(QPointF scenePosition);
     bool hasObjectAtPosition(QPointF scenePosition);
     Connection* getConnectionAtPosition(QPointF gridposition);
     QList<Component*> getComponents(void) {return _components;}
-    QList<Connection*> getConnections(void) {return _connections;}
     QList<Description*> getDescriptions(void) {return _descriptions;}
+    QList<GridObject*> getObjects(void) {return _objects;}
+    QList<Connection*> getConnections(void) {return _connections;}
     QString getFileName(void);
     long double getResistanceValue(void) {return _resistanceValue;}
     bool isLoading(void) {return _isLoading;}
     QUndoStack* getUndoStack(void) {return _undoStack;}
     QString getVoltageAndCurrentInformation(void);
-    QList<Component*> getSelectedComponents(void);
+    QList<GridObject*> getSelectedObjects(void);
     QList<Description*> getSelectedDescriptionFields(void);
 
     bool hasChangedDocument(void);
@@ -140,11 +141,13 @@ private:
     int _powerSupplyCount = 0;
     int _descriptionCount = 0;
 
-    void addObject(Component* component);
+    void addObject(GridObject* component);
 
     QList<Component*>        _components;
-    QList<Connection*>       _connections;
     QList<Description*> _descriptions;
+    QList<GridObject*>      _objects;
+
+    QList<Connection*>       _connections;
     QGraphicsScene*          _graphics = nullptr;
     FileManager*             _manager = nullptr;
     QUndoStack*              _undoStack;

@@ -985,8 +985,11 @@ NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QLis
     {
         if(component->isSelected() && component != componentToMove)
         {
-            QPointF* newPosition = new QPointF(component->getXPosition() + diffXAfterMoving,
-                                               component->getYPosition() + diffYAfterMoving);
+            int xPosition = component->getPosition().x();
+            int yPosition = component->getPosition().y();
+
+            QPointF* newPosition = new QPointF(xPosition + diffXAfterMoving,
+                                               yPosition + diffYAfterMoving);
             if(hasObjectAtPosition(*newPosition))
             {
                 if(getComponentAtPosition(*newPosition) != nullptr &&
@@ -1010,8 +1013,10 @@ NetworkGraphics::moveMultiselectComponents(QList<Component*> componentList, QLis
     {
         if(descriptionfield->isSelected() && descriptionfield != descriptionToMove)
         {
-            QPointF* newPosition = new QPointF(descriptionfield->getXPosition() + diffXAfterMoving,
-                                               descriptionfield->getYPosition() + diffYAfterMoving);
+            int xPosition = descriptionfield->getPosition().x();
+            int yPosition = descriptionfield->getPosition().y();
+            QPointF* newPosition = new QPointF(xPosition + diffXAfterMoving,
+                                               yPosition + diffYAfterMoving);
             if(hasObjectAtPosition(*newPosition))
             {
                 if(getComponentAtPosition(*newPosition) != nullptr &&
@@ -1181,7 +1186,7 @@ void NetworkGraphics::deselectAllItems(void)
 
     for (Description* descriptionfield : getDescriptions())
     {
-        descriptionfield->setIsSelected(false);
+        descriptionfield->setSelected(false);
     }
 
     for (Connection* connection : getConnections())
@@ -1208,7 +1213,7 @@ void NetworkGraphics::selectObjectsAtPosition(QPointF scenePosition)
     }
     else if(hasFoundDescription)
     {
-        foundDescription->setIsSelected(true);
+        foundDescription->setSelected(true);
     }
     else if(hasFoundConnection)
     {

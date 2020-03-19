@@ -95,8 +95,8 @@ QJsonObject FileManager::saveComponent(Component* component)
     c.insert("type", component->getComponentTypeInt());
     c.insert("id", component->getId());
     c.insert("name", component->getName());
-    c.insert("xPos", component->getXPosition());
-    c.insert("yPos", component->getYPosition());
+    c.insert("xPos", component->getPosition().x());
+    c.insert("yPos", component->getPosition().y());
     c.insert("isVertical", component->isVertical());
     Resistor* resistor = dynamic_cast<Resistor*>(component);
     bool isResistor = (nullptr != resistor);
@@ -128,8 +128,8 @@ QJsonObject FileManager::saveDescription(Description *description)
     QJsonObject df;
     df.insert("type", "Description");
     df.insert("id", description->getId());
-    df.insert("xPos", description->getXPosition());
-    df.insert("yPos", description->getYPosition());
+    df.insert("xPos", description->getPosition().x());
+    df.insert("yPos", description->getPosition().y());
     df.insert("text", description->getText());
     return df;
 }

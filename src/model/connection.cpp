@@ -199,16 +199,15 @@ void Connection::paintHitbox(QPainter* painter)
 
 bool Connection::isThereAComponentOrADescription(int x, int y)
 {
-    QPointF scenePosition = QPointF(x, y);
-    return _model->getComponentAtPosition(scenePosition) != nullptr || _model->getDescriptionAtPosition(scenePosition) != nullptr;
+    return getComponentAtPosition(x, y) != nullptr || getDescriptionAtPosition(x, y) != nullptr;
 }
 
 Component* Connection::getComponentAtPosition(int x, int y)
 {
     for (Component* component : _model->getComponents())
     {
-        bool equalX = (component->getXPosition() == x);
-        bool equalY = (component->getYPosition() == y);
+        bool equalX = (component->getPosition().x() == x);
+        bool equalY = (component->getPosition().y() == y);
         if (equalX && equalY)
         {
             return component;
@@ -221,8 +220,8 @@ Description* Connection::getDescriptionAtPosition(int x, int y)
 {
     for (Description* description : _model->getDescriptions())
     {
-        bool equalX = (description->getXPosition() == x);
-        bool equalY = (description->getYPosition() == y);
+        bool equalX = (description->getPosition().x() == x);
+        bool equalY = (description->getPosition().y() == y);
         if (equalX && equalY)
         {
             return description;

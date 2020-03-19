@@ -142,7 +142,7 @@ CommandMoveComponent::CommandMoveComponent(NetworkGraphics* model, Component* co
     }
     else if (descriptionToMove != nullptr)
     {
-        _gridDescriptionStartPosition = QPointF(descriptionToMove->getXPosition(), descriptionToMove->getYPosition());
+        _gridDescriptionStartPosition = descriptionToMove->getPosition();
     }
 }
 

@@ -34,25 +34,27 @@ Resistor::Resistor(QString name, long double valueResistance, int x, int y, bool
 void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option,
                      [[maybe_unused]] QWidget* widget)
 {
+    int xPosition = _position.x();
+    int yPosition = _position.y();
 
     if(_isVertical)
     {
         //Resistor has length of 120 and width of 60
-        painter->drawRect(_xPosition - (Defines::gridLength * 0.2), _yPosition - (Defines::gridLength * 0.3),
+        painter->drawRect(xPosition - (Defines::gridLength * 0.2), yPosition - (Defines::gridLength * 0.3),
                           (Defines::gridLength * 0.4), Defines::gridLength * 0.6);
-        painter->drawLine(_xPosition, _yPosition - (Defines::gridLength * 0.3), _xPosition,
-                          _yPosition - (Defines::gridLength / 2) + Connection::_circleRadius);
-        painter->drawLine(_xPosition, _yPosition + (Defines::gridLength * 0.3), _xPosition,
-                          _yPosition + (Defines::gridLength / 2) - Connection::_circleRadius);
+        painter->drawLine(xPosition, yPosition - (Defines::gridLength * 0.3), xPosition,
+                          yPosition - (Defines::gridLength / 2) + Connection::_circleRadius);
+        painter->drawLine(xPosition, yPosition + (Defines::gridLength * 0.3), xPosition,
+                          yPosition + (Defines::gridLength / 2) - Connection::_circleRadius);
     }
     else
     {
-        painter->drawRect(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.2),
+        painter->drawRect(xPosition - (Defines::gridLength * 0.3), yPosition - (Defines::gridLength * 0.2),
                           (Defines::gridLength * 0.6), Defines::gridLength * 0.4);
-        painter->drawLine(_xPosition - (Defines::gridLength * 0.3), _yPosition + 0,
-                          _xPosition - (Defines::gridLength / 2) + Connection::_circleRadius, _yPosition + 0);
-        painter->drawLine(_xPosition + (Defines::gridLength * 0.3), _yPosition + 0,
-                          _xPosition + (Defines::gridLength / 2) - Connection::_circleRadius, _yPosition + 0);
+        painter->drawLine(xPosition - (Defines::gridLength * 0.3), yPosition + 0,
+                          xPosition - (Defines::gridLength / 2) + Connection::_circleRadius, yPosition + 0);
+        painter->drawLine(xPosition + (Defines::gridLength * 0.3), yPosition + 0,
+                          xPosition + (Defines::gridLength / 2) - Connection::_circleRadius, yPosition + 0);
     }
 
     if(_isSelected)
@@ -66,20 +68,23 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
 
 void Resistor::setLabelPositions(QPainter* painter)
 {
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+
     QRectF posText;
     QRectF posValue;
     if(_isVertical)
     {
-        posText = QRectF(QPointF(_xPosition - (Defines::gridLength * 0.2), _yPosition - (Defines::gridLength * 0.45)),
+        posText = QRectF(QPointF(xPosition - (Defines::gridLength * 0.2), yPosition - (Defines::gridLength * 0.45)),
                        QSizeF(Defines::gridLength * 0.7, Defines::gridLength * 0.2));
-        posValue = QRectF(QPointF(_xPosition - (Defines::gridLength * 0.5), _yPosition + (Defines::gridLength * 0.315)),
+        posValue = QRectF(QPointF(xPosition - (Defines::gridLength * 0.5), yPosition + (Defines::gridLength * 0.315)),
                           QSizeF(Defines::gridLength * 0.9, Defines::gridLength * 0.2));;
     }
     else
     {
-        posText = QRectF(QPointF(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.35)),
+        posText = QRectF(QPointF(xPosition - (Defines::gridLength * 0.3), yPosition - (Defines::gridLength * 0.35)),
                 QSizeF(Defines::gridLength * 0.6, Defines::gridLength * 0.2));
-        posValue = QRectF(QPointF(_xPosition - (Defines::gridLength * 0.3), _yPosition + (Defines::gridLength * 0.215)),
+        posValue = QRectF(QPointF(xPosition - (Defines::gridLength * 0.3), yPosition + (Defines::gridLength * 0.215)),
                         QSizeF(Defines::gridLength * 0.6, Defines::gridLength * 0.2));
     }
 

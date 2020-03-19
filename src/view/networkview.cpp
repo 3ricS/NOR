@@ -110,7 +110,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             {
                 if ((_selectedComponentToMove != nullptr && _selectedComponentToMove->getPosition() != gridPosition) ||
                     (_selectedDescriptionToMove != nullptr &&
-                     QPointF(_selectedDescriptionToMove->getXPosition(), _selectedDescriptionToMove->getYPosition()) !=
+                     QPointF(_selectedDescriptionToMove->getPosition().x(), _selectedDescriptionToMove->getPosition().y()) !=
                      gridPosition))
                 {
                     int previousComoponentXPosition = 0;
@@ -120,26 +120,26 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
                     if (_selectedComponentToMove != nullptr)
                     {
-                        previousComoponentXPosition = _selectedComponentToMove->getXPosition();
-                        previousComoponentYPosition = _selectedComponentToMove->getYPosition();
+                        previousComoponentXPosition = _selectedComponentToMove->getPosition().x();
+                        previousComoponentYPosition = _selectedComponentToMove->getPosition().y();
                     }
                     else if (_selectedDescriptionToMove != nullptr)
                     {
-                        previousComoponentXPosition = _selectedDescriptionToMove->getXPosition();
-                        previousComoponentYPosition = _selectedDescriptionToMove->getYPosition();
+                        previousComoponentXPosition = _selectedDescriptionToMove->getPosition().x();
+                        previousComoponentYPosition = _selectedDescriptionToMove->getPosition().y();
                     }
 
                     _model->moveComponent(_selectedComponentToMove, _selectedDescriptionToMove, gridPosition);
 
                     if (_selectedComponentToMove != nullptr)
                     {
-                        diffXAfterMoving = _selectedComponentToMove->getXPosition() - previousComoponentXPosition;
-                        diffYAfterMoving = _selectedComponentToMove->getYPosition() - previousComoponentYPosition;
+                        diffXAfterMoving = _selectedComponentToMove->getPosition().x() - previousComoponentXPosition;
+                        diffYAfterMoving = _selectedComponentToMove->getPosition().y() - previousComoponentYPosition;
                     }
                     else if (_selectedDescriptionToMove != nullptr)
                     {
-                        diffXAfterMoving = _selectedDescriptionToMove->getXPosition() - previousComoponentXPosition;
-                        diffYAfterMoving = _selectedDescriptionToMove->getYPosition() - previousComoponentYPosition;
+                        diffXAfterMoving = _selectedDescriptionToMove->getPosition().x() - previousComoponentXPosition;
+                        diffYAfterMoving = _selectedDescriptionToMove->getPosition().y() - previousComoponentYPosition;
                     }
 
                     _model->moveMultiselectComponents(_model->getComponents(), _model->getDescriptions(),
@@ -400,8 +400,8 @@ QPointF NetworkView::findScrollPosition(void)
         {
             if (c->getComponentTypeInt() == Component::Resistor)
             {
-                averageX += c->getXPosition();
-                averageY += c->getYPosition();
+                averageX += c->getPosition().x();
+                averageY += c->getPosition().y();
 
                 anzahlResistorAndDescriptions++;
             }
@@ -411,8 +411,8 @@ QPointF NetworkView::findScrollPosition(void)
     {
         for (Description* c : _model->getDescriptions())
         {
-            averageX += c->getXPosition();
-            averageY += c->getYPosition();
+            averageX += c->getPosition().x();
+            averageY += c->getPosition().y();
             anzahlResistorAndDescriptions++;
         }
     }
@@ -534,11 +534,14 @@ void NetworkView::duplicate(void)
     {
         if (component->isSelected())
         {
+            int xPosition = component->getPosition().x();
+            int yPosition = component->getPosition().y();
+
             int xWayToTheRight = Defines::gridLength;
-            if (lookingForFreeSpaceToDuplicate(component->getXPosition(), component->getYPosition(), xWayToTheRight))
+            if (lookingForFreeSpaceToDuplicate(xPosition, yPosition, xWayToTheRight))
             {
-                _model->duplicateComponent(component, component->getXPosition() + xWayToTheRight,
-                                           component->getYPosition());
+                _model->duplicateComponent(component, xPosition + xWayToTheRight,
+                                           yPosition);
             }
         }
     }
@@ -547,12 +550,15 @@ void NetworkView::duplicate(void)
     {
         if (description->isSelected())
         {
+            int xPosition = description->getPosition().x();
+            int yPosition = description->getPosition().y();
+
             int xWayToTheRight = Defines::gridLength;
-            if (lookingForFreeSpaceToDuplicate(description->getXPosition(), description->getYPosition(),
+            if (lookingForFreeSpaceToDuplicate(xPosition, yPosition,
                                                xWayToTheRight))
             {
-                _model->duplicateDescription(description, description->getXPosition() + xWayToTheRight,
-                                             description->getYPosition());
+                _model->duplicateDescription(description, xPosition + xWayToTheRight,
+                                             yPosition);
             }
         }
     }
@@ -609,8 +615,8 @@ void NetworkView::paste(void)
     }
     if (firstComp != nullptr && firstDescription != nullptr)
     {
-        xSpace = firstComp->getXPosition() - firstDescription->getXPosition();
-        ySpace = firstComp->getYPosition() - firstDescription->getYPosition();
+        xSpace = firstComp->getPosition().x() - firstDescription->getPosition().x();
+        ySpace = firstComp->getPosition().y() - firstDescription->getPosition().y();
     }
     for (Description* description : _copiedDescriptions)
     {
@@ -708,8 +714,8 @@ void NetworkView::calculateDistanceToNextComponent(int& i, Component* firstComp,
 {
     if (i < _copiedComponents.count() && firstComp != nullptr)
     {
-        xSpace = firstComp->getXPosition() - _copiedComponents[i]->getXPosition();
-        ySpace = firstComp->getYPosition() - _copiedComponents[i]->getYPosition();
+        xSpace = firstComp->getPosition().x() - _copiedComponents[i]->getPosition().x();
+        ySpace = firstComp->getPosition().y() - _copiedComponents[i]->getPosition().y();
     }
     else if (i == _copiedComponents.count())
     {
@@ -723,8 +729,8 @@ void NetworkView::calculateDistanceToNextDescription(int& i, Component* firstCom
 {
     if (i < _copiedDescriptions.count() && firstComp != nullptr)
     {
-        xSpace = firstComp->getXPosition() - _copiedDescriptions[i]->getXPosition();
-        ySpace = firstComp->getYPosition() - _copiedDescriptions[i]->getYPosition();
+        xSpace = firstComp->getPosition().x() - _copiedDescriptions[i]->getPosition().x();
+        ySpace = firstComp->getPosition().y() - _copiedDescriptions[i]->getPosition().y();
     }
     i++;
 }

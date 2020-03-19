@@ -42,7 +42,8 @@ SOURCES += \
         model/componentport.cpp \
         model/rowpiece.cpp \
         model/commands.cpp \
-        view/powerview.cpp
+        view/powerview.cpp \
+        model/gridobject.cpp
 
 HEADERS += \
         defines.h \
@@ -61,7 +62,8 @@ HEADERS += \
         model/node.h \
         model/rowpiece.h \
         model/commands.h \
-        view/powerview.h
+        view/powerview.h \
+        model/gridobject.h
 
 FORMS += \
         view/editview.ui \

@@ -30,17 +30,20 @@ PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, double vol
 void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option,
                         [[maybe_unused]] QWidget* widget)
 {
-    painter->drawEllipse(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.3),
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+
+    painter->drawEllipse(xPosition - (Defines::gridLength * 0.3), yPosition - (Defines::gridLength * 0.3),
                          Defines::gridLength * 0.6, Defines::gridLength * 0.6);
     if(_isVertical)
     {
-        painter->drawLine(_xPosition, _yPosition + (Defines::gridLength / 2) - Connection::_circleRadius,
-                _xPosition,_yPosition - (Defines::gridLength / 2) + Connection::_circleRadius);
+        painter->drawLine(xPosition, yPosition + (Defines::gridLength / 2) - Connection::_circleRadius,
+                xPosition,yPosition - (Defines::gridLength / 2) + Connection::_circleRadius);
     }
     else
     {
-        painter->drawLine(_xPosition - (Defines::gridLength / 2) + Connection::_circleRadius, _yPosition,
-                          _xPosition + (Defines::gridLength / 2) - Connection::_circleRadius, _yPosition);
+        painter->drawLine(xPosition - (Defines::gridLength / 2) + Connection::_circleRadius, yPosition,
+                          xPosition + (Defines::gridLength / 2) - Connection::_circleRadius, yPosition);
     }
     if(_isSelected)
     {
@@ -56,7 +59,10 @@ void PowerSupply::setLabelPositions(QPainter* painter)
     q.setPixelSize(13);
     painter->setFont(q);
 
-    QRectF posName(QPointF(_xPosition - (Defines::gridLength * 0.3), _yPosition - (Defines::gridLength * 0.43)),
+
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+    QRectF posName(QPointF(xPosition - (Defines::gridLength * 0.3), yPosition - (Defines::gridLength * 0.43)),
                    QSize(Defines::gridLength * 0.7, 20));
     painter->drawText(posName, Qt::AlignLeft, _name);
     double voltageWithoutUnit;
@@ -83,12 +89,12 @@ void PowerSupply::setLabelPositions(QPainter* painter)
     QRectF posValue;
     if(_isVertical)
     {
-        posValue = QRectF(QPointF(_xPosition - (Defines::gridLength * 0.4), _yPosition + (Defines::gridLength * 0.32)),
+        posValue = QRectF(QPointF(xPosition - (Defines::gridLength * 0.4), yPosition + (Defines::gridLength * 0.32)),
                           QSize(Defines::gridLength * 0.8, 20));
     }
     else
     {
-        posValue = QRectF(QPointF(_xPosition - (Defines::gridLength * 0.4), _yPosition + (Defines::gridLength * 0.32)),
+        posValue = QRectF(QPointF(xPosition - (Defines::gridLength * 0.4), yPosition + (Defines::gridLength * 0.32)),
                           QSize(Defines::gridLength * 0.7, 20));
     }
 

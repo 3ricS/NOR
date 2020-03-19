@@ -2,8 +2,7 @@
 #include "description.h"
 
 Description::Description(int x, int y, int id, QString text)
-    : QGraphicsItem(nullptr),
-    _xPosition(x), _yPosition(y), _id(id)
+    : GridObject(QPointF(x, y), id)
 {
     if(text != "")
     {
@@ -11,15 +10,12 @@ Description::Description(int x, int y, int id, QString text)
     }
 }
 
-void Description::setPosition(QPointF gridPosition)
-{
-    _xPosition = gridPosition.x();
-    _yPosition = gridPosition.y();
-}
 
 QRectF Description::boundingRect(void) const
 {
-    return QRectF (_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+    return QRectF (xPosition - (Defines::gridLength / 2), yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }
 
 void Description::paint(QPainter *painter, [[maybe_unused]] const QStyleOptionGraphicsItem *option, [[maybe_unused]] QWidget *widget)
@@ -27,7 +23,11 @@ void Description::paint(QPainter *painter, [[maybe_unused]] const QStyleOptionGr
     QFont q;
     q.setPixelSize(13);
     painter->setFont(q);
-    painter->drawText(QRectF (_xPosition - (Defines::gridLength * 0.4), _yPosition - (Defines::gridLength * 0.4), (Defines::gridLength * 0.8), (Defines::gridLength * 0.8)), _text);
+
+
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+    painter->drawText(QRectF (xPosition - (Defines::gridLength * 0.4), yPosition - (Defines::gridLength * 0.4), (Defines::gridLength * 0.8), (Defines::gridLength * 0.8)), _text);
 
     if(_isSelected)
     {
@@ -48,10 +48,7 @@ void Description::paintHighlightRect(QPainter *painter)
     brush.setColor(QColor(255, 0, 0, 55));
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     painter->setBrush(brush);
-    painter->drawRect(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
-}
-
-void Description::setIsSelected(bool isSelected)
-{
-    _isSelected = isSelected;
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+    painter->drawRect(xPosition - (Defines::gridLength / 2), yPosition - (Defines::gridLength / 2), Defines::gridLength, Defines::gridLength);
 }

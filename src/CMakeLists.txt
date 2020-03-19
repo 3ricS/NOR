@@ -62,7 +62,7 @@ set(SOURCES
         model/calculator.cpp
         model/rowpiece.cpp
         model/commands.cpp
-        )
+        model/gridobject.cpp model/gridobject.h)
 
 # set .ui files
 set(UIS

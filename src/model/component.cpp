@@ -4,9 +4,8 @@
 #include <QDebug>
 
 Component::Component(int x, int y, bool isVertical, QString name, double voltage, ComponentType componentTyp, int id)
-        : QGraphicsItem(nullptr),
-          _xPosition(x), _yPosition(y), _isVertical(isVertical),
-          _name(name), _voltage(voltage), _id(id),
+        : GridObject(QPointF(x, y), id),
+        _isVertical(isVertical), _name(name), _voltage(voltage),
           _componentType(componentTyp)
 {
     if (isVertical)
@@ -26,7 +25,9 @@ Component::Component(int x, int y, bool isVertical, QString name, double voltage
  */
 QRectF Component::boundingRect(void) const
 {
-    return QRectF(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2), Defines::gridLength,
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+    return QRectF(xPosition - (Defines::gridLength / 2), yPosition - (Defines::gridLength / 2), Defines::gridLength,
                   Defines::gridLength);
 }
 
@@ -66,14 +67,16 @@ int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
  */
 Component::Port Component::getPort(QPointF position) const
 {
-    bool xEqualPortA = (position.x() > getPortPositionXOrY(_xPosition, Port::A, true) - _hitBoxSize &&
-                        position.x() < getPortPositionXOrY(_xPosition, Port::A, true) + _hitBoxSize);
-    bool yEqualPortA = (position.y() > getPortPositionXOrY(_yPosition, Port::A, false) - _hitBoxSize &&
-                        position.y() < getPortPositionXOrY(_yPosition, Port::A, false) + _hitBoxSize);
-    bool xEqualPortB = (position.x() > getPortPositionXOrY(_xPosition, Port::B, true) - _hitBoxSize &&
-                        position.x() < getPortPositionXOrY(_xPosition, Port::B, true) + _hitBoxSize);
-    bool yEqualPortB = (position.y() > getPortPositionXOrY(_yPosition, Port::B, false) - _hitBoxSize &&
-                        position.y() < getPortPositionXOrY(_yPosition, Port::B, false) + _hitBoxSize);
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+    bool xEqualPortA = (position.x() > getPortPositionXOrY(xPosition, Port::A, true) - _hitBoxSize &&
+                        position.x() < getPortPositionXOrY(xPosition, Port::A, true) + _hitBoxSize);
+    bool yEqualPortA = (position.y() > getPortPositionXOrY(yPosition, Port::A, false) - _hitBoxSize &&
+                        position.y() < getPortPositionXOrY(yPosition, Port::A, false) + _hitBoxSize);
+    bool xEqualPortB = (position.x() > getPortPositionXOrY(xPosition, Port::B, true) - _hitBoxSize &&
+                        position.x() < getPortPositionXOrY(xPosition, Port::B, true) + _hitBoxSize);
+    bool yEqualPortB = (position.y() > getPortPositionXOrY(yPosition, Port::B, false) - _hitBoxSize &&
+                        position.y() < getPortPositionXOrY(yPosition, Port::B, false) + _hitBoxSize);
 
     if (xEqualPortA && yEqualPortA)
     {
@@ -135,25 +138,17 @@ void Component::paintHighlightRect(QPainter* painter)
     brush.setColor(QColor(255, 0, 0, 55));
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     painter->setBrush(brush);
-    painter->drawRect(_xPosition - (Defines::gridLength / 2), _yPosition - (Defines::gridLength / 2),
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+    painter->drawRect(xPosition - (Defines::gridLength / 2), yPosition - (Defines::gridLength / 2),
                       Defines::gridLength, Defines::gridLength);
 }
 
 QPointF Component::getPortPosition(Component::Port port) const
 {
-    return QPointF(getPortPositionXOrY(_xPosition, port, true), getPortPositionXOrY(_yPosition, port, false));
-}
-
-void Component::setPosition(QPointF gridPosition)
-{
-    _xPosition = gridPosition.toPoint().x();
-    _yPosition = gridPosition.toPoint().y();
-}
-
-void Component::setSelected(bool isSelected)
-{
-    _isSelected = isSelected;
-
+    int xPosition = _position.x();
+    int yPosition = _position.y();
+    return QPointF(getPortPositionXOrY(xPosition, port, true), getPortPositionXOrY(yPosition, port, false));
 }
 
 void Component::setOrientation(Component::Orientation newOrientation)

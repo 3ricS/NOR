@@ -16,8 +16,9 @@
 #include <QPainter>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
+#include "gridobject.h"
 
-class Component : public QGraphicsItem
+class Component : public GridObject
 {
 public:
     enum ComponentType{Resistor, PowerSupply};
@@ -34,26 +35,19 @@ public:
     //getter
     int getComponentTypeInt(void) const {return _componentType;}
     ComponentType getComponentType(void) const {return _componentType;}
-    int getXPosition(void) const {return _xPosition;}
-    int getYPosition(void) const {return _yPosition;}
     QString getName(void) const {return _name;}
     bool isVertical(void) const {return _isVertical;}
-    bool isSelected(void) const {return  _isSelected;}
     double getVoltage(void) {return _voltage;}
     double getAmp(void) {return _amp;}
 
     Component::Port getPort(QPointF position) const;
     QPointF getPortPosition(Port port) const;
-    int getId(void) {return _id;}
     Orientation getOrientation(void) {return _orientation;}
-    QPointF getPosition(void) {return QPointF(_xPosition, _yPosition);}
 
     //setter
     void setVertical(bool orientation) {_isVertical = orientation;}
     void setOrientation(Component::Orientation newOrientation);
     void setName(QString name) {_name = name;}
-    void setPosition(QPointF gridPosition);
-    void setSelected(bool isSelected);
     void setVoltage(double voltage) {_voltage = voltage;}
     void setAmp(double amp) {_amp = amp;}
 
@@ -61,10 +55,8 @@ public:
 
 protected:
     //Variables
-    int  _xPosition;
-    int  _yPosition;
+    //TODO: _isVertical entfernen
     bool _isVertical;
-    bool _isSelected = false;
     Orientation _orientation;
 
     QString     _name;
@@ -81,8 +73,6 @@ private:
     int getPortPositionXOrY(int positionValue, Port port, bool isX) const;
     QString getDisplayedValueString(double value, ComponentType componentType);
     QString getScaledValue(double& valueWithoutUnit);
-
-    const int _id;
 
     //_componentTyp gets the type of the object
     const ComponentType _componentType;

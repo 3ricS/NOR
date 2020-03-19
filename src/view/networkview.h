@@ -40,7 +40,6 @@ public slots:
     void focus(void);
 
 protected:
-    void keyPressEvent(QKeyEvent* event) override;
     void keyReleaseEvent(QKeyEvent* event) override;
     void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
     void mousePressEvent(QMouseEvent *event) override;
@@ -85,7 +84,6 @@ private:
     NetworkGraphics*         _model  = nullptr;
 
     bool                     _mouseIsPressed = false;
-    bool                     _controlIsPressed = false;
 
     QList<Component*>        _tempComponentListForConnections;
     ComponentPort*           _connectionStartComponentPort = nullptr;

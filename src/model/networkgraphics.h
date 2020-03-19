@@ -43,6 +43,8 @@ public:
 
     //Selection
     void deselectAllItems(void);
+    void deselectAllConnections(void);
+    void deselctAllGridObjects(void);
     void selectObjectsAtPosition(QPointF scenePosition);
     void selectObjectsInArea(QRectF selectionArea);
     QList<Component*> findSelectedComponents(void);
@@ -135,6 +137,9 @@ signals:
 
 
 private:
+    QList<GridObject*> getGridObjectsInArea(QRectF selectionArea);
+    QList<Connection*> getConnectionsInArea(QRectF selectionArea);
+
     int _resistorCount = 0;
     int _powerSupplyCount = 0;
     int _descriptionCount = 0;

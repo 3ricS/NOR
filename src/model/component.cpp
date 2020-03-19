@@ -140,8 +140,9 @@ void Component::paintHighlightRect(QPainter* painter)
     painter->setBrush(brush);
     int xPosition = _position.x();
     int yPosition = _position.y();
-    painter->drawRect(xPosition - (Defines::gridLength / 2), yPosition - (Defines::gridLength / 2),
-                      Defines::gridLength, Defines::gridLength);
+    double relactionHighlightToGridSize = 0.93;
+    painter->drawRect(xPosition - (Defines::gridLength / 2 * relactionHighlightToGridSize), yPosition - (Defines::gridLength / 2 * relactionHighlightToGridSize),
+                      Defines::gridLength * relactionHighlightToGridSize, Defines::gridLength * relactionHighlightToGridSize);
 }
 
 QPointF Component::getPortPosition(Component::Port port) const

@@ -133,14 +133,13 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                 }
             }
 
-            if (_selectedObjectToMove == nullptr)
+            bool hasStartedMoving = (_selectedObjectToMove != nullptr);
+            if (!hasStartedMoving)
             {
-                //Multiselection der Bauteile
                 multiselect(scenePosition, true);
             }
             _selectedObjectToMove = nullptr;
 
-            _model->selectObjectsAtPosition(scenePosition);
             _model->update();
             changeOverrideCursor();
         }
@@ -362,7 +361,7 @@ void NetworkView::rotateComponent(QPointF scenePosition)
     }
 }
 
-bool NetworkView::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight)
+bool NetworkView::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWaytoTheRight)
 {
     bool foundUnusedSpace = false;
     while (true)
@@ -640,20 +639,17 @@ void NetworkView::leaveEvent(QEvent* event)
     deleteSampleObjectsAndHighlights();
 }
 
-void NetworkView::keyPressEvent(QKeyEvent* event)
-{
-    if (event->key() == Qt::Key_Control)
-    {
-        qDebug() << "Sttrg gedrückt";
-        _controlIsPressed = true;
-    }
-
-    QGraphicsView::keyPressEvent(event);
-}
 
 void NetworkView::multiselect(QPointF endOfSelectionPosition, bool isEndOfSelection)
 {
     QRectF selectionArea = QRectF(_firstPositionMultiselect, endOfSelectionPosition);
+    int selectionAreaSize = selectionArea.height() * selectionArea.width();
+    bool selectionAreaHasNoExpansion = (0 == selectionAreaSize);
+    if (selectionAreaHasNoExpansion)
+    {
+        selectionArea.setSize(QSize(1, 1));
+    }
+
     bool selectionAreaChanged = (_multiselectRect != nullptr && selectionArea != _multiselectRect->boundingRect());
     if (selectionAreaChanged || isEndOfSelection)
     {
@@ -666,7 +662,8 @@ void NetworkView::multiselect(QPointF endOfSelectionPosition, bool isEndOfSelect
         _multiselectRect = _model->addRect(selectionArea);
     }
 
-    if (!_controlIsPressed)
+    bool controlIsPressed = QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
+    if (!controlIsPressed)
     {
         _model->deselectAllItems();
     }
@@ -713,7 +710,7 @@ QList<Description*> NetworkView::findSelectedDescription(void)
     return descriptionList;
 }
 
-void NetworkView::calculateDistanceToNextComponent(int& i, Component* firstComp, int& xSpace, int& ySpace)
+void NetworkView::calculateDistanceToNextComponent(int &i, Component* firstComp, int &xSpace, int &ySpace)
 {
     if (i < _copiedComponents.count() && firstComp != nullptr)
     {
@@ -728,7 +725,7 @@ void NetworkView::calculateDistanceToNextComponent(int& i, Component* firstComp,
     i++;
 }
 
-void NetworkView::calculateDistanceToNextDescription(int& i, Component* firstComp, int& xSpace, int& ySpace)
+void NetworkView::calculateDistanceToNextDescription(int &i, Component* firstComp, int &xSpace, int &ySpace)
 {
     if (i < _copiedDescriptions.count() && firstComp != nullptr)
     {
@@ -895,8 +892,8 @@ void NetworkView::showSampleDescription(QPointF scenePosition)
 void NetworkView::startMultiSelection(QPointF scenePosition)
 {
     _firstPositionMultiselect = scenePosition;
-    qDebug() << _controlIsPressed;
-    if (!_controlIsPressed)
+    bool controlIsPressed = QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
+    if (!controlIsPressed)
     {
         _model->deselectAllItems();
     }
@@ -911,11 +908,6 @@ void NetworkView::keyReleaseEvent(QKeyEvent* event)
         _model->deselectAllItems();
         deleteSampleObjectsAndHighlights();
         emit changeToSelectionMode();
-    }
-    else if (event->key() == Qt::Key_Control)
-    {
-        qDebug() << "Strg losgelassen";
-        _controlIsPressed = false;
     }
 }
 

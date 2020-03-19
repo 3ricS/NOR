@@ -104,13 +104,11 @@ Connection* NetworkGraphics::getConnectionAtPosition(QPointF gridposition)
 {
     for (Connection* connection : _connections)
     {
-        for (QRect* hitBox : connection->getHitboxList())
+        for (QRect hitBox : connection->getHitBoxes())
         {
-            bool equalX = ((gridposition.toPoint().x() >= hitBox->x()) &&
-                           (gridposition.toPoint().x() <= (hitBox->x() + hitBox->width())));
-            bool equalY = ((gridposition.toPoint().y() >= hitBox->y()) &&
-                           (gridposition.toPoint().y() <= (hitBox->y() + hitBox->height())));
-            if (equalX && equalY)
+            int x = gridposition.x();
+            int y = gridposition.y();
+            if (hitBox.contains(x, y))
             {
                 return connection;
             }
@@ -1088,6 +1086,10 @@ void NetworkGraphics::selectObjectsAtPosition(QPointF scenePosition)
     {
         foundConnection->setSelected(true);
     }
+    else
+    {
+        deselectAllItems();
+    }
 }
 
 QPointF NetworkGraphics::mapSceneToGrid(QPointF scenePosition)
@@ -1150,12 +1152,23 @@ void NetworkGraphics::turnSelectedComponentsRight(void)
 
 void NetworkGraphics::selectObjectsInArea(QRectF selectionArea)
 {
-    for (GridObject* gridObject : _objects)
+    QList<GridObject*> foundObjects = getGridObjectsInArea(selectionArea);
+    for (GridObject* gridObject : foundObjects)
     {
-        bool isInSelectionArea = selectionArea.intersects(gridObject->boundingRect());
-        if(isInSelectionArea)
+        gridObject->setSelected(true);
+    }
+
+    bool hasFoundObjects = !foundObjects.isEmpty();
+    if (hasFoundObjects)
+    {
+        deselectAllConnections();
+    }
+    else
+    {
+        deselctAllGridObjects();
+        for (Connection* connection : getConnectionsInArea(selectionArea))
         {
-            gridObject->setSelected(isInSelectionArea);
+            connection->setSelected(true);
         }
     }
     update();
@@ -1199,4 +1212,51 @@ Component* NetworkGraphics::getComponentById(int id)
         }
     }
     return nullptr;
+}
+
+void NetworkGraphics::deselectAllConnections(void)
+{
+    for (Connection* connection : _connections)
+    {
+        connection->setSelected(false);
+    }
+}
+
+QList<GridObject*> NetworkGraphics::getGridObjectsInArea(QRectF selectionArea)
+{
+    QList<GridObject*> gridObjects;
+    for (GridObject* gridObject : _objects)
+    {
+        bool isInSelectionArea = selectionArea.intersects(gridObject->boundingRect());
+        if (isInSelectionArea)
+        {
+            gridObjects.append(gridObject);
+        }
+    }
+    return gridObjects;
+}
+
+QList<Connection*> NetworkGraphics::getConnectionsInArea(QRectF selectionArea)
+{
+    QList<Connection*> connections;
+    for (Connection* connection : _connections)
+    {
+        for (QRect connectionHitBox : connection->getHitBoxes())
+        {
+            bool isInSelectionArea = selectionArea.intersects(connectionHitBox);
+            if (isInSelectionArea)
+            {
+                connections.append(connection);
+            }
+        }
+    }
+    return connections;
+}
+
+void NetworkGraphics::deselctAllGridObjects(void)
+{
+    for (GridObject* gridObject : _objects)
+    {
+        gridObject->setSelected(false);
+    }
 }

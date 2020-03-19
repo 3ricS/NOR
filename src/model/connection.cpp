@@ -19,10 +19,6 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
                        [[maybe_unused]] QWidget* widget)
 {
     //TODO: Funktion mit mehreren Rückgabewerten für xStart, xEnd, ...
-    for (QRect* rect : _connectionHitbox)
-    {
-        delete rect;
-    }
     _connectionHitbox.clear();
     _startPoint = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
     _endPoint = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());
@@ -184,14 +180,14 @@ int Connection::pathAnalyse(bool horizontalBeforeVertical)
  */
 void Connection::paintHitbox(QPainter* painter)
 {
-    for (QRect* hitbox : _connectionHitbox)
+    for (QRect hitbox : _connectionHitbox)
     {
         QBrush brush;
         brush.setColor(QColor(255, 0, 0, 55));
         brush.setStyle(Qt::BrushStyle::SolidPattern);
         painter->setPen(Qt::NoPen);
         painter->setBrush(brush);
-        painter->drawRect(hitbox->x(), hitbox->y(), hitbox->width(), hitbox->height());
+        painter->drawRect(hitbox.x(), hitbox.y(), hitbox.width(), hitbox.height());
     }
 }
 
@@ -257,12 +253,12 @@ void Connection::drawLeftOrRight(int leftOrRight)
         {
             if (leftOrRight > 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, (Defines::gridLength / 2), 10);
+                QRect hitbox (_currentPoint.x(), _currentPoint.y() - 5, (Defines::gridLength / 2), 10);
                 _connectionHitbox.append(hitbox);
             }
             else
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y() - 5,
+                QRect hitbox(_currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y() - 5,
                                           (Defines::gridLength / 2), 10);
                 _connectionHitbox.append(hitbox);
             }
@@ -320,12 +316,12 @@ void Connection::drawUpOrDown(int upOrDown)
         {
             if (upOrDown > 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, (Defines::gridLength / 2));
+                QRect hitbox(_currentPoint.x() - 5, _currentPoint.y(), 10, (Defines::gridLength / 2));
                 _connectionHitbox.append(hitbox);
             }
             else
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - (Defines::gridLength / 2), 10,
+                QRect hitbox(_currentPoint.x() - 5, _currentPoint.y() - (Defines::gridLength / 2), 10,
                                           (Defines::gridLength / 2));
                 _connectionHitbox.append(hitbox);
             }
@@ -355,7 +351,7 @@ void Connection::dodgeComponent(void)
     {
         if (!_isDodgedBefore)
         {
-            QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, Defines::gridLength / 2, 10);
+            QRect hitbox(_currentPoint.x(), _currentPoint.y() - 5, Defines::gridLength / 2, 10);
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() + (Defines::gridLength / 2), _currentPoint.y());
@@ -364,7 +360,7 @@ void Connection::dodgeComponent(void)
         }
         if (_diffY < 0)
         {
-            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - Defines::gridLength, 10, Defines::gridLength);
+            QRect hitbox(_currentPoint.x() - 5, _currentPoint.y() - Defines::gridLength, 10, Defines::gridLength);
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(),
@@ -374,7 +370,7 @@ void Connection::dodgeComponent(void)
             if (!isThereAComponentOrADescription(_currentPoint.x() - (Defines::gridLength / 2),
                                                  _currentPoint.y() - (Defines::gridLength / 2)) || _diffY == 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y() - 5, (Defines::gridLength / 2), 10);
+                QRect hitbox(_currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y() - 5, (Defines::gridLength / 2), 10);
                 _connectionHitbox.append(hitbox);
 
                 _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y());
@@ -387,7 +383,7 @@ void Connection::dodgeComponent(void)
         }
         if (_diffY > 0)
         {
-            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, Defines::gridLength);
+            QRect hitbox(_currentPoint.x() - 5, _currentPoint.y(), 10, Defines::gridLength);
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(),
@@ -397,7 +393,7 @@ void Connection::dodgeComponent(void)
             if (!isThereAComponentOrADescription(_currentPoint.x() - (Defines::gridLength / 2),
                                                  _currentPoint.y() + (Defines::gridLength / 2)) || _diffY == 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y() - 5, (Defines::gridLength / 2), 10);
+                QRect hitbox(_currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y() - 5, (Defines::gridLength / 2), 10);
                 _connectionHitbox.append(hitbox);
 
                 _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() - (Defines::gridLength / 2), _currentPoint.y());
@@ -413,7 +409,7 @@ void Connection::dodgeComponent(void)
     {
         if (!_isDodgedBefore)
         {
-            QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y(), 10, (Defines::gridLength / 2));
+            QRect hitbox(_currentPoint.x() - 5, _currentPoint.y(), 10, (Defines::gridLength / 2));
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() + (Defines::gridLength / 2));
@@ -422,7 +418,7 @@ void Connection::dodgeComponent(void)
         }
         if (_diffX < 0)
         {
-            QRect* hitbox = new QRect(_currentPoint.x() - Defines::gridLength, _currentPoint.y() - 5,
+            QRect hitbox(_currentPoint.x() - Defines::gridLength, _currentPoint.y() - 5,
                                       Defines::gridLength, 10);
             _connectionHitbox.append(hitbox);
 
@@ -433,7 +429,7 @@ void Connection::dodgeComponent(void)
             if (!isThereAComponentOrADescription(_currentPoint.x() - (Defines::gridLength / 2),
                                                  _currentPoint.y() - (Defines::gridLength / 2)) || _diffX == 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - (Defines::gridLength / 2), 10, (Defines::gridLength / 2));
+                QRect hitbox(_currentPoint.x() - 5, _currentPoint.y() - (Defines::gridLength / 2), 10, (Defines::gridLength / 2));
                 _connectionHitbox.append(hitbox);
 
                 _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - (Defines::gridLength / 2));
@@ -446,7 +442,7 @@ void Connection::dodgeComponent(void)
         }
         if (_diffX > 0)
         {
-            QRect* hitbox = new QRect(_currentPoint.x(), _currentPoint.y() - 5, Defines::gridLength, 10);
+            QRect hitbox(_currentPoint.x(), _currentPoint.y() - 5, Defines::gridLength, 10);
             _connectionHitbox.append(hitbox);
 
             _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x() + Defines::gridLength,
@@ -456,7 +452,7 @@ void Connection::dodgeComponent(void)
             if (!isThereAComponentOrADescription(_currentPoint.x() + (Defines::gridLength / 2),
                                                  _currentPoint.y() - (Defines::gridLength / 2)) || _diffX == 0)
             {
-                QRect* hitbox = new QRect(_currentPoint.x() - 5, _currentPoint.y() - (Defines::gridLength / 2), 10, (Defines::gridLength / 2));
+                QRect hitbox(_currentPoint.x() - 5, _currentPoint.y() - (Defines::gridLength / 2), 10, (Defines::gridLength / 2));
                 _connectionHitbox.append(hitbox);
 
                 _painter->drawLine(_currentPoint.x(), _currentPoint.y(), _currentPoint.x(), _currentPoint.y() - (Defines::gridLength / 2));

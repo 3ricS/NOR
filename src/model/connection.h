@@ -44,7 +44,7 @@ public:
     bool isThereAComponentOrADescription(int x, int y);
     Component* getComponentAtPosition(int x, int y);
     Description* getDescriptionAtPosition(int x, int y);
-    QList<QRect*> getHitboxList(void) const {return _connectionHitbox;}
+    QList<QRect> getHitBoxes(void) const {return _connectionHitbox;}
     ComponentPort getComponentPortOne(void) const {return _componentPortOne;}
     ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}
     bool hasComponent(Component* searchedComponent);
@@ -90,7 +90,7 @@ private:
 
 
     NetworkGraphics* _model = nullptr;
-    QList<QRect*> _connectionHitbox;
+    QList<QRect> _connectionHitbox;
 
     bool _isSelected = false;
     bool _startHorizontal;

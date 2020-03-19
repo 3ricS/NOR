@@ -7,7 +7,8 @@
 NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsScene()), _undoStack(new QUndoStack(this))
 {
     // die Anfangsgröße wird initialisiert
-    setSceneRect(-_defaultSceneSize, -_defaultSceneSize, _defaultSceneSize, _defaultSceneSize);
+    int defaultSceneSize = Defines::defaultSceneSize;
+    setSceneRect(-defaultSceneSize, -defaultSceneSize, defaultSceneSize, defaultSceneSize);
     _manager = new FileManager(this);
     connect(_undoStack, SIGNAL(indexChanged(int)), this, SLOT(hasChangedDocument(int)));
 }
@@ -352,7 +353,6 @@ NetworkGraphics::duplicateDescription(Description* descriptionToDuplicate, int x
                                                                                                descriptionToDuplicate,
                                                                                                xPosition, yPosition);
     _undoStack->push(commandDuplicateDescription);
-    //return addDescriptionWithoutUndo(QPointF(xPosition, yPosition), false, descriptionToDuplicate->getText());
     return commandDuplicateDescription->getCreatedDescription();
 }
 
@@ -439,39 +439,8 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
 
     Component* powerSupply = new PowerSupply(name, x, y,
                                              isVertical, voltage, id);
-    addComponentWithoutUndo(powerSupply);
+    powerSupply = addComponentWithoutUndo(powerSupply);
     return powerSupply;
-    return nullptr;
-}
-
-/*!
- * \brief Schneidet ausgewählte Komponenten aus.
- *
- * \param componentToCut ist die Komponente die Ausgeschnitten werden soll
- */
-void NetworkGraphics::cutComponentWithoutUndo(Component* componentToCut)
-{
-    if (nullptr != componentToCut)
-    {
-        removeItem(componentToCut);
-        _objects.removeOne(componentToCut);
-        if (componentToCut->getComponentType() == Component::PowerSupply)
-        {
-            emit powerSupplyIsAllowed(true);
-            _powerSupplyCount--;
-        }
-        update();
-    }
-}
-
-void NetworkGraphics::cutDescriptionWithoutUndo(Description* descriptionToCut)
-{
-    if (nullptr != descriptionToCut)
-    {
-        removeItem(descriptionToCut);
-        _objects.removeOne(descriptionToCut);
-        update();
-    }
 }
 
 /*!
@@ -817,12 +786,12 @@ void NetworkGraphics::editComponent(Component* componentToEdit, QString newName,
  *
  * Fügt eine Komponente an einer Position hinzu, wenn sich an dieser keine befindet.
  */
-void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
+Component* NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
 {
     QPointF gridPosition = componentToAdd->getPosition();
     if (hasObjectAtPosition(gridPosition))
     {
-        return;
+        return nullptr;
     }
 
     Component::ComponentType componentType = componentToAdd->getComponentType();
@@ -842,10 +811,12 @@ void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
         else
         {
             QMessageBox::about(nullptr, "Fehleingabe", "Nur eine Spannungsquelle erlaubt");
+            componentToAdd = nullptr;
         }
     }
 
     updateCalc();
+    return componentToAdd;
 }
 
 /*!
@@ -1067,11 +1038,6 @@ void NetworkGraphics::hasChangedDocument([[maybe_unused]]int idx)
     _hasChangedDocument = true;
 }
 
-bool NetworkGraphics::hasChangedDocument(void)
-{
-    return _hasChangedDocument;
-}
-
 QList<GridObject*> NetworkGraphics::getSelectedObjects(void)
 {
     QList<GridObject*> selectedObjects;
@@ -1212,4 +1178,16 @@ QList<Description*> NetworkGraphics::getDescriptions(void)
         }
     }
     return descriptions;
+}
+
+Component* NetworkGraphics::getComponentById(int id)
+{
+    for (Component* component : getComponents())
+    {
+        if (component->getId() == id)
+        {
+            return component;
+        }
+    }
+    return nullptr;
 }

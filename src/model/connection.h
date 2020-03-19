@@ -37,7 +37,7 @@ public:
     void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);
 
     //Methoden
-    int pathAnalyse(bool horizontalFirst);
+    int pathAnalyse(bool horizontalBeforeVertical);
     void paintHitbox(QPainter* painter);
 
     //getter
@@ -51,7 +51,7 @@ public:
     bool isSelected(void) const { return  _isSelected;}
 
     //setter
-    void setIsSelected(bool isSelected);
+    void setSelected(bool isSelected);
 
     static constexpr int _circleRadius = 5;
 
@@ -67,6 +67,8 @@ private:
     int upOrDownPathAnalysis(int howManyConnections, bool horizontalFirst, int upOrDown);
     int pathAnalyseDodgeComponent(int howManyConnections);
     void initializeValues(void);
+
+    int signum(int checkedNumber);
 
     int _diffX = 0;
     int _diffY = 0;

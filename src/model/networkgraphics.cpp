@@ -80,9 +80,8 @@ Component* NetworkGraphics::getComponentAtPosition(QPointF scenePosition)
     QPointF gridPosition = mapSceneToGrid(scenePosition);
     for (Component* component : _components)
     {
-        bool equalX = (component->getXPosition() == gridPosition.toPoint().x());
-        bool equalY = (component->getYPosition() == gridPosition.toPoint().y());
-        if(equalX && equalY)
+        bool equalPosition = (component->getPosition() == gridPosition);
+        if(equalPosition)
         {
             return component;
         }
@@ -104,9 +103,8 @@ Description* NetworkGraphics::getDescriptionAtPosition(QPointF scenePosition)
     QPointF gridPosition = mapSceneToGrid(scenePosition);
     for (Description* description : _descriptions)
     {
-        bool equalX = (description->getXPosition() == gridPosition.toPoint().x());
-        bool equalY = (description->getYPosition() == gridPosition.toPoint().y());
-        if(equalX && equalY)
+        bool equalPosition = (description->getPosition() == gridPosition);
+        if(equalPosition)
         {
             return description;
         }
@@ -1188,7 +1186,7 @@ void NetworkGraphics::deselectAllItems(void)
 
     for (Connection* connection : getConnections())
     {
-        connection->setIsSelected(false);
+        connection->setSelected(false);
     }
 
     update();
@@ -1214,7 +1212,7 @@ void NetworkGraphics::selectObjectsAtPosition(QPointF scenePosition)
     }
     else if(hasFoundConnection)
     {
-        foundConnection->setIsSelected(true);
+        foundConnection->setSelected(true);
     }
 }
 

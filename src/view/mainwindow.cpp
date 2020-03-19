@@ -294,7 +294,7 @@ void MainWindow::createUpperMenu(void)
 
     //Erstellen Menü
     _selectionMode = new QAction("Auswahl Maus");
-    _selectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
+    _selectionMode->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     _selectionMode->setCheckable(true);
     _ui->menuErstellen->addAction(_selectionMode);
     _createActionGroup.append(_selectionMode);

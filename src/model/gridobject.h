@@ -12,7 +12,7 @@
 class GridObject : public QGraphicsItem
 {
 public:
-    GridObject(QPointF position, int id) : _position(position), _id(id), QGraphicsItem(nullptr) {}
+    GridObject(QPointF position, int id) : QGraphicsItem(nullptr), _position(position), _id(id) {}
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override = 0;
     QRectF boundingRect() const override = 0;

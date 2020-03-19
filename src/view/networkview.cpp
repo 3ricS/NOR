@@ -180,7 +180,6 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     QPointF scenePosition = mapToScene(event->pos());
 
     _mouseIsPressed = true;
-    QPointF gridPosition = scenePositionToGrid(scenePosition);
 
     //Keine Verbindung begonnen: _connectionStartComponentPort muss auf Nullptr zeigen
     _connectionStartComponentPort = nullptr;

@@ -383,7 +383,7 @@ NetworkGraphics::addResistor(QString name, long double valueResistance, int xPos
     if (0 == id)
     {
         //Finden einer freien ID
-        int newId = _resistorCount;
+        int newId = _resistorCount + 1;
         bool isSetId = false;
         while (!isSetId)
         {

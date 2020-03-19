@@ -454,7 +454,6 @@ void NetworkGraphics::cutComponentWithoutUndo(Component* componentToCut)
     if (nullptr != componentToCut)
     {
         removeItem(componentToCut);
-        _components.removeOne(componentToCut);
         _objects.removeOne(componentToCut);
         if (componentToCut->getComponentType() == Component::PowerSupply)
         {
@@ -470,7 +469,6 @@ void NetworkGraphics::cutDescriptionWithoutUndo(Description* descriptionToCut)
     if (nullptr != descriptionToCut)
     {
         removeItem(descriptionToCut);
-        _descriptions.removeOne(descriptionToCut);
         _objects.removeOne(descriptionToCut);
         update();
     }
@@ -518,7 +516,6 @@ NetworkGraphics::addDescriptionWithoutUndo(QPointF gridPosition, bool isLoad, [[
  */
 void NetworkGraphics::addDescriptionWithoutUndo(Description* descriptionFieldToAdd)
 {
-    _descriptions.append(descriptionFieldToAdd);
     _descriptionCount++;
     addObject(descriptionFieldToAdd);
 }
@@ -541,7 +538,6 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
     if (component != nullptr)
     {
         removeItem(component);
-        _components.removeOne(component);
         _objects.removeOne(component);
 
         //ResistorCount und PowerSupplyCount setzen
@@ -585,7 +581,6 @@ void NetworkGraphics::deleteDescriptionWithoutUndo(Description* description)
     if (description != nullptr)
     {
         removeItem(description);
-        _descriptions.removeOne(description);
         _objects.removeOne(description);
         _descriptionCount--;
     }
@@ -684,14 +679,14 @@ void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Comp
 /*!
  * \brief Aktualisiert den Widerstandswert.
  *
- * Die aktuellen _connections und _components werden dem Calculator übergeben.
+ * Die aktuellen Verbindungen und Komponenten werden dem Calculator übergeben.
  * Anschließend wird der aktualisierte Widerstandswert ausgegeben.
  */
 void NetworkGraphics::updateCalc(void)
 {
     if (!_isLoading)
     {
-        _resistanceValue = Calculator::calculator().calculate(_connections, _components);
+        _resistanceValue = Calculator::calculator().calculate(_connections, getComponents());
 
         update();
         emit resistanceValueChanged();
@@ -834,7 +829,6 @@ void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
     if (Component::ComponentType::Resistor == componentType)
     {
         _resistorCount++;
-        _components.append(componentToAdd);
         addObject(componentToAdd);
     }
     else if (Component::ComponentType::PowerSupply == componentType)
@@ -842,7 +836,6 @@ void NetworkGraphics::addComponentWithoutUndo(Component* componentToAdd)
         if (_powerSupplyCount < 1)
         {
             _powerSupplyCount++;
-            _components.append(componentToAdd);
             addObject(componentToAdd);
             emit powerSupplyIsAllowed(false);
         }
@@ -1092,29 +1085,11 @@ QList<GridObject*> NetworkGraphics::getSelectedObjects(void)
     return selectedObjects;
 }
 
-QList<Description*> NetworkGraphics::getSelectedDescriptionFields(void)
-{
-    QList<Description*> selectedDescriptionFields;
-    for (Description* description : _descriptions)
-    {
-        if (description->isSelected())
-        {
-            selectedDescriptionFields.append(description);
-        }
-    }
-    return selectedDescriptionFields;
-}
-
 void NetworkGraphics::deselectAllItems(void)
 {
-    for (Component* component : getComponents())
+    for (GridObject* gridObject : _objects)
     {
-        component->setSelected(false);
-    }
-
-    for (Description* descriptionfield : getDescriptions())
-    {
-        descriptionfield->setSelected(false);
+        gridObject->setSelected(false);
     }
 
     for (Connection* connection : getConnections())
@@ -1203,16 +1178,38 @@ void NetworkGraphics::turnSelectedComponentsRight(void)
 
 void NetworkGraphics::selectObjectsInArea(QRectF selectionArea)
 {
-    for (Component* component : _components)
+    for (GridObject* gridObject : _objects)
     {
-        bool isInSelectionArea = selectionArea.intersects(component->boundingRect());
-        component->setSelected(isInSelectionArea);
-    }
-
-    for (Description* description : _descriptions)
-    {
-        bool isInSelectionArea = selectionArea.intersects(description->boundingRect());
-        description->setSelected(isInSelectionArea);
+        bool isInSelectionArea = selectionArea.intersects(gridObject->boundingRect());
+        gridObject->setSelected(isInSelectionArea);
     }
     update();
+}
+
+QList<Component*> NetworkGraphics::getComponents(void)
+{
+    QList<Component*> components;
+    for (GridObject* gridObject : _objects)
+    {
+        Component* component = dynamic_cast<Component*>(gridObject);
+        if (nullptr != component)
+        {
+            components.append(component);
+        }
+    }
+    return components;
+}
+
+QList<Description*> NetworkGraphics::getDescriptions(void)
+{
+    QList<Description*> descriptions;
+    for (GridObject* gridObject : _objects)
+    {
+        Description* component = dynamic_cast<Description*>(gridObject);
+        if (nullptr != component)
+        {
+            descriptions.append(component);
+        }
+    }
+    return descriptions;
 }

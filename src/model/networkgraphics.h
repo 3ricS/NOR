@@ -110,8 +110,8 @@ public:
     GridObject* getObjectAtPosition(QPointF scenePosition);
     bool hasObjectAtPosition(QPointF scenePosition);
     Connection* getConnectionAtPosition(QPointF gridposition);
-    QList<Component*> getComponents(void) {return _components;}
-    QList<Description*> getDescriptions(void) {return _descriptions;}
+    QList<Component*> getComponents(void);
+    QList<Description*> getDescriptions(void);
     QList<GridObject*> getObjects(void) {return _objects;}
     QList<Connection*> getConnections(void) {return _connections;}
     QString getFileName(void);
@@ -120,7 +120,6 @@ public:
     QUndoStack* getUndoStack(void) {return _undoStack;}
     QString getVoltageAndCurrentInformation(void);
     QList<GridObject*> getSelectedObjects(void);
-    QList<Description*> getSelectedDescriptionFields(void);
 
     bool hasChangedDocument(void);
 
@@ -143,8 +142,6 @@ private:
 
     void addObject(GridObject* component);
 
-    QList<Component*>        _components;
-    QList<Description*> _descriptions;
     QList<GridObject*>      _objects;
 
     QList<Connection*>       _connections;

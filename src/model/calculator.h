@@ -31,7 +31,7 @@ private:
     Calculator(void) = default;
     ~Calculator(void) = default;
     Calculator(const Calculator&) = delete;
-    Calculator&operator=(const Calculator&) = delete;
+    Calculator& operator=(const Calculator&) = delete;
 
     QList<RowPiece> findRowPieces(QList<Node *> &nodes);
     void findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeList);

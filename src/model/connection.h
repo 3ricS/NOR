@@ -65,7 +65,7 @@ private:
     int leftOrRightPathAnalysis(int howManyConnections, bool horizontalFirst, int leftOrRight);
     int verticalPathAnalysis(int howManyConnections, bool horizontalFirst);
     int upOrDownPathAnalysis(int howManyConnections, bool horizontalFirst, int upOrDown);
-    int pathAnalyseDodgeComponent(int howManyConnections);
+    int pathAnalysisDodgeComponent(int howManyConnections);
     void initializeValues(void);
 
     int signum(int checkedNumber);

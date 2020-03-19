@@ -531,7 +531,7 @@ int Connection::leftOrRightPathAnalysis(int howManyConnections, bool horizontalF
         {
             if (_diffY == 0)
             {
-                howManyConnections = pathAnalyseDodgeComponent(howManyConnections);
+                howManyConnections = pathAnalysisDodgeComponent(howManyConnections);
             }
             else
             {
@@ -579,7 +579,7 @@ int Connection::upOrDownPathAnalysis(int howManyConnections, bool horizontalFirs
         {
             if (_diffX == 0)
             {
-                howManyConnections = pathAnalyseDodgeComponent(howManyConnections);
+                howManyConnections = pathAnalysisDodgeComponent(howManyConnections);
             }
             else
             {
@@ -591,7 +591,7 @@ int Connection::upOrDownPathAnalysis(int howManyConnections, bool horizontalFirs
     return howManyConnections;
 }
 
-int Connection::pathAnalyseDodgeComponent(int howManyConnections)
+int Connection::pathAnalysisDodgeComponent(int howManyConnections)
 {
     if (_diffX == 0)
     {
@@ -614,7 +614,7 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
             }
             else
             {
-                howManyConnections = pathAnalyseDodgeComponent(howManyConnections);
+                howManyConnections = pathAnalysisDodgeComponent(howManyConnections);
             }
         }
         if (_diffY > 0)
@@ -630,7 +630,7 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
             }
             else
             {
-                howManyConnections = pathAnalyseDodgeComponent(howManyConnections);
+                howManyConnections = pathAnalysisDodgeComponent(howManyConnections);
             }
         }
     }
@@ -655,7 +655,7 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
             }
             else
             {
-                howManyConnections = pathAnalyseDodgeComponent(howManyConnections);
+                howManyConnections = pathAnalysisDodgeComponent(howManyConnections);
             }
         }
         if (_diffX > 0)
@@ -671,7 +671,7 @@ int Connection::pathAnalyseDodgeComponent(int howManyConnections)
             }
             else
             {
-                howManyConnections = pathAnalyseDodgeComponent(howManyConnections);
+                howManyConnections = pathAnalysisDodgeComponent(howManyConnections);
             }
         }
     }

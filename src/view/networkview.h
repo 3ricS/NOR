@@ -33,6 +33,9 @@ public:
     void deleteSelectedItem(void);
     void editNetworkOrDescription(void);
 
+    signals:
+    void changeToSelectionMode();
+
 public slots:
     void focus(void);
 

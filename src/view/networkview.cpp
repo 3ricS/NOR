@@ -642,13 +642,7 @@ void NetworkView::leaveEvent(QEvent* event)
 
 void NetworkView::keyPressEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Escape)
-    {
-        QApplication::restoreOverrideCursor();
-        _model->deselectAllItems();
-        deleteSampleObjectsAndHighlights();
-    }
-    else if (event->key() == Qt::Key_Control)
+    if (event->key() == Qt::Key_Control)
     {
         qDebug() << "Sttrg gedrückt";
         _controlIsPressed = true;
@@ -911,7 +905,14 @@ void NetworkView::startMultiSelection(QPointF scenePosition)
 
 void NetworkView::keyReleaseEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Control)
+    if (event->key() == Qt::Key_Escape)
+    {
+        QApplication::restoreOverrideCursor();
+        _model->deselectAllItems();
+        deleteSampleObjectsAndHighlights();
+        emit changeToSelectionMode();
+    }
+    else if (event->key() == Qt::Key_Control)
     {
         qDebug() << "Strg losgelassen";
         _controlIsPressed = false;

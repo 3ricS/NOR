@@ -12,7 +12,7 @@
 
 #include <QList>
 #include <model/rowpiece.h>
-#include <model/ComponentPort.h>
+#include <model/componentport.h>
 
 class Connection;
 class Component;

@@ -1,4 +1,4 @@
-#include "ComponentPort.h"
+#include "componentport.h"
 
 /*!
  * \brief   Tauscht den Port des ComponentPorts.

@@ -294,7 +294,6 @@ Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, 
                                                                                   yPosition);
     _undoStack->push(duplicateComponent);
     Component* createdComponent = duplicateComponent->getCreatedComponent();
-
     return createdComponent;
 }
 
@@ -349,7 +348,8 @@ NetworkGraphics::duplicateDescription(Description* descriptionToDuplicate, int x
                                                                                                descriptionToDuplicate,
                                                                                                xPosition, yPosition);
     _undoStack->push(commandDuplicateDescription);
-    return commandDuplicateDescription->getCreatedDescription();
+    Description* createdDescription = commandDuplicateDescription->getCreatedDescription();
+    return createdDescription;
 }
 
 /*!
@@ -1057,33 +1057,6 @@ void NetworkGraphics::deselectAllItems(void)
     update();
 }
 
-/*!
- * \brief Wählt alle makierten Objekte aus.
- *
- * \param scenePosition ist die geklikte Position.
- */
-void NetworkGraphics::selectObjectsAtPosition(QPointF scenePosition)
-{
-    GridObject* foundObject = getObjectAtPosition(scenePosition);
-    Connection* foundConnection = getConnectionAtPosition(scenePosition);
-
-    bool hasFoundObject = nullptr != foundObject;
-    bool hasFoundConnection = nullptr != foundConnection;
-
-    if (hasFoundObject)
-    {
-        foundObject->setSelected(true);
-    }
-    else if (hasFoundConnection)
-    {
-        foundConnection->setSelected(true);
-    }
-    else
-    {
-        deselectAllItems();
-    }
-}
-
 QPointF NetworkGraphics::mapSceneToGrid(QPointF scenePosition)
 {
     qreal xPos = scenePosition.toPoint().x() / Defines::gridLength * Defines::gridLength - (Defines::gridLength / 2);
@@ -1091,7 +1064,7 @@ QPointF NetworkGraphics::mapSceneToGrid(QPointF scenePosition)
     return QPointF(xPos, yPos);
 }
 
-QList<Component*> NetworkGraphics::findSelectedComponents(void)
+QList<Component*> NetworkGraphics::getSelectedComponents(void)
 {
     QList<Component*> componentList;
     for (Component* component : getComponents())
@@ -1104,7 +1077,7 @@ QList<Component*> NetworkGraphics::findSelectedComponents(void)
     return componentList;
 }
 
-QList<Description*> NetworkGraphics::findSelectedDescription(void)
+QList<Description*> NetworkGraphics::getSelectedDescriptions(void)
 {
     QList<Description*> descriptionList;
     for (Description* description : getDescriptions())
@@ -1117,25 +1090,9 @@ QList<Description*> NetworkGraphics::findSelectedDescription(void)
     return descriptionList;
 }
 
-void NetworkGraphics::cutComponent(QList<Component*> components)
-{
-    for (Component* componentToCut : components)
-    {
-        cutComponent(componentToCut);
-    }
-}
-
-void NetworkGraphics::cutDescription(QList<Description*> descriptions)
-{
-    for (Description* descriptionToCut : descriptions)
-    {
-        cutDescription(descriptionToCut);
-    }
-}
-
 void NetworkGraphics::turnSelectedComponentsRight(void)
 {
-    QList<Component*> selectedComponents = findSelectedComponents();
+    QList<Component*> selectedComponents = getSelectedComponents();
     for (Component* component : selectedComponents)
     {
         turnComponentRight(component);
@@ -1268,4 +1225,121 @@ void NetworkGraphics::selectAllGridObjects(void)
         gridObject->setSelected(true);
     }
     update();
+}
+
+void NetworkGraphics::cutObjects(QList<GridObject*> objectsToCut)
+{
+    for (GridObject* gridObject : objectsToCut)
+    {
+        Component* component = dynamic_cast<Component*>(gridObject);
+        Description* description = dynamic_cast<Description*>(gridObject);
+
+        if (nullptr != component)
+        {
+            cutComponent(component);
+        }
+        else if (nullptr != description)
+        {
+            cutDescription(description);
+        }
+    }
+}
+
+void NetworkGraphics::duplicateSelectedGridObjects()
+{
+    for (GridObject* gridObject : getSelectedObjects())
+    {
+        int xPosition = gridObject->getPosition().x();
+        int yPosition = gridObject->getPosition().y();
+
+        int xWayToTheRight = Defines::gridLength;
+        if (lookingForFreeSpaceToDuplicate(xPosition, yPosition, xWayToTheRight))
+        {
+            duplicateGridObject(gridObject, xPosition + xWayToTheRight,
+                                       yPosition);
+        }
+    }
+}
+
+bool NetworkGraphics::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWaytoTheRight)
+{
+    bool foundUnusedSpace = false;
+    while (true)
+    {
+        if (!hasObjectAtPosition(  QPointF(xPos + xWaytoTheRight, yPos)))
+        {
+            foundUnusedSpace = true;
+            return foundUnusedSpace;
+        }
+
+        xWaytoTheRight += Defines::gridLength;
+    }
+}
+
+GridObject* NetworkGraphics::duplicateGridObject(GridObject* gridObjectToDuplicate, int xPosition, int yPosition)
+{
+    GridObject* duplicatedObject = nullptr;
+    Component* componentToDuplicate = dynamic_cast<Component*>(gridObjectToDuplicate);
+    Description* descriptionToDuplicate = dynamic_cast<Description*>(gridObjectToDuplicate);
+
+    if (nullptr != componentToDuplicate)
+    {
+        duplicatedObject = duplicateComponent(componentToDuplicate, xPosition, yPosition);
+    }
+    else if (nullptr != descriptionToDuplicate)
+    {
+        duplicatedObject = duplicateDescription(descriptionToDuplicate, xPosition, yPosition);
+    }
+    return duplicatedObject;
+}
+
+void NetworkGraphics::deleteSelectedObjects(QList<GridObject*>& copiedObjects)
+{
+    deleteSelectedGridObjects(copiedObjects);
+    deleteSelectedConnections();
+    deselectAllItems();
+}
+
+void NetworkGraphics::deleteSelectedGridObjects(QList<GridObject*>& copiedObjects)
+{
+    for (GridObject* selectedObject : getSelectedObjects())
+    {
+        if (copiedObjects.contains(selectedObject))
+        {
+            copiedObjects.removeOne(selectedObject);
+        }
+
+        Component* component = dynamic_cast<Component*>(selectedObject);
+        Description* description = dynamic_cast<Description*>(selectedObject);
+
+        if (nullptr != component)
+        {
+            deleteComponent(component);
+        }
+        else if (nullptr != description)
+        {
+            deleteDescription(description);
+        }
+    }
+}
+
+void NetworkGraphics::deleteSelectedConnections()
+{
+    for (Connection* selectedConnection : getSelectedConnections())
+    {
+        deleteConnection(selectedConnection);
+    }
+}
+
+QList<Connection*> NetworkGraphics::getSelectedConnections()
+{
+    QList<Connection*> selectedConnections;
+    for (Connection* connection : _connections)
+    {
+        if (connection->isSelected())
+        {
+            selectedConnections.append(connection);
+        }
+    }
+    return selectedConnections;
 }

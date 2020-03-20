@@ -55,7 +55,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_selectNothing, SIGNAL(triggered()), this, SLOT(selectNothing()));
     connect(_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
     connect(_rotateComponent, SIGNAL(triggered()), this, SLOT(rotate()));
-    connect(_deleteComponent, SIGNAL(triggered()), this, SLOT(deleteItem()));
+    connect(_deleteObject, SIGNAL(triggered()), this, SLOT(deleteItem()));
     connect(_edit, SIGNAL(triggered()), this, SLOT(editItem()));
     connect(_selectionMode, SIGNAL(triggered()), this, SLOT(setSelectionMode()));
     connect(_powerSupplyMode, SIGNAL(triggered()), this, SLOT(setPowerSupplyMode()));
@@ -274,9 +274,9 @@ void MainWindow::createUpperMenu(void)
     _rotateComponent->setShortcut(QKeySequence(Qt::CTRL + Qt::Key::Key_R));
     _ui->menuBearbeiten->addAction(_rotateComponent);
 
-    _deleteComponent = new QAction("Entfernen");
-    _deleteComponent->setShortcut(QKeySequence(Qt::Key_Delete));
-    _ui->menuBearbeiten->addAction(_deleteComponent);
+    _deleteObject = new QAction("Entfernen");
+    _deleteObject->setShortcut(QKeySequence(Qt::Key_Delete));
+    _ui->menuBearbeiten->addAction(_deleteObject);
 
 
     //Erstellen Menü
@@ -504,12 +504,12 @@ void MainWindow::isRedoPossible(bool canRedo)
 
 void MainWindow::deleteItem(void)
 {
-    _networkView->deleteSelectedItem();
+    _networkView->deleteSelectedItems();
 }
 
 void MainWindow::editItem(void)
 {
-    _networkView->editNetworkOrDescription();
+    _networkView->editGridObject();
 }
 
 void MainWindow::undo(void)

@@ -33,8 +33,8 @@ public:
     void selectNothing();
 
     void setMouseMode(MouseMode newMode);
-    void deleteSelectedItem(void);
-    void editNetworkOrDescription(void);
+    void deleteSelectedItems(void);
+    void editGridObject(void);
 
     bool isAllowedToChangeMode(void);
 
@@ -64,8 +64,7 @@ private:
     void updateOverrideCursor(void);
     QList<Component*> findSelectedComponent(void);
     QList<Description*> findSelectedDescription(void);
-    void calculateDistanceToNextComponent(int& i, Component* firstComp, int& xSpace, int& ySpace);
-    void calculateDistanceToNextDescription(int& i, Component* firstComp, int& xSpace, int& ySpace);
+    void calculateDistanceToNextObject(int& i, GridObject* firstGridObject, int& xSpace, int& ySpace);
     QGraphicsItem* deleteGraphicsItem(QGraphicsItem* graphicsItem);
 
     //for Key/MouseEvents
@@ -100,6 +99,7 @@ private:
     Description*             _sampleDescriptionOnMoveEvent = nullptr;
     QList<Component*>        _copiedComponents;
     QList<Description*>      _copiedDescriptions;
+    QList<GridObject*>       _copiedObjects;
     QPointF                  _lastClickedPosition;
     QGraphicsRectItem*       _multiselectRect = nullptr;
 

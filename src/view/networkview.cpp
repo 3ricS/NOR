@@ -233,7 +233,7 @@ void NetworkView::mouseDoubleClickEvent([[maybe_unused]]QMouseEvent* event)
 {
     if (_mouseMode == SelectionMode)
     {
-        editNetworkOrDescription();
+        editGridObject();
     }
 }
 
@@ -275,42 +275,9 @@ void NetworkView::highlightGrid(QPointF scenePosition, QColor highlightColor)
  *
  * Anhand des Types des Elements, werden diese entsprechend enfernt.
  */
-void NetworkView::deleteSelectedItem(void)
+void NetworkView::deleteSelectedItems(void)
 {
-    //TODO: nach Model verschieben
-    //TODO: auf Undostack
-    for (Component* component : _model->getComponents())
-    {
-        if (component->isSelected())
-        {
-            if (_copiedComponents.contains(component))
-            {
-                _copiedComponents.removeOne(component);
-            }
-            _model->deleteComponent(component);
-        }
-    }
-
-    for (Description* description : _model->getDescriptions())
-    {
-        if (description->isSelected())
-        {
-            if (_copiedDescriptions.contains(description))
-            {
-                _copiedDescriptions.removeOne(description);
-            }
-            _model->deleteDescription(description);
-        }
-    }
-
-    for (Connection* connection : _model->getConnections())
-    {
-        if (connection->isSelected())
-        {
-            _model->deleteConnection(connection);
-        }
-    }
-    _model->deselectAllItems();
+    _model->deleteSelectedObjects(_copiedObjects);
 }
 
 /*!
@@ -318,7 +285,7 @@ void NetworkView::deleteSelectedItem(void)
  *
  * Es werden entweder eine Komponente oder ein Textfeld in dem Netzwerk bearbeitet.
  */
-void NetworkView::editNetworkOrDescription(void)
+void NetworkView::editGridObject(void)
 {
     QList<GridObject*> selectedObjects = _model->getSelectedObjects();
 
@@ -492,15 +459,10 @@ void NetworkView::print(void)
  */
 void NetworkView::cut(void)
 {
-    _copiedComponents = _model->findSelectedComponents();
-    _copiedDescriptions = _model->findSelectedDescription();
-    if (_copiedComponents.count() != 0)
+    _copiedObjects = _model->getSelectedObjects();
+    if (_copiedObjects.count() != 0)
     {
-        _model->cutComponent(_copiedComponents);
-    }
-    if (_copiedDescriptions.count() != 0)
-    {
-        _model->cutDescription(_copiedDescriptions);
+        _model->cutObjects(_copiedObjects);
     }
 }
 
@@ -526,38 +488,7 @@ void NetworkView::setMouseMode(NetworkView::MouseMode newMode)
  */
 void NetworkView::duplicate(void)
 {
-    for (Component* component : _model->getComponents())
-    {
-        if (component->isSelected())
-        {
-            int xPosition = component->getPosition().x();
-            int yPosition = component->getPosition().y();
-
-            int xWayToTheRight = Defines::gridLength;
-            if (lookingForFreeSpaceToDuplicate(xPosition, yPosition, xWayToTheRight))
-            {
-                _model->duplicateComponent(component, xPosition + xWayToTheRight,
-                                           yPosition);
-            }
-        }
-    }
-
-    for (Description* description : _model->getDescriptions())
-    {
-        if (description->isSelected())
-        {
-            int xPosition = description->getPosition().x();
-            int yPosition = description->getPosition().y();
-
-            int xWayToTheRight = Defines::gridLength;
-            if (lookingForFreeSpaceToDuplicate(xPosition, yPosition,
-                                               xWayToTheRight))
-            {
-                _model->duplicateDescription(description, xPosition + xWayToTheRight,
-                                             yPosition);
-            }
-        }
-    }
+    _model->duplicateSelectedGridObjects();
 }
 
 /*!
@@ -567,12 +498,8 @@ void NetworkView::duplicate(void)
  */
 void NetworkView::copy(void)
 {
-    //Zuerst alle alten Einträge löschen
-    _copiedComponents.clear();
-    _copiedDescriptions.clear();
-
-    _copiedComponents = _model->findSelectedComponents();
-    _copiedDescriptions = _model->findSelectedDescription();
+    _copiedObjects.clear();
+    _copiedObjects = _model->getSelectedObjects();
 }
 
 /*!
@@ -582,46 +509,22 @@ void NetworkView::copy(void)
  */
 void NetworkView::paste(void)
 {
-    Component* firstComp = nullptr;
-    if (!_copiedComponents.empty())
+    GridObject* firstGridObject = nullptr;
+    if (!_copiedObjects.empty())
     {
-        firstComp = _copiedComponents.first();
+        firstGridObject = _copiedObjects.first();
     }
 
     int xSpace = 0;
     int ySpace = 0;
     int i = 1;
-    for (Component* component : _copiedComponents)
+    for (GridObject* gridObject : _copiedObjects)
     {
-        QPointF point = _model->mapSceneToGrid(
-                QPointF(_lastClickedPosition.x() - xSpace, _lastClickedPosition.y() - ySpace));
-        if (!_model->hasObjectAtPosition(point))
+        QPointF scenePosition(_lastClickedPosition.x() - xSpace, _lastClickedPosition.y() - ySpace);
+        if (!_model->hasObjectAtPosition(scenePosition))
         {
-            _model->duplicateComponent(component, _lastClickedPosition.x() - xSpace, _lastClickedPosition.y() - ySpace);
-            calculateDistanceToNextComponent(i, firstComp, xSpace, ySpace);
-        }
-
-    }
-    //Zurücksetzten der Laufvariablen
-    i = 1;
-    Description* firstDescription = nullptr;
-    if (!_copiedDescriptions.empty())
-    {
-        firstDescription = _copiedDescriptions.first();
-    }
-    if (firstComp != nullptr && firstDescription != nullptr)
-    {
-        xSpace = firstComp->getPosition().x() - firstDescription->getPosition().x();
-        ySpace = firstComp->getPosition().y() - firstDescription->getPosition().y();
-    }
-    for (Description* description : _copiedDescriptions)
-    {
-        if (!_model->hasObjectAtPosition(
-                scenePositionToGrid(QPointF(_lastClickedPosition.x() - xSpace, _lastClickedPosition.y() - ySpace))))
-        {
-            _model->duplicateDescription(description, _lastClickedPosition.x() - xSpace,
-                                         _lastClickedPosition.y() - ySpace);
-            calculateDistanceToNextDescription(i, firstComp, xSpace, ySpace);
+            _model->duplicateGridObject(gridObject, _lastClickedPosition.x() - xSpace, _lastClickedPosition.y() - ySpace);
+            calculateDistanceToNextObject(i, firstGridObject, xSpace, ySpace);
         }
 
     }
@@ -713,27 +616,17 @@ QList<Description*> NetworkView::findSelectedDescription(void)
     return descriptionList;
 }
 
-void NetworkView::calculateDistanceToNextComponent(int &i, Component* firstComp, int &xSpace, int &ySpace)
+void NetworkView::calculateDistanceToNextObject(int &i, GridObject* firstGridObject, int &xSpace, int &ySpace)
 {
-    if (i < _copiedComponents.count() && firstComp != nullptr)
+    if (i < _copiedObjects.count() && firstGridObject != nullptr)
     {
-        xSpace = firstComp->getPosition().x() - _copiedComponents[i]->getPosition().x();
-        ySpace = firstComp->getPosition().y() - _copiedComponents[i]->getPosition().y();
+        xSpace = firstGridObject->getPosition().x() - _copiedObjects[i]->getPosition().x();
+        ySpace = firstGridObject->getPosition().y() - _copiedObjects[i]->getPosition().y();
     }
-    else if (i == _copiedComponents.count())
+    else if (i == _copiedObjects.count())
     {
         xSpace = 0;
         ySpace = 0;
-    }
-    i++;
-}
-
-void NetworkView::calculateDistanceToNextDescription(int &i, Component* firstComp, int &xSpace, int &ySpace)
-{
-    if (i < _copiedDescriptions.count() && firstComp != nullptr)
-    {
-        xSpace = firstComp->getPosition().x() - _copiedDescriptions[i]->getPosition().x();
-        ySpace = firstComp->getPosition().y() - _copiedDescriptions[i]->getPosition().y();
     }
     i++;
 }

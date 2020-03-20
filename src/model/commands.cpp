@@ -250,10 +250,13 @@ CommandDeleteComponent::CommandDeleteComponent(NetworkGraphics* model, Component
  */
 void CommandDeleteComponent::undo(void)
 {
-    _model->addComponentWithoutUndo(_deletedComponent);
-    for (Connection* connection : _deletedConnections)
+    if (nullptr != _deletedComponent)
     {
-        _model->addConnectionWithoutUndo(connection);
+        _model->addComponentWithoutUndo(_deletedComponent);
+        for (Connection* connection : _deletedConnections)
+        {
+            _model->addConnectionWithoutUndo(connection);
+        }
     }
     _hasDoneUndo = true;
 }
@@ -386,6 +389,34 @@ void CommandDuplicateComponent::redo(void)
 
 /*
  * _______________________________________________________________________
+ * CommandDuplicateDescription
+ */
+
+CommandDuplicateDescription::CommandDuplicateDescription(NetworkGraphics *model, Description *descriptionToDuplicate, int xPosition, int yPosition) :
+        _model(model), _descriptionToDuplicate(descriptionToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
+{
+}
+
+/*!
+ * \brief Undo des Duplizieren eines Textfeldes.
+ */
+void CommandDuplicateDescription::undo(void)
+{
+    _model->deleteDescriptionWithoutUndo(_createdDescription);
+}
+
+/*!
+ * \brief Redo des Duplizieren eines Textfeldes.
+ */
+void CommandDuplicateDescription::redo(void)
+{
+
+    _createdDescription = _model->addDescriptionWithoutUndo(QPointF(_xPosition, _yPosition), false,
+                                                            _descriptionToDuplicate->getText());
+}
+
+/*
+ * _______________________________________________________________________
  * CommandEditDescription
  */
 
@@ -442,108 +473,4 @@ void CommandRotateComponent::undo(void)
 void CommandRotateComponent::redo(void)
 {
     _model->turnComponentRightWithoutUndo(_componentToTurn);
-}
-
-/*
- * _______________________________________________________________________
- * CommandRotateDescription
- */
-
-CommandCutComponents::CommandCutComponents(NetworkGraphics* model, Component* componentToCut) :
-    _model(model), _componentToCut(componentToCut)
-{
-}
-
-/*!
- * \brief Undo des Ausschneiden einer Komponente.
- */
-void CommandCutComponents::undo(void)
-{
-    if (_componentToCut != nullptr)
-    {
-        _model->addComponentWithoutUndo(_componentToCut);
-        for (Connection* connection : _deletedConnections)
-        {
-            _model->addConnectionWithoutUndo(connection);
-        }
-    }
-    _hasDoneUndo = true;
-}
-
-/*!
- * \brief Redo des Ausschneiden einer Komponente.
- */
-void CommandCutComponents::redo(void)
-{
-    _deletedConnections = _model->deleteComponentWithoutUndoAndGetDeletedConnections(_componentToCut);
-    _hasDoneUndo = false;
-}
-
-CommandCutComponents::~CommandCutComponents(void)
-{
-    //TODO: hier die Connections und den Component nicht löschen, aber dennoch kein Memory Leak
-    if(!_hasDoneUndo)
-    {
-        delete _componentToCut;
-        for (Connection* connection : _deletedConnections)
-        {
-            delete connection;
-        }
-    }
-}
-
-/*
- * _______________________________________________________________________
- * CommandCutDescriptionField
- */
-
-CommandCutDescriptionField::CommandCutDescriptionField(NetworkGraphics *model, Description *descriptionToCut) :
-    _model(model), _descriptionFieldToCut(descriptionToCut)
-{
-}
-
-/*!
- * \brief Undo des Ausschneiden eines Textfeldes.
- */
-void CommandCutDescriptionField::undo(void)
-{
-    _model->addDescriptionWithoutUndo(_descriptionFieldToCut);
-    _hasDoneUndo = true;
-}
-
-/*!
- * \brief Redo des Ausschneiden eines Textfeldes.
- */
-void CommandCutDescriptionField::redo(void)
-{
-    _model->deleteDescriptionWithoutUndo(_descriptionFieldToCut);
-    _hasDoneUndo = false;
-}
-
-/*
- * _______________________________________________________________________
- * CommandDuplicateDescription
- */
-
-CommandDuplicateDescription::CommandDuplicateDescription(NetworkGraphics *model, Description *descriptionToDuplicate, int xPosition, int yPosition) :
-    _model(model), _descriptionToDuplicate(descriptionToDuplicate), _xPosition(xPosition), _yPosition(yPosition)
-{
-}
-
-/*!
- * \brief Undo des Duplizieren eines Textfeldes.
- */
-void CommandDuplicateDescription::undo(void)
-{
-    _model->deleteDescriptionWithoutUndo(_createdDescription);
-}
-
-/*!
- * \brief Redo des Duplizieren eines Textfeldes.
- */
-void CommandDuplicateDescription::redo(void)
-{
-
-   _createdDescription = _model->addDescriptionWithoutUndo(QPointF(_xPosition, _yPosition), false,
-                                                           _descriptionToDuplicate->getText());
 }

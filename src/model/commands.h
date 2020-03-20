@@ -32,13 +32,13 @@ public:
     Component* getCreatedComponent(void) {return _createdComponent;}
 
 private:
-    Component*                  _createdComponent = nullptr;
-    NetworkGraphics*            _model = nullptr;
-    QPointF                     _gridPosition;
-    Component::ComponentType    _componentType;
-    bool                        _componentIsVertical;
-    QList<Connection*>          _deletedConnections;
-    bool                        _hasDoneUndo = false;
+    Component*               _createdComponent = nullptr;
+    NetworkGraphics*         _model = nullptr;
+    QPointF                  _gridPosition;
+    Component::ComponentType _componentType;
+    bool                     _componentIsVertical;
+    QList<Connection*>       _deletedConnections;
+    bool                     _hasDoneUndo = false;
 };
 
 
@@ -53,11 +53,11 @@ public:
     void redo(void) override;
 
 private:
-    NetworkGraphics*    _model = nullptr;
-    Connection*         _createdConnection = nullptr;
-    ComponentPort       _componentPortA;
-    ComponentPort       _componentPortB;
-    bool                _hasDoneUndo = false;
+    NetworkGraphics* _model = nullptr;
+    Connection*      _createdConnection = nullptr;
+    ComponentPort    _componentPortA;
+    ComponentPort    _componentPortB;
+    bool             _hasDoneUndo = false;
 };
 
 
@@ -72,9 +72,9 @@ public:
     void redo(void) override;
 
 private:
-    NetworkGraphics*    _model = nullptr;
-    Description*   _createdDescriptionField = nullptr;
-    bool                _hasDoneUndo = false;
+    NetworkGraphics* _model = nullptr;
+    Description*     _createdDescriptionField = nullptr;
+    bool             _hasDoneUndo = false;
 };
 
 
@@ -89,10 +89,10 @@ public:
     void redo(void) override;
 
 private:
-    NetworkGraphics*    _model = nullptr;
-    GridObject*          _objectToMove = nullptr;
-    QPointF             _gridEndPosition;
-    QPointF             _gridStartPosition;
+    NetworkGraphics* _model = nullptr;
+    GridObject*      _objectToMove = nullptr;
+    QPointF          _gridEndPosition;
+    QPointF          _gridStartPosition;
 };
 
 
@@ -107,14 +107,14 @@ public:
     void redo(void) override;
 
 private:
-    NetworkGraphics*    _model = nullptr;
-    Component*          _editedComponent = nullptr;
-    QString             _newName;
-    QString             _oldName;
-    long double              _newValue;
-    long double              _oldValue;
-    Component::Orientation  _oldOrientation;
-    Component::Orientation  _newOrientation;
+    NetworkGraphics*       _model = nullptr;
+    Component*             _editedComponent = nullptr;
+    QString                _newName;
+    QString                _oldName;
+    long double            _newValue;
+    long double            _oldValue;
+    Component::Orientation _oldOrientation;
+    Component::Orientation _newOrientation;
 };
 
 
@@ -129,10 +129,10 @@ public:
     void redo(void) override;
 
 private:
-    NetworkGraphics*    _model = nullptr;
-    Component*          _deletedComponent = nullptr;
-    QList<Connection*>  _deletedConnections;
-    bool                _hasDoneUndo = false;
+    NetworkGraphics*   _model = nullptr;
+    Component*         _deletedComponent = nullptr;
+    QList<Connection*> _deletedConnections;
+    bool               _hasDoneUndo = false;
 };
 
 
@@ -147,9 +147,9 @@ public:
     void redo(void) override;
 
 private:
-    NetworkGraphics*    _model = nullptr;
-    Connection*         _deletedConnection = nullptr;
-    bool                _hasDoneUndo = false;
+    NetworkGraphics* _model = nullptr;
+    Connection*      _deletedConnection = nullptr;
+    bool             _hasDoneUndo = false;
 };
 
 
@@ -164,9 +164,9 @@ public:
     void redo(void) override;
 
 private:
-    NetworkGraphics*    _model = nullptr;
-    Description*    _deletedDescription = nullptr;
-    bool                _hasDoneUndo = false;
+    NetworkGraphics* _model = nullptr;
+    Description*     _deletedDescription = nullptr;
+    bool             _hasDoneUndo = false;
 };
 
 
@@ -183,11 +183,11 @@ public:
     Component* getCreatedComponent(void) {return _createdComponent;}
 
 private:
-    Component*                  _createdComponent = nullptr;
-    NetworkGraphics*            _model = nullptr;
-    Component*                  _componentToDuplicate = nullptr;
-    int                         _xPosition;
-    int                         _yPosition;
+    Component*       _createdComponent = nullptr;
+    NetworkGraphics* _model = nullptr;
+    Component*       _componentToDuplicate = nullptr;
+    int              _xPosition;
+    int              _yPosition;
 };
 
 
@@ -204,11 +204,11 @@ public:
     Description* getCreatedDescription() {return _createdDescription;}
 
 private:
-    Description*           _createdDescription = nullptr;
-    NetworkGraphics*            _model = nullptr;
-    Description*           _descriptionToDuplicate = nullptr;
-    int                         _xPosition;
-    int                         _yPosition;
+    Description*     _createdDescription = nullptr;
+    NetworkGraphics* _model = nullptr;
+    Description*     _descriptionToDuplicate = nullptr;
+    int              _xPosition;
+    int              _yPosition;
 };
 
 
@@ -223,10 +223,10 @@ public:
     void redo(void) override;
 
 private:
-    Description*                  _editDescription = nullptr;
-    NetworkGraphics*            _model = nullptr;
-    QString                     _newText;
-    QString                     _oldText;
+    Description*     _editDescription = nullptr;
+    NetworkGraphics* _model = nullptr;
+    QString          _newText;
+    QString          _oldText;
 };
 
 
@@ -242,44 +242,11 @@ public:
 
 
 private:
-    Component*           _componentToTurn = nullptr;
-    NetworkGraphics*            _model = nullptr;
+    Component*       _componentToTurn = nullptr;
+    NetworkGraphics* _model = nullptr;
 };
 
 
-
-class CommandCutComponents : public QUndoCommand
-{
-public:
-    CommandCutComponents(NetworkGraphics* model, Component* componentToCut);
-    ~CommandCutComponents(void);
-
-    void undo(void) override;
-    void redo(void) override;
-
-private:
-    NetworkGraphics*    _model = nullptr;
-    Component*          _componentToCut = nullptr;
-    QList<Connection*>  _deletedConnections;
-    bool                _hasDoneUndo = false;
-};
-
-
-
-class CommandCutDescriptionField : public QUndoCommand
-{
-public:
-    CommandCutDescriptionField(NetworkGraphics* model, Description* descriptionToCut);
-    ~CommandCutDescriptionField(void) {};
-
-    void undo(void) override;
-    void redo(void) override;
-
-private:
-    NetworkGraphics*    _model = nullptr;
-    Description*   _descriptionFieldToCut;
-    bool                _hasDoneUndo = false;
-};
 
 
 #endif //NOR_COMMANDS_H

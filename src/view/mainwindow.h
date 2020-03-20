@@ -110,7 +110,7 @@ private:
     QAction* _selectNothing = nullptr;
     QAction* _duplicate = nullptr;
     QAction* _rotateComponent = nullptr;
-    QAction* _deleteComponent = nullptr;
+    QAction* _deleteObject = nullptr;
     QAction* _edit = nullptr;
     QAction* _resistorMode = nullptr;
     QAction* _powerSupplyMode = nullptr;

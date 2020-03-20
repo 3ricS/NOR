@@ -74,7 +74,7 @@ public:
 
     //Duplicate
     GridObject* duplicateGridObject(GridObject* gridObjectToDuplicate, int xPosition, int yPosition);
-    void duplicateSelectedGridObjects();
+    void duplicateSelectedGridObjects(void);
 
 
 
@@ -163,8 +163,6 @@ private:
     QList<Connection*> getConnectionsInArea(QRectF selectionArea);
 
     QList<Connection*> getSelectedConnections();
-
-
 
 
 

@@ -100,6 +100,12 @@ bool NetworkGraphics::hasObjectAtPosition(QPointF scenePosition)
     return getObjectAtPosition(scenePosition) != nullptr;
 }
 
+/*!
+ * \brief Gibt die Verbindung an der zu prüfenden Position zurück.
+ *
+ * \param gridposition ist die prüfende Position
+ * \return Gibt die Verbindung an der Position zurück.
+ */
 Connection* NetworkGraphics::getConnectionAtPosition(QPointF gridposition)
 {
     for (Connection* connection : _connections)
@@ -477,7 +483,6 @@ NetworkGraphics::addDescriptionWithoutUndo(QPointF gridPosition, bool isLoad, [[
  * \brief Fügt ein Textfeld dem Netzwerk hinzu.
  *
  * \param   descriptionFieldToAdd   ist das Textfeld, welches hinzugefügt wird
- *
  */
 void NetworkGraphics::addDescriptionWithoutUndo(Description* descriptionFieldToAdd)
 {
@@ -947,6 +952,11 @@ Description* NetworkGraphics::addDescriptionField(QPointF gridPosition, bool isL
     return description;
 }
 
+/*!
+ * \brief Liefert die Spannungsabfälle und die Ströme.
+ *
+ * \return Gibt die Stöme und Spannungen zürück.
+ */
 QString NetworkGraphics::getVoltageAndCurrentInformation(void)
 {
     QString information;
@@ -1041,6 +1051,9 @@ QList<Component*> NetworkGraphics::getSelectedComponents(void)
     return componentList;
 }
 
+/*!
+ * \brief Dreht alle ausgewählten Komponenten rechtsrum.
+ */
 void NetworkGraphics::turnSelectedComponentsRight(void)
 {
     QList<Component*> selectedComponents = getSelectedComponents();
@@ -1050,6 +1063,11 @@ void NetworkGraphics::turnSelectedComponentsRight(void)
     }
 }
 
+/*!
+ * \brief Wählt alle Objekte in einem Bereich aus.
+ *
+ * \param selectionArea ist der ausgewählte Bereich
+ */
 void NetworkGraphics::selectObjectsInArea(QRectF selectionArea)
 {
     QList<GridObject*> foundObjects = getGridObjectsInArea(selectionArea);
@@ -1102,6 +1120,12 @@ QList<Description*> NetworkGraphics::getDescriptions(void)
     return descriptions;
 }
 
+/*!
+ * \brief Liefert die Komponente zu der gesuchten Id.
+ *
+ * \param id ist die gegebene Id
+ * \return Gibt die Komponente zu der Id zurück.
+ */
 Component* NetworkGraphics::getComponentById(int id)
 {
     for (Component* component : getComponents())
@@ -1163,6 +1187,11 @@ void NetworkGraphics::deselctAllGridObjects(void)
     update();
 }
 
+/*!
+ * \brief Wählt alle makierten Objekte aus.
+ *
+ * es werden alle GridObjekte ausgewählt und alle Connections abgewählt.
+ */
 void NetworkGraphics::selectAll(void)
 {
     deselectAllConnections();
@@ -1178,6 +1207,11 @@ void NetworkGraphics::selectAllGridObjects(void)
     update();
 }
 
+/*!
+ * \brief Schneidet die ausgewählten Objekte aus.
+ *
+ * \param objectsToCut sind die Objekte, die ausgeschnitten werden sollen
+ */
 void NetworkGraphics::cutObjects(QList<GridObject*> objectsToCut)
 {
     for (GridObject* gridObject : objectsToCut)
@@ -1196,7 +1230,10 @@ void NetworkGraphics::cutObjects(QList<GridObject*> objectsToCut)
     }
 }
 
-void NetworkGraphics::duplicateSelectedGridObjects()
+/*!
+ * \brief Dupliziert alle ausgewählten Objekte.
+ */
+void NetworkGraphics::duplicateSelectedGridObjects(void)
 {
     for (GridObject* gridObject : getSelectedObjects())
     {
@@ -1227,6 +1264,14 @@ bool NetworkGraphics::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xW
     }
 }
 
+/*!
+ * \brief Verdoppelt das ausgewählte GridObject.
+ *
+ * \param gridObjectToDuplicate ist das zu duplizierende Objekt
+ * \param xPosition             ist die X-Koordinate, an der das Objekt dupliziert werden soll
+ * \param yPosition             ist die Y-Koordinate, an der das Objekt dupliziert werden soll
+ * \return Gibt das duplizierte Objekt zurück.
+ */
 GridObject* NetworkGraphics::duplicateGridObject(GridObject* gridObjectToDuplicate, int xPosition, int yPosition)
 {
     GridObject* duplicatedObject = nullptr;
@@ -1244,6 +1289,11 @@ GridObject* NetworkGraphics::duplicateGridObject(GridObject* gridObjectToDuplica
     return duplicatedObject;
 }
 
+/*!
+ * \brief Entfernt die ausgewählten Objekte.
+ *
+ * \param copiedObjects ist das zu entfernende Objekt
+ */
 void NetworkGraphics::deleteSelectedObjects(QList<GridObject*>& copiedObjects)
 {
     deleteSelectedGridObjects(copiedObjects);

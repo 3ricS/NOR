@@ -49,10 +49,10 @@ private:
 
     Component::Port toPort(int componentPort);
 
-    QFile    _actualFile;
-    const QString  _fileFilter  = "Json (*.json);;Text (*.txt)";
-    QDir     _homePath;
-    bool     _isSaved = false;
+    QFile         _actualFile;
+    const QString _fileFilter  = "Json (*.json);;Text (*.txt)";
+    QDir          _homePath;
+    bool          _isSaved = false;
 
     NetworkGraphics* _model = nullptr;
     QDir             _dirFilePath;

@@ -494,7 +494,7 @@ void NetworkGraphics::addDescriptionWithoutUndo(Description* descriptionFieldToA
 /*!
  * \brief Entfernt Komponenten aus dem Netzwerk.
  *
- * \param   component ist die zu entfernende Komponente
+ * \param   componentToDelete ist die zu entfernende Komponente
  *
  * Wenn die ausgewählte Komponente vorhanden ist, wird diese entfernt.
  * Nach dem entfernen aus dem Netzwerk wird die Komponente aus dem componentList entfernt.
@@ -503,20 +503,20 @@ void NetworkGraphics::addDescriptionWithoutUndo(Description* descriptionFieldToA
  * Anschließend werden die Verbindungen, die sich an der Komponente befinden entfernt.
  * Zum Schluss wird der Widerstandswert neu berechnet.
  */
-QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConnections(Component* component)
+QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConnections(Component* componentToDelete)
 {
     QList<Connection*> deletedConnections;
-    if (component != nullptr)
+    if (componentToDelete != nullptr)
     {
-        removeItem(component);
-        _objects.removeOne(component);
+        removeItem(componentToDelete);
+        _objects.removeOne(componentToDelete);
 
         //ResistorCount und PowerSupplyCount setzen
-        if (Component::ComponentType::Resistor == component->getComponentTypeInt())
+        if (Component::ComponentType::Resistor == componentToDelete->getComponentTypeInt())
         {
             _resistorCount--;
         }
-        else if (Component::ComponentType::PowerSupply == component->getComponentTypeInt())
+        else if (Component::ComponentType::PowerSupply == componentToDelete->getComponentTypeInt())
         {
             _powerSupplyCount--;
             emit powerSupplyIsAllowed(true);
@@ -525,16 +525,22 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
         //Lösche Verbindungen vom Component
         for (Connection* connection : _connections)
         {
-            if (connection->hasComponent(component))
+            if (connection->hasComponent(componentToDelete))
             {
                 removeItem(connection);
-                _connections.removeOne(connection);
                 deletedConnections.append(connection);
             }
         }
-        updateCalc();
+        for (Connection* connectionToDelete : deletedConnections)
+        {
+            if (_connections.contains(connectionToDelete))
+            {
+                _connections.removeOne(connectionToDelete);
+            }
+        }
     }
-    update();
+
+    updateCalc();
     return deletedConnections;
 }
 
@@ -661,14 +667,7 @@ void NetworkGraphics::updateCalc(void)
 
         update();
         emit resistanceValueChanged();
-        if (_resistanceValue != 0)
-        {
-            emit currentAndVoltageIsValid(true);
-        }
-        else
-        {
-            emit currentAndVoltageIsValid(false);
-        }
+        currentAndVoltageIsValid(_resistanceValue != 0);
     }
 }
 

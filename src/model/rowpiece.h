@@ -48,6 +48,10 @@ public:
     bool hasEqualNodesOnBothSides(RowPiece otherRowPiece);
     bool hasOneEqualNode(RowPiece otherRowPiece);
     bool hasNode(Node* node);
+    bool hasOpenEnd(QList<Node*> allNodes, QList<RowPiece> rowPieces);
+    QList<Node*> getConnectedNodes(QList<Node*> allNodes);
+    int countConnectedRowPiecesOfNode(Node* node, QList<RowPiece> rowPieces);
+
 
 private:
     Node* _nodeOne;

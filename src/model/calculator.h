@@ -65,7 +65,7 @@ private:
     void paralleMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething, QList<RowPiece> &mergeList);
     void rowMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething, QList<RowPiece> &mergeList);
 
-    double _resistanceValue = 0;
+    long double _resistanceValue = 0;
     QList<Component*> _components;
     QList<Connection*> _connections;
     bool _hasUsedStarCalculation = false;

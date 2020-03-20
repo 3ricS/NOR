@@ -92,7 +92,7 @@ public:
     Connection* addConnectionWithoutUndo(ComponentPort componentPortA, ComponentPort componentPortB);
     Description* addDescriptionWithoutUndo(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
     void addDescriptionWithoutUndo(Description* descriptionFieldToAdd);
-    QList<Connection*> deleteComponentWithoutUndoAndGetDeletedConnections(Component* component);
+    QList<Connection*> deleteComponentWithoutUndoAndGetDeletedConnections(Component* componentToDelete);
     void deleteConnectionWithoutUndo(Connection* connection);
     void deleteDescriptionWithoutUndo(Description* description);
     void moveComponentWithoutUndo(GridObject* objectToMove, QPointF gridPosition);

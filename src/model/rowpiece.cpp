@@ -3,11 +3,11 @@
 #include "model/node.h"
 
 RowPiece::RowPiece(Node* nodeOne, Node* nodeTwo, long double resistanceValue, QList<Component*> includedComponents) :
-    _nodeOne(nodeOne), _nodeTwo(nodeTwo), _resistanceValue(resistanceValue), _components(includedComponents)
+        _nodeOne(nodeOne), _nodeTwo(nodeTwo), _resistanceValue(resistanceValue), _components(includedComponents)
 {
 }
 
-bool RowPiece::operator==(const RowPiece& rhs)
+bool RowPiece::operator==(const RowPiece &rhs)
 {
     bool hasSameComponents = true;
     for (Component* component : _components)
@@ -21,7 +21,7 @@ bool RowPiece::operator==(const RowPiece& rhs)
     return hasSameComponents;
 }
 
-bool RowPiece::operator!=(const RowPiece& rhs)
+bool RowPiece::operator!=(const RowPiece &rhs)
 {
     return !(operator==(rhs));
 }
@@ -70,7 +70,7 @@ void RowPiece::parallelMerge(RowPiece otherRowPiece)
     //Werte zusammenrechnen
     long double newResistanceValueCounter = _resistanceValue * otherRowPiece._resistanceValue;
     long double newResistanceValueDenominator = _resistanceValue + otherRowPiece._resistanceValue;
-    if(newResistanceValueDenominator != 0)
+    if (newResistanceValueDenominator != 0)
     {
         _resistanceValue = (newResistanceValueCounter / newResistanceValueDenominator);
     }
@@ -178,9 +178,9 @@ Node* RowPiece::getEqualNode(RowPiece otherRowPiece)
     return nullptr;
 }
 
-Node *RowPiece::getOppositeNode(Node *node)
+Node* RowPiece::getOppositeNode(Node* node)
 {
-    if(node == _nodeOne)
+    if (node == _nodeOne)
     {
         return _nodeTwo;
     }
@@ -200,4 +200,48 @@ Node *RowPiece::getOppositeNode(Node *node)
 bool RowPiece::hasNode(Node* node)
 {
     return node == _nodeOne || node == _nodeTwo;
+}
+
+bool RowPiece::hasOpenEnd(QList<Node*> allNodes, QList<RowPiece> rowPieces)
+{
+    //find connectedNodes
+    QList<Node*> connectedNodes = getConnectedNodes(allNodes);
+
+    //count
+    bool hasOpenEnd = false;
+    for (Node* connectedNode : connectedNodes)
+    {
+        hasOpenEnd = (0 == countConnectedRowPiecesOfNode(connectedNode, rowPieces));
+        if (hasOpenEnd)
+        {
+            return hasOpenEnd;
+        }
+    }
+    return hasOpenEnd;
+}
+
+int RowPiece::countConnectedRowPiecesOfNode(Node* node, QList<RowPiece> rowPieces)
+{
+    int counterOfConnectedRowPieces = 0;
+    for (RowPiece rowPiece : rowPieces)
+    {
+        if (rowPiece.hasNode(node) && rowPiece != *this)
+        {
+            counterOfConnectedRowPieces++;
+        }
+    }
+    return counterOfConnectedRowPieces;
+}
+
+QList<Node*> RowPiece::getConnectedNodes(QList<Node*> allNodes)
+{
+    QList<Node*> connectedNodes;
+    for (Node* node : allNodes)
+    {
+        if (hasNode(node))
+        {
+            connectedNodes.append(node);
+        }
+    }
+    return connectedNodes;
 }

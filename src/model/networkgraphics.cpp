@@ -202,6 +202,7 @@ void NetworkGraphics::load(void)
 void NetworkGraphics::saveAs(void)
 {
     _manager->saveAs();
+    _hasChangedDocument = false;
 }
 
 /*!

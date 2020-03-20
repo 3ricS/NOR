@@ -234,8 +234,8 @@ QPointF NetworkView::scenePositionToGrid(QPointF scenePosition)
 void NetworkView::deleteSampleObjectsAndHighlights(void)
 {
     _previousHighlightedRect = deleteGraphicsItem(_previousHighlightedRect);
-    _sampleComponentOnMoveEvent = dynamic_cast<Component*>(deleteGraphicsItem(_sampleComponentOnMoveEvent));
-    _sampleDescriptionOnMoveEvent = dynamic_cast<Description*>(deleteGraphicsItem(_sampleDescriptionOnMoveEvent));
+    _sampleComponent = dynamic_cast<Component*>(deleteGraphicsItem(_sampleComponent));
+    _sampleDescription = dynamic_cast<Description*>(deleteGraphicsItem(_sampleDescription));
 }
 #include <QDebug>
 void NetworkView::highlightGrid(QPointF scenePosition, QColor highlightColor)
@@ -314,22 +314,6 @@ void NetworkView::rotateComponent(QPointF scenePosition)
     else if (MouseMode::SelectionMode == _mouseMode)
     {
         _model->turnSelectedComponentsRight();
-    }
-}
-
-bool NetworkView::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWaytoTheRight)
-{
-    bool foundUnusedSpace = false;
-    while (true)
-    {
-        if (!_model->hasObjectAtPosition(
-                QPointF(xPos + xWaytoTheRight, yPos)))
-        {
-            foundUnusedSpace = true;
-            return foundUnusedSpace;
-        }
-
-        xWaytoTheRight += Defines::gridLength;
     }
 }
 
@@ -492,26 +476,7 @@ void NetworkView::copy(void)
  */
 void NetworkView::paste(void)
 {
-    GridObject* firstGridObject = nullptr;
-    if (!_copiedObjects.empty())
-    {
-        firstGridObject = _copiedObjects.first();
-    }
-
-    int xSpace = 0;
-    int ySpace = 0;
-    int i = 1;
-    for (GridObject* gridObject : _copiedObjects)
-    {
-        QPointF scenePosition(_lastClickedPosition.x() - xSpace, _lastClickedPosition.y() - ySpace);
-        if (!_model->hasObjectAtPosition(scenePosition))
-        {
-            _model->duplicateGridObject(gridObject, _lastClickedPosition.x() - xSpace,
-                                        _lastClickedPosition.y() - ySpace);
-            calculateDistanceToNextObject(i, firstGridObject, xSpace, ySpace);
-        }
-
-    }
+    _model->pasteGridObjects(_copiedObjects, _lastClickedPosition);
 }
 
 void NetworkView::enterEvent(QEvent* event)
@@ -570,47 +535,6 @@ void NetworkView::updateOverrideCursor(void)
     {
         QApplication::setOverrideCursor(Qt::OpenHandCursor);
     }
-}
-
-QList<Component*> NetworkView::findSelectedComponent(void)
-{
-    QList<Component*> componentList;
-    for (Component* component : _model->getComponents())
-    {
-        if (component->isSelected())
-        {
-            componentList.append(component);
-        }
-    }
-    return componentList;
-}
-
-QList<Description*> NetworkView::findSelectedDescription(void)
-{
-    QList<Description*> descriptionList;
-    for (Description* description : _model->getDescriptions())
-    {
-        if (description->isSelected())
-        {
-            descriptionList.append(description);
-        }
-    }
-    return descriptionList;
-}
-
-void NetworkView::calculateDistanceToNextObject(int &i, GridObject* firstGridObject, int &xSpace, int &ySpace)
-{
-    if (i < _copiedObjects.count() && firstGridObject != nullptr)
-    {
-        xSpace = firstGridObject->getPosition().x() - _copiedObjects[i]->getPosition().x();
-        ySpace = firstGridObject->getPosition().y() - _copiedObjects[i]->getPosition().y();
-    }
-    else if (i == _copiedObjects.count())
-    {
-        xSpace = 0;
-        ySpace = 0;
-    }
-    i++;
 }
 
 QGraphicsItem* NetworkView::deleteGraphicsItem(QGraphicsItem* graphicsItem)
@@ -692,8 +616,8 @@ void NetworkView::showSampleComponent(QPointF scenePosition, Component::Componen
                                               gridPosition.toPoint().y(), _isVerticalComponentDefault, 0,
                                               0);
         }
-        _sampleComponentOnMoveEvent = sampleComponent;
-        _model->addItem(_sampleComponentOnMoveEvent);
+        _sampleComponent = sampleComponent;
+        _model->addItem(_sampleComponent);
         highlightGrid(scenePosition, Defines::highlightColor);
     }
 }
@@ -761,8 +685,8 @@ void NetworkView::showSampleDescription(QPointF scenePosition)
     if (!_model->hasObjectAtPosition(scenePosition))
     {
         QPointF gridPosition = _model->mapSceneToGrid(scenePosition);
-        _sampleDescriptionOnMoveEvent = new Description(gridPosition.x(), gridPosition.y(), 0);
-        _model->addItem(_sampleDescriptionOnMoveEvent);
+        _sampleDescription = new Description(gridPosition.x(), gridPosition.y(), 0);
+        _model->addItem(_sampleDescription);
         highlightGrid(scenePosition, Defines::highlightColor);
     }
 }

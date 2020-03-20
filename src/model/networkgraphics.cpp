@@ -1235,18 +1235,7 @@ void NetworkGraphics::cutObjects(QList<GridObject*> objectsToCut)
  */
 void NetworkGraphics::duplicateSelectedGridObjects(void)
 {
-    for (GridObject* gridObject : getSelectedObjects())
-    {
-        int xPosition = gridObject->getPosition().x();
-        int yPosition = gridObject->getPosition().y();
-
-        int xWayToTheRight = Defines::gridLength;
-        if (lookingForFreeSpaceToDuplicate(xPosition, yPosition, xWayToTheRight))
-        {
-            duplicateGridObject(gridObject, xPosition + xWayToTheRight,
-                                       yPosition);
-        }
-    }
+    duplicateGridObjects(getSelectedObjects());
 }
 
 bool NetworkGraphics::lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWaytoTheRight)
@@ -1379,4 +1368,57 @@ void NetworkGraphics::moveObjects(QList<GridObject*> objectsToMove, GridObject* 
     {
         moveObjects(notMovedObjects, objectToMove, diffX, diffY);
     }
+}
+
+void NetworkGraphics::duplicateGridObjects(QList<GridObject*> objectsToDuplicate)
+{
+    for (GridObject* gridObject : objectsToDuplicate)
+    {
+        int xPosition = gridObject->getPosition().x();
+        int yPosition = gridObject->getPosition().y();
+
+        int xWayToTheRight = Defines::gridLength;
+        if (lookingForFreeSpaceToDuplicate(xPosition, yPosition, xWayToTheRight))
+        {
+            duplicateGridObject(gridObject, xPosition + xWayToTheRight,
+                                yPosition);
+        }
+    }
+}
+
+void NetworkGraphics::pasteGridObjects(QList<GridObject*> objectsToPaste, QPointF positionToPaste)
+{
+    GridObject* firstGridObject = nullptr;
+    if (!objectsToPaste.empty())
+    {
+        firstGridObject = objectsToPaste.first();
+    }
+
+    int xSpace = 0;
+    int ySpace = 0;
+    int i = 1;
+    for (GridObject* gridObject : objectsToPaste)
+    {
+        QPointF scenePosition(positionToPaste.x() - xSpace, positionToPaste.y() - ySpace);
+        if (!hasObjectAtPosition(scenePosition))
+        {
+            duplicateGridObject(gridObject, scenePosition.x(), scenePosition.y());
+            calculateDistanceToNextObject(i, firstGridObject, xSpace, ySpace, objectsToPaste);
+        }
+    }
+}
+
+void NetworkGraphics::calculateDistanceToNextObject(int &i, GridObject* firstGridObject, int &xSpace, int &ySpace, QList<GridObject*> objects)
+{
+    if (i < objects.count() && firstGridObject != nullptr)
+    {
+        xSpace = firstGridObject->getPosition().x() - objects[i]->getPosition().x();
+        ySpace = firstGridObject->getPosition().y() - objects[i]->getPosition().y();
+    }
+    else if (i == objects.count())
+    {
+        xSpace = 0;
+        ySpace = 0;
+    }
+    i++;
 }

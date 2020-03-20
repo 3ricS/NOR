@@ -100,29 +100,6 @@ bool NetworkGraphics::hasObjectAtPosition(QPointF scenePosition)
     return getObjectAtPosition(scenePosition) != nullptr;
 }
 
-/*!
- * \brief Gibt die Verbindung an der zu prüfenden Position zurück.
- *
- * \param gridposition ist die prüfende Position
- * \return Gibt die Verbindung an der Position zurück.
- */
-Connection* NetworkGraphics::getConnectionAtPosition(QPointF gridposition)
-{
-    for (Connection* connection : _connections)
-    {
-        for (QRect hitBox : connection->getHitBoxes())
-        {
-            int x = gridposition.x();
-            int y = gridposition.y();
-            if (hitBox.contains(x, y))
-            {
-                return connection;
-            }
-        }
-    }
-    return nullptr;
-}
-
 QString NetworkGraphics::getFileName(void)
 {
     return _manager->getFileName();

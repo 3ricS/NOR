@@ -485,7 +485,7 @@ void NetworkView::startConnection(QPointF scenePosition)
         Component* foundComponent = _connectionStartComponentPort->getComponent();
         Component::Port port = _connectionStartComponentPort->getPort();
 
-        int hitBoxHighlight = Component::_hitBoxSize / 1.5;
+        int hitBoxHighlight = Component::_hitBoxSizeAtPort / 1.5;
         int positionX = foundComponent->getPortPosition(port).x() - hitBoxHighlight;
         int positionY = foundComponent->getPortPosition(port).y() - hitBoxHighlight;
         QColor color = QColor(255, 0, 0, 55);
@@ -578,7 +578,7 @@ void NetworkView::highlightComponentPort(ComponentPort* componentPortToHighlight
     Component* foundComponent = componentPortToHighlight->getComponent();
     Component::Port port = componentPortToHighlight->getPort();
 
-    int hitBoxHighlight = Component::_hitBoxSize / 1.5;
+    int hitBoxHighlight = Component::_hitBoxSizeAtPort / 1.5;
     int positionX = foundComponent->getPortPosition(port).x() - hitBoxHighlight;
     int positionY = foundComponent->getPortPosition(port).y() - hitBoxHighlight;
 

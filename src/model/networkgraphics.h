@@ -100,6 +100,10 @@ public:
     void turnComponentRightWithoutUndo(Component* componentToTurn);
 
 
+    //Positions
+    bool hasObjectAtPosition(QPointF scenePosition);
+    GridObject* getObjectAtPosition(QPointF scenePosition);
+    ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
 
     //getter
     QList<GridObject*> getObjects(void) {return _objects;}
@@ -110,11 +114,6 @@ public:
     QList<GridObject*> getSelectedObjects(void);
     QList<Component*> getSelectedComponents(void);
 
-    //Positions
-    bool hasObjectAtPosition(QPointF scenePosition);
-    GridObject* getObjectAtPosition(QPointF scenePosition);
-    ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
-    Connection* getConnectionAtPosition(QPointF gridposition);
 
     Component* getComponentById(int id);
 

@@ -33,12 +33,7 @@ public:
     bool operator!=(const Connection& rhs);
 
     QRectF boundingRect(void) const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);
-
-    //Methoden
-    int pathAnalyse(bool horizontalBeforeVertical);
-    void paintHitbox(QPainter* painter);
 
     //getter
     bool isThereAComponentOrADescription(int x, int y);
@@ -56,6 +51,11 @@ public:
     static constexpr int _circleRadius = 5;
 
 private:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+    int pathAnalyse(bool horizontalBeforeVertical);
+    void paintHitbox(QPainter* painter);
+
     void drawHorizontalLines(void);
     void drawLeftOrRight(int leftOrRight);
     void drawVerticalLines(void);

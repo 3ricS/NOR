@@ -21,19 +21,23 @@ class RowPiece
 {
 public:
     RowPiece(Node* nodeOne, Node* nodeTwo, long double resistanceValue, QList<Component *> includedComponents);
+    bool operator==(const RowPiece& rhs);
+    bool operator!=(const RowPiece& rhs);
 
     void parallelMerge(RowPiece otherRowPiece);
     void rowMerge(RowPiece otherRowPiece);
 
+    bool hasEqualNodesOnBothSides(RowPiece otherRowPiece);
+    bool hasOneEqualNode(RowPiece otherRowPiece);
+    bool hasNode(Node* node);
+    bool hasOpenEnd(QList<Node*> allNodes, QList<RowPiece> rowPieces);
+
     //getter
     long double getResistanceValue(void) {return _resistanceValue;}
-
     Node* getNodeOne(void) {return _nodeOne;}
     Node* getNodeTwo(void) {return _nodeTwo;}
-
     bool getIsMergedParallel(void) {return _isMergedParallel;}
     void setIsMergedParallel(bool isMergedParallel) {_isMergedParallel = isMergedParallel;}
-
     double getAmp(void) {return _amp;}
     QList<Component*> getComponents(void) {return _components;}
     Node* getEqualNode(RowPiece otherRowPiece);
@@ -42,18 +46,10 @@ public:
     //setter
     void setAmp(double amp) {_amp = amp;}
 
-    bool operator==(const RowPiece& rhs);
-    bool operator!=(const RowPiece& rhs);
-
-    bool hasEqualNodesOnBothSides(RowPiece otherRowPiece);
-    bool hasOneEqualNode(RowPiece otherRowPiece);
-    bool hasNode(Node* node);
-    bool hasOpenEnd(QList<Node*> allNodes, QList<RowPiece> rowPieces);
+private:
     QList<Node*> getConnectedNodes(QList<Node*> allNodes);
     int countConnectedRowPiecesOfNode(Node* node, QList<RowPiece> rowPieces);
 
-
-private:
     Node* _nodeOne;
     Node* _nodeTwo;
     long double _resistanceValue;

@@ -69,14 +69,14 @@ Component::Port Component::getPort(QPointF position) const
 {
     int xPosition = _position.x();
     int yPosition = _position.y();
-    bool xEqualPortA = (position.x() > getPortPositionXOrY(xPosition, Port::A, true) - _hitBoxSize &&
-                        position.x() < getPortPositionXOrY(xPosition, Port::A, true) + _hitBoxSize);
-    bool yEqualPortA = (position.y() > getPortPositionXOrY(yPosition, Port::A, false) - _hitBoxSize &&
-                        position.y() < getPortPositionXOrY(yPosition, Port::A, false) + _hitBoxSize);
-    bool xEqualPortB = (position.x() > getPortPositionXOrY(xPosition, Port::B, true) - _hitBoxSize &&
-                        position.x() < getPortPositionXOrY(xPosition, Port::B, true) + _hitBoxSize);
-    bool yEqualPortB = (position.y() > getPortPositionXOrY(yPosition, Port::B, false) - _hitBoxSize &&
-                        position.y() < getPortPositionXOrY(yPosition, Port::B, false) + _hitBoxSize);
+    bool xEqualPortA = (position.x() > getPortPositionXOrY(xPosition, Port::A, true) - _hitBoxSizeAtPort &&
+                        position.x() < getPortPositionXOrY(xPosition, Port::A, true) + _hitBoxSizeAtPort);
+    bool yEqualPortA = (position.y() > getPortPositionXOrY(yPosition, Port::A, false) - _hitBoxSizeAtPort &&
+                        position.y() < getPortPositionXOrY(yPosition, Port::A, false) + _hitBoxSizeAtPort);
+    bool xEqualPortB = (position.x() > getPortPositionXOrY(xPosition, Port::B, true) - _hitBoxSizeAtPort &&
+                        position.x() < getPortPositionXOrY(xPosition, Port::B, true) + _hitBoxSizeAtPort);
+    bool yEqualPortB = (position.y() > getPortPositionXOrY(yPosition, Port::B, false) - _hitBoxSizeAtPort &&
+                        position.y() < getPortPositionXOrY(yPosition, Port::B, false) + _hitBoxSizeAtPort);
 
     if (xEqualPortA && yEqualPortA)
     {
@@ -114,7 +114,7 @@ bool Component::hasPortAtPosition(QPointF position) const
  *
  * Es wird geprüft ob es sich bei dem componentType um einen Widerstand oder eine Spannungsquelle handelt.
  */
-Component::ComponentType Component::integerToComponentType(int componentType)
+Component::ComponentType Component::convertToComponentType(int componentType)
 {
     Component::ComponentType type = ComponentType::PowerSupply;
     if (0 == componentType)

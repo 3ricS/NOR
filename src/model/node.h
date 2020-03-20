@@ -36,10 +36,6 @@ public:
     QList<ComponentPort> getComponentPorts(void)
     { return _componentPorts; }
 
-    int getComponentPortCount(void)
-    { return _componentPorts.count(); }
-
-    bool isOpenNode() {return (0 == _componentPorts.count());}
 
 private:
     int _id;

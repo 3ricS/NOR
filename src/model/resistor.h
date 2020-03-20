@@ -19,12 +19,9 @@ public:
     long double getResistanceValue(void) {return _resistanceValue;}
     void setResistanceValue(long double resistance) { _resistanceValue = resistance;}
 
-    //Methoden
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 private:
-
-    //Methoden
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     virtual void setLabelPositions(QPainter* painter) override;
 
     long double _resistanceValue;

@@ -205,7 +205,7 @@ void FileManager::loadComponent(QJsonArray array)
                 int yPos = obj.value("yPos").toInt();
                 bool isVertical = obj.value("isVertical").toBool();
                 long double value = obj.value("value").toDouble();
-                Component::ComponentType componentType = Component::integerToComponentType(obj.value("type").toInt());
+                Component::ComponentType componentType = Component::convertToComponentType(obj.value("type").toInt());
                 if(Component::ComponentType::Resistor == componentType)
                 {
                     _model->addResistor(name, value, xPos, yPos, isVertical, id);

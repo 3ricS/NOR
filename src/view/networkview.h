@@ -20,6 +20,8 @@ class NetworkView : public QGraphicsView
     Q_OBJECT
 public:
     enum MouseMode{ResistorMode, PowerSupplyMode, ConnectionMode, SelectionMode, DescriptionMode};
+    Component::ComponentType convertMouseModeToComponentType(MouseMode mouseMode);
+
     NetworkView(QWidget *parent);
     void setModel(NetworkGraphics* model);
     void duplicate(void);
@@ -67,14 +69,20 @@ private:
     void startConnection(QPointF scenePosition);
     //TODO: benenne connectionMoveEvent um
     void connectionMoveEvent(QPointF scenePosition);
-    void startSelection(QPointF scenePosition);
+    void startSelectionOrMove(QPointF scenePosition);
     void startMultiSelection(QPointF scenePosition);
+    void startMove(QPointF scenePosition);
+    bool moveIfNeeded(QPointF scenePosition);
 
+    void addInitialComponentWithMouseMode(QPointF scenePosition, NetworkView::MouseMode mouseMode);
+    void addInitialDescription(QPointF scenePosition);
+    void buildConnection(QPointF scenePositionOfEnd);
+    void deleteConnectionHighlights();
 
     //Highlighting
     void deleteSampleObjectsAndHighlights(void);
     void showSampleComponent(QPointF scenePosition, Component::ComponentType componentType);
-    void showSampleComponent(QPointF scenePosition, const MouseMode mouseMode);
+    void showSampleComponent(QPointF scenePosition, MouseMode mouseMode);
     void showSampleDescription(QPointF scenePosition);
     void highlightGrid(QPointF scenePosition, QColor highlightColor);
     void highlightComponentPort(ComponentPort* componentPortToHighlight, QColor highlightColor);;

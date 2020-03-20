@@ -21,7 +21,7 @@
 class Component : public GridObject
 {
 public:
-    enum ComponentType{Resistor, PowerSupply};
+    enum ComponentType{Resistor, PowerSupply, Null};
     enum Port{A, B, null};
     enum Orientation{left, top, right, bottom};
     Component(int x, int y, bool isVertical, QString name, double voltage, ComponentType componentTyp, int id);

@@ -30,35 +30,17 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 
     //Merken des zuletzt geklickten Bereichs, wird beim Paste benötigt
     _lastClickedPosition = scenePosition;
-
-    if (_multiselectRect != nullptr)
-    {
-        delete _multiselectRect;
-    }
-    _multiselectRect = nullptr;
-
     _mouseIsPressed = false;
-
-    Component::ComponentType componentType = Component::ComponentType::PowerSupply;
+    updateOverrideCursor();
 
     switch (_mouseMode)
     {
         case MouseMode::ResistorMode:
-        {
-            componentType = Component::ComponentType::Resistor;
-            //Durchfallen zum nächsten Case, da in beiden Fällen das Gleiche passiert
-        }
         case MouseMode::PowerSupplyMode:
         {
             if (Qt::LeftButton == mouseEvent->button())
             {
-                Component* createdComponent = _model->addComponent(scenePosition, componentType,
-                                                                   _isVerticalComponentDefault);
-                if (createdComponent != nullptr)
-                {
-                    EditView* editView = new EditView(createdComponent, _model, true, this, nullptr);
-                    editView->show();
-                }
+                addInitialComponentWithMouseMode(scenePosition, _mouseMode);
             }
             else if (Qt::RightButton == mouseEvent->button())
             {
@@ -68,85 +50,24 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             break;
         case MouseMode::ConnectionMode:
         {
-            bool connectionStarted = (nullptr != _connectionStartComponentPort);
-            if (connectionStarted)
-            {
-                //TODO: entferne _tempComponentListForConnections
-                ComponentPort* connectionComponentPortEnd = nullptr;
-                for (Component* component : _tempComponentListForConnections)
-                {
-                    bool hasFoundPort = component->hasPortAtPosition(scenePosition);
-                    if (hasFoundPort)
-                    {
-                        Component::Port port = component->getPort(scenePosition);
-                        connectionComponentPortEnd = new ComponentPort(component, port);
-                    }
-                }
-
-                bool foundComponentPortAtEnd = (connectionComponentPortEnd != nullptr);
-                if (foundComponentPortAtEnd)
-                {
-                    _model->addConnection(*_connectionStartComponentPort, *connectionComponentPortEnd);
-                }
-
-                delete _connectionStartComponentPort;
-                _connectionStartComponentPort = nullptr;
-                _previousHighlightedPort = deleteGraphicsItem(_previousHighlightedPort);
-            }
-            _tempComponentListForConnections.clear();
-            if (nullptr != _previousHighlightedPort)
-            {
-                deleteSampleObjectsAndHighlights();
-                _model->removeItem(_previousHighlightedPort);
-                delete _previousHighlightedPort;
-                _previousHighlightedPort = nullptr;
-
-                _model->update();
-            }
+            buildConnection(scenePosition);
+            deleteConnectionHighlights();
         }
             break;
         case MouseMode::SelectionMode:
         {
-            updateOverrideCursor();
-            //Move Event nur auslösen, wenn Objekt an neuer Position
-
-            bool hasStartedMoving = (_selectedObjectToMove != nullptr);
-            if (hasStartedMoving)
-            {
-                if (!_model->hasObjectAtPosition(scenePosition))
-                {
-                    if (!_selectedObjectToMove->boundingRect().contains(scenePosition))
-                    {
-                        _model->moveMultiselectObjects(_model->getSelectedObjects(), _selectedObjectToMove,
-                                                       scenePosition);
-                    }
-                }
-            }
-            else
+            bool hasStartedMoving = moveIfNeeded(scenePosition);
+            if (!hasStartedMoving)
             {
                 multiselect(scenePosition, true);
             }
-            _selectedObjectToMove = nullptr;
-
-            _model->update();
         }
             break;
         case MouseMode::DescriptionMode:
         {
             if (mouseEvent->button() == Qt::LeftButton)
             {
-                bool ok;
-                Description* createdDescription = _model->addDescriptionField(scenePosition, false);
-                if (createdDescription != nullptr)
-                {
-                    QString text = QInputDialog::getMultiLineText(this, "Textfeld bearbeiten", "Text bearbeiten", "",
-                                                                  &ok, Qt::WindowCloseButtonHint);
-
-                    if (ok && !text.isEmpty())
-                    {
-                        createdDescription->setText(text);
-                    }
-                }
+                addInitialDescription(scenePosition);
             }
         }
             break;
@@ -171,8 +92,7 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     }
     else if (SelectionMode == _mouseMode)
     {
-        QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-        startSelection(scenePosition);
+        startSelectionOrMove(scenePosition);
     }
 }
 
@@ -232,7 +152,9 @@ void NetworkView::deleteSampleObjectsAndHighlights(void)
     _sampleComponent = dynamic_cast<Component*>(deleteGraphicsItem(_sampleComponent));
     _sampleDescription = dynamic_cast<Description*>(deleteGraphicsItem(_sampleDescription));
 }
+
 #include <QDebug>
+
 void NetworkView::highlightGrid(QPointF scenePosition, QColor highlightColor)
 {
     QPointF gridPosition = _model->mapSceneToGrid(scenePosition);
@@ -241,7 +163,7 @@ void NetworkView::highlightGrid(QPointF scenePosition, QColor highlightColor)
 
     if (!_model->hasObjectAtPosition(gridPosition))
     {
-        QPointF startOfRect = QPointF(positionX - (Defines::gridLength / 2),positionY - (Defines::gridLength / 2));
+        QPointF startOfRect = QPointF(positionX - (Defines::gridLength / 2), positionY - (Defines::gridLength / 2));
         QGraphicsItem* highlightedRect = _model->addRect(startOfRect.x(), startOfRect.y(),
                                                          Defines::gridLength, Defines::gridLength, Qt::NoPen,
                                                          highlightColor);
@@ -438,7 +360,7 @@ void NetworkView::setMouseMode(NetworkView::MouseMode newMode)
     if (isAllowedToChangeMode())
     {
         _mouseMode = newMode;
-
+        updateOverrideCursor();
         deleteSampleObjectsAndHighlights();
     }
 }
@@ -482,7 +404,7 @@ void NetworkView::enterEvent(QEvent* event)
 
 void NetworkView::leaveEvent(QEvent* event)
 {
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
+    QApplication::restoreOverrideCursor();
     QWidget::leaveEvent(event);
 
     deleteSampleObjectsAndHighlights();
@@ -522,13 +444,21 @@ void NetworkView::multiselect(QPointF endOfSelectionPosition, bool isEndOfSelect
 
 void NetworkView::updateOverrideCursor(void)
 {
+    QApplication::restoreOverrideCursor();
     if (_mouseMode == ConnectionMode)
     {
         QApplication::setOverrideCursor(Qt::CrossCursor);
     }
     else if (_mouseMode == SelectionMode)
     {
-        QApplication::setOverrideCursor(Qt::OpenHandCursor);
+        if(_mouseIsPressed)
+        {
+            QApplication::setOverrideCursor(Qt::ClosedHandCursor);
+        }
+        else
+        {
+            QApplication::setOverrideCursor(Qt::OpenHandCursor);
+        }
     }
 }
 
@@ -571,7 +501,7 @@ void NetworkView::startConnection(QPointF scenePosition)
     }
 }
 
-void NetworkView::startSelection(QPointF scenePosition)
+void NetworkView::startSelectionOrMove(QPointF scenePosition)
 {
     GridObject* selectedObject = _model->getObjectAtPosition(scenePosition);
     bool isObjectAtPosition = (nullptr != selectedObject);
@@ -579,8 +509,7 @@ void NetworkView::startSelection(QPointF scenePosition)
     {
         if (selectedObject->isSelected())
         {
-            QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-            _selectedObjectToMove = _model->getObjectAtPosition(scenePosition);
+            startMove(scenePosition);
         }
         else
         {
@@ -617,23 +546,10 @@ void NetworkView::showSampleComponent(QPointF scenePosition, Component::Componen
     }
 }
 
-void NetworkView::showSampleComponent(QPointF scenePosition, const NetworkView::MouseMode mouseMode)
+void NetworkView::showSampleComponent(QPointF scenePosition, NetworkView::MouseMode mouseMode)
 {
-    Component::ComponentType componentType;
-    bool isResistorMode = mouseMode == MouseMode::ResistorMode;
-    bool isPowerSupplyMode = mouseMode == MouseMode::PowerSupplyMode;
-    if (isResistorMode)
-    {
-        componentType = Component::ComponentType::Resistor;
-    }
-    else if (isPowerSupplyMode)
-    {
-        componentType = Component::ComponentType::PowerSupply;
-    }
-    if (isResistorMode || isPowerSupplyMode)
-    {
-        showSampleComponent(scenePosition, componentType);
-    }
+    Component::ComponentType componentType = convertMouseModeToComponentType(mouseMode);
+    showSampleComponent(scenePosition, componentType);
 }
 
 void NetworkView::connectionMoveEvent(QPointF scenePosition)
@@ -701,7 +617,6 @@ void NetworkView::keyReleaseEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Escape)
     {
-        QApplication::setOverrideCursor(Qt::OpenHandCursor);
         emit changeToSelectionMode();
     }
 }
@@ -722,5 +637,110 @@ void NetworkView::selectAll()
 void NetworkView::selectNothing()
 {
     _model->deselectAllItems();
+}
+
+Component::ComponentType NetworkView::convertMouseModeToComponentType(NetworkView::MouseMode mouseMode)
+{
+    bool isResistorMode = mouseMode == MouseMode::ResistorMode;
+    bool isPowerSupplyMode = mouseMode == MouseMode::PowerSupplyMode;
+    if (isResistorMode)
+    {
+        return Component::ComponentType::Resistor;
+    }
+    else if (isPowerSupplyMode)
+    {
+        return Component::ComponentType::PowerSupply;
+    }
+    else
+    {
+        return Component::ComponentType::Null;
+    }
+}
+
+void NetworkView::addInitialComponentWithMouseMode(QPointF scenePosition, NetworkView::MouseMode mouseMode)
+{
+    Component::ComponentType componentType = convertMouseModeToComponentType(mouseMode);
+    Component* createdComponent = _model->addComponent(scenePosition, componentType,
+                                                       _isVerticalComponentDefault);
+    if (createdComponent != nullptr)
+    {
+        EditView* editView = new EditView(createdComponent, _model, true, this, nullptr);
+        editView->show();
+    }
+}
+
+void NetworkView::buildConnection(QPointF scenePositionOfEnd)
+{
+    bool connectionStarted = (nullptr != _connectionStartComponentPort);
+    if (connectionStarted)
+    {
+        //TODO: entferne _tempComponentListForConnections
+        ComponentPort* connectionComponentPortEnd = nullptr;
+        for (Component* component : _tempComponentListForConnections)
+        {
+            bool hasFoundPort = component->hasPortAtPosition(scenePositionOfEnd);
+            if (hasFoundPort)
+            {
+                Component::Port port = component->getPort(scenePositionOfEnd);
+                connectionComponentPortEnd = new ComponentPort(component, port);
+            }
+        }
+
+        bool foundComponentPortAtEnd = (connectionComponentPortEnd != nullptr);
+        if (foundComponentPortAtEnd)
+        {
+            _model->addConnection(*_connectionStartComponentPort, *connectionComponentPortEnd);
+        }
+
+        delete _connectionStartComponentPort;
+        _connectionStartComponentPort = nullptr;
+    }
+}
+
+void NetworkView::deleteConnectionHighlights()
+{
+    _previousHighlightedPort = deleteGraphicsItem(_previousHighlightedPort);
+    _tempComponentListForConnections.clear();
+}
+
+bool NetworkView::moveIfNeeded(QPointF scenePosition)
+{
+    bool hasStartedMoving = (_selectedObjectToMove != nullptr);
+    if (hasStartedMoving)
+    {
+        if (!_model->hasObjectAtPosition(scenePosition))
+        {
+            if (!_selectedObjectToMove->boundingRect().contains(scenePosition))
+            {
+                _model->moveMultiselectObjects(_model->getSelectedObjects(), _selectedObjectToMove,
+                                               scenePosition);
+            }
+        }
+    }
+    _selectedObjectToMove = nullptr;
+    _model->update();
+    return hasStartedMoving;
+}
+
+void NetworkView::addInitialDescription(QPointF scenePosition)
+{
+    bool ok;
+    Description* createdDescription = _model->addDescriptionField(scenePosition, false);
+    if (createdDescription != nullptr)
+    {
+        QString text = QInputDialog::getMultiLineText(this, "Textfeld bearbeiten", "Text bearbeiten", "",
+                                                      &ok, Qt::WindowCloseButtonHint);
+
+        if (ok && !text.isEmpty())
+        {
+            createdDescription->setText(text);
+        }
+    }
+}
+
+void NetworkView::startMove(QPointF scenePosition)
+{
+    _selectedObjectToMove = _model->getObjectAtPosition(scenePosition);
+    updateOverrideCursor();
 }
 

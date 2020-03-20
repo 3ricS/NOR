@@ -107,7 +107,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             break;
         case MouseMode::SelectionMode:
         {
-            QApplication::restoreOverrideCursor();
+            updateOverrideCursor();
             //Move Event nur auslösen, wenn Objekt an neuer GridPosition
             if (!_model->hasObjectAtPosition(gridPosition))
             {
@@ -186,6 +186,7 @@ void NetworkView::mousePressEvent(QMouseEvent* event)
     }
     else if (SelectionMode == _mouseMode)
     {
+        QApplication::setOverrideCursor(Qt::ClosedHandCursor);
         startSelection(scenePosition);
     }
 }
@@ -515,7 +516,6 @@ void NetworkView::setMouseMode(NetworkView::MouseMode newMode)
         _mouseMode = newMode;
 
         deleteSampleObjectsAndHighlights();
-        updateOverrideCursor();
     }
 }
 
@@ -636,6 +636,7 @@ void NetworkView::enterEvent(QEvent* event)
 void NetworkView::leaveEvent(QEvent* event)
 {
     QApplication::restoreOverrideCursor();
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
     QWidget::leaveEvent(event);
 
     deleteSampleObjectsAndHighlights();

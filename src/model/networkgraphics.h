@@ -76,6 +76,9 @@ public:
     GridObject* duplicateGridObject(GridObject* gridObjectToDuplicate, int xPosition, int yPosition);
     void duplicateSelectedGridObjects();
 
+    //Paste
+    void pasteGridObjects(QList<GridObject*> objectsToPaste, QPointF positionToPaste);
+
 
 
 
@@ -147,9 +150,12 @@ private:
     void moveObjects(QList<GridObject*> objectsToMove, GridObject* objectToMove, int diffX, int diffY);
 
 
+    void duplicateGridObjects(QList<GridObject*> objectsToDuplicate);
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
     Description* duplicateDescription(Description* descriptionToDuplicate, int xPosition, int yPosition);
+
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWaytoTheRight);
+    void calculateDistanceToNextObject(int &i, GridObject* firstGridObject, int &xSpace, int &ySpace, QList<GridObject*> objects);
 
     void deleteSelectedGridObjects(QList<GridObject*>& copiedObjects);
     void deleteSelectedConnections();

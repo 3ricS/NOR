@@ -57,14 +57,11 @@ private:
 
     static QPointF scenePositionToGrid(QPointF scenePosition);
     void rotateComponent(QPointF scenePosition);
-    bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int& xWaytoTheRight);
     QPointF findScrollPosition(void);
     void focusForPrint(void);
     void multiselect(QPointF endOfSelectionPosition, bool isEndOfSelection = false);
     void updateOverrideCursor(void);
-    QList<Component*> findSelectedComponent(void);
-    QList<Description*> findSelectedDescription(void);
-    void calculateDistanceToNextObject(int& i, GridObject* firstGridObject, int& xSpace, int& ySpace);
+
     QGraphicsItem* deleteGraphicsItem(QGraphicsItem* graphicsItem);
 
     //for Key/MouseEvents
@@ -88,17 +85,14 @@ private:
     NetworkGraphics*         _model  = nullptr;
 
     bool                     _mouseIsPressed = false;
-
     QList<Component*>        _tempComponentListForConnections;
     ComponentPort*           _connectionStartComponentPort = nullptr;
     QGraphicsItem*           _previousHighlightedRect = nullptr;
     QGraphicsItem*           _previousHighlightedPort = nullptr;
     GridObject*              _selectedObjectToMove = nullptr;
     bool                     _isVerticalComponentDefault = true;
-    Component*               _sampleComponentOnMoveEvent = nullptr;
-    Description*             _sampleDescriptionOnMoveEvent = nullptr;
-    QList<Component*>        _copiedComponents;
-    QList<Description*>      _copiedDescriptions;
+    Component*               _sampleComponent = nullptr;
+    Description*             _sampleDescription = nullptr;
     QList<GridObject*>       _copiedObjects;
     QPointF                  _lastClickedPosition;
     QGraphicsRectItem*       _multiselectRect = nullptr;

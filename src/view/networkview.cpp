@@ -219,6 +219,10 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
             {
                 multiselect(scenePosition, false);
             }
+            else if (_mouseIsPressed && _selectedObjectToMove != nullptr)
+            {
+                highlightGrid(scenePosition, Defines::highlightColor);
+            }
         }
             break;
         case DescriptionMode:
@@ -251,7 +255,7 @@ void NetworkView::deleteSampleObjectsAndHighlights(void)
     _sampleComponentOnMoveEvent = dynamic_cast<Component*>(deleteGraphicsItem(_sampleComponentOnMoveEvent));
     _sampleDescriptionOnMoveEvent = dynamic_cast<Description*>(deleteGraphicsItem(_sampleDescriptionOnMoveEvent));
 }
-
+#include <QDebug>
 void NetworkView::highlightGrid(QPointF scenePosition, QColor highlightColor)
 {
     QPointF gridPositionOne = scenePositionToGrid(scenePosition);
@@ -635,7 +639,6 @@ void NetworkView::enterEvent(QEvent* event)
 
 void NetworkView::leaveEvent(QEvent* event)
 {
-    QApplication::restoreOverrideCursor();
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     QWidget::leaveEvent(event);
 
@@ -676,7 +679,6 @@ void NetworkView::multiselect(QPointF endOfSelectionPosition, bool isEndOfSelect
 
 void NetworkView::updateOverrideCursor(void)
 {
-    QApplication::restoreOverrideCursor();
     if (_mouseMode == ConnectionMode)
     {
         QApplication::setOverrideCursor(Qt::CrossCursor);
@@ -907,6 +909,7 @@ void NetworkView::keyReleaseEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Escape)
     {
+        QApplication::setOverrideCursor(Qt::OpenHandCursor);
         emit changeToSelectionMode();
     }
 }

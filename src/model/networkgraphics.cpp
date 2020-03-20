@@ -685,13 +685,14 @@ void NetworkGraphics::addConnection(ComponentPort componentPortA, ComponentPort 
  *
  * \param   objectToMove     ist die zu verschiebene Komponente
  * \param   descriptionToMove   ist das zu verschieben Textfeld
- * \param   gridPosition        neue Position
+ * \param   scenePosition        neue Position
  *
  * Wenn eine Komponente ausgewählt ist, wird die Komponente verschoben.
  */
 void
-NetworkGraphics::moveObject(GridObject* objectToMove, QPointF gridPosition)
+NetworkGraphics::moveObject(GridObject* objectToMove, QPointF scenePosition)
 {
+    QPointF gridPosition = mapSceneToGrid(scenePosition);
     if (objectToMove != nullptr)
     {
         CommandMoveComponent* commandMoveComponent = new CommandMoveComponent(this, objectToMove,
@@ -891,47 +892,27 @@ void NetworkGraphics::editDescription(Description* descriptionToEdit, QString ne
 /*!
  * \brief Verschiebt zusammengefasste Komponente an eine andere Gitterposition.
  *
- * \param objects     ist die Liste der zusammengefassten Objekte
+ * \param selectedObjects     ist die Liste der zusammengefassten Objekte
  * \param objectToMove   ist die ausgewählte Komponente
  * \param descriptionToMove ist das ausgewählte Textfeld
  * \param diffXAfterMoving  ist die Differenz zwischen der Ausgangs und der End X-Koordinate
  * \param diffYAfterMoving  ist die Differenz zwischen der Ausgangs und der End Y-Koordinate
  */
 void
-NetworkGraphics::moveMultiselectComponents(QList<GridObject*> objects, GridObject* objectToMove,
-                                           int diffXAfterMoving, int diffYAfterMoving)
+NetworkGraphics::moveMultiselectObjects(QList<GridObject*> selectedObjects, GridObject* objectToMove,
+                                        QPointF scenePosition)
 {
-    bool terminationCondition = false;
-    QList<GridObject*> notMovedObjects;
-    for (GridObject* gridObject : objects)
+    if (objectToMove != nullptr)
     {
-        if (gridObject->isSelected() && gridObject != objectToMove)
-        {
-            int xPosition = gridObject->getPosition().x();
-            int yPosition = gridObject->getPosition().y();
+        int previousComoponentXPosition = objectToMove->getPosition().x();
+        int previousComoponentYPosition = objectToMove->getPosition().y();
 
-            QPointF* newPosition = new QPointF(xPosition + diffXAfterMoving,
-                                               yPosition + diffYAfterMoving);
-            if (hasObjectAtPosition(*newPosition))
-            {
-                if (getObjectAtPosition(*newPosition) != nullptr &&
-                    !getObjectAtPosition(*newPosition)->isSelected())
-                {
-                    terminationCondition = true;
-                }
-                notMovedObjects.append(gridObject);
-            }
-            moveObject(gridObject, *newPosition);
-        }
-    }
+        moveObject(objectToMove, scenePosition);
 
-    if (terminationCondition)
-    {
-        return;
-    }
-    if (!notMovedObjects.isEmpty())
-    {
-        moveMultiselectComponents(notMovedObjects, objectToMove, diffXAfterMoving, diffYAfterMoving);
+        int diffX = objectToMove->getPosition().x() - previousComoponentXPosition;
+        int diffY = objectToMove->getPosition().y() - previousComoponentYPosition;
+
+        moveObjects(selectedObjects, objectToMove, diffX, diffY);
     }
 }
 
@@ -1312,4 +1293,40 @@ QList<Connection*> NetworkGraphics::getSelectedConnections()
         }
     }
     return selectedConnections;
+}
+
+void NetworkGraphics::moveObjects(QList<GridObject*> objectsToMove, GridObject* objectToMove, int diffX, int diffY)
+{
+    bool terminationCondition = false;
+    QList<GridObject*> notMovedObjects;
+    for (GridObject* gridObject : objectsToMove)
+    {
+        if (gridObject != objectToMove)
+        {
+            int xPosition = gridObject->getPosition().x();
+            int yPosition = gridObject->getPosition().y();
+
+            QPointF* newPosition = new QPointF(xPosition + diffX,
+                                               yPosition + diffY);
+            if (hasObjectAtPosition(*newPosition))
+            {
+                if (getObjectAtPosition(*newPosition) != nullptr &&
+                    !getObjectAtPosition(*newPosition)->isSelected())
+                {
+                    terminationCondition = true;
+                }
+                notMovedObjects.append(gridObject);
+            }
+            moveObject(gridObject, *newPosition);
+        }
+    }
+
+    if (terminationCondition)
+    {
+        return;
+    }
+    if (!notMovedObjects.isEmpty())
+    {
+        moveObjects(notMovedObjects, objectToMove, diffX, diffY);
+    }
 }

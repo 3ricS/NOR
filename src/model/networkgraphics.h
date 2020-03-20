@@ -50,7 +50,7 @@ public:
     void turnSelectedComponentsRight(void);
     void turnComponentLeft(Component* componentToTurn);
     void turnComponentRight(Component* componentToTurn);
-    void mirrorComponent(Component* component);
+
 
     //Copy-Paste
     void cutObjects(QList<GridObject*> objectsToCut);
@@ -60,14 +60,13 @@ public:
 
     //Add
     Component* addComponent(QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
-    void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
-    Description* addDescriptionField(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
-    Component* addResistor(QString name, long double valueResistance, int xPosition, int yPosition, bool isVertical, int id = 0);
     Component* addPowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id = 0);
+    Component* addResistor(QString name, long double valueResistance, int xPosition, int yPosition, bool isVertical, int id = 0);
+    Description* addDescriptionField(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
+    void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
 
     //Move
-    void moveObject(GridObject* objectToMove, QPointF gridPosition);
-    void moveMultiselectComponents(QList<GridObject*> objects, GridObject* objectToMove, int diffXAfterMoving, int diffYAfterMoving);
+    void moveMultiselectObjects(QList<GridObject*> selectedObjects, GridObject* objectToMove, QPointF scenePosition);
 
     //Edit
     void editComponent(Component* componentToEdit, QString newName, double newValue, Component::Orientation originalOrientation);
@@ -135,12 +134,22 @@ signals:
 
 
 private:
+    //Selection
     void selectAllGridObjects(void);
     void deselectAllConnections(void);
     void deselctAllGridObjects(void);
 
+    //Edit
+    void mirrorComponent(Component* component);
+
+    //Move
+    void moveObject(GridObject* objectToMove, QPointF scenePosition);
+    void moveObjects(QList<GridObject*> objectsToMove, GridObject* objectToMove, int diffX, int diffY);
+
+
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
     Description* duplicateDescription(Description* descriptionToDuplicate, int xPosition, int yPosition);
+    bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWaytoTheRight);
 
     void deleteSelectedGridObjects(QList<GridObject*>& copiedObjects);
     void deleteSelectedConnections();
@@ -148,7 +157,6 @@ private:
     void deleteConnection(Connection* connectionToDelete);
     void deleteDescription(Description* descriptionFieldToDelete);
 
-    bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWaytoTheRight);
 
     //Getter
     QList<GridObject*> getGridObjectsInArea(QRectF selectionArea);

@@ -113,26 +113,8 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             {
                 if (_selectedObjectToMove != nullptr && _selectedObjectToMove->getPosition() != gridPosition)
                 {
-                    int previousComoponentXPosition = 0;
-                    int previousComoponentYPosition = 0;
-                    int diffXAfterMoving = 0;
-                    int diffYAfterMoving = 0;
-
-                    if (_selectedObjectToMove != nullptr)
-                    {
-                        previousComoponentXPosition = _selectedObjectToMove->getPosition().x();
-                        previousComoponentYPosition = _selectedObjectToMove->getPosition().y();
-                    }
-
-                    _model->moveObject(_selectedObjectToMove, gridPosition);
-
-                    if (_selectedObjectToMove != nullptr)
-                    {
-                        diffXAfterMoving = _selectedObjectToMove->getPosition().x() - previousComoponentXPosition;
-                        diffYAfterMoving = _selectedObjectToMove->getPosition().y() - previousComoponentYPosition;
-                    }
-                    _model->moveMultiselectComponents(_model->getObjects(), _selectedObjectToMove, diffXAfterMoving,
-                                                      diffYAfterMoving);
+                    _model->moveMultiselectObjects(_model->getSelectedObjects(), _selectedObjectToMove,
+                                                   scenePosition);
                 }
             }
 

@@ -460,10 +460,7 @@ void NetworkView::print(void)
 void NetworkView::cut(void)
 {
     _copiedObjects = _model->getSelectedObjects();
-    if (_copiedObjects.count() != 0)
-    {
-        _model->cutObjects(_copiedObjects);
-    }
+    _model->cutObjects(_copiedObjects);
 }
 
 /*!
@@ -473,7 +470,7 @@ void NetworkView::cut(void)
  */
 void NetworkView::setMouseMode(NetworkView::MouseMode newMode)
 {
-    if(isAllowedToChangeMode())
+    if (isAllowedToChangeMode())
     {
         _mouseMode = newMode;
 
@@ -523,7 +520,8 @@ void NetworkView::paste(void)
         QPointF scenePosition(_lastClickedPosition.x() - xSpace, _lastClickedPosition.y() - ySpace);
         if (!_model->hasObjectAtPosition(scenePosition))
         {
-            _model->duplicateGridObject(gridObject, _lastClickedPosition.x() - xSpace, _lastClickedPosition.y() - ySpace);
+            _model->duplicateGridObject(gridObject, _lastClickedPosition.x() - xSpace,
+                                        _lastClickedPosition.y() - ySpace);
             calculateDistanceToNextObject(i, firstGridObject, xSpace, ySpace);
         }
 

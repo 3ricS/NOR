@@ -1077,19 +1077,6 @@ QList<Component*> NetworkGraphics::getSelectedComponents(void)
     return componentList;
 }
 
-QList<Description*> NetworkGraphics::getSelectedDescriptions(void)
-{
-    QList<Description*> descriptionList;
-    for (Description* description : getDescriptions())
-    {
-        if (description->isSelected())
-        {
-            descriptionList.append(description);
-        }
-    }
-    return descriptionList;
-}
-
 void NetworkGraphics::turnSelectedComponentsRight(void)
 {
     QList<Component*> selectedComponents = getSelectedComponents();
@@ -1236,11 +1223,11 @@ void NetworkGraphics::cutObjects(QList<GridObject*> objectsToCut)
 
         if (nullptr != component)
         {
-            cutComponent(component);
+            deleteComponent(component);
         }
         else if (nullptr != description)
         {
-            cutDescription(description);
+            deleteDescription(description);
         }
     }
 }

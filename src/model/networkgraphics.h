@@ -55,7 +55,6 @@ public:
     //Copy-Paste
     void cutObjects(QList<GridObject*> objectsToCut);
 
-
     //Delete
     void deleteSelectedObjects(QList<GridObject*>& copiedObjects);
 
@@ -101,29 +100,29 @@ public:
 
 
     //getter
-    QList<Component*> getComponents(void);
-    QList<Description*> getDescriptions(void);
     QList<GridObject*> getObjects(void) {return _objects;}
     QList<Connection*> getConnections(void) {return _connections;}
+    QList<Component*> getComponents(void);
+    QList<Description*> getDescriptions(void);
 
     QList<GridObject*> getSelectedObjects(void);
     QList<Component*> getSelectedComponents(void);
-    QList<Description*> getSelectedDescriptions(void);
 
+    //Positions
+    bool hasObjectAtPosition(QPointF scenePosition);
     GridObject* getObjectAtPosition(QPointF scenePosition);
     ComponentPort* getComponentPortAtPosition(QPointF scenePosition);
-    bool hasObjectAtPosition(QPointF scenePosition);
     Connection* getConnectionAtPosition(QPointF gridposition);
-
-    QString getFileName(void);
-    long double getResistanceValue(void) {return _resistanceValue;}
-    QUndoStack* getUndoStack(void) {return _undoStack;}
-    QString getVoltageAndCurrentInformation(void);
-
 
     Component* getComponentById(int id);
 
+    //File
     bool hasChangedDocument(void) {return _hasChangedDocument;}
+    QString getFileName(void);
+
+    long double getResistanceValue(void) {return _resistanceValue;}
+    QString getVoltageAndCurrentInformation(void);
+    QUndoStack* getUndoStack(void) {return _undoStack;}
 
 public slots:
     void hasChangedDocument(int idx);

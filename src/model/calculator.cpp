@@ -50,19 +50,6 @@ QList<RowPiece> Calculator::findRowPieces(QList<Node*> &nodes)
         {
             pathAnalysis(componentPort, analysisHasEndedSuccessful, &rowPieces, &nodes);
         }
-
-        if (analysisHasEndedSuccessful)
-        {
-            for (Node* n : nodes)
-            {
-                QString comps = "";
-                for (ComponentPort cp : n->getComponentPorts())
-                {
-                    comps += (cp.getComponent()->getName() + " ");
-                }
-                qDebug() << "Node " << n->getId() << comps;
-            }
-        }
     }
     return rowPieces;
 }
@@ -73,12 +60,12 @@ void Calculator::findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeLis
     {
         if (rowpiece1.getComponents() == rowpiece2.getComponents())
         {
-            qDebug() << "gefunden" << rowpiece2.getAmp() << rowpiece1.getAmp();
             rowpiece2.setAmp(rowpiece1.getAmp());
         }
     }
 }
 
+//Suche nach Nachbarn, die nicht direkt mit dem aktuellen ComponentPort verbunden sind
 void Calculator::searchingForIndirectParallelNeighbours(QList<ComponentPort> &foundComponentPorts)
 {
     QList<ComponentPort> newFound;
@@ -108,6 +95,7 @@ void Calculator::searchingForIndirectParallelNeighbours(QList<ComponentPort> &fo
     }
 }
 
+//Suche nach Nachbarn, die direkt mit dem aktuellen ComponentPort verbunden sind
 void
 Calculator::searchingForDirectParallelNeighbours(ComponentPort actualComPort,
                                                  QList<ComponentPort> &foundComponentPorts)
@@ -268,8 +256,8 @@ void Calculator::addingResistorsInRowToOneRowPiece(QList<Component*> &rowPiecesC
 }
 
 void
-Calculator::triangleToStar(QList<Node*> &nodes, bool &changedSomething, QList<RowPiece> &rowPieces, RowPiece &rowPieceA,
-                           RowPiece &rowPieceB, RowPiece* searchedRowPieces)
+Calculator::deltaToStar(QList<Node*> &nodes, bool &changedSomething, QList<RowPiece> &rowPieces, RowPiece &rowPieceA,
+                        RowPiece &rowPieceB, RowPiece* searchedRowPieces)
 {
     _hasUsedStarCalculation = true;
     //rp ist rowPieceC
@@ -536,7 +524,7 @@ void Calculator::starMerge(bool &changedSomething, QList<RowPiece> &rowPieces, R
         if (oppositeNode != nullptr && searchedRowPieces != nullptr &&
             *searchedRowPieces != rowPieceA && *searchedRowPieces != rowPieceB)
         {
-            triangleToStar(nodes, changedSomething, rowPieces, rowPieceA, rowPieceB, searchedRowPieces);
+            deltaToStar(nodes, changedSomething, rowPieces, rowPieceA, rowPieceB, searchedRowPieces);
         }
     }
 }
@@ -571,101 +559,11 @@ long double Calculator::calculateResistanceValueFromRowPieces(QList<RowPiece> ro
 {
     while (1 < rowPieces.count())
     {
-        bool changedSomething = false;
-        for (RowPiece &rowPieceA : rowPieces)
+        bool changedSomething = doUsualReshaping(rowPieces, nodes, mergeList);
+        if (!changedSomething)
         {
-            //Widerstand kurzgeschlossen
-            if (rowPieceA.getNodeOne() == rowPieceA.getNodeTwo())
-            {
-                rowPieces.removeOne(rowPieceA);
-                break;
-            }
-            //offenes Ende
-            else if (rowPieceA.hasOpenEnd(nodes, rowPieces))
-            {
-                rowPieces.removeOne(rowPieceA);
-                break;
-            }
-
-            for (RowPiece &rowPieceB : rowPieces)
-            {
-                //Parallelschaltung
-                if (rowPieceA != rowPieceB && rowPieceA.hasEqualNodesOnBothSides(rowPieceB))
-                {
-                    paralleMerge(rowPieceA, rowPieceB, rowPieces, changedSomething, mergeList);
-                    break;
-                }
-                    //Reihenschaltung
-                else if (rowPieceA != rowPieceB && rowPieceA.hasOneEqualNode(rowPieceB))
-                {
-                    Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
-                    if (equalNode != nullptr && !equalNode->isConnectedToPowerSupply())
-                    {
-                        if (changedSomething)
-                        {
-                            break;
-                        }
-
-                        if (2 == countNodesInRowPieces(equalNode, rowPieces))
-                        {
-                            rowMerge(rowPieceA, rowPieceB, rowPieces, changedSomething, mergeList);
-                            break;
-                        }
-                        else if (1 == countNodesInRowPieces(equalNode, rowPieces))
-                        {
-                            qDebug() << "nur ein RowPiece mit bestimmtem Node";
-                        }
-                    }
-
-                }
-                if (changedSomething)
-                {
-                    break;
-                }
-            }
-            if (changedSomething)
-            {
-                break;
-            }
+            doStarDeltaReshaping(rowPieces, nodes, mergeList);
         }
-
-        for (RowPiece &rowPieceA : rowPieces)
-        {
-            for (RowPiece &rowPieceB : rowPieces)
-            {
-                if (rowPieceA != rowPieceB && rowPieceA.hasOneEqualNode(rowPieceB))
-                {
-                    Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
-                    if (equalNode != nullptr && !equalNode->isConnectedToPowerSupply())
-                    {
-                        //Wenn die Anzahl der Node ComponentPort größer 3 ist, klingt es nach Stern-Dreieck, RowPieces werden nach Anbindung zum Node
-                        //durchsucht
-                        int count = 0;
-                        for (RowPiece rs : rowPieces)
-                        {
-                            if (rs.getNodeOne()->getId() == equalNode->getId() ||
-                                rs.getNodeTwo()->getId() == equalNode->getId())
-                            {
-                                count++;
-                            }
-                        }
-                        if (count >= 3 && !changedSomething)
-                        {
-                            starMerge(changedSomething, rowPieces, rowPieceA, rowPieceB, equalNode, nodes);
-                        }
-                    }
-                }
-                if (changedSomething)
-                {
-                    break;
-                }
-            }
-            if (changedSomething)
-            {
-                break;
-            }
-        }
-        qDebug() << changedSomething << rowPieces.count();
     }
     return rowPieces.last().getResistanceValue();
 }
@@ -687,4 +585,108 @@ Calculator &Calculator::calculator(void)
 {
     static Calculator calculator;
     return calculator;
+}
+
+bool Calculator::doUsualReshaping(QList<RowPiece> &rowPieces, QList<Node*> &nodes, QList<RowPiece> &mergeList)
+{
+    bool changedSomething = false;
+    for (RowPiece &rowPieceA : rowPieces)
+    {
+        //Widerstand kurzgeschlossen
+        if (rowPieceA.getNodeOne() == rowPieceA.getNodeTwo())
+        {
+            rowPieces.removeOne(rowPieceA);
+            break;
+        }
+            //offenes Ende
+        else if (rowPieceA.hasOpenEnd(nodes, rowPieces))
+        {
+            rowPieces.removeOne(rowPieceA);
+            break;
+        }
+
+        for (RowPiece &rowPieceB : rowPieces)
+        {
+            //Parallelschaltung
+            if (rowPieceA != rowPieceB && rowPieceA.hasEqualNodesOnBothSides(rowPieceB))
+            {
+                paralleMerge(rowPieceA, rowPieceB, rowPieces, changedSomething, mergeList);
+                break;
+            }
+                //Reihenschaltung
+            else if (rowPieceA != rowPieceB && rowPieceA.hasOneEqualNode(rowPieceB))
+            {
+                Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
+                if (equalNode != nullptr && !equalNode->isConnectedToPowerSupply())
+                {
+                    if (changedSomething)
+                    {
+                        break;
+                    }
+
+                    if (2 == countNodesInRowPieces(equalNode, rowPieces))
+                    {
+                        rowMerge(rowPieceA, rowPieceB, rowPieces, changedSomething, mergeList);
+                        break;
+                    }
+                    else if (1 == countNodesInRowPieces(equalNode, rowPieces))
+                    {
+                        qDebug() << "nur ein RowPiece mit bestimmtem Node";
+                    }
+                }
+
+            }
+            if (changedSomething)
+            {
+                break;
+            }
+        }
+        if (changedSomething)
+        {
+            break;
+        }
+    }
+    return changedSomething;
+}
+
+bool Calculator::doStarDeltaReshaping(QList<RowPiece> &rowPieces, QList<Node*> &nodes, QList<RowPiece> &mergeList)
+{
+    bool changedSomething = false;
+    for (RowPiece &rowPieceA : rowPieces)
+    {
+        for (RowPiece &rowPieceB : rowPieces)
+        {
+            if (rowPieceA != rowPieceB && rowPieceA.hasOneEqualNode(rowPieceB))
+            {
+                Node* equalNode = rowPieceA.getEqualNode(rowPieceB);
+                if (equalNode != nullptr && !equalNode->isConnectedToPowerSupply())
+                {
+                    //Wenn die Anzahl der Node ComponentPort größer 3 ist, klingt es nach Stern-Dreieck, RowPieces werden nach Anbindung zum Node
+                    //durchsucht
+                    int count = 0;
+                    for (RowPiece rs : rowPieces)
+                    {
+                        if (rs.getNodeOne()->getId() == equalNode->getId() ||
+                            rs.getNodeTwo()->getId() == equalNode->getId())
+                        {
+                            count++;
+                        }
+                    }
+                    if (count >= 3 && !changedSomething)
+                    {
+                        starMerge(changedSomething, rowPieces, rowPieceA, rowPieceB, equalNode, nodes);
+                    }
+                }
+            }
+            if (changedSomething)
+            {
+                break;
+            }
+        }
+        if (changedSomething)
+        {
+            break;
+        }
+    }
+    return changedSomething;
 }

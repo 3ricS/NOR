@@ -33,34 +33,39 @@ private:
     Calculator(const Calculator&) = delete;
     Calculator& operator=(const Calculator&) = delete;
 
-    QList<RowPiece> findRowPieces(QList<Node *> &nodes);
-    void findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeList);
-    long double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes, QList<RowPiece>& mergeList);
-    void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful, QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
-    void addingResistorsInRowToOneRowPiece(QList<Component*>& rowPiecesComponents, ComponentPort& actualComponentPort,
-                                           QList<ComponentPort>& neighbourComponentPorts, bool neighbourComponentPortsContainPowerSupply,
-                                           int& resistanceValueOfRowPiece);
-    void triangleToStar(QList<Node*>& nodes, bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB,
-                        RowPiece* searchedRowPieces);
 
-    //Suche nach Nachbarn, die nicht direkt mit dem aktuellen ComponentPort verbunden sind
+    //search
+    void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful, QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
+    QList<RowPiece> findRowPieces(QList<Node *> &nodes);
+    QList<ComponentPort> findFirstComponentPort(void);
+    void findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeList);
+    bool isPowerSupplyinComponentPortList(QList<ComponentPort> list);
+    bool isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces);
+    int countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
+    Node* getOrCreateNode(ComponentPort componentPortForNewNode, QList<ComponentPort> connectedComponentPorts,
+                          QList<Node*>* knownNodes);
+
     void searchingForIndirectParallelNeighbours(QList<ComponentPort> &foundComponentPorts);
-    //Suche nach Nachbarn, die direkt mit dem aktuellen ComponentPort verbunden sind
     void searchingForDirectParallelNeighbours(ComponentPort actualComPort,
                                               QList<ComponentPort>& foundComponentPorts);
     QList<ComponentPort> searchForNeighbours(ComponentPort componentPortForSearch);
 
-    QList<ComponentPort> findFirstComponentPort(void);
-    Node* getOrCreateNode(ComponentPort componentPortForNewNode, QList<ComponentPort> connectedComponentPorts,
-                          QList<Node*>* knownNodes);
-    bool isPowerSupplyinComponentPortList(QList<ComponentPort> list);
-    bool isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces);
+    void addingResistorsInRowToOneRowPiece(QList<Component*>& rowPiecesComponents, ComponentPort& actualComponentPort,
+                                           QList<ComponentPort>& neighbourComponentPorts, bool neighbourComponentPortsContainPowerSupply,
+                                           int& resistanceValueOfRowPiece);
 
-    int countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
+
+    //evaluate
+    long double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes, QList<RowPiece>& mergeList);
+    bool doUsualReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes, QList<RowPiece>& mergeList);
+    bool doStarDeltaReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes, QList<RowPiece>& mergeList);
     QList<RowPiece> calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node *newNode);
+    void deltaToStar(QList<Node*>& nodes, bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB,
+                     RowPiece* searchedRowPieces);
 
     void calculateVoltageAndAmp(QList<RowPiece> rowpieces, QList<RowPiece> &mergeList);
     void calculateVoltageAndAmpInResistor(RowPiece* rowpiece);
+
     void starMerge(bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB, Node* equalNode, QList<Node*> nodes);
     void paralleMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething, QList<RowPiece> &mergeList);
     void rowMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething, QList<RowPiece> &mergeList);

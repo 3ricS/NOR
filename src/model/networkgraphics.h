@@ -59,10 +59,10 @@ public:
     void deleteSelectedObjects(QList<GridObject*>& copiedObjects);
 
     //Add
-    Component* addComponent(QPointF gridPosition, Component::ComponentType componentType, bool componentIsVertical);
+    Component* addComponent(QPointF scenePosition, Component::ComponentType componentType, bool componentIsVertical);
     Component* addPowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id = 0);
     Component* addResistor(QString name, long double valueResistance, int xPosition, int yPosition, bool isVertical, int id = 0);
-    Description* addDescriptionField(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
+    Description* addDescriptionField(QPointF scenePosition, bool isLoad, QString text = 0, int id = 0);
     void addConnection(ComponentPort componentPortA, ComponentPort componentPortB);
 
     //Move

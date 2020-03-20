@@ -224,7 +224,7 @@ void NetworkGraphics::mirrorComponent(Component* component)
 /*!
  * \brief Erzeugt eine neue Komponente im Netzwerk.
  *
- * \param   gridPosition            ist die zu prüfende Gitterposition
+ * \param   scenePosition            ist die zu prüfende Gitterposition
  * \param   componentType           ist der typ der Komponente
  * \param   componentIsVertical     ist die räumliche Ausrichtung der Komponente
  * \return Gibt eine neue Komponente zurück.
@@ -232,9 +232,10 @@ void NetworkGraphics::mirrorComponent(Component* component)
  * Zu Beginn wird geprüft ob sich an der ausgewählten Position bereits eine Komponente befindet.
  * Anschließend wird anhand des ausgewählten Typs, jeweils ein Widerstand oder eine Spannungsquelle erzeugt.
  */
-Component* NetworkGraphics::addComponent(QPointF gridPosition,
+Component* NetworkGraphics::addComponent(QPointF scenePosition,
                                          Component::ComponentType componentType, bool componentIsVertical)
 {
+    QPointF gridPosition = mapSceneToGrid(scenePosition);
     CommandAddComponent* addComponent = new CommandAddComponent(this, gridPosition, componentType, componentIsVertical);
     _undoStack->push(addComponent);
     Component* createdComponent = addComponent->getCreatedComponent();
@@ -297,8 +298,9 @@ Component* NetworkGraphics::createNewComponentWithoutUndo(QPointF gridPosition,
  */
 Component* NetworkGraphics::duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition)
 {
-    CommandDuplicateComponent* duplicateComponent = new CommandDuplicateComponent(this, componentToDuplicate, xPosition,
-                                                                                  yPosition);
+    QPointF gridPosition = mapSceneToGrid(QPointF(xPosition, yPosition));
+    CommandDuplicateComponent* duplicateComponent = new CommandDuplicateComponent(this, componentToDuplicate, gridPosition.x(),
+                                                                                  gridPosition.y());
     _undoStack->push(duplicateComponent);
     Component* createdComponent = duplicateComponent->getCreatedComponent();
     return createdComponent;
@@ -351,9 +353,10 @@ Component* NetworkGraphics::duplicateComponentWithoutUndo(Component* componentTo
 Description*
 NetworkGraphics::duplicateDescription(Description* descriptionToDuplicate, int xPosition, int yPosition)
 {
+    QPointF gridPosition = mapSceneToGrid(QPointF(xPosition, yPosition));
     CommandDuplicateDescription* commandDuplicateDescription = new CommandDuplicateDescription(this,
                                                                                                descriptionToDuplicate,
-                                                                                               xPosition, yPosition);
+                                                                                               gridPosition.x(), gridPosition.y());
     _undoStack->push(commandDuplicateDescription);
     Description* createdDescription = commandDuplicateDescription->getCreatedDescription();
     return createdDescription;
@@ -510,6 +513,7 @@ QList<Connection*> NetworkGraphics::deleteComponentWithoutUndoAndGetDeletedConne
     {
         removeItem(componentToDelete);
         _objects.removeOne(componentToDelete);
+        componentToDelete->setSelected(false);
 
         //ResistorCount und PowerSupplyCount setzen
         if (Component::ComponentType::Resistor == componentToDelete->getComponentTypeInt())
@@ -560,6 +564,7 @@ void NetworkGraphics::deleteDescriptionWithoutUndo(Description* description)
         removeItem(description);
         _objects.removeOne(description);
         _descriptionCount--;
+        description->setSelected(false);
     }
 }
 
@@ -576,6 +581,7 @@ void NetworkGraphics::deleteConnectionWithoutUndo(Connection* connection)
     if (connection != nullptr)
     {
         removeItem(connection);
+        connection->setSelected(false);
         _connections.removeOne(connection);
     }
 
@@ -933,11 +939,12 @@ NetworkGraphics::moveMultiselectObjects(QList<GridObject*> selectedObjects, Grid
  * Wenn das Textfeld nicht geladen wird, wird überprüft, ob sich eine Komponente oder ein Textfeld an der Position befindet und die Id neu vergeben.
  * Anschließend wird das Textfeld erstellt.
  */
-Description* NetworkGraphics::addDescriptionField(QPointF gridPosition, bool isLoad, QString text, int id)
+Description* NetworkGraphics::addDescriptionField(QPointF scenePosition, bool isLoad, QString text, int id)
 {
+    QPointF gridPosition = mapSceneToGrid(scenePosition);
     if (!isLoad)
     {
-        if (hasObjectAtPosition(gridPosition))
+        if (hasObjectAtPosition(scenePosition))
         {
             return nullptr;
         }

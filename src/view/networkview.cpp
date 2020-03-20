@@ -2,6 +2,7 @@
 #include "networkview.h"
 
 #include <QPrintDialog>
+#include <QDebug>
 #include <QPrinter>
 
 NetworkView::NetworkView(QWidget* parent) :
@@ -26,10 +27,9 @@ void NetworkView::setModel(NetworkGraphics* model)
 void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 {
     QPointF scenePosition = mapToScene(mouseEvent->pos());
-    QPointF gridPosition = scenePositionToGrid(scenePosition);
 
     //Merken des zuletzt geklickten Bereichs, wird beim Paste benötigt
-    _lastClickedPosition = gridPosition;
+    _lastClickedPosition = scenePosition;
 
     if (_multiselectRect != nullptr)
     {
@@ -52,7 +52,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         {
             if (Qt::LeftButton == mouseEvent->button())
             {
-                Component* createdComponent = _model->addComponent(gridPosition, componentType,
+                Component* createdComponent = _model->addComponent(scenePosition, componentType,
                                                                    _isVerticalComponentDefault);
                 if (createdComponent != nullptr)
                 {
@@ -108,18 +108,21 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
         case MouseMode::SelectionMode:
         {
             updateOverrideCursor();
-            //Move Event nur auslösen, wenn Objekt an neuer GridPosition
-            if (!_model->hasObjectAtPosition(gridPosition))
-            {
-                if (_selectedObjectToMove != nullptr && _selectedObjectToMove->getPosition() != gridPosition)
-                {
-                    _model->moveMultiselectObjects(_model->getSelectedObjects(), _selectedObjectToMove,
-                                                   scenePosition);
-                }
-            }
+            //Move Event nur auslösen, wenn Objekt an neuer Position
 
             bool hasStartedMoving = (_selectedObjectToMove != nullptr);
-            if (!hasStartedMoving)
+            if (hasStartedMoving)
+            {
+                if (!_model->hasObjectAtPosition(scenePosition))
+                {
+                    if (!_selectedObjectToMove->boundingRect().contains(scenePosition))
+                    {
+                        _model->moveMultiselectObjects(_model->getSelectedObjects(), _selectedObjectToMove,
+                                                       scenePosition);
+                    }
+                }
+            }
+            else
             {
                 multiselect(scenePosition, true);
             }
@@ -133,7 +136,7 @@ void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
             if (mouseEvent->button() == Qt::LeftButton)
             {
                 bool ok;
-                Description* createdDescription = _model->addDescriptionField(gridPosition, false);
+                Description* createdDescription = _model->addDescriptionField(scenePosition, false);
                 if (createdDescription != nullptr)
                 {
                     QString text = QInputDialog::getMultiLineText(this, "Textfeld bearbeiten", "Text bearbeiten", "",
@@ -223,14 +226,6 @@ void NetworkView::mouseDoubleClickEvent([[maybe_unused]]QMouseEvent* event)
     }
 }
 
-QPointF NetworkView::scenePositionToGrid(QPointF scenePosition)
-{
-    //TODO: diese Funktion ist in NetworkGraphics; diese muss gelöscht werden
-    qreal xPos = scenePosition.toPoint().x() / Defines::gridLength * Defines::gridLength - (Defines::gridLength / 2);
-    qreal yPos = scenePosition.toPoint().y() / Defines::gridLength * Defines::gridLength - (Defines::gridLength / 2);
-    return QPointF(xPos, yPos);
-}
-
 void NetworkView::deleteSampleObjectsAndHighlights(void)
 {
     _previousHighlightedRect = deleteGraphicsItem(_previousHighlightedRect);
@@ -240,14 +235,14 @@ void NetworkView::deleteSampleObjectsAndHighlights(void)
 #include <QDebug>
 void NetworkView::highlightGrid(QPointF scenePosition, QColor highlightColor)
 {
-    QPointF gridPositionOne = scenePositionToGrid(scenePosition);
-    int positionX = gridPositionOne.toPoint().x();
-    int positionY = gridPositionOne.toPoint().y();
+    QPointF gridPosition = _model->mapSceneToGrid(scenePosition);
+    int positionX = gridPosition.toPoint().x();
+    int positionY = gridPosition.toPoint().y();
 
-    if (!_model->hasObjectAtPosition(gridPositionOne))
+    if (!_model->hasObjectAtPosition(gridPosition))
     {
-        QGraphicsItem* highlightedRect = _model->addRect(positionX - (Defines::gridLength / 2),
-                                                         positionY - (Defines::gridLength / 2),
+        QPointF startOfRect = QPointF(positionX - (Defines::gridLength / 2),positionY - (Defines::gridLength / 2));
+        QGraphicsItem* highlightedRect = _model->addRect(startOfRect.x(), startOfRect.y(),
                                                          Defines::gridLength, Defines::gridLength, Qt::NoPen,
                                                          highlightColor);
         _previousHighlightedRect = highlightedRect;

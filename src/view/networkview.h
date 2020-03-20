@@ -55,7 +55,6 @@ protected:
 
 private:
 
-    static QPointF scenePositionToGrid(QPointF scenePosition);
     void rotateComponent(QPointF scenePosition);
     QPointF findScrollPosition(void);
     void focusForPrint(void);

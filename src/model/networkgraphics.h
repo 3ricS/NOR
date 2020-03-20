@@ -139,9 +139,6 @@ private:
     void deselectAllConnections(void);
     void deselctAllGridObjects(void);
 
-    void cutComponent(Component* componentToCut);
-    void cutDescription(Description* descriptionToCut);
-
     Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
     Description* duplicateDescription(Description* descriptionToDuplicate, int xPosition, int yPosition);
 

@@ -936,23 +936,6 @@ NetworkGraphics::moveMultiselectComponents(QList<GridObject*> objects, GridObjec
 }
 
 /*!
- * \brief Schneidet eine ausgewählte Komponente aus.
- *
- * \param componentToCut ist die ausgewählte Komponente, die ausgeschnitten werden soll
- */
-void NetworkGraphics::cutComponent(Component* componentToCut)
-{
-    CommandCutComponents* commandCutComponent = new CommandCutComponents(this, componentToCut);
-    _undoStack->push(commandCutComponent);
-}
-
-void NetworkGraphics::cutDescription(Description* descriptionToCut)
-{
-    CommandCutDescriptionField* commandCutDescriptionField = new CommandCutDescriptionField(this, descriptionToCut);
-    _undoStack->push(commandCutDescriptionField);
-}
-
-/*!
  * \brief Fügt ein Textfeld hinzu.
  *
  * \param   gridPosoition   ist die GitterPositon, an der das Textfeld erzeugt werden soll

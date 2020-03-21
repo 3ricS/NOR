@@ -152,49 +152,27 @@ void Connection::changePortOfComponentPortWithComponent(Component* componentOfCo
     }
 }
 
-/*!
- * \brief Analysiert den den Weg, den auf dem die Verbindung gezeichnet werden soll.
- *
- * \param horizontalBeforeVertical
- * \return Gibt die Länge der Verbindung zurück
- */
-int Connection::pathAnalyse(bool horizontalBeforeVertical)
-{
-    int howManyConnections = 0;
-    if (horizontalBeforeVertical)
-    {
-        return horizontalPathAnalysis(howManyConnections, horizontalBeforeVertical);
-    }
-    else
-    {
-        return verticalPathAnalysis(howManyConnections, horizontalBeforeVertical);
-    }
-
-}
 
 /*!
- * \brief Zeichnet eine HitBox um die Verbindung herum.
+ * \brief Prüft ob sich an einer bestimmten Koordinate, eine Komponente oder Textfeld befindet.
  *
- * \param painter
+ * \param   x   ist die Soll-X-Koordinate
+ * \param   y   ist die Soll-Y-Koordinate
+ * \return Gibt zurück, ob sich an der Gitterposition eine Komponente oder Textfeld befindet.
+ *
  */
-void Connection::paintHitbox(QPainter* painter)
-{
-    for (QRect hitbox : _connectionHitbox)
-    {
-        QBrush brush;
-        brush.setColor(QColor(255, 0, 0, 55));
-        brush.setStyle(Qt::BrushStyle::SolidPattern);
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(brush);
-        painter->drawRect(hitbox.x(), hitbox.y(), hitbox.width(), hitbox.height());
-    }
-}
-
 bool Connection::isThereAComponentOrADescription(int x, int y)
 {
     return getComponentAtPosition(x, y) != nullptr || getDescriptionAtPosition(x, y) != nullptr;
 }
 
+/*!
+ * \brief Liefert ein Component, welches an der Soll-Position ist.
+ *
+ * \param   x   ist die Soll-X-Koordinate
+ * \param   y   ist die Soll-Y-Koordinate
+ * \return  Gibt das Component an der Soll-Position zurück.
+ */
 Component* Connection::getComponentAtPosition(int x, int y)
 {
     for (Component* component : _model->getComponents())
@@ -209,6 +187,13 @@ Component* Connection::getComponentAtPosition(int x, int y)
     return nullptr;
 }
 
+/*!
+ * \brief Liefert eine Description, welches an der Soll-Position ist.
+ *
+ * \param   x   ist die Soll-X-Koordinate
+ * \param   y   ist die Soll-Y-Koordinate
+ * \return  Gibt die Description an der Soll-Position zurück.
+ */
 Description* Connection::getDescriptionAtPosition(int x, int y)
 {
     for (Description* description : _model->getDescriptions())
@@ -221,6 +206,33 @@ Description* Connection::getDescriptionAtPosition(int x, int y)
         }
     }
     return nullptr;
+}
+
+int Connection::pathAnalyse(bool horizontalBeforeVertical)
+{
+    int howManyConnections = 0;
+    if (horizontalBeforeVertical)
+    {
+        return horizontalPathAnalysis(howManyConnections, horizontalBeforeVertical);
+    }
+    else
+    {
+        return verticalPathAnalysis(howManyConnections, horizontalBeforeVertical);
+    }
+
+}
+
+void Connection::paintHitbox(QPainter* painter)
+{
+    for (QRect hitbox : _connectionHitbox)
+    {
+        QBrush brush;
+        brush.setColor(QColor(255, 0, 0, 55));
+        brush.setStyle(Qt::BrushStyle::SolidPattern);
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(brush);
+        painter->drawRect(hitbox.x(), hitbox.y(), hitbox.width(), hitbox.height());
+    }
 }
 
 void Connection::drawHorizontalLines(void)

@@ -200,6 +200,7 @@ void EditView::editComponent(void)
 {
     QString newName = _editViewUi->textEditName->text();
     QString newValueString = _editViewUi->textEditValue->text();
+    newValueString.replace(',', '.');
     double newValue = newValueString.toDouble();
 
     bool changedObject = hasChangedComponent(newName, newValue);

@@ -29,9 +29,6 @@ void EditView::setupView(void)
     resize(400, 250);
     setWindowTitle("Eigenschaften");
 
-    connect(this, SIGNAL(accepted()), this, SLOT(ok()));
-    connect(this, SIGNAL(rejected()), this, SLOT(cancel()));
-
     connect(_editViewUi->buttonTurnRightComponent, SIGNAL(released()), this, SLOT(turnRight()));
     connect(_editViewUi->buttonTurnLeftComponent, SIGNAL(released()), this, SLOT(turnLeft()));
 
@@ -78,58 +75,35 @@ void EditView::setupView(void)
     _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
 }
 
-void EditView::ok(void)
+void EditView::accept()
 {
+    bool nameIsValid = isNameValid();
+    bool valueIsValid = isValueValid();
     //Wert prüfen
-    QString newValueString = _editViewUi->textEditValue->text();
-    if ("" != newValueString)
+    if (nameIsValid && valueIsValid)
     {
-        bool convertSuccsessful = false;
-        newValueString.replace(',', '.');
-        double newValue = newValueString.toDouble(&convertSuccsessful);
-
-        //Werte übernehmen
-        if (convertSuccsessful)
+        editComponent();
+        QDialog::accept();
+    }
+    else
+    {
+        if (!nameIsValid)
         {
-            QString newName = _editViewUi->textEditName->text();
-
-            bool changedOrientation = (0 != _numberOfRotationsRight || 0 != _numberOfRotationsLeft);
-            bool changedName = (_component->getName() != newName);
-            bool changedValue = true;
-            if (Component::ComponentType::PowerSupply == _component->getComponentType())
-            {
-                changedValue = (_component->getVoltage() != newValue);
-            }
-            else
-            {
-                Resistor* resistor = dynamic_cast<Resistor*>(_component);
-                if (nullptr != resistor)
-                {
-                    changedValue = (resistor->getResistanceValue() != newValue);
-                }
-            }
-            bool changedObject = changedName || changedValue || changedOrientation;
-
-            if (!changedObject || _isInitializingWindow)
-            {
-                rotateInOriginalPosition();
-                _model->editComponentWithoutUndo(_component, newName, newValue);
-            }
-            else
-            {
-                _model->editComponent(_component, newName, newValue, _orientationAtStart);
-            }
-            close();
+            QMessageBox::about(this, "Üngültige Eingabe", "Bitte Wert eingeben.");
         }
         else
         {
             QMessageBox::about(this, "Üngültige Eingabe", "Ungültiger Wert wurde eingeben.");
         }
     }
-    else
-    {
-        QMessageBox::about(this, "Üngültige Eingabe", "Bitte Namen eingeben.");
-    }
+}
+
+void EditView::reject()
+{
+    //Reset changed Settings
+    rotateInOriginalPosition();
+    _model->update();
+    QDialog::reject();
 }
 
 void EditView::setupInitilizingView(void)
@@ -162,13 +136,6 @@ void EditView::turnRight(void)
     _model->update();
 }
 
-void EditView::cancel(void)
-{
-    //Reset changed Settings
-    rotateInOriginalPosition();
-    _model->update();
-}
-
 void EditView::turnLeft(void)
 {
     _model->rotateComponentLeftWithoutUndo(_component);
@@ -187,5 +154,64 @@ void EditView::rotateInOriginalPosition(void)
         _model->rotateComponentRightWithoutUndo(_component);
     }
     _model->update();
+}
+
+bool EditView::hasChangedComponent(QString newName, double newValue)
+{
+    bool changedOrientation = (0 != _numberOfRotationsRight || 0 != _numberOfRotationsLeft);
+    bool changedName = (_component->getName() != newName);
+    bool changedValue = true;
+    if (Component::ComponentType::PowerSupply == _component->getComponentType())
+    {
+        changedValue = (_component->getVoltage() != newValue);
+    }
+    else
+    {
+        Resistor* resistor = dynamic_cast<Resistor*>(_component);
+        if (nullptr != resistor)
+        {
+            changedValue = (resistor->getResistanceValue() != newValue);
+        }
+    }
+    bool changedObject = changedName || changedValue || changedOrientation;
+    return changedObject;
+}
+
+bool EditView::isNameValid()
+{
+    QString newNameString = _editViewUi->textEditName->text();
+    return ("" != newNameString);
+}
+
+bool EditView::isValueValid()
+{
+    QString newValueString = _editViewUi->textEditValue->text();
+    bool valueIsValid = ("" != newValueString);
+    if (valueIsValid)
+    {
+        valueIsValid = false;
+        newValueString.replace(',', '.');
+        newValueString.toDouble(&valueIsValid);
+    }
+    return valueIsValid;
+}
+
+void EditView::editComponent(void)
+{
+    QString newName = _editViewUi->textEditName->text();
+    QString newValueString = _editViewUi->textEditValue->text();
+    double newValue = newValueString.toDouble();
+
+    bool changedObject = hasChangedComponent(newName, newValue);
+
+    if (!changedObject || _isInitializingWindow)
+    {
+        rotateInOriginalPosition();
+        _model->editComponentWithoutUndo(_component, newName, newValue);
+    }
+    else
+    {
+        _model->editComponent(_component, newName, newValue, _orientationAtStart);
+    }
 }
 

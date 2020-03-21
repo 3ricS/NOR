@@ -37,8 +37,9 @@ public slots:
     void turnLeft(void);
     void turnRight(void);
 
-    void cancel(void);
-    void ok(void);
+    void accept() override;
+
+    void reject() override;
 
 private:
     //Methoden
@@ -47,6 +48,13 @@ private:
     void hideCurrentAndVoltageLabels(void);
     void hideVoltageLabels(void);
     void rotateInOriginalPosition(void);
+    void editComponent(void);
+
+    bool hasChangedComponent(QString newName, double newValue);
+    bool isNameValid();
+    bool isValueValid();
+
+private:
 
     //Variablen
     Ui::EditView*          _editViewUi;

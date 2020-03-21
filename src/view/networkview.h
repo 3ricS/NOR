@@ -67,7 +67,6 @@ private:
 
     //for Key/MouseEvents
     void startConnection(QPointF scenePosition);
-    //TODO: benenne connectionMoveEvent um
     void connectionMoveEvent(QPointF scenePosition);
     void startSelectionOrMove(QPointF scenePosition);
     void startMultiSelection(QPointF scenePosition);
@@ -92,7 +91,6 @@ private:
     NetworkGraphics*         _model  = nullptr;
 
     bool                     _mouseIsPressed = false;
-    QList<Component*>        _tempComponentListForConnections;
     ComponentPort*           _connectionStartComponentPort = nullptr;
     QGraphicsItem*           _previousHighlightedRect = nullptr;
     QGraphicsItem*           _previousHighlightedPort = nullptr;

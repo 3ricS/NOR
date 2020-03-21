@@ -5,7 +5,7 @@
 #include <QLocale>
 
 PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id) :
-        Component(x, y, isVertical, name, voltage, Component::ComponentType::PowerSupply, id)
+        Component(QPointF(x, y), isVertical, name, voltage, Component::ComponentType::PowerSupply, id)
 {
 }
 
@@ -26,7 +26,7 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
 
     painter->drawEllipse(xPosition - (Defines::gridLength * 0.3), yPosition - (Defines::gridLength * 0.3),
                          Defines::gridLength * 0.6, Defines::gridLength * 0.6);
-    if(_isVertical)
+    if(isVertical())
     {
         painter->drawLine(xPosition, yPosition + (Defines::gridLength / 2) - Connection::_circleRadius,
                 xPosition,yPosition - (Defines::gridLength / 2) + Connection::_circleRadius);
@@ -78,7 +78,7 @@ void PowerSupply::setLabelPositions(QPainter* painter)
     valueString.replace(".", "");
     QString displayString = valueString + " " + unitString + "V";
     QRectF posValue;
-    if(_isVertical)
+    if(isVertical())
     {
         posValue = QRectF(QPointF(xPosition - (Defines::gridLength * 0.4), yPosition + (Defines::gridLength * 0.32)),
                           QSize(Defines::gridLength * 0.8, 20));

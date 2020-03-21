@@ -18,7 +18,6 @@ Connection::Connection(ComponentPort componentPortA, ComponentPort componentPort
 void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option,
                        [[maybe_unused]] QWidget* widget)
 {
-    //TODO: Funktion mit mehreren Rückgabewerten für xStart, xEnd, ...
     _connectionHitbox.clear();
     _startPoint = _componentPortOne.getComponent()->getPortPosition(_componentPortOne.getPort());
     _endPoint = _componentPortTwo.getComponent()->getPortPosition(_componentPortTwo.getPort());

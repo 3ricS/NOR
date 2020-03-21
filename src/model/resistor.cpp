@@ -6,7 +6,7 @@
 #include <QDebug>
 
 Resistor::Resistor(QString name, long double valueResistance, int x, int y, bool isVertical, int id)
-        : Component(x, y, isVertical, name, 0.0, Component::ComponentType::Resistor, id),
+        : Component(QPointF(x, y), isVertical, name, 0.0, Component::ComponentType::Resistor, id),
           _resistanceValue(valueResistance)
 {
 }
@@ -27,7 +27,7 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
     int xPosition = _position.x();
     int yPosition = _position.y();
 
-    if(_isVertical)
+    if(isVertical())
     {
         //Resistor has length of 120 and width of 60
         painter->drawRect(xPosition - (Defines::gridLength * 0.2), yPosition - (Defines::gridLength * 0.3),
@@ -63,7 +63,7 @@ void Resistor::setLabelPositions(QPainter* painter)
 
     QRectF posText;
     QRectF posValue;
-    if(_isVertical)
+    if(isVertical())
     {
         posText = QRectF(QPointF(xPosition - (Defines::gridLength * 0.2), yPosition - (Defines::gridLength * 0.45)),
                        QSizeF(Defines::gridLength * 0.7, Defines::gridLength * 0.2));

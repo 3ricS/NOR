@@ -3,9 +3,10 @@
 
 #include <QDebug>
 
-Component::Component(int x, int y, bool isVertical, QString name, double voltage, ComponentType componentTyp, int id)
-        : GridObject(QPointF(x, y), id),
-        _isVertical(isVertical), _name(name), _voltage(voltage),
+Component::Component(QPointF position, bool isVertical, QString name, double voltage, ComponentType componentTyp,
+                     int id)
+        : GridObject(position, id),
+          _name(name), _voltage(voltage),
           _componentType(componentTyp)
 {
     if (isVertical)
@@ -49,7 +50,7 @@ int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
             break;
     }
 
-    if ((_isVertical && !isX) || (!_isVertical && isX))
+    if ((isVertical() && !isX) || (!isVertical() && isX))
     {
         return positionValue + factor * Defines::gridLength / 2;
     }
@@ -155,7 +156,6 @@ QPointF Component::getPortPosition(Component::Port port) const
 void Component::setOrientation(Component::Orientation newOrientation)
 {
     _orientation = newOrientation;
-    _isVertical = !(Orientation::left == newOrientation || Orientation::right == newOrientation);
 }
 
 void
@@ -197,7 +197,7 @@ QString Component::getScaledValue(double& valueWithoutUnit)
 {
     QString unitString = "";
     double value = valueWithoutUnit;
-    
+
     if (value < 1e3)
     {
         valueWithoutUnit = value;
@@ -220,4 +220,9 @@ QString Component::getScaledValue(double& valueWithoutUnit)
 
     valueWithoutUnit = int(valueWithoutUnit * 100) / 100.0;
     return unitString;
+}
+
+bool Component::isVertical() const
+{
+    return (Orientation::top == _orientation || Orientation::bottom == _orientation);
 }

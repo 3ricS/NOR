@@ -11,10 +11,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     setWindowTitle("NOR - Network of Resistance");
     resize(1080, 720);
 
-    //TODO: Dopplung setScene entfernen
     _networkView = _ui->networkView;
     _ui->networkView->setModel(_model);
-    _ui->networkView->setScene(_model);
     setSelectionMode();
 
     //Zuerst Strom und Spannungs Button verstecken

@@ -22,6 +22,7 @@ void NetworkView::setModel(NetworkGraphics* model)
 {
     _model = model;
     connect(_model, SIGNAL(newNetworkIsLoad()), this, SLOT(focus()));
+    setScene(model);
 }
 
 void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
@@ -496,8 +497,6 @@ void NetworkView::startConnection(QPointF scenePosition)
         _previousHighlightedPort = highlightedRect;
 
         Component* tempComponentForConnection = _connectionStartComponentPort->getComponent();
-        _tempComponentListForConnections = _model->getComponents();
-        _tempComponentListForConnections.removeOne(tempComponentForConnection);
     }
 }
 
@@ -674,15 +673,16 @@ void NetworkView::buildConnection(QPointF scenePositionOfEnd)
     bool connectionStarted = (nullptr != _connectionStartComponentPort);
     if (connectionStarted)
     {
-        //TODO: entferne _tempComponentListForConnections
         ComponentPort* connectionComponentPortEnd = nullptr;
-        for (Component* component : _tempComponentListForConnections)
+        for (Component* component : _model->getComponents())
         {
             bool hasFoundPort = component->hasPortAtPosition(scenePositionOfEnd);
-            if (hasFoundPort)
+            bool startAndEndComponentAreEqual = (_connectionStartComponentPort->getComponent() == component);
+            if (hasFoundPort && !startAndEndComponentAreEqual)
             {
                 Component::Port port = component->getPort(scenePositionOfEnd);
                 connectionComponentPortEnd = new ComponentPort(component, port);
+                break;
             }
         }
 
@@ -700,7 +700,6 @@ void NetworkView::buildConnection(QPointF scenePositionOfEnd)
 void NetworkView::deleteConnectionHighlights()
 {
     _previousHighlightedPort = deleteGraphicsItem(_previousHighlightedPort);
-    _tempComponentListForConnections.clear();
 }
 
 bool NetworkView::moveIfNeeded(QPointF scenePosition)

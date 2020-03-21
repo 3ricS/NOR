@@ -24,7 +24,8 @@ public:
     enum ComponentType{Resistor, PowerSupply, Null};
     enum Port{A, B, null};
     enum Orientation{left, top, right, bottom};
-    Component(int x, int y, bool isVertical, QString name, double voltage, ComponentType componentTyp, int id);
+    Component(QPointF position, bool isVertical, QString name, double voltage, ComponentType componentTyp,
+              int id);
 
     QRectF boundingRect(void) const;
     bool hasPortAtPosition(QPointF position) const;
@@ -33,10 +34,10 @@ public:
 
 
     //getter
+    bool isVertical() const;
     int getComponentTypeInt(void) const {return _componentType;}
     ComponentType getComponentType(void) const {return _componentType;}
     QString getName(void) const {return _name;}
-    bool isVertical(void) const {return _isVertical;}
     double getVoltage(void) {return _voltage;}
     double getAmp(void) {return _amp;}
 
@@ -59,22 +60,16 @@ protected:
     void paintInformation(QPainter* painter, QString name, double value, QRectF namePosition, QRectF valuePosition,
                           ComponentType componentType);
 
-    //TODO: _isVertical entfernen
-    bool _isVertical;
-    Orientation _orientation;
-
     QString     _name;
-
+    Orientation _orientation;
     double _voltage = 0.0;
     double _amp = 0.0;
 
 private:
     int getPortPositionXOrY(int positionValue, Port port, bool isX) const;
     QString getDisplayedValueString(double value, ComponentType componentType);
-    QString getScaledValue(double
-    & valueWithoutUnit);
+    QString getScaledValue(double& valueWithoutUnit);
 
-    //_componentTyp gets the type of the object
     const ComponentType _componentType;
 };
 

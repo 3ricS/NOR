@@ -46,10 +46,9 @@ public:
     void deselectAllItems(void);
     void selectObjectsInArea(QRectF selectionArea);
 
-    void setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation);
-    void turnSelectedComponentsRight(void);
-    void turnComponentLeft(Component* componentToTurn);
-    void turnComponentRight(Component* componentToTurn);
+    void rotateSelectedComponentsRight(void);
+    void rotateComponentLeft(Component* componentToRotate);
+    void rotateComponentRight(Component* componentToRotate);
 
 
     //Copy-Paste
@@ -97,7 +96,9 @@ public:
     void deleteDescriptionWithoutUndo(Description* description);
     void moveComponentWithoutUndo(GridObject* objectToMove, QPointF gridPosition);
     void editComponentWithoutUndo(Component* componentToEdit, QString newName, long double newValue);
-    void turnComponentRightWithoutUndo(Component* componentToTurn);
+    void setOrientationOfComponentWithoutUndo(Component* componentToRotate, Component::Orientation orientation);
+    void rotateComponentRightWithoutUndo(Component* componentToRotate);
+    void rotateComponentLeftWithoutUndo(Component* componentToRotate);
 
 
     //Positions
@@ -142,6 +143,7 @@ private:
     void deselctAllGridObjects(void);
 
     //Edit
+    void rotateComponent(Component* componentToRotate, bool rotateClockwise);
     void mirrorComponent(Component* component);
 
     //Move

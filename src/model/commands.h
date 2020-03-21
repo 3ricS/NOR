@@ -234,7 +234,8 @@ private:
 class CommandRotateComponent : public QUndoCommand
 {
 public:
-    CommandRotateComponent(Component* ComponentToTurn, NetworkGraphics* model);
+    CommandRotateComponent(Component* componentToTurn, NetworkGraphics* model,
+                           bool rotateClockwise);
     ~CommandRotateComponent(void) {};
 
     void undo(void) override;
@@ -242,8 +243,13 @@ public:
 
 
 private:
+    void rotate(bool rotateInClockwiseDirection);
+    void rotateClockwise();
+    void rotateCounterClockwise();
+
     Component*       _componentToTurn = nullptr;
     NetworkGraphics* _model = nullptr;
+    bool             _rotateClockwise = false;
 };
 
 

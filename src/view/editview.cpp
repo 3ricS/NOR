@@ -138,20 +138,25 @@ void EditView::hideVoltageLabels(void)
 
 void EditView::turnRight(void)
 {
-    _model->turnComponentRight(_component);
+    _model->rotateComponentRightWithoutUndo(_component);
+    _numberOfRotations++;
     _model->update();
 }
 
 void EditView::cancel(void)
 {
     //Reset changed Settings
-    _model->setOrientationOfComponent(_component, _orientationAtStart);
+    for (int i = 0; i < _numberOfRotations; i++)
+    {
+        _undoStack->undo();
+    }
     _model->update();
 }
 
 void EditView::turnLeft(void)
 {
-    _model->turnComponentLeft(_component);
+    _model->rotateComponentLeftWithoutUndo(_component);
+    _numberOfRotations++;
     _model->update();
 }
 

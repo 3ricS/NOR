@@ -593,45 +593,46 @@ NetworkGraphics::moveComponentWithoutUndo(GridObject* objectToMove, QPointF grid
 /*!
  * \brief Dreht die Komponente linksrum.
  *
- * \param   componentToTurn ist die zu drehende Komponente
+ * \param   componentToRotate ist die zu drehende Komponente
  *
- * Es wird die Methode turnComponentRight drei Mal aufgerufen, da dies einmal linksrum drehen entspricht.
+ * Es wird die Methode rotateComponentRight drei Mal aufgerufen, da dies einmal linksrum drehen entspricht.
  */
-void NetworkGraphics::turnComponentLeft(Component* componentToTurn)
+void NetworkGraphics::rotateComponentLeft(Component* componentToRotate)
 {
-    // 3 mal rechts ist einmal links
-    for (int i = 0; i < 3; i++)
-    {
-        turnComponentRight(componentToTurn);
-    }
+    rotateComponent(componentToRotate, false);
 }
 
 /*!
  * \brief Dreht die Komponente rechtsrum.
  *
- * \param   componentToTurn ist die zu drehende Komponente
+ * \param   componentToRotate ist die zu drehende Komponente
  *
  * Anhand der Ausrichtung der Komponente, wird die neue Ausrichtung nach einmaligem rechtsrum drehen gesetzt.
  */
-void NetworkGraphics::turnComponentRight(Component* componentToTurn)
+void NetworkGraphics::rotateComponentRight(Component* componentToRotate)
 {
-    CommandRotateComponent* commandRotateComponent = new CommandRotateComponent(componentToTurn, this);
+    rotateComponent(componentToRotate, true);
+}
+
+void NetworkGraphics::rotateComponent(Component* componentToRotate, bool rotateClockwise)
+{
+    CommandRotateComponent* commandRotateComponent = new CommandRotateComponent(componentToRotate, this, rotateClockwise);
     _undoStack->push(commandRotateComponent);
 }
 
 /*!
  * \brief Setzt die Orientierung einer ausgewählten Komponente.
  *
- * \param   componentToTurn ist die zu drehende Komponente
+ * \param   componentToRotate ist die zu drehende Komponente
  * \param   orientation     ist die Orientierung der zu drehenden Komponente
  *
  * Die Komponente wird so lange rechtsrum gedreht, bis die neue Orientierung der übergebenen Orientierung ist.
  */
-void NetworkGraphics::setOrientationOfComponent(Component* componentToTurn, Component::Orientation orientation)
+void NetworkGraphics::setOrientationOfComponentWithoutUndo(Component* componentToRotate, Component::Orientation orientation)
 {
-    while (componentToTurn->getOrientation() != orientation)
+    while (componentToRotate->getOrientation() != orientation)
     {
-        turnComponentRight(componentToTurn);
+        rotateComponentRightWithoutUndo(componentToRotate);
     }
 }
 
@@ -712,35 +713,54 @@ void NetworkGraphics::editComponentWithoutUndo(Component* componentToEdit, QStri
     updateCalc();
 }
 
+
 /*!
  * \brief Dreht eine ausgewählte Komponente.
  *
- * \param componentToTurn ist die zu drehende Komponente
+ * \param componentToRotate ist die zu drehende Komponente
  */
-void NetworkGraphics::turnComponentRightWithoutUndo(Component* componentToTurn)
+void NetworkGraphics::rotateComponentLeftWithoutUndo(Component* componentToRotate)
 {
-    switch (componentToTurn->getOrientation())
+    for (int i = 0; i < 3; i++)
+    {
+        rotateComponentRightWithoutUndo(componentToRotate);
+    }
+}
+
+/*!
+ * \brief Dreht eine ausgewählte Komponente.
+ *
+ * \param componentToRotate ist die zu drehende Komponente
+ */
+void NetworkGraphics::rotateComponentRightWithoutUndo(Component* componentToRotate)
+{
+    qDebug() << "rotate right";
+    switch (componentToRotate->getOrientation())
     {
         case Component::Orientation::left:
         {
-            componentToTurn->setOrientation(Component::Orientation::top);
+            qDebug() << "left";
+            componentToRotate->setOrientation(Component::Orientation::top);
         }
             break;
         case Component::Orientation::top:
         {
-            componentToTurn->setOrientation(Component::Orientation::right);
-            mirrorComponent(componentToTurn);
+            qDebug() << "top";
+            componentToRotate->setOrientation(Component::Orientation::right);
+            mirrorComponent(componentToRotate);
         }
             break;
         case Component::Orientation::right:
         {
-            componentToTurn->setOrientation(Component::Orientation::bottom);
+            qDebug() << "right";
+            componentToRotate->setOrientation(Component::Orientation::bottom);
         }
             break;
         case Component::Orientation::bottom:
         {
-            componentToTurn->setOrientation(Component::Orientation::left);
-            mirrorComponent(componentToTurn);
+            qDebug() << "bottom";
+            componentToRotate->setOrientation(Component::Orientation::left);
+            mirrorComponent(componentToRotate);
         }
             break;
     }
@@ -1038,12 +1058,12 @@ QList<Component*> NetworkGraphics::getSelectedComponents(void)
 /*!
  * \brief Dreht alle ausgewählten Komponenten rechtsrum.
  */
-void NetworkGraphics::turnSelectedComponentsRight(void)
+void NetworkGraphics::rotateSelectedComponentsRight(void)
 {
     QList<Component*> selectedComponents = getSelectedComponents();
     for (Component* component : selectedComponents)
     {
-        turnComponentRight(component);
+        rotateComponentRight(component);
     }
 }
 

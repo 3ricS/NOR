@@ -53,6 +53,7 @@ private:
     NetworkGraphics*       _model = nullptr;
     Component::Orientation _orientationAtStart;
     QUndoStack*            _undoStack;
+    int                    _numberOfRotations = 0;
     bool                   _isInitializingWindow;
 };
 

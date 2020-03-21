@@ -231,7 +231,7 @@ void NetworkView::rotateComponent(QPointF scenePosition)
     }
     else if (MouseMode::SelectionMode == _mouseMode)
     {
-        _model->turnSelectedComponentsRight();
+        _model->rotateSelectedComponentsRight();
     }
 }
 

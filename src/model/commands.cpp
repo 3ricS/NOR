@@ -195,7 +195,7 @@ void CommandEditComponent::undo(void)
     if (_editedComponent != nullptr)
     {
         _editedComponent->setName(_oldName);
-        _editedComponent->setOrientation(_oldOrientation);
+        _model->setOrientationOfComponentWithoutUndo(_editedComponent, _oldOrientation);
 
         Resistor* resistor = dynamic_cast<Resistor*>(_editedComponent);
         bool isAResistor = (nullptr != resistor);
@@ -219,7 +219,7 @@ void CommandEditComponent::redo(void)
     if (nullptr != _editedComponent)
     {
         _editedComponent->setName(_newName);
-        _editedComponent->setOrientation(_newOrientation);
+        _model->setOrientationOfComponentWithoutUndo(_editedComponent, _newOrientation);
 
         Resistor* resistor = dynamic_cast<Resistor*>(_editedComponent);
         bool isAResistor = (nullptr != resistor);
@@ -450,8 +450,9 @@ void CommandEditDescription::redo(void)
  * CommandRotateDescription
  */
 
-CommandRotateComponent::CommandRotateComponent(Component* componentToTurn, NetworkGraphics* model) :
-        _componentToTurn(componentToTurn), _model(model)
+CommandRotateComponent::CommandRotateComponent(Component* componentToTurn, NetworkGraphics* model,
+                                               bool rotateClockwise) :
+        _componentToTurn(componentToTurn), _model(model), _rotateClockwise(rotateClockwise)
 {
 }
 
@@ -460,11 +461,7 @@ CommandRotateComponent::CommandRotateComponent(Component* componentToTurn, Netwo
  */
 void CommandRotateComponent::undo(void)
 {
-    //Dreimal rechts = einmal links
-    for (int i = 0; i < 3; i++)
-    {
-        _model->turnComponentRightWithoutUndo(_componentToTurn);
-    }
+    rotate(!_rotateClockwise);
 }
 
 /*!
@@ -472,5 +469,30 @@ void CommandRotateComponent::undo(void)
  */
 void CommandRotateComponent::redo(void)
 {
-    _model->turnComponentRightWithoutUndo(_componentToTurn);
+    rotate(_rotateClockwise);
+}
+
+void CommandRotateComponent::rotateClockwise()
+{
+    _model->rotateComponentRightWithoutUndo(_componentToTurn);
+}
+
+void CommandRotateComponent::rotateCounterClockwise()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        rotateClockwise();
+    }
+}
+
+void CommandRotateComponent::rotate(bool rotateInClockwiseDirection)
+{
+    if (rotateInClockwiseDirection)
+    {
+        rotateClockwise();
+    }
+    else
+    {
+        rotateCounterClockwise();
+    }
 }

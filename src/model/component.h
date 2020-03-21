@@ -27,6 +27,9 @@ public:
     Component(QPointF position, bool isVertical, QString name, double voltage, ComponentType componentTyp,
               int id);
 
+    bool operator==(const Component& rhs);
+    bool operator!=(const Component& rhs);
+
     bool hasPortAtPosition(QPointF position) const;
     static ComponentType convertToComponentType(int componentType);
 

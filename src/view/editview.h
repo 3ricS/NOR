@@ -46,6 +46,7 @@ private:
     void setupInitilizingView(void);
     void hideCurrentAndVoltageLabels(void);
     void hideVoltageLabels(void);
+    void rotateInOriginalPosition(void);
 
     //Variablen
     Ui::EditView*          _editViewUi;
@@ -53,7 +54,8 @@ private:
     NetworkGraphics*       _model = nullptr;
     Component::Orientation _orientationAtStart;
     QUndoStack*            _undoStack;
-    int                    _numberOfRotations = 0;
+    int                    _numberOfRotationsRight = 0;
+    int                    _numberOfRotationsLeft = 0;
     bool                   _isInitializingWindow;
 };
 

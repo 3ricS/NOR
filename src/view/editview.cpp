@@ -92,8 +92,27 @@ void EditView::ok(void)
         if (convertSuccsessful)
         {
             QString newName = _editViewUi->textEditName->text();
-            if (_isInitializingWindow)
+
+            bool changedOrientation = (0 != _numberOfRotationsRight || 0 != _numberOfRotationsLeft);
+            bool changedName = (_component->getName() != newName);
+            bool changedValue = true;
+            if (Component::ComponentType::PowerSupply == _component->getComponentType())
             {
+                changedValue = (_component->getVoltage() != newValue);
+            }
+            else
+            {
+                Resistor* resistor = dynamic_cast<Resistor*>(_component);
+                if (nullptr != resistor)
+                {
+                    changedValue = (resistor->getResistanceValue() != newValue);
+                }
+            }
+            bool changedObject = changedName || changedValue || changedOrientation;
+
+            if (!changedObject || _isInitializingWindow)
+            {
+                rotateInOriginalPosition();
                 _model->editComponentWithoutUndo(_component, newName, newValue);
             }
             else
@@ -139,24 +158,34 @@ void EditView::hideVoltageLabels(void)
 void EditView::turnRight(void)
 {
     _model->rotateComponentRightWithoutUndo(_component);
-    _numberOfRotations++;
+    _numberOfRotationsRight++;
     _model->update();
 }
 
 void EditView::cancel(void)
 {
     //Reset changed Settings
-    for (int i = 0; i < _numberOfRotations; i++)
-    {
-        _undoStack->undo();
-    }
+    rotateInOriginalPosition();
     _model->update();
 }
 
 void EditView::turnLeft(void)
 {
     _model->rotateComponentLeftWithoutUndo(_component);
-    _numberOfRotations++;
+    _numberOfRotationsLeft++;
+    _model->update();
+}
+
+void EditView::rotateInOriginalPosition(void)
+{
+    for (int i = 0; i < _numberOfRotationsRight; i++)
+    {
+        _model->rotateComponentLeftWithoutUndo(_component);
+    }
+    for (int i = 0; i < _numberOfRotationsLeft; i++)
+    {
+        _model->rotateComponentRightWithoutUndo(_component);
+    }
     _model->update();
 }
 

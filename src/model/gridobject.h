@@ -26,8 +26,6 @@ protected:
     void paintSelectionHighlight(QPainter* painter) override;
 
     QPointF     _position;
-
-private:
     const int   _id;
 
 };

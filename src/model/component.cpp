@@ -197,3 +197,22 @@ bool Component::isVertical() const
 {
     return (Orientation::top == _orientation || Orientation::bottom == _orientation);
 }
+
+bool Component::operator==(const Component &rhs)
+{
+    bool equalType = (_componentType == rhs._componentType);
+    bool equalName = (_name == rhs._name);
+    bool equalOrientation = (_orientation == rhs._orientation);
+    bool equalVoltage = (_voltage == rhs._voltage);
+    bool equalCurrent = (_amp == rhs._amp);
+    bool equalPosition = (_position == rhs._position);
+    bool equalId = (_id == rhs._id);
+    bool equal = equalType && equalName && equalOrientation &&
+            equalVoltage && equalCurrent && equalPosition && equalId;
+    return equal;
+}
+
+bool Component::operator!=(const Component &rhs)
+{
+    return !(operator==(rhs));
+}

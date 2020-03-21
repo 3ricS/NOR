@@ -16,6 +16,7 @@
 #define CONNECTION_H
 
 #include <model/componentport.h>
+#include <model/graphicsobject.h>
 
 #include <QPainter>
 #include <algorithm>
@@ -24,7 +25,7 @@ class NetworkGraphics;
 class Description;
 class ComponentPort;
 
-class Connection : public QGraphicsItem
+class Connection : public GraphicsObject
 {
 public:
     Connection(ComponentPort componentPortA, ComponentPort componentPortB, NetworkGraphics* model);
@@ -43,10 +44,7 @@ public:
     ComponentPort getComponentPortOne(void) const {return _componentPortOne;}
     ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}
     bool hasComponent(Component* searchedComponent);
-    bool isSelected(void) const { return  _isSelected;}
 
-    //setter
-    void setSelected(bool isSelected);
 
     static constexpr int _circleRadius = 5;
 
@@ -54,7 +52,7 @@ private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     int pathAnalyse(bool horizontalBeforeVertical);
-    void paintHitbox(QPainter* painter);
+    void paintSelectionHighlight(QPainter* painter) override;
 
     void drawHorizontalLines(void);
     void drawLeftOrRight(int leftOrRight);
@@ -92,7 +90,6 @@ private:
     NetworkGraphics* _model = nullptr;
     QList<QRect> _connectionHitbox;
 
-    bool _isSelected = false;
     bool _startHorizontal;
 };
 

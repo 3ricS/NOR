@@ -63,7 +63,8 @@ HEADERS += \
         model/rowpiece.h \
         model/commands.h \
         view/powerview.h \
-        model/gridobject.h
+        model/gridobject.h \
+        model/graphicsobject.h
 
 FORMS += \
         view/editview.ui \

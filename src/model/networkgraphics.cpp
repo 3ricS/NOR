@@ -367,13 +367,12 @@ NetworkGraphics::addResistor(QString name, long double valueResistance, int xPos
     {
         //Finden einer freien ID
         int newId = _resistorCount + 1;
-        bool isSetId = false;
-        while (!isSetId)
+        bool hasFoundNewId = false;
+        while (!hasFoundNewId)
         {
             bool isIdValid = true;
-            for (GridObject* gridObject : _objects)
+            for (Component* component : getComponents())
             {
-                Component* component = dynamic_cast<Component*>(gridObject);
                 if (component != nullptr && component->getId() == newId)
                 {
                     isIdValid = false;
@@ -382,7 +381,7 @@ NetworkGraphics::addResistor(QString name, long double valueResistance, int xPos
             if (isIdValid)
             {
                 id = newId;
-                isSetId = true;
+                hasFoundNewId = true;
                 break;
             }
             else
@@ -918,16 +917,17 @@ NetworkGraphics::moveMultiselectObjects(QList<GridObject*> selectedObjects, Grid
  */
 Description* NetworkGraphics::addDescriptionField(QPointF scenePosition, bool isLoad, QString text, int id)
 {
-    QPointF gridPosition = mapSceneToGrid(scenePosition);
+    if (hasObjectAtPosition(scenePosition))
+    {
+        return nullptr;
+    }
+
     if (!isLoad)
     {
-        if (hasObjectAtPosition(scenePosition))
-        {
-            return nullptr;
-        }
         id = _descriptionCount;
     }
 
+    QPointF gridPosition = mapSceneToGrid(scenePosition);
     Description* description = new Description(gridPosition.x(), gridPosition.y(), id, text);
 
     CommandAddDescriptionField* commandAddDescriptionField = new CommandAddDescriptionField(this, description);

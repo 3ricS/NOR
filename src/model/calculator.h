@@ -56,12 +56,13 @@ private:
     void addingResistorsInRowToOneRowPiece(QList<Component*>& rowPiecesComponents, ComponentPort& actualComponentPort,
                                            QList<ComponentPort>& neighbourComponentPorts, bool neighbourComponentPortsContainPowerSupply,
                                            int& resistanceValueOfRowPiece);
-
+    //preparation
+    QList<Component*> initializeAmpAndVoltage(QList<Component*> components);
 
     //evaluate
     long double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes, QList<RowPiece>& mergeList);
     bool doUsualReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes, QList<RowPiece>& mergeList);
-    bool doStarDeltaReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes, QList<RowPiece>& mergeList);
+    bool doStarDeltaReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes);
     QList<RowPiece> calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node *newNode);
     void deltaToStar(QList<Node*>& nodes, bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB,
                      RowPiece* searchedRowPieces);

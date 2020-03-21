@@ -20,7 +20,7 @@ long double Calculator::calculate(QList<Connection*> connections, QList<Componen
 {
     _hasUsedStarCalculation = false;
     _connections = connections;
-    _components = components;
+    _components = initializeAmpAndVoltage(components);
 
     QList<RowPiece> mergeList;
     QList<Node*> nodes;
@@ -253,6 +253,19 @@ void Calculator::addingResistorsInRowToOneRowPiece(QList<Component*> &rowPiecesC
         neighbourComponentPorts = searchForNeighbours(actualComponentPort);
         neighbourComponentPortsContainPowerSupply = isPowerSupplyinComponentPortList(neighbourComponentPorts);
     }
+}
+
+QList<Component *> Calculator::initializeAmpAndVoltage(QList<Component *> components)
+{
+    for(Component* c : components)
+    {
+        if(c->getComponentType() == Component::ComponentType::Resistor)
+        {
+            c->setAmp(0.0);
+            c->setVoltage(0.0);
+        }
+    }
+    return components;
 }
 
 void
@@ -562,7 +575,7 @@ long double Calculator::calculateResistanceValueFromRowPieces(QList<RowPiece> ro
         bool changedSomething = doUsualReshaping(rowPieces, nodes, mergeList);
         if (!changedSomething)
         {
-            doStarDeltaReshaping(rowPieces, nodes, mergeList);
+            doStarDeltaReshaping(rowPieces, nodes);
         }
     }
     return rowPieces.last().getResistanceValue();
@@ -599,8 +612,10 @@ bool Calculator::doUsualReshaping(QList<RowPiece> &rowPieces, QList<Node*> &node
             break;
         }
             //offenes Ende
-        else if (rowPieceA.hasOpenEnd(nodes, rowPieces))
+        else if (rowPieceA.hasOpenEnd(nodes, rowPieces) &&
+                !(rowPieceA.getNodeOne()->isConnectedToPowerSupply() || rowPieceA.getNodeTwo()->isConnectedToPowerSupply()))
         {
+            qDebug() << "Offenes Ende";
             rowPieces.removeOne(rowPieceA);
             break;
         }
@@ -649,7 +664,7 @@ bool Calculator::doUsualReshaping(QList<RowPiece> &rowPieces, QList<Node*> &node
     return changedSomething;
 }
 
-bool Calculator::doStarDeltaReshaping(QList<RowPiece> &rowPieces, QList<Node*> &nodes, QList<RowPiece> &mergeList)
+bool Calculator::doStarDeltaReshaping(QList<RowPiece> &rowPieces, QList<Node*> &nodes)
 {
     bool changedSomething = false;
     for (RowPiece &rowPieceA : rowPieces)

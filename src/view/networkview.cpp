@@ -495,8 +495,6 @@ void NetworkView::startConnection(QPointF scenePosition)
                                                          2 * hitBoxHighlight, Qt::NoPen,
                                                          color);
         _previousHighlightedPort = highlightedRect;
-
-        Component* tempComponentForConnection = _connectionStartComponentPort->getComponent();
     }
 }
 

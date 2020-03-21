@@ -1,7 +1,8 @@
-//
-// Created by eric on 21.03.20.
-//
-
+/*!
+ * \author Eric Schniedermeyer, Leonel Fransen, Moritz Fichte, Soeren Koestler
+ *
+ * \brief   Ein GraphicsObject ist ein Zeichenobjekt, das in der Zeichenebene gezeichnet werden kann.
+ */
 #ifndef NOR_GRAPHICSOBJECT_H
 #define NOR_GRAPHICSOBJECT_H
 

@@ -3,7 +3,7 @@
 #include "model/networkgraphics.h"
 
 Connection::Connection(ComponentPort componentPortA, ComponentPort componentPortB, NetworkGraphics* model) :
-        QGraphicsItem(nullptr),
+        GraphicsObject(nullptr),
         _componentPortOne(componentPortA), _componentPortTwo(componentPortB), _model(model)
 {
 }
@@ -65,7 +65,7 @@ void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGra
 
     if (_isSelected)
     {
-        paintHitbox(painter);
+        paintSelectionHighlight(painter);
     }
 
 
@@ -85,11 +85,6 @@ bool Connection::hasComponent(Component* searchedComponent)
     return (_componentPortOne.getComponent() == searchedComponent) ||
            (_componentPortTwo.getComponent() == searchedComponent);
 
-}
-
-void Connection::setSelected(bool isSelected)
-{
-    _isSelected = isSelected;
 }
 
 /*!
@@ -177,7 +172,7 @@ int Connection::pathAnalyse(bool horizontalBeforeVertical)
  *
  * \param painter
  */
-void Connection::paintHitbox(QPainter* painter)
+void Connection::paintSelectionHighlight(QPainter* painter)
 {
     for (QRect hitbox : _connectionHitbox)
     {

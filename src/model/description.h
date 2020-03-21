@@ -10,7 +10,6 @@
 #ifndef DESCRIPTION_H
 #define DESCRIPTION_H
 
-#include <QGraphicsItem>
 #include <QPainter>
 #include "gridobject.h"
 

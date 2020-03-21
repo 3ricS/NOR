@@ -19,19 +19,6 @@ Component::Component(QPointF position, bool isVertical, QString name, double vol
     }
 }
 
-/*!
- * \brief
- *
- * \return
- */
-QRectF Component::boundingRect(void) const
-{
-    int xPosition = _position.x();
-    int yPosition = _position.y();
-    return QRectF(xPosition - (Defines::gridLength / 2), yPosition - (Defines::gridLength / 2), Defines::gridLength,
-                  Defines::gridLength);
-}
-
 int Component::getPortPositionXOrY(int positionValue, Port port, bool isX) const
 {
     //Portangabe in Faktor umrechnen
@@ -96,10 +83,10 @@ Component::Port Component::getPort(QPointF position) const
 /*!
  * \brief Prüft ob sich an der ausgewählten Position ein Port befindet.
  *
- * \param   position ist die zu prüfende Position
- * \return  Liefert einen bool zurück, ob sich an der zu prüfenden Position ein Port befindet
+ * \param   position ist die Position, an dem ein Port gesucht werden soll
+ * \return  Gibt an, ob sich an der zu prüfenden Position ein Port befindet
  *
- * Es wird geprüft, ob der Port an der Position != dem nullptr ist und somit an der Position ein Port vorhanden ist.
+ * Es wird geprüft, ob der Port an der Position ungleich dem nullptr ist und somit an der Position ein Port vorhanden ist.
  */
 bool Component::hasPortAtPosition(QPointF position) const
 {
@@ -110,10 +97,10 @@ bool Component::hasPortAtPosition(QPointF position) const
 /*!
  * \brief Wandelt den Integer in einen Komponententyp.
  *
- * \param   componentType ist ein int, der für einen Komponententyp steht
- * \return  Gibt den ComponentType der zu prüfenden Komponente zurück
+ * \param   componentType ist eine Zahl (int), der für einen Komponententyp steht
+ * \return  Gibt den ComponentType der zu geprüften Komponente zurück
  *
- * Es wird geprüft ob es sich bei dem componentType um einen Widerstand oder eine Spannungsquelle handelt.
+ * Es wird geprüft ob es sich bei der Komponente componentType um einen Widerstand oder eine Spannungsquelle handelt.
  */
 Component::ComponentType Component::convertToComponentType(int componentType)
 {
@@ -127,35 +114,15 @@ Component::ComponentType Component::convertToComponentType(int componentType)
 }
 
 /*!
- * \brief Highlightet das Textfeld in einer Farbe.
+ * \brief Liefert die Position eines bestimmten Ports zurück
  *
- * \param   painter
- *
- * Färbt das Gitterfeld um die Komponente an der ausgewählten Position, mit der eingestelten Farbe, ein.
+ * \return Position den gesuchten Ports
  */
-void Component::paintHighlightRect(QPainter* painter)
-{
-    QBrush brush;
-    brush.setColor(QColor(255, 0, 0, 55));
-    brush.setStyle(Qt::BrushStyle::SolidPattern);
-    painter->setBrush(brush);
-    int xPosition = _position.x();
-    int yPosition = _position.y();
-    double relactionHighlightToGridSize = 0.93;
-    painter->drawRect(xPosition - (Defines::gridLength / 2 * relactionHighlightToGridSize), yPosition - (Defines::gridLength / 2 * relactionHighlightToGridSize),
-                      Defines::gridLength * relactionHighlightToGridSize, Defines::gridLength * relactionHighlightToGridSize);
-}
-
 QPointF Component::getPortPosition(Component::Port port) const
 {
     int xPosition = _position.x();
     int yPosition = _position.y();
     return QPointF(getPortPositionXOrY(xPosition, port, true), getPortPositionXOrY(yPosition, port, false));
-}
-
-void Component::setOrientation(Component::Orientation newOrientation)
-{
-    _orientation = newOrientation;
 }
 
 void
@@ -221,7 +188,11 @@ QString Component::getScaledValue(double& valueWithoutUnit)
     valueWithoutUnit = int(valueWithoutUnit * 100) / 100.0;
     return unitString;
 }
-
+/*!
+ * \brief Gibt an, ob die Komponente vertikal ausgerichtet ist
+ *
+ * \return Liefert true, wenn die Komponente vertikal ausgerichtet ist.
+ */
 bool Component::isVertical() const
 {
     return (Orientation::top == _orientation || Orientation::bottom == _orientation);

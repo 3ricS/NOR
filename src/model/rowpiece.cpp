@@ -27,7 +27,7 @@ bool RowPiece::operator!=(const RowPiece &rhs)
 }
 
 /*!
- * \brief Prüft ob ein RowPiece zu einem anderen RowPiece die gleichen Knoten an beiden Seiten besitzt.
+ * \brief Prüft, ob zwei RowPieces die gleichen Knoten an beiden Seiten besitzt.
  *
  * \param   otherRowPiece  das zu vergleichende RowPiece
  *
@@ -44,7 +44,7 @@ bool RowPiece::hasEqualNodesOnBothSides(RowPiece otherRowPiece)
  *
  * \param   otherRowPiece  das zu vergleichende RowPiece
  *
- * Es werden die beiden Widerstandswerte der RowPieces zusammengerechnet.
+ * Es werden die beiden Widerstandswerte der RowPieces zusammengerechnet, sodass aus beiden RowPieces ein RowPiece wird.
  */
 void RowPiece::parallelMerge(RowPiece otherRowPiece)
 {
@@ -85,8 +85,9 @@ void RowPiece::parallelMerge(RowPiece otherRowPiece)
  *
  * \param   otherRowPiece  das zu vergleichende RowPiece
  *
- * Es wird geprüft, ob ein Knoten von zwei RowPieces übereinstimmt und führt diese zusammen.
- * Nach dem zusammenführen wird der Widerstandswert beider RowPieces addiert.
+ * Es wird geprüft, ob ein Knoten von zwei RowPieces übereinstimmt und kombiniert diese.
+ * Bei dem zusammenführen wird der Widerstandswert beider RowPieces addiert.
+ * Zuvor muss geprüft werden, ob die jeweiligen RowPieces keine anderen RowPieces parallel geschaltet haben.
  */
 void RowPiece::rowMerge(RowPiece otherRowPiece)
 {
@@ -147,7 +148,7 @@ void RowPiece::rowMerge(RowPiece otherRowPiece)
  * \brief Ob ein anderes RawPiece den gleichen Knoten besitzt.
  *
  * \param   otherRowPiece   ist das zu vergleichende RowPiece
- * \return Ob der Knoten bei beiden RowPieces gleich ist.
+ * \return Liefert true, wenn ein Knoten bei beiden RowPieces gleich ist.
  */
 bool RowPiece::hasOneEqualNode(RowPiece otherRowPiece)
 {
@@ -192,16 +193,26 @@ Node* RowPiece::getOppositeNode(Node* node)
 }
 
 /*!
- * \brief Prüft ob ein Knoten vorhanden ist.
+ * \brief Prüft, ob ein Knoten vorhanden ist.
  *
  * \param   node    ist der zu überprüfende Knoten.
- * \return Gibt zurück, ob ein Knoten vorhanden ist.
+ * \return Gibt zurück, ob der übergebene Knoten vorhanden ist.
  */
 bool RowPiece::hasNode(Node* node)
 {
     return node == _nodeOne || node == _nodeTwo;
 }
 
+/*!
+ * \brief Prüft, ob das RowPiece an einem Ende keine Verbindung zu anderen RowPieces hat
+ *
+ * \param allNodes    Alle bekannten Knoten
+ * \param rowPieces   Alle bekannten RowPieces
+ * \return Liefert true, wenn das RowPiece eine offene Verbindung hat
+ *
+ * Prüft, ob das RowPiece ein offenes Ende hat. Eine offenes Ende ist dabei ein Knoten auf einer Seite des RowPiece,
+ * mit dem ein RowPiece verbunden ist.
+ */
 bool RowPiece::hasOpenEnd(QList<Node*> allNodes, QList<RowPiece> rowPieces)
 {
     //find connectedNodes

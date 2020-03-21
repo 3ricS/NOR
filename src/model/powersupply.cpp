@@ -38,7 +38,7 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
     }
     if(_isSelected)
     {
-        paintHighlightRect(painter);
+        paintSelectionHighlight(painter);
     }
 
     setLabelPositions(painter);

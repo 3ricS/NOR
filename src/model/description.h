@@ -19,9 +19,6 @@ class Description : public GridObject
 public:
     Description(int x, int y, int id, QString text = 0);
 
-    QRectF boundingRect(void) const override;
-    void paintHighlightRect(QPainter* painter);
-
     //Getter
     QString getText(void) const {return _text;}
 
@@ -29,11 +26,9 @@ public:
     void setText(const QString text) {_text = text;}
 
 private:
-    QString _text = "Hier könnte dein Text stehen!";
-
-
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
+    QString _text = "Hier könnte dein Text stehen!";
 };
 
 #endif // DESCRIPTIONFIELD_H

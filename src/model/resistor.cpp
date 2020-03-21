@@ -49,7 +49,7 @@ void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraph
 
     if(_isSelected)
     {
-        paintHighlightRect(painter);
+        paintSelectionHighlight(painter);
     }
 
     //Zeichnen der Informationen (Name und Wert) in Abhängigkeit ob vertikal oder horizontal

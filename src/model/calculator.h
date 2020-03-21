@@ -24,6 +24,9 @@ public:
     long double calculate(QList<Connection*> connections, QList<Component*> components);
 
     //getter
+    /*!
+     * \brief Liefert true, wenn eine Stern-Dreieck-Umformung durchgeführt wurde
+     */
     bool hasUsedStarCalculation(void) {return _hasUsedStarCalculation;}
 
 private:

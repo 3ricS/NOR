@@ -27,7 +27,6 @@ public:
     Component(QPointF position, bool isVertical, QString name, double voltage, ComponentType componentTyp,
               int id);
 
-    QRectF boundingRect(void) const;
     bool hasPortAtPosition(QPointF position) const;
     static ComponentType convertToComponentType(int componentType);
 
@@ -46,7 +45,7 @@ public:
     Orientation getOrientation(void) {return _orientation;}
 
     //setter
-    void setOrientation(Component::Orientation newOrientation);
+    void setOrientation(Component::Orientation newOrientation) {_orientation = newOrientation;}
     void setName(QString name) {_name = name;}
     void setVoltage(double voltage) {_voltage = voltage;}
     void setAmp(double amp) {_amp = amp;}
@@ -54,8 +53,6 @@ public:
     static constexpr int _hitBoxSizeAtPort = 20;
 
 protected:
-    void paintHighlightRect(QPainter* painter);
-
     virtual void setLabelPositions(QPainter* painter) = 0;
     void paintInformation(QPainter* painter, QString name, double value, QRectF namePosition, QRectF valuePosition,
                           ComponentType componentType);

@@ -178,7 +178,15 @@ Node* RowPiece::getEqualNode(RowPiece otherRowPiece)
     }
     return nullptr;
 }
-
+/*!
+ * \brief Liefert den gegenüberliegenden Knoten zurück.
+ *
+ * \param node ist der Knoten von dem der gegenüberliegende gesucht wird
+ * \return Gibt den Knoten, der gegenüberliegt zurück.
+ *
+ * Es wird geschaut welcher Knoten vorliegt und daraus wird dann der andere zurückgegeben.
+ *
+ */
 Node* RowPiece::getOppositeNode(Node* node)
 {
     if (node == _nodeOne)

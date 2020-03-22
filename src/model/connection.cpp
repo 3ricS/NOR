@@ -8,13 +8,6 @@ Connection::Connection(ComponentPort componentPortA, ComponentPort componentPort
 {
 }
 
-/*!
- * \brief   Zeichnet die Verbindung in der QGraphicsScene.
- *
- * \param   painter Objekt, das die einzelnen Elemente zeichnet
- * \param   option
- * \param   widget
- */
 void Connection::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option,
                        [[maybe_unused]] QWidget* widget)
 {

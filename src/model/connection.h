@@ -18,8 +18,8 @@
 #include <model/componentport.h>
 #include <model/graphicsobject.h>
 
-#include <QPainter>
 #include <algorithm>
+#include <QPainter>
 
 class NetworkGraphics;
 class Description;

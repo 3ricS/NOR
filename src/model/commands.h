@@ -11,7 +11,6 @@
 #define NOR_COMMANDS_H
 
 #include <QUndoCommand>
-#include <QPointF>
 
 #include <model/component.h>
 #include <model/componentport.h>

@@ -10,12 +10,11 @@
 #ifndef NOR_PUZZLECALCULATOR_H
 #define NOR_PUZZLECALCULATOR_H
 
-#include <QList>
-#include <model/rowpiece.h>
 #include <model/componentport.h>
+#include <model/rowpiece.h>
 
-class Connection;
 class Component;
+class Connection;
 
 class Calculator
 {

@@ -11,7 +11,6 @@
 
 #include <model/component.h>
 
-
 class PowerSupply : public Component
 {
 public:

@@ -75,7 +75,7 @@ void EditView::setupView(void)
     _editViewUi->textEditValue->setPlaceholderText(valuePlaceHolder);
 }
 
-void EditView::accept()
+void EditView::accept(void)
 {
     bool nameIsValid = isNameValid();
     bool valueIsValid = isValueValid();
@@ -98,7 +98,7 @@ void EditView::accept()
     }
 }
 
-void EditView::reject()
+void EditView::reject(void)
 {
     //Reset changed Settings
     rotateInOriginalPosition();

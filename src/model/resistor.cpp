@@ -11,16 +11,6 @@ Resistor::Resistor(QString name, long double valueResistance, int x, int y, bool
 {
 }
 
-
-/*!
- * \brief Zeichnet die Umrisse und Informationen eines Widerstandes im Netzwerk.
- *
- * \param   painter
- * \param   option
- * \param   widget
- *
- * Die Methode zeichnet abhängig von der räumlichen Ausrichtung den Widerstand au zwei unterschiedliche Weisen.
- */
 void Resistor::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGraphicsItem* option,
                      [[maybe_unused]] QWidget* widget)
 {

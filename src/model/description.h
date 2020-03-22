@@ -11,7 +11,8 @@
 #define DESCRIPTION_H
 
 #include <QPainter>
-#include "gridobject.h"
+
+#include "model/gridobject.h"
 
 class Description : public GridObject
 {

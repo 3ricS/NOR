@@ -14,11 +14,10 @@
 #include <QWidget>
 #include <QComboBox>
 
-#include <model/resistor.h>
-#include <model/powersupply.h>
-#include <ui_editview.h>
 #include <model/networkgraphics.h>
-
+#include <model/powersupply.h>
+#include <model/resistor.h>
+#include <ui_editview.h>
 
 namespace Ui {
     class EditView;
@@ -37,9 +36,9 @@ public slots:
     void turnLeft(void);
     void turnRight(void);
 
-    void accept() override;
+    void accept(void) override;
 
-    void reject() override;
+    void reject(void) override;
 
 private:
     //Methoden

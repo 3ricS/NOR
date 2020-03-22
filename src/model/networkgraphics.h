@@ -130,9 +130,27 @@ public slots:
     void hasChangedDocument(int idx);
 
 signals:
+
+    /*!
+     * \brief Wird ausgesendet, sobald ein Widerstandswert geändert wird.
+     */
     void resistanceValueChanged(void);
+
+    /*!
+     * \brief Wird ausgesendet, sobald ein Widerstandsnetzwerk geladen wurde.
+     */
     void newNetworkIsLoad(void);
+
+    /*!
+     * \brief Wird ausgesendet, sobald eine PowerSupply erzeugt, gelöscht oder geladen wird.
+     * \param isAllowed gibt an, ob eine Spannungsquelle auswählbar sein darf oder nicht.
+     */
     void powerSupplyIsAllowed(bool isAllowed);
+
+    /*!
+     * \brief Wird ausgesendet, wenn der Widerstandswert gültig ist, also keine Stern-Dreieck-Umwandlung stattgefunden hat.
+     * \param isValid gibt an, ob der Strom und Spannungswert interpretiert werden darf.
+     */
     void currentAndVoltageIsValid(bool isValid);
 
 

@@ -2,7 +2,6 @@
 #include "networkview.h"
 
 #include <QPrintDialog>
-#include <QDebug>
 #include <QPrinter>
 
 NetworkView::NetworkView(QWidget* parent) :

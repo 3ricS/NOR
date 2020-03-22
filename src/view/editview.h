@@ -53,8 +53,6 @@ private:
     bool isNameValid();
     bool isValueValid();
 
-private:
-
     //Variablen
     Ui::EditView*          _editViewUi;
     Component*             _component = nullptr;

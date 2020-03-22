@@ -76,7 +76,6 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
 void MainWindow::setSelectionMode(void)
 {
     setMouseMode(NetworkView::SelectionMode);
-    setSelectionOfModeButtons(_ui->Selection);
 }
 
 /*!

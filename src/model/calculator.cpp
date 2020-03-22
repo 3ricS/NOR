@@ -615,7 +615,6 @@ bool Calculator::doUsualReshaping(QList<RowPiece> &rowPieces, QList<Node*> &node
         else if (rowPieceA.hasOpenEnd(nodes, rowPieces) &&
                 !(rowPieceA.getNodeOne()->isConnectedToPowerSupply() || rowPieceA.getNodeTwo()->isConnectedToPowerSupply()))
         {
-            qDebug() << "Offenes Ende";
             rowPieces.removeOne(rowPieceA);
             break;
         }
@@ -643,10 +642,6 @@ bool Calculator::doUsualReshaping(QList<RowPiece> &rowPieces, QList<Node*> &node
                     {
                         rowMerge(rowPieceA, rowPieceB, rowPieces, changedSomething, mergeList);
                         break;
-                    }
-                    else if (1 == countNodesInRowPieces(equalNode, rowPieces))
-                    {
-                        qDebug() << "nur ein RowPiece mit bestimmtem Node";
                     }
                 }
 

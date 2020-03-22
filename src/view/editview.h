@@ -37,9 +37,9 @@ public slots:
     void turnLeft(void);
     void turnRight(void);
 
-    void accept() override;
+    void accept(void) override;
 
-    void reject() override;
+    void reject(void) override;
 
 private:
     //Methoden

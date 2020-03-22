@@ -453,6 +453,16 @@ void NetworkGraphics::duplicateSelectedGridObjects(void)
     duplicateGridObjects(getSelectedObjects());
 }
 
+/*!
+ * \brief Einfügen ausgewählter GridObject.
+ *
+ * \param objectsToPaste        ist eine Liste der Objekte die einegfügt werden
+ * \param positionToPaste       ist die Position, wo die Objekte eingefügt werden
+ * \param firstGridObject       ist das erste Objekt was eingefügt wird
+ * \param xSpace                ist der Abstand von einem Objekt auf der x-Achse zum firstGridObject
+ * \param ySpace                ist der Abstand von einem Objekt auf der y-Achse zum firstGridObject
+ * \param scenePosition         ist die Positionen, wo ein Objekt aus objectsToPaste eingefügt wird
+ */
 void NetworkGraphics::pasteGridObjects(QList<GridObject*> objectsToPaste, QPointF positionToPaste)
 {
     GridObject* firstGridObject = nullptr;

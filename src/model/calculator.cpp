@@ -35,7 +35,7 @@ long double Calculator::calculate(QList<Connection*> connections, QList<Componen
     return 0.0;
 }
 
-QList<RowPiece> Calculator::findRowPieces(QList<Node*> &nodes)
+QList<RowPiece> Calculator::findRowPieces(QList<Node*>& nodes)
 {
     //Anfang suchen
     QList<ComponentPort> startOfSearchComponentsPorts = findFirstComponentPort();
@@ -54,9 +54,9 @@ QList<RowPiece> Calculator::findRowPieces(QList<Node*> &nodes)
     return rowPieces;
 }
 
-void Calculator::findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeList)
+void Calculator::findSameRowPieces(RowPiece rowpiece1, QList<RowPiece>& mergeList)
 {
-    for (RowPiece &rowpiece2 : mergeList)
+    for (RowPiece& rowpiece2 : mergeList)
     {
         if (rowpiece1.getComponents() == rowpiece2.getComponents())
         {
@@ -66,7 +66,7 @@ void Calculator::findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeLis
 }
 
 //Suche nach Nachbarn, die nicht direkt mit dem aktuellen ComponentPort verbunden sind
-void Calculator::searchingForIndirectParallelNeighbours(QList<ComponentPort> &foundComponentPorts)
+void Calculator::searchingForIndirectParallelNeighbours(QList<ComponentPort>& foundComponentPorts)
 {
     QList<ComponentPort> newFound;
 
@@ -98,7 +98,7 @@ void Calculator::searchingForIndirectParallelNeighbours(QList<ComponentPort> &fo
 //Suche nach Nachbarn, die direkt mit dem aktuellen ComponentPort verbunden sind
 void
 Calculator::searchingForDirectParallelNeighbours(ComponentPort actualComPort,
-                                                 QList<ComponentPort> &foundComponentPorts)
+                                                 QList<ComponentPort>& foundComponentPorts)
 {
     for (Connection* c : _connections)
     {
@@ -150,7 +150,7 @@ QList<ComponentPort> Calculator::findFirstComponentPort(void)
     return searchForNeighbours(startOfSearch);
 }
 
-void Calculator::pathAnalysis(ComponentPort actualComponentPort, bool &hasAnalysisEndedSuccessful,
+void Calculator::pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful,
                               QList<RowPiece>* rowPieces, QList<Node*>* knownNodes)
 {
     //Wenn der Knoten bereits bekannt ist, ist die Abbruchbedingung erreicht
@@ -158,7 +158,7 @@ void Calculator::pathAnalysis(ComponentPort actualComponentPort, bool &hasAnalys
     rowPiecesComponents.append(actualComponentPort.getComponent());
 
     //Widerstand des RowPieces
-    int resistanceValueOfRowPiece = 0;
+    long double resistanceValueOfRowPiece = 0;
 
     /*
      * Finde alle ComponentPorts, die mit dem gegenüberliegenden Port von actualComponentPort verbunden sind.
@@ -226,11 +226,11 @@ void Calculator::pathAnalysis(ComponentPort actualComponentPort, bool &hasAnalys
     }
 }
 
-void Calculator::addingResistorsInRowToOneRowPiece(QList<Component*> &rowPiecesComponents,
-                                                   ComponentPort &actualComponentPort,
-                                                   QList<ComponentPort> &neighbourComponentPorts,
+void Calculator::addingResistorsInRowToOneRowPiece(QList<Component*>& rowPiecesComponents,
+                                                   ComponentPort& actualComponentPort,
+                                                   QList<ComponentPort>& neighbourComponentPorts,
                                                    bool neighbourComponentPortsContainPowerSupply,
-                                                   int &resistanceValueOfRowPiece)
+                                                   long double& resistanceValueOfRowPiece)
 {
     while (neighbourComponentPorts.count() == 1 && !neighbourComponentPortsContainPowerSupply)
     {
@@ -255,11 +255,11 @@ void Calculator::addingResistorsInRowToOneRowPiece(QList<Component*> &rowPiecesC
     }
 }
 
-QList<Component *> Calculator::initializeAmpAndVoltage(QList<Component *> components)
+QList<Component*> Calculator::initializeAmpAndVoltage(QList<Component*> components)
 {
-    for(Component* c : components)
+    for (Component* c : components)
     {
-        if(c->getComponentType() == Component::ComponentType::Resistor)
+        if (c->getComponentType() == Component::ComponentType::Resistor)
         {
             c->setAmp(0.0);
             c->setVoltage(0.0);
@@ -269,8 +269,8 @@ QList<Component *> Calculator::initializeAmpAndVoltage(QList<Component *> compon
 }
 
 void
-Calculator::deltaToStar(QList<Node*> &nodes, bool &changedSomething, QList<RowPiece> &rowPieces, RowPiece &rowPieceA,
-                        RowPiece &rowPieceB, RowPiece* searchedRowPieces)
+Calculator::deltaToStar(QList<Node*>& nodes, bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA,
+                        RowPiece& rowPieceB, RowPiece* searchedRowPieces)
 {
     _hasUsedStarCalculation = true;
     //rp ist rowPieceC
@@ -390,7 +390,7 @@ Calculator::calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPi
     return listOfNewRowPieces;
 }
 
-void Calculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces, QList<RowPiece> &mergeList)
+void Calculator::calculateVoltageAndAmp(QList<RowPiece> rowpieces, QList<RowPiece>& mergeList)
 {
     int ListSize = mergeList.count() - 1;
     long double totalCurrent = 0.0;
@@ -485,7 +485,7 @@ void Calculator::calculateVoltageAndAmpInResistor(RowPiece* rowpiece)
     }
 }
 
-void Calculator::starMerge(bool &changedSomething, QList<RowPiece> &rowPieces, RowPiece &rowPieceA, RowPiece &rowPieceB,
+void Calculator::starMerge(bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB,
                            Node* equalNode, QList<Node*> nodes)
 {
     //Nun schauen auf der gegenüberliegenden Seite vom gleichen Node
@@ -543,8 +543,8 @@ void Calculator::starMerge(bool &changedSomething, QList<RowPiece> &rowPieces, R
 }
 
 void
-Calculator::paralleMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPiece> &rowPieces, bool &changedSomething,
-                         QList<RowPiece> &mergeList)
+Calculator::paralleMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething,
+                         QList<RowPiece>& mergeList)
 {
     mergeList.append(rowPieceA);
     mergeList.append(rowPieceB);
@@ -556,8 +556,8 @@ Calculator::paralleMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPiec
     changedSomething = true;
 }
 
-void Calculator::rowMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPiece> &rowPieces, bool &changedSomething,
-                          QList<RowPiece> &mergeList)
+void Calculator::rowMerge(RowPiece& rowPieceA, RowPiece& rowPieceB, QList<RowPiece>& rowPieces, bool& changedSomething,
+                          QList<RowPiece>& mergeList)
 {
     mergeList.append(rowPieceA);
     mergeList.append(rowPieceB);
@@ -568,7 +568,7 @@ void Calculator::rowMerge(RowPiece &rowPieceA, RowPiece &rowPieceB, QList<RowPie
 }
 
 long double Calculator::calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node*> nodes,
-                                                              QList<RowPiece> &mergeList)
+                                                              QList<RowPiece>& mergeList)
 {
     while (1 < rowPieces.count())
     {
@@ -594,16 +594,16 @@ int Calculator::countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfR
     return counter;
 }
 
-Calculator &Calculator::calculator(void)
+Calculator& Calculator::calculator(void)
 {
     static Calculator calculator;
     return calculator;
 }
 
-bool Calculator::doUsualReshaping(QList<RowPiece> &rowPieces, QList<Node*> &nodes, QList<RowPiece> &mergeList)
+bool Calculator::doUsualReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes, QList<RowPiece>& mergeList)
 {
     bool changedSomething = false;
-    for (RowPiece &rowPieceA : rowPieces)
+    for (RowPiece& rowPieceA : rowPieces)
     {
         //Widerstand kurzgeschlossen
         if (rowPieceA.getNodeOne() == rowPieceA.getNodeTwo())
@@ -613,13 +613,14 @@ bool Calculator::doUsualReshaping(QList<RowPiece> &rowPieces, QList<Node*> &node
         }
             //offenes Ende
         else if (rowPieceA.hasOpenEnd(nodes, rowPieces) &&
-                !(rowPieceA.getNodeOne()->isConnectedToPowerSupply() || rowPieceA.getNodeTwo()->isConnectedToPowerSupply()))
+                 !(rowPieceA.getNodeOne()->isConnectedToPowerSupply() ||
+                   rowPieceA.getNodeTwo()->isConnectedToPowerSupply()))
         {
             rowPieces.removeOne(rowPieceA);
             break;
         }
 
-        for (RowPiece &rowPieceB : rowPieces)
+        for (RowPiece& rowPieceB : rowPieces)
         {
             //Parallelschaltung
             if (rowPieceA != rowPieceB && rowPieceA.hasEqualNodesOnBothSides(rowPieceB))
@@ -659,12 +660,12 @@ bool Calculator::doUsualReshaping(QList<RowPiece> &rowPieces, QList<Node*> &node
     return changedSomething;
 }
 
-bool Calculator::doStarDeltaReshaping(QList<RowPiece> &rowPieces, QList<Node*> &nodes)
+bool Calculator::doStarDeltaReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes)
 {
     bool changedSomething = false;
-    for (RowPiece &rowPieceA : rowPieces)
+    for (RowPiece& rowPieceA : rowPieces)
     {
-        for (RowPiece &rowPieceB : rowPieces)
+        for (RowPiece& rowPieceB : rowPieces)
         {
             if (rowPieceA != rowPieceB && rowPieceA.hasOneEqualNode(rowPieceB))
             {

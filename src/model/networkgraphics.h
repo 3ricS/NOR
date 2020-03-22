@@ -87,7 +87,7 @@ public:
                                              Component::ComponentType componentType, bool componentIsVertical);
     Component*          addComponentWithoutUndo(Component* componentToAdd);
     Component*          duplicateComponentWithoutUndo(Component* componentToDuplicate, int xPosition, int yPosition);
-    void                addConnectionWithoutUndo(Connection* connection);
+    Connection*         addConnectionWithoutUndo(Connection* connection);
     Connection*         addConnectionWithoutUndo(ComponentPort componentPortA, ComponentPort componentPortB);
     Description*        addDescriptionWithoutUndo(QPointF gridPosition, bool isLoad, QString text = 0, int id = 0);
     void                addDescriptionWithoutUndo(Description* descriptionFieldToAdd);

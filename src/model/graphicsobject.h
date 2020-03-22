@@ -12,7 +12,7 @@
 class GraphicsObject : public QGraphicsItem
 {
 public:
-    GraphicsObject([[maybe_unused]]QGraphicsItem* parent) : QGraphicsItem(nullptr) {}
+    GraphicsObject(QGraphicsItem* parent) : QGraphicsItem(nullptr), _parent(parent) {}
 
 
     void setSelected(bool isSelected) {_isSelected = isSelected;}
@@ -26,6 +26,7 @@ protected:
     virtual void paintSelectionHighlight(QPainter* painter) = 0;
 
     bool        _isSelected = false;
+    QGraphicsItem* _parent = nullptr;
 };
 
 

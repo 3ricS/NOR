@@ -71,6 +71,7 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
     void createUpperMenu(void);

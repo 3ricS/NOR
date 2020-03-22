@@ -65,9 +65,15 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_model->getUndoStack(), SIGNAL(canUndoChanged(bool)), this, SLOT(isUndoPossible(bool)));
     connect(_model, SIGNAL(currentAndVoltageIsValid(bool)), this, SLOT(setCurrentButtonVisibility(bool)));
 
-    connect(_networkView, SIGNAL(changeToSelectionMode()), this, SLOT(setSelectionMode()));
-
     setSelectionMode();
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Escape)
+    {
+        setSelectionMode();
+    }
 }
 
 /*!
@@ -84,6 +90,7 @@ void MainWindow::setSelectionMode(void)
 void MainWindow::setResistorMode(void)
 {
     setMouseMode(NetworkView::ResistorMode);
+    setFocusProxy(_networkView);
 }
 
 /*!

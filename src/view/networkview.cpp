@@ -226,14 +226,6 @@ void NetworkView::focus(void)
     centerOn(findScrollPosition());
 }
 
-void NetworkView::keyReleaseEvent(QKeyEvent* event)
-{
-    if (event->key() == Qt::Key_Escape)
-    {
-        emit changeToSelectionMode();
-    }
-}
-
 void NetworkView::mouseReleaseEvent(QMouseEvent* mouseEvent)
 {
     QPointF scenePosition = mapToScene(mouseEvent->pos());

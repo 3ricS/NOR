@@ -40,14 +40,10 @@ public:
 
     bool isAllowedToChangeMode(void);
 
-    signals:
-    void changeToSelectionMode();
-
 public slots:
     void focus(void);
 
 protected:
-    void keyReleaseEvent(QKeyEvent* event) override;
     void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

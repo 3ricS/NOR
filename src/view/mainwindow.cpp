@@ -11,7 +11,6 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
 
     _networkView = _ui->networkView;
     _ui->networkView->setModel(_model);
-    setSelectionMode();
 
     //Zuerst Strom und Spannungs Button verstecken
     setCurrentButtonVisibility(false);
@@ -67,6 +66,8 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
     connect(_model, SIGNAL(currentAndVoltageIsValid(bool)), this, SLOT(setCurrentButtonVisibility(bool)));
 
     connect(_networkView, SIGNAL(changeToSelectionMode()), this, SLOT(setSelectionMode()));
+
+    setSelectionMode();
 }
 
 /*!
@@ -75,6 +76,7 @@ MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(pa
 void MainWindow::setSelectionMode(void)
 {
     setMouseMode(NetworkView::SelectionMode);
+    setSelectionOfModeButtons(_ui->Selection);
 }
 
 /*!

@@ -15,13 +15,13 @@
 #include <QMouseEvent>
 #include <QUndoStack>
 
-#include <model/description.h>
-#include <model/resistor.h>
-#include <model/powersupply.h>
-#include <model/connection.h>
-#include <model/filemanager.h>
 #include <model/calculator.h>
 #include <model/commands.h>
+#include <model/connection.h>
+#include <model/description.h>
+#include <model/filemanager.h>
+#include <model/resistor.h>
+#include <model/powersupply.h>
 
 class FileManager;
 

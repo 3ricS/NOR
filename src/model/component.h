@@ -12,11 +12,11 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <QString>
-#include <QPainter>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
-#include "gridobject.h"
+#include <QPainter>
+
+#include "model/gridobject.h"
 
 class Component : public GridObject
 {

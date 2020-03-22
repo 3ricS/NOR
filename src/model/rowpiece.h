@@ -12,7 +12,6 @@
 #ifndef NOR_ROWPIECE_H
 #define NOR_ROWPIECE_H
 
-#include <QList>
 #include <model/component.h>
 
 class Node;

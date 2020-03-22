@@ -6,7 +6,6 @@
 #ifndef NOR_GRAPHICSOBJECT_H
 #define NOR_GRAPHICSOBJECT_H
 
-
 #include <QtWidgets/QGraphicsItem>
 
 class GraphicsObject : public QGraphicsItem

@@ -12,15 +12,14 @@
 #include <QJsonObject>
 #include <QFile>
 #include <QFileDialog>
-#include <QString>
 #include <QStandardPaths>
 #include <QTextStream>
 
-#include <model/networkgraphics.h>
 #include <model/connection.h>
+#include <model/description.h>
+#include <model/networkgraphics.h>
 #include <model/powersupply.h>
 #include <model/resistor.h>
-#include <model/description.h>
 
 class NetworkGraphics;
 

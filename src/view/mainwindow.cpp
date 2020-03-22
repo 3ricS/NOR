@@ -1,7 +1,5 @@
 #include "view/mainwindow.h"
 
-#include <QDebug>
-
 MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow),
                                                                   _model(model)
 {

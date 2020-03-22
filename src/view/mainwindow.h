@@ -9,23 +9,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPushButton>
-#include <QGraphicsView>
-#include <QToolButton>
 #include <QMenu>
 #include <QAction>
 #include <QMouseEvent>
 #include <QLocale>
-#include <QToolBar>
-#include <QListView>
-#include <QHBoxLayout>
-#include <QComboBox>
-#include <QLocale>
 
 #include <model/networkgraphics.h>
+#include "ui_mainwindow.h"
 #include "view/networkview.h"
 #include "view/powerview.h"
-#include "ui_mainwindow.h"
 
 class Model;
 class NetworkGraphics;

@@ -32,22 +32,22 @@ public:
     bool hasOpenEnd(QList<Node*> allNodes, QList<RowPiece> rowPieces);
 
     //getter
-    long double getResistanceValue(void) {return _resistanceValue;}
-    Node* getNodeOne(void) {return _nodeOne;}
-    Node* getNodeTwo(void) {return _nodeTwo;}
-    bool getIsMergedParallel(void) {return _isMergedParallel;}
-    void setIsMergedParallel(bool isMergedParallel) {_isMergedParallel = isMergedParallel;}
-    double getAmp(void) {return _amp;}
+    long double       getResistanceValue(void) {return _resistanceValue;}
+    Node*             getNodeOne(void) {return _nodeOne;}
+    Node*             getNodeTwo(void) {return _nodeTwo;}
+    bool              getIsMergedParallel(void) {return _isMergedParallel;}
+    void              setIsMergedParallel(bool isMergedParallel) {_isMergedParallel = isMergedParallel;}
+    double            getAmp(void) {return _amp;}
     QList<Component*> getComponents(void) {return _components;}
-    Node* getEqualNode(RowPiece otherRowPiece);
-    Node* getOppositeNode(Node* node);
+    Node*             getEqualNode(RowPiece otherRowPiece);
+    Node*             getOppositeNode(Node* node);
 
     //setter
     void setAmp(double amp) {_amp = amp;}
 
 private:
     QList<Node*> getConnectedNodes(QList<Node*> allNodes);
-    int countConnectedRowPiecesOfNode(Node* node, QList<RowPiece> rowPieces);
+    int          countConnectedRowPiecesOfNode(Node* node, QList<RowPiece> rowPieces);
 
     Node* _nodeOne;
     Node* _nodeTwo;

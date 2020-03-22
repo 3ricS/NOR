@@ -19,13 +19,13 @@ public:
     bool isSelected(void) {return _isSelected;}
 
 protected:
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override = 0;
-    virtual QRectF boundingRect(void) const override = 0;
+    virtual void    paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override = 0;
+    virtual QRectF  boundingRect(void) const override = 0;
 
     virtual void paintSelectionHighlight(QPainter* painter) = 0;
 
-    bool        _isSelected = false;
-    QGraphicsItem* _parent = nullptr;
+    bool            _isSelected = false;
+    QGraphicsItem*  _parent = nullptr;
 };
 
 

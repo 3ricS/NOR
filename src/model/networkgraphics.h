@@ -151,9 +151,9 @@ private:
     void moveObjects(QList<GridObject*> objectsToMove, GridObject* objectToMove, int diffX, int diffY);
 
 
-    void duplicateGridObjects(QList<GridObject*> objectsToDuplicate);
-    Component* duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
-    Description* duplicateDescription(Description* descriptionToDuplicate, int xPosition, int yPosition);
+    void            duplicateGridObjects(QList<GridObject*> objectsToDuplicate);
+    Component*      duplicateComponent(Component* componentToDuplicate, int xPosition, int yPosition);
+    Description*    duplicateDescription(Description* descriptionToDuplicate, int xPosition, int yPosition);
 
     bool lookingForFreeSpaceToDuplicate(int xPos, int yPos, int &xWaytoTheRight);
     void calculateDistanceToNextObject(int &i, GridObject* firstGridObject, int &xSpace, int &ySpace, QList<GridObject*> objects);

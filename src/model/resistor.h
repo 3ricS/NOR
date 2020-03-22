@@ -17,7 +17,7 @@ public:
     Resistor(QString name, long double valueResistance, int x, int y, bool isVertical, int id);
 
     long double getResistanceValue(void) {return _resistanceValue;}
-    void setResistanceValue(long double resistance) { _resistanceValue = resistance;}
+    void        setResistanceValue(long double resistance) { _resistanceValue = resistance;}
 
 
 private:

@@ -37,14 +37,15 @@ private:
 
 
     //search
-    void pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful, QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
-    QList<RowPiece> findRowPieces(QList<Node *> &nodes);
-    QList<ComponentPort> findFirstComponentPort(void);
-    void findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeList);
-    bool isPowerSupplyinComponentPortList(QList<ComponentPort> list);
-    bool isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces);
-    int countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
-    Node* getOrCreateNode(ComponentPort componentPortForNewNode, QList<ComponentPort> connectedComponentPorts,
+    void                    pathAnalysis(ComponentPort actualComponentPort, bool& hasAnalysisEndedSuccessful, QList<RowPiece>* rowPieces, QList<Node*>* knownNodes);
+    QList<RowPiece>         findRowPieces(QList<Node *> &nodes);
+    QList<ComponentPort>    findFirstComponentPort(void);
+
+    void    findSameRowPieces(RowPiece rowpiece1, QList<RowPiece> &mergeList);
+    bool    isPowerSupplyinComponentPortList(QList<ComponentPort> list);
+    bool    isNodeConnectedToPowerSupply(QList<RowPiece> rowPieces);
+    int     countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfRowPieces);
+    Node*   getOrCreateNode(ComponentPort componentPortForNewNode, QList<ComponentPort> connectedComponentPorts,
                           QList<Node*>* knownNodes);
 
     void searchingForIndirectParallelNeighbours(QList<ComponentPort> &foundComponentPorts);
@@ -59,12 +60,12 @@ private:
     QList<Component*> initializeAmpAndVoltage(QList<Component*> components);
 
     //evaluate
-    long double calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes, QList<RowPiece>& mergeList);
-    bool doUsualReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes, QList<RowPiece>& mergeList);
-    bool doStarDeltaReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes);
+    long double     calculateResistanceValueFromRowPieces(QList<RowPiece> rowPieces, QList<Node *> nodes, QList<RowPiece>& mergeList);
+    bool            doUsualReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes, QList<RowPiece>& mergeList);
+    bool            doStarDeltaReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes);
     QList<RowPiece> calculateStar(RowPiece rowPieceA, RowPiece rowPieceB, RowPiece rowPieceC, Node *newNode);
-    void deltaToStar(QList<Node*>& nodes, bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB,
-                     RowPiece* searchedRowPieces);
+    void            deltaToStar(QList<Node*>& nodes, bool& changedSomething, QList<RowPiece>& rowPieces, RowPiece& rowPieceA, RowPiece& rowPieceB,
+                                RowPiece* searchedRowPieces);
 
     void calculateVoltageAndAmp(QList<RowPiece> rowpieces, QList<RowPiece> &mergeList);
     void calculateVoltageAndAmpInResistor(RowPiece* rowpiece);

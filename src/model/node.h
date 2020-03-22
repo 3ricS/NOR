@@ -38,9 +38,9 @@ public:
 
 
 private:
-    int _id;
+    int                  _id;
     QList<ComponentPort> _componentPorts;
-    bool _isConnectedToPowerSupply = false;
+    bool                 _isConnectedToPowerSupply = false;
 };
 
 

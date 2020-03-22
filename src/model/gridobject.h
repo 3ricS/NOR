@@ -15,12 +15,12 @@ class GridObject : public GraphicsObject
 {
 public:
     GridObject(QPointF position, int id) : GraphicsObject(nullptr), _position(position), _id(id) {}
-    QRectF boundingRect(void) const override;
+    QRectF  boundingRect(void) const override;
 
-    void setPosition(QPointF position) {_position = position;}
+    void    setPosition(QPointF position) {_position = position;}
 
     QPointF getPosition(void) {return _position;}
-    int getId(void) {return _id;}
+    int     getId(void) {return _id;}
 
 protected:
     void paintSelectionHighlight(QPainter* painter) override;

@@ -23,9 +23,9 @@ public:
     void invertPort(void);
 
     //getter
-    Component* getComponent(void) const {return _component;}
+    Component*      getComponent(void) const {return _component;}
     Component::Port getPort(void) const {return _port;}
-    ComponentPort getOppisiteComponentPort(void);
+    ComponentPort   getOppisiteComponentPort(void);
 
 private:
     Component*      _component;

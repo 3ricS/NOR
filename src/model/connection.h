@@ -37,13 +37,13 @@ public:
     void changePortOfComponentPortWithComponent(Component* componentOfComponentPortToChangePortOf);
 
     //getter
-    bool isThereAComponentOrADescription(int x, int y);
-    Component* getComponentAtPosition(int x, int y);
-    Description* getDescriptionAtPosition(int x, int y);
-    QList<QRect> getHitBoxes(void) const {return _connectionHitbox;}
-    ComponentPort getComponentPortOne(void) const {return _componentPortOne;}
-    ComponentPort getComponentPortTwo(void) const {return _componentPortTwo;}
-    bool hasComponent(Component* searchedComponent);
+    bool            isThereAComponentOrADescription(int x, int y);
+    Component*      getComponentAtPosition(int x, int y);
+    Description*    getDescriptionAtPosition(int x, int y);
+    QList<QRect>    getHitBoxes(void) const {return _connectionHitbox;}
+    ComponentPort   getComponentPortOne(void) const {return _componentPortOne;}
+    ComponentPort   getComponentPortTwo(void) const {return _componentPortTwo;}
+    bool            hasComponent(Component* searchedComponent);
 
 
     static constexpr int _circleRadius = 5;
@@ -59,11 +59,11 @@ private:
     void drawVerticalLines(void);
     void drawUpOrDown(int upOrDown);
     void dodgeComponent(void);
-    int horizontalPathAnalysis(int howManyConnections, bool horizontalFirst);
-    int leftOrRightPathAnalysis(int howManyConnections, bool horizontalFirst, int leftOrRight);
-    int verticalPathAnalysis(int howManyConnections, bool horizontalFirst);
-    int upOrDownPathAnalysis(int howManyConnections, bool horizontalFirst, int upOrDown);
-    int pathAnalysisDodgeComponent(int howManyConnections);
+    int  horizontalPathAnalysis(int howManyConnections, bool horizontalFirst);
+    int  leftOrRightPathAnalysis(int howManyConnections, bool horizontalFirst, int leftOrRight);
+    int  verticalPathAnalysis(int howManyConnections, bool horizontalFirst);
+    int  upOrDownPathAnalysis(int howManyConnections, bool horizontalFirst, int upOrDown);
+    int  pathAnalysisDodgeComponent(int howManyConnections);
     void initializeValues(void);
     void paintStartAndEndPoint(QPainter* painter);
 

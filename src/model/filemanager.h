@@ -42,6 +42,7 @@ private:
     QJsonObject saveComponent(Component* component);
     QJsonObject saveConnection(Connection* connection);
     QJsonObject saveDescription(Description* description);
+
     void loadComponent(QJsonArray array);
     void loadConnection(QJsonArray array);
     void loadDescription(QJsonArray array);

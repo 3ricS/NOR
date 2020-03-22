@@ -458,7 +458,9 @@ MainWindow::~MainWindow(void)
 void MainWindow::updateResistanceValue(void)
 {
     double resistance = static_cast<double>(_model->getResistanceValue());
-    _ui->CalculatedValue->setText(QLocale::system().toString(resistance, 'f', 2) + " Ω");
+    QString unit = getUnitAndFitValue(resistance);
+    QString displayedResistance = getDisplayedValue(resistance, unit);
+    _ui->CalculatedValue->setText(displayedResistance);
 }
 
 void MainWindow::isPowerSupplyAllowed(bool isAllowed)
@@ -586,4 +588,59 @@ void MainWindow::setMouseMode(NetworkView::MouseMode newMouseMode)
                 break;
         }
     }
+}
+
+QString MainWindow::getDisplayedValue(double resistance, QString unit)
+{
+    QString displayedValue = QLocale::system().toString(resistance, 'f', 4);
+    displayedValue = cutNullIfNeeded(displayedValue);
+    displayedValue += (" " + unit + "Ω");
+    return displayedValue;
+}
+
+QString MainWindow::cutNullIfNeeded(QString value)
+{
+    while (value.endsWith('0'))
+    {
+        int lastPosition = value.lastIndexOf('0');
+        value.remove(lastPosition, 1);
+        if (value.endsWith(',') || value.endsWith('.'))
+        {
+            value.remove(',');
+            value.remove('.');
+            return value;
+        }
+    }
+    return value;
+}
+
+QString MainWindow::getUnitAndFitValue(double& value)
+{
+    QString unit = "";
+    if (value < 1)
+    {
+        unit = "m";
+        value = value / 1e-3;
+    }
+    else if (value < 1e3)
+    {
+
+    }
+    else if (value < 1e6)
+    {
+        value = value / 1e3;
+        unit = "k";
+    }
+    else if (value < 1e9)
+    {
+        unit = "M";
+        value = value / 1e6;
+    }
+    else
+    {
+        unit = "G";
+        value = value / 1e9;
+    }
+
+    return unit;
 }

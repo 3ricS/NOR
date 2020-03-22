@@ -55,7 +55,7 @@ private:
 
     void addingResistorsInRowToOneRowPiece(QList<Component*>& rowPiecesComponents, ComponentPort& actualComponentPort,
                                            QList<ComponentPort>& neighbourComponentPorts, bool neighbourComponentPortsContainPowerSupply,
-                                           int& resistanceValueOfRowPiece);
+                                           long double& resistanceValueOfRowPiece);
     //preparation
     QList<Component*> initializeAmpAndVoltage(QList<Component*> components);
 

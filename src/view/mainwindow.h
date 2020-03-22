@@ -80,6 +80,10 @@ private:
     void createListOfModeButtons(void);
     void setMouseMode(NetworkView::MouseMode newMouseMode);
 
+    QString getDisplayedValue(double resistance, QString unit);
+    QString cutNullIfNeeded(QString value);
+    QString getUnitAndFitValue(double& value);
+
 //Konstanten
     static constexpr double _maximumZoom = 299;
     static constexpr double _minimumZoom = 11;

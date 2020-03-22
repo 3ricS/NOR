@@ -610,7 +610,7 @@ Component* NetworkGraphics::duplicateComponentWithoutUndo(Component* componentTo
  * Es wird geprüft, ob die Verbindung bereits existiert.
  * Anschließend wird die Verbindung hinzugefügt.
  */
-void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
+Connection* NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
 {
     bool isAlreadyExisting = false;
     for (Connection* otherConnection : _connections)
@@ -618,6 +618,8 @@ void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
         if (*otherConnection == *connection)
         {
             isAlreadyExisting = true;
+            delete connection;
+            connection = otherConnection;
             break;
         }
     }
@@ -627,7 +629,11 @@ void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
         addItem(connection);
     }
 
-    updateCalc();
+    if(!_isLoading)
+    {
+        updateCalc();
+    }
+    return connection;
 }
 
 /*!
@@ -643,35 +649,8 @@ void NetworkGraphics::addConnectionWithoutUndo(Connection* connection)
 Connection* NetworkGraphics::addConnectionWithoutUndo(ComponentPort componentPortA, ComponentPort componentPortB)
 {
     Connection* connection = new Connection(componentPortA, componentPortB, this);
-    Connection* createdConnection = nullptr;
-    bool isAlreadyExisting = false;
-    for (Connection* otherConnection : _connections)
-    {
-        if (*otherConnection == *connection)
-        {
-            isAlreadyExisting = true;
-            createdConnection = otherConnection;
-            break;
-        }
-    }
-    if (!isAlreadyExisting)
-    {
-        _connections.append(connection);
-        createdConnection = connection;
-        addItem(connection);
-        update();
-    }
-    else
-    {
-        delete connection;
-    }
-
-    if (!_isLoading)
-    {
-        updateCalc();
-    }
-
-    return createdConnection;
+    connection = addConnectionWithoutUndo(connection);
+    return connection;
 }
 
 /*!

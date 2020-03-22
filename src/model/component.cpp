@@ -142,7 +142,7 @@ Component::paintInformation(QPainter* painter, QString name, double value, QRect
 QString Component::getDisplayedValueString(double value, Component::ComponentType componentType)
 {
     double valueWithoutUnit = value;
-    QString unitString = getScaledValue(valueWithoutUnit);
+    QString unitString = getUnitAndFitValue(valueWithoutUnit);
 
     if (ComponentType::Resistor == componentType)
     {
@@ -160,7 +160,7 @@ QString Component::getDisplayedValueString(double value, Component::ComponentTyp
     return displayedString;
 }
 
-QString Component::getScaledValue(double& valueWithoutUnit)
+QString Component::getUnitAndFitValue(double& valueWithoutUnit)
 {
     QString unitString = "";
     double value = valueWithoutUnit;

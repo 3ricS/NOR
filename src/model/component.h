@@ -68,7 +68,7 @@ protected:
 private:
     int     getPortPositionXOrY(int positionValue, Port port, bool isX) const;
     QString getDisplayedValueString(double value, ComponentType componentType);
-    QString getScaledValue(double& valueWithoutUnit);
+    QString getUnitAndFitValue(double& valueWithoutUnit);
 
     const ComponentType _componentType;
 };

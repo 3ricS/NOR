@@ -18,6 +18,7 @@ class Defines
 public:
     static constexpr int gridLength = 120;
     static constexpr int defaultSceneSize = 6000;
-    static const QColor highlightColor;
+    static const QColor shapeColor;
+    static const QColor hightlightColor;
 };
 

@@ -328,7 +328,7 @@ void NetworkView::mouseMoveEvent(QMouseEvent* event)
             }
             else if (_mouseIsPressed && _selectedObjectToMove != nullptr)
             {
-                highlightGrid(scenePosition, Defines::highlightColor);
+                highlightGrid(scenePosition, Defines::shapeColor);
             }
         }
             break;
@@ -512,7 +512,7 @@ void NetworkView::connectionMoveEvent(QPointF scenePosition)
     {
         if (!_mouseIsPressed)
         {
-            highlightComponentPort(foundComponentPort, Defines::highlightColor);
+            highlightComponentPort(foundComponentPort, Defines::shapeColor);
         }
         else if (_mouseIsPressed && _connectionStartComponentPort != nullptr &&
                  foundComponentPort->getComponent() != _connectionStartComponentPort->getComponent())
@@ -670,7 +670,7 @@ void NetworkView::showSampleComponent(QPointF scenePosition, Component::Componen
         }
         _sampleComponent = sampleComponent;
         _model->addItem(_sampleComponent);
-        highlightGrid(scenePosition, Defines::highlightColor);
+        highlightGrid(scenePosition, Defines::shapeColor);
     }
 }
 
@@ -687,7 +687,7 @@ void NetworkView::showSampleDescription(QPointF scenePosition)
         QPointF gridPosition = _model->mapSceneToGrid(scenePosition);
         _sampleDescription = new Description(gridPosition.x(), gridPosition.y(), 0);
         _model->addItem(_sampleDescription);
-        highlightGrid(scenePosition, Defines::highlightColor);
+        highlightGrid(scenePosition, Defines::shapeColor);
     }
 }
 

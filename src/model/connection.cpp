@@ -215,7 +215,7 @@ void Connection::paintSelectionHighlight(QPainter* painter)
     for (QRect hitbox : _connectionHitbox)
     {
         QBrush brush;
-        brush.setColor(QColor(255, 0, 0, 55));
+        brush.setColor(Defines::hightlightColor);
         brush.setStyle(Qt::BrushStyle::SolidPattern);
         painter->setPen(Qt::NoPen);
         painter->setBrush(brush);

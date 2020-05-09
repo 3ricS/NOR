@@ -14,7 +14,7 @@
 void GridObject::paintSelectionHighlight(QPainter* painter)
 {
     QBrush brush;
-    brush.setColor(QColor(255, 0, 0, 55));
+    brush.setColor(Defines::hightlightColor);
     brush.setStyle(Qt::BrushStyle::SolidPattern);
     painter->setBrush(brush);
     int xPosition = _position.x();

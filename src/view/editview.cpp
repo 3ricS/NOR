@@ -8,8 +8,8 @@
 
 EditView::EditView(Component* component, NetworkGraphics* model, bool isInitializingWindow, QWidget* parent,
                    QUndoStack* undoStack) :
-        QDialog(parent, Qt::WindowCloseButtonHint),
-        _editViewUi(new Ui::EditView), _model(model), _undoStack(undoStack), _isInitializingWindow(isInitializingWindow)
+    QDialog(parent, Qt::WindowCloseButtonHint),
+    _editViewUi(new Ui::EditView), _model(model), _undoStack(undoStack), _isInitializingWindow(isInitializingWindow)
 {
     _component = component;
     _orientationAtStart = component->getOrientation();
@@ -35,19 +35,26 @@ void EditView::setupView(void)
     QString valueDescription = "";
     QString valuePlaceHolder = "";
 
-    if (_component->getComponentTypeInt() == Component::ComponentType::Resistor)
+    if (!_model->hasUsedStarCalculation())
     {
-        valueDescription = "Widerstandswert [Ohm]:";
-        valuePlaceHolder = "Widerstandswert hier eingeben";
+        if (_component->getComponentTypeInt() == Component::ComponentType::Resistor)
+        {
+            valueDescription = "Widerstandswert [Ohm]:";
+            valuePlaceHolder = "Widerstandswert hier eingeben";
 
-        _editViewUi->actualVoltageView->setText(QLocale::system().toString(_component->getVoltage(), 'f', 2) + "V");
-        _editViewUi->actualCurrentView->setText(QLocale::system().toString(_component->getAmp(), 'f', 2) + "A");
+            _editViewUi->actualVoltageView->setText(QLocale::system().toString(_component->getVoltage(), 'f', 2) + "V");
+            _editViewUi->actualCurrentView->setText(QLocale::system().toString(_component->getAmp(), 'f', 2) + "A");
+        }
+        else if (_component->getComponentTypeInt() == Component::ComponentType::PowerSupply)
+        {
+            hideVoltageLabels();
+            valueDescription = "Spannung [V]:";
+            _editViewUi->actualCurrentView->setText(QLocale::system().toString(_component->getAmp(), 'f', 2) + "A");
+        }
     }
-    else if (_component->getComponentTypeInt() == Component::ComponentType::PowerSupply)
+    else
     {
-        hideVoltageLabels();
-        valueDescription = "Spannung [V]:";
-        _editViewUi->actualCurrentView->setText(QLocale::system().toString(_component->getAmp(), 'f', 2) + "A");
+        hideCurrentAndVoltageLabels();
     }
 
     QRegExp regExp("(([1-9][0-9]*|0)(\\,[0-9]*[1-9])?)");

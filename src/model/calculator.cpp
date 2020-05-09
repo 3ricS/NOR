@@ -594,12 +594,6 @@ int Calculator::countNodesInRowPieces(Node* nodeToCount, QList<RowPiece> listOfR
     return counter;
 }
 
-Calculator& Calculator::calculator(void)
-{
-    static Calculator calculator;
-    return calculator;
-}
-
 bool Calculator::doUsualReshaping(QList<RowPiece>& rowPieces, QList<Node*>& nodes, QList<RowPiece>& mergeList)
 {
     bool changedSomething = false;

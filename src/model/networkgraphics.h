@@ -126,6 +126,9 @@ public:
     QString             getVoltageAndCurrentInformation(void);
     QUndoStack*         getUndoStack(void) {return _undoStack;}
 
+    //Calculator
+    bool                hasUsedStarCalculation() {return _calculator->hasUsedStarCalculation();}
+
 public slots:
     void hasChangedDocument(int idx);
 
@@ -202,6 +205,7 @@ private:
     QList<Connection*>       _connections;
     QGraphicsScene*          _graphics = nullptr;
     FileManager*             _manager = nullptr;
+    Calculator*              _calculator = nullptr;
     QUndoStack*              _undoStack;
 
     bool _isLoading = false;

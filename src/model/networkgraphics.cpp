@@ -10,6 +10,7 @@ NetworkGraphics::NetworkGraphics() : QGraphicsScene(), _graphics(new QGraphicsSc
     int defaultSceneSize = Defines::defaultSceneSize;
     setSceneRect(-defaultSceneSize, -defaultSceneSize, defaultSceneSize, defaultSceneSize);
     _manager = new FileManager(this);
+    _calculator = new Calculator();
     connect(_undoStack, SIGNAL(indexChanged(int)), this, SLOT(hasChangedDocument(int)));
 }
 
@@ -81,7 +82,7 @@ void NetworkGraphics::updateCalc(void)
 {
     if (!_isLoading)
     {
-        _resistanceValue = Calculator::calculator().calculate(_connections, getComponents());
+        _resistanceValue = _calculator->calculate(_connections, getComponents());
 
         update();
         emit resistanceValueChanged();
@@ -1052,16 +1053,16 @@ QString NetworkGraphics::getFileName(void)
 QString NetworkGraphics::getVoltageAndCurrentInformation(void)
 {
     QString information;
-    if (!Calculator::calculator().hasUsedStarCalculation())
+    if (!_calculator->hasUsedStarCalculation())
     {
         for (Component* c : getComponents())
         {
             if (c->getComponentType() == Component::PowerSupply)
             {
                 information +=
-                        "Gesamtspannung: " + QString::number(c->getVoltage(), 'f', 2) + "V" + "<br>" + "Gesamtstrom: " +
+                        "Gesamtspannung: " + QString::number(c->getVoltage(), 'f', 2) + " V" + "<br>" + "Gesamtstrom: " +
                         QString::number(c->getAmp(), 'f', 2)
-                        + "A" + "<br> <br>";
+                        + " A" + "<br> <br>";
             }
         }
         for (Component* c : getComponents())
@@ -1076,10 +1077,10 @@ QString NetworkGraphics::getVoltageAndCurrentInformation(void)
                     information += "Widerstand: ";
                     information += QString::number(resistor->getResistanceValue(), 'f', 2) + "Ω" + "<br>";
                     information += "Strom: ";
-                    information += QString::number(c->getAmp(), 'f', 2) + "A" + "<br>";
+                    information += QString::number(c->getAmp(), 'f', 2) + " A" + "<br>";
                     information += "Spannung: ";
-                    information += QString::number(c->getVoltage(), 'f', 2) + "V";
-                    information += " <br> <br>";
+                    information += QString::number(c->getVoltage(), 'f', 2) + " V";
+                    information += "<br>------------<br><br>";
                 }
             }
         }
@@ -1088,9 +1089,11 @@ QString NetworkGraphics::getVoltageAndCurrentInformation(void)
     else
     {
         information += "Warnung: <br><br>";
-        information += "In Ihrem Netzwerk wurde eine Stern-Dreiecks-Umformung durchgeführt."
+        /*information += "In Ihrem Netzwerk wurde eine Stern-Dreiecks-Umformung durchgeführt."
                        "<br>Da sich die Funktion der Wertetabelle noch in der Beta befindet, können wir Ihnen keine richtigen Spannungen und Ströme ausgeben."
                        "<br><br> Vielen Dank für Ihr Vertändnis!";
+        */
+        information += "Da in dem Netzwerk eine Stern-Dreieck-Umformung durchgeführt wurde, können Ströme und Spannungen nicht angegeben werden.";
     }
     return information;
 }

@@ -19,7 +19,8 @@ class Connection;
 class Calculator
 {
 public:
-    static Calculator& calculator(void);
+    Calculator(void) = default;
+    ~Calculator(void) = default;
     long double calculate(QList<Connection*> connections, QList<Component*> components);
 
     //getter
@@ -29,11 +30,6 @@ public:
     bool hasUsedStarCalculation(void) {return _hasUsedStarCalculation;}
 
 private:
-    //Singleton
-    Calculator(void) = default;
-    ~Calculator(void) = default;
-    Calculator(const Calculator&) = delete;
-    Calculator& operator=(const Calculator&) = delete;
 
 
     //search

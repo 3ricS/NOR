@@ -6,6 +6,7 @@ NOR - Network of Resistance
 NOR kann den Gesamtwiderstand beliebiger Netzwerke von elektrischen Widerständen berechnen.
 Darüber hinaus können die Spannungen und Ströme an jedem Widerstand abgerufen werden.
 Die Netzwerke können gespeichert und gedruckt werden.
+Dieses Projekt wurde im Rahmen eines Studiensemsters an der Privaten Hochschule Wirtschaft und Technik in Diepholz angefertigt. Als Ansprechpartner stand uns Prof. Dr. H. Henseler zur Seite.
 
 ---
 
@@ -40,3 +41,7 @@ Unter doc/ befinden sich das Klassendiagramm, das Lastenheft sowie die Protokoll
 
 ## Benutzerhandbuch
 Die Doxygen-Datei befindet sich unter doxygen/
+
+## Kooperationspartner
+![PHWT Logo](https://upload.wikimedia.org/wikipedia/commons/0/0f/Logo_PHWT.jpg)
+

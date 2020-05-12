@@ -38,22 +38,22 @@ Die Lizenzinformationen befinden sich unter License.md.
 Als Versionskontrolle wird Git eingesetzt.
 
 ## Compiler
-Desktop Qt 5.14.0 clang 64bit
+Desktop Qt 5.14.1 clang 64bit
 
 ## Erzeugung eines lauffähigen Programms
-Für ein lauffähiges Programm muss der Quellcode in die Qt-Entwicklungsumgebung importiert werden und dort dann kompiliert werden. Dazu muss die Datei src/NOR.pro mit dem Qt Creator geöffnet werden.
-Es ist keine Installation und damit einhergehende Konfiguration notwendig. Auch die Deinstallation entfällt. Das Programm wird über die Entwicklungsumgebung aufgerufen.
+Das Programm kann unter https://github.com/3ricS/NOR/releases direkt heruntergeladen und installiert werden.  
+Um aus dem Quellcode ein lauffähiges Programm zu erzeugen, muss dieser mit dem Qt Creator geöffnet und kompiliert werden, wodurch die Installation entfällt. Dazu muss die Datei src/NOR.pro mit dem Qt Creator geöffnet werden.
 
 ## Struktur des Codes
-Als Leitlinie des Code-Styles wurden aus dem verbindlichen Styleguide (Version 1.8.1) der PHWT entnommen. Als Architektur-Pattern wurde das Model-View-Pattern sowie das Singleton verwendet.
+Als Architektur-Pattern wurde das Model-View-Pattern verwendet. Als Leitlinie des Code-Styles wurden aus dem verbindlichen Styleguide (Version 1.8.1) der PHWT entnommen.
 
 ## Verzeichnisstruktur
-Die Quellcode-Datei befinden sich in src/, in diesem Ordner werden die Klassen nochmals in Model und View getrennt abgelegt. Außerdem liegen dort die Bilder bzw. Icons, die in unserem Programm verwendet werden.
-Unter doc/ befinden sich das Klassendiagramm, das Lastenheft sowie die Protokolle.
+Die Quellcode-Datei befinden sich in src/, in diesem Ordner werden die Klassen nochmals in Model und View getrennt abgelegt. Außerdem liegen dort unter src/img die Bilder bzw. Icons, die in unserem Programm verwendet werden.
+Unter doc/ befinden sich das Klassendiagramm und das Lastenheft sowie die Doxygen-Datei.
 Beispiele für elektrische Netzwerke, die mit dem Programm geladen werden können, finden sich unter examples/.
 
 ## Benutzerhandbuch
-Die Doxygen-Datei befindet sich unter doxygen/
+Die Doxygen-Datei befindet sich unter doc/doxygen/
 
 ## Kooperationspartner
 ![PHWT Logo](https://upload.wikimedia.org/wikipedia/commons/0/0f/Logo_PHWT.jpg)

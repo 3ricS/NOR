@@ -35,6 +35,7 @@ SOURCES += \
         model/filemanager.cpp \
         model/powersupply.cpp \
         model/resistor.cpp \
+        view/aboutbox.cpp \
         view/editview.cpp \
         view/mainwindow.cpp \
         model/networkgraphics.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
         model/filemanager.h \
         model/powersupply.h \
         model/resistor.h \
+        view/aboutbox.h \
         view/editview.h \
         view/mainwindow.h \
         model/networkgraphics.h \
@@ -67,6 +69,7 @@ HEADERS += \
         model/graphicsobject.h
 
 FORMS += \
+        view/aboutbox.ui \
         view/editview.ui \
         view/mainwindow.ui \
         view/powerview.ui

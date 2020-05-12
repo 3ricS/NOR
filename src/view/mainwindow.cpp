@@ -1,4 +1,5 @@
 #include "view/mainwindow.h"
+#include "view/aboutbox.h"
 
 MainWindow::MainWindow(NetworkGraphics* model, QWidget* parent) : QMainWindow(parent), _ui(new Ui::MainWindow),
                                                                   _model(model)
@@ -237,6 +238,9 @@ void MainWindow::createUpperMenu(void)
     _ui->menuExtras->addAction(_about);
     _about->setMenuRole(QAction::ApplicationSpecificRole);
 
+    QAction *aboutQtAct = _ui->menuExtras->addAction(tr("Über &Qt"), qApp, &QApplication::aboutQt);
+    aboutQtAct->setStatusTip(tr("Einzelheiten zur Qt-Bibliothek"));
+
     //Bearbeiten Menu
     _edit = new QAction("Eigenschaften");
     _edit->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
@@ -363,18 +367,8 @@ void MainWindow::setCurrentButtonVisibility(bool visibility)
 */
 void MainWindow::openAboutWindow(void)
 {
-    QMessageBox::about(this, ("About Application"),
-                       ("Das Programm <b>NOR - Network of Resistance</b> berechnet den Gesamtwiderstand von Netzwerken "
-                        "<br> "
-                        "<br> Dieses Programm wurde von folgenden Personen im Rahmen von Software Engineering 1 geschrieben:"
-                        "<br>"
-                        "<br> Eric Schniedermeyer"
-                        "<br> Leonel Fransen"
-                        "<br> Moritz Fichte"
-                        "<br> Sören Köstler"
-                        "<br>"
-                        "<br> Version: 1.0")
-    );
+    AboutBox* about = new AboutBox(this);
+    about->show();
 }
 
 void MainWindow::duplicate(void)

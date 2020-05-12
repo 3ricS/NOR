@@ -9,5 +9,7 @@
         <file>img/resistorLogo.png</file>
         <file>img/resistorLogo.icns</file>
         <file>img/hand.png</file>
+        <file>img/PHWTLogo.svg</file>
+        <file>img/PHWTLogo.png</file>
     </qresource>
 </RCC>

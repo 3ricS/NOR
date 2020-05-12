@@ -6,6 +6,7 @@ NOR - Network of Resistance
 NOR kann den Gesamtwiderstand beliebiger Netzwerke von elektrischen Widerständen berechnen.
 Darüber hinaus können die Spannungen und Ströme an jedem Widerstand abgerufen werden.
 Die Netzwerke können gespeichert und gedruckt werden.
+Als Entwicklungsumgebung wurde die Community-Version von Qt verwendet. 
 Dieses Projekt wurde im Rahmen eines Studiensemsters an der Privaten Hochschule Wirtschaft und Technik in Diepholz angefertigt. Als Ansprechpartner stand uns Prof. Dr. H. Henseler zur Seite.
 
 ---

@@ -1,6 +1,7 @@
 NOR - Network of Resistance
 ===========================
 #### Version 1.0
+#### Download: https://github.com/3ricS/NOR/releases
 
 # Beschreibung
 NOR kann den Gesamtwiderstand beliebiger Netzwerke von elektrischen Widerständen berechnen.

@@ -26,7 +26,7 @@ Dieses Projekt wurde im Rahmen eines Studiensemsters an der [Privaten Hochschule
 - Eric Schniedermeyer
 - Leonel Fransen
 - Moritz Fichte
-- Soeren Koestler
+- Sören Köstler
 
 ## Entwicklungszeitraum
 seit 20.01.2020

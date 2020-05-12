@@ -41,7 +41,7 @@ Als Versionskontrolle wird Git eingesetzt.
 Desktop Qt 5.14.0 clang 64bit
 
 ## Erzeugung eines lauffähigen Programms
-Für ein lauffähiges Programm muss der Quellcode in die Qt-Entwicklungsumgebung importiert werden und dort dann kompiliert werden.
+Für ein lauffähiges Programm muss der Quellcode in die Qt-Entwicklungsumgebung importiert werden und dort dann kompiliert werden. Dazu muss die Datei src/NOR.pro mit dem Qt Creator geöffnet werden.
 Es ist keine Installation und damit einhergehende Konfiguration notwendig. Auch die Deinstallation entfällt. Das Programm wird über die Entwicklungsumgebung aufgerufen.
 
 ## Struktur des Codes

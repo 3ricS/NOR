@@ -1,0 +1,73 @@
+[
+    {
+        "id": 0,
+        "isVertical": true,
+        "name": "Q0",
+        "type": 1,
+        "value": 100,
+        "xPos": -3420,
+        "yPos": -3060
+    },
+    {
+        "id": 1,
+        "isVertical": true,
+        "name": "R1",
+        "type": 0,
+        "value": 45,
+        "xPos": -3060,
+        "yPos": -3180
+    },
+    {
+        "id": 2,
+        "isVertical": true,
+        "name": "R2",
+        "type": 0,
+        "value": 56.75,
+        "xPos": -3060,
+        "yPos": -2940
+    },
+    {
+        "id": 3,
+        "isVertical": true,
+        "name": "R3",
+        "type": 0,
+        "value": 730,
+        "xPos": -2820,
+        "yPos": -2940
+    },
+    {
+        "componentIdOne": 0,
+        "componentIdTwo": 1,
+        "portA": 0,
+        "portB": 0,
+        "type": "Connection"
+    },
+    {
+        "componentIdOne": 1,
+        "componentIdTwo": 2,
+        "portA": 1,
+        "portB": 0,
+        "type": "Connection"
+    },
+    {
+        "componentIdOne": 1,
+        "componentIdTwo": 3,
+        "portA": 1,
+        "portB": 0,
+        "type": "Connection"
+    },
+    {
+        "componentIdOne": 3,
+        "componentIdTwo": 2,
+        "portA": 1,
+        "portB": 1,
+        "type": "Connection"
+    },
+    {
+        "componentIdOne": 2,
+        "componentIdTwo": 0,
+        "portA": 1,
+        "portB": 1,
+        "type": "Connection"
+    }
+]

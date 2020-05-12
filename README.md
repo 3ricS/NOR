@@ -39,6 +39,7 @@ Als Leitlinie des Code-Styles wurden aus dem verbindlichen Styleguide (Version 1
 ## Verzeichnisstruktur
 Die Quellcode-Datei befinden sich in src/, in diesem Ordner werden die Klassen nochmals in Model und View getrennt abgelegt. Außerdem liegen dort die Bilder bzw. Icons, die in unserem Programm verwendet werden.
 Unter doc/ befinden sich das Klassendiagramm, das Lastenheft sowie die Protokolle.
+Beispiele für elektrische Netzwerke, die mit dem Programm geladen werden können, finden sich unter examples/.
 
 ## Benutzerhandbuch
 Die Doxygen-Datei befindet sich unter doxygen/

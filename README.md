@@ -1,8 +1,14 @@
+<p align="center">
+  <img src="src/img/resistorLogo.svg" height="70">
+</p>
+
 NOR - Network of Resistance
 ===========================
+Einfaches Berechnen des Gesamtwiderstandes von elektrischen Netzwerken
+
 #### Download: https://github.com/3ricS/NOR/releases
 
-# Beschreibung
+## Beschreibung
 NOR kann den Gesamtwiderstand beliebiger Netzwerke von elektrischen Widerständen berechnen.
 Darüber hinaus können die Spannungen und Ströme an jedem Widerstand abgerufen werden.
 Die Netzwerke können gespeichert und gedruckt werden.
@@ -11,7 +17,7 @@ Dieses Projekt wurde im Rahmen eines Studiensemsters an der [Privaten Hochschule
 
 ---
 
-# Projektbeteiligte
+## Projektbeteiligte
 - Eric Schniedermeyer
 - Leonel Fransen
 - Moritz Fichte

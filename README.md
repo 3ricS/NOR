@@ -56,5 +56,5 @@ Beispiele für elektrische Netzwerke, die mit dem Programm geladen werden könne
 Die Doxygen-Datei befindet sich unter doc/doxygen/
 
 ## Kooperationspartner
-![PHWT Logo](https://upload.wikimedia.org/wikipedia/commons/0/0f/Logo_PHWT.jpg)
+<img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Logo_PHWT.jpg" height="270">
 

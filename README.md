@@ -7,7 +7,7 @@ NOR kann den Gesamtwiderstand beliebiger Netzwerke von elektrischen Widerstände
 Darüber hinaus können die Spannungen und Ströme an jedem Widerstand abgerufen werden.
 Die Netzwerke können gespeichert und gedruckt werden.
 Als Entwicklungsumgebung wurde die Community-Version von Qt verwendet. 
-Dieses Projekt wurde im Rahmen eines Studiensemsters an der Privaten Hochschule Wirtschaft und Technik in Diepholz angefertigt. Als Ansprechpartner stand uns Prof. Dr. H. Henseler zur Seite.
+Dieses Projekt wurde im Rahmen eines Studiensemsters an der [Privaten Hochschule Wirtschaft und Technik](https://www.phwt.de/) in Diepholz angefertigt. Als Ansprechpartner stand uns [Prof. Dr. H. Henseler](https://www.phwt.de/weiterbildung/referenten/prof-dr-herwig-henseler/) zur Seite.
 
 ---
 

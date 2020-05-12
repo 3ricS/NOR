@@ -29,7 +29,7 @@ Dieses Projekt wurde im Rahmen eines Studiensemsters an der [Privaten Hochschule
 - Soeren Koestler
 
 ## Entwicklungszeitraum
-20.01.2020 - 23.03.2020
+seit 20.01.2020
 
 ## Copyright
 Die Lizenzinformationen befinden sich unter License.md.

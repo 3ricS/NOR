@@ -234,11 +234,12 @@ void MainWindow::createUpperMenu(void)
     _ui->menuAnsicht->addAction(_zoom100Percent);
 
     //About Menu
-    _about = new QAction("Über");
+    _about = new QAction("Über NOR");
     _ui->menuExtras->addAction(_about);
     _about->setMenuRole(QAction::ApplicationSpecificRole);
 
     QAction *aboutQtAct = _ui->menuExtras->addAction(tr("Über &Qt"), qApp, &QApplication::aboutQt);
+    aboutQtAct->setMenuRole(QAction::ApplicationSpecificRole);
     aboutQtAct->setStatusTip(tr("Einzelheiten zur Qt-Bibliothek"));
 
     //Bearbeiten Menu

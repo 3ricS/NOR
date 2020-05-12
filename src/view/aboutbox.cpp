@@ -6,6 +6,7 @@ AboutBox::AboutBox(QWidget *parent) :
     ui(new Ui::AboutBox)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 AboutBox::~AboutBox()

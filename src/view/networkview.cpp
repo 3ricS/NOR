@@ -496,11 +496,10 @@ void NetworkView::startConnection(QPointF scenePosition)
         int hitBoxHighlight = Component::_hitBoxSizeAtPort / 1.5;
         int positionX = foundComponent->getPortPosition(port).x() - hitBoxHighlight;
         int positionY = foundComponent->getPortPosition(port).y() - hitBoxHighlight;
-        QColor color = QColor(255, 0, 0, 55);
 
         QGraphicsItem* highlightedRect = _model->addRect(positionX, positionY, 2 * hitBoxHighlight,
                                                          2 * hitBoxHighlight, Qt::NoPen,
-                                                         color);
+                                                         Defines::hightlightColor);
         _previousHighlightedPort = highlightedRect;
     }
 }
@@ -517,8 +516,7 @@ void NetworkView::connectionMoveEvent(QPointF scenePosition)
         else if (_mouseIsPressed && _connectionStartComponentPort != nullptr &&
                  foundComponentPort->getComponent() != _connectionStartComponentPort->getComponent())
         {
-            QColor color = QColor(255, 0, 0, 55);
-            highlightComponentPort(foundComponentPort, color);
+            highlightComponentPort(foundComponentPort, Defines::hightlightColor);
         }
         _model->update();
     }
@@ -622,7 +620,7 @@ void NetworkView::buildConnection(QPointF scenePositionOfEnd)
             if (hasFoundPort && !startAndEndComponentAreEqual)
             {
                 Component::Port port = component->getPort(scenePositionOfEnd);
-                connectionComponentPortEnd = new ComponentPort(component, port);
+                connectionComponentPortEnd = new ComponentPort(component, port, _model);
                 break;
             }
         }
@@ -660,13 +658,13 @@ void NetworkView::showSampleComponent(QPointF scenePosition, Component::Componen
         if (componentType == Component::ComponentType::Resistor)
         {
             sampleComponent = new Resistor(QString("R"), 0, gridPosition.toPoint().x(),
-                                           gridPosition.toPoint().y(), _isVerticalComponentDefault, 0);
+                                           gridPosition.toPoint().y(), _isVerticalComponentDefault, 0, _model);
         }
         else
         {
             sampleComponent = new PowerSupply(QString("Q"), gridPosition.toPoint().x(),
-                                              gridPosition.toPoint().y(), _isVerticalComponentDefault, 0,
-                                              0);
+                                              gridPosition.toPoint().y(), _isVerticalComponentDefault, 0, 0,
+                                              _model);
         }
         _sampleComponent = sampleComponent;
         _model->addItem(_sampleComponent);

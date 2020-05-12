@@ -14,7 +14,7 @@
 class PowerSupply : public Component
 {
 public:
-    PowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id);
+    PowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id, NetworkGraphics* model);
 
 private:
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;

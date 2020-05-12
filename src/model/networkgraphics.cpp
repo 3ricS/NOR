@@ -255,7 +255,7 @@ Component* NetworkGraphics::addPowerSupply(QString name, int x, int y, bool isVe
     }
 
     Component* powerSupply = new PowerSupply(name, x, y,
-                                             isVertical, voltage, id);
+                                             isVertical, voltage, id, this);
     powerSupply = addComponentWithoutUndo(powerSupply);
     return powerSupply;
 }
@@ -314,7 +314,7 @@ NetworkGraphics::addResistor(QString name, long double valueResistance, int xPos
     }
 
     Component* resistor = new Resistor(name, valueResistance, xPosition, yPosition,
-                                       isVertical, id);
+                                       isVertical, id, this);
     addComponentWithoutUndo(resistor);
     return resistor;
 }
@@ -960,7 +960,7 @@ ComponentPort* NetworkGraphics::getComponentPortAtPosition(QPointF scenePosition
             if (hasFoundPort)
             {
                 Component::Port port = component->getPort(scenePosition);
-                ComponentPort* cp = new ComponentPort(component, port);
+                ComponentPort* cp = new ComponentPort(component, port, this);
                 return cp;
             }
         }

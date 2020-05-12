@@ -125,7 +125,7 @@ Calculator::searchingForDirectParallelNeighbours(ComponentPort actualComPort,
 
 QList<ComponentPort> Calculator::findFirstComponentPort(void)
 {
-    ComponentPort startOfSearch(nullptr, Component::Port::null);
+    ComponentPort startOfSearch(nullptr, Component::Port::null, nullptr);
     for (Connection* connection : _connections)
     {
         if (Component::ComponentType::PowerSupply ==

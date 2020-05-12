@@ -1,4 +1,5 @@
 #include "componentport.h"
+#include "networkgraphics.h"
 
 /*!
  * \brief   Tauscht den Port des ComponentPorts.
@@ -17,6 +18,21 @@ void ComponentPort::invertPort(void)
     }
 }
 
+bool ComponentPort::isConnected() const
+{
+    if (nullptr != _model)
+    {
+        for (Connection* c : _model->getConnections())
+        {
+            if (c->getComponentPortOne() == *this || c->getComponentPortTwo() == *this)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 /*!
  * \brief   Erzeugt ComponentPort mit invertiertem Port.
  *
@@ -24,7 +40,7 @@ void ComponentPort::invertPort(void)
  */
 ComponentPort ComponentPort::getOppisiteComponentPort(void)
 {
-    return ComponentPort(_component, getOppisitePort());
+    return ComponentPort(_component, getOppisitePort(), _model);
 }
 
 Component::Port ComponentPort::getOppisitePort(void)

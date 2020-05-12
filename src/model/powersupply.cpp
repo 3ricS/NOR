@@ -4,8 +4,8 @@
 
 #include <QLocale>
 
-PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id) :
-        Component(QPointF(x, y), isVertical, name, voltage, Component::ComponentType::PowerSupply, id)
+PowerSupply::PowerSupply(QString name, int x, int y, bool isVertical, double voltage, int id, NetworkGraphics* model) :
+        Component(QPointF(x, y), isVertical, name, voltage, Component::ComponentType::PowerSupply, id, model)
 {
 }
 
@@ -15,17 +15,21 @@ void PowerSupply::paint(QPainter* painter, [[maybe_unused]] const QStyleOptionGr
     int xPosition = _position.x();
     int yPosition = _position.y();
 
-    painter->drawEllipse(xPosition - (Defines::gridLength * 0.3), yPosition - (Defines::gridLength * 0.3),
-                         Defines::gridLength * 0.6, Defines::gridLength * 0.6);
+    int deviationPortA = 0;
+    int deviationPortB = 0;
+    calculateDeviationPortAB(deviationPortA, deviationPortB);
+
+    painter->drawEllipse(xPosition - (Defines::gridLength * Defines::gridObjectWidth / 2), yPosition - (Defines::gridLength * Defines::gridObjectWidth / 2),
+                         Defines::gridLength * Defines::gridObjectWidth, Defines::gridLength * Defines::gridObjectWidth);
     if(isVertical())
     {
-        painter->drawLine(xPosition, yPosition + (Defines::gridLength / 2) - Connection::_circleRadius,
-                xPosition,yPosition - (Defines::gridLength / 2) + Connection::_circleRadius);
+        painter->drawLine(xPosition, yPosition + (Defines::gridLength / 2) - Connection::_circleRadius - deviationPortB,
+                xPosition, yPosition - (Defines::gridLength / 2) + Connection::_circleRadius + deviationPortA);
     }
     else
     {
-        painter->drawLine(xPosition - (Defines::gridLength / 2) + Connection::_circleRadius, yPosition,
-                          xPosition + (Defines::gridLength / 2) - Connection::_circleRadius, yPosition);
+        painter->drawLine(xPosition - (Defines::gridLength / 2) + Connection::_circleRadius + deviationPortA, yPosition,
+                          xPosition + (Defines::gridLength / 2) - Connection::_circleRadius - deviationPortB, yPosition);
     }
     if(_isSelected)
     {

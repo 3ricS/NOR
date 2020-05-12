@@ -18,6 +18,8 @@
 
 #include "model/gridobject.h"
 
+class NetworkGraphics;
+
 class Component : public GridObject
 {
 public:
@@ -25,7 +27,7 @@ public:
     enum Port{A, B, null};
     enum Orientation{left, top, right, bottom};
     Component(QPointF position, bool isVertical, QString name, double voltage, ComponentType componentTyp,
-              int id);
+              int id, NetworkGraphics* model);
 
     bool operator==(const Component& rhs);
     bool operator!=(const Component& rhs);
@@ -57,6 +59,7 @@ public:
 
 protected:
     virtual void    setLabelPositions(QPainter* painter) = 0;
+    void calculateDeviationPortAB(int& deviationPortA, int& deviationPortB);
     void            paintInformation(QPainter* painter, QString name, double value, QRectF namePosition, QRectF valuePosition,
                                      ComponentType componentType);
 
@@ -71,6 +74,9 @@ private:
     QString getUnitAndFitValue(double& valueWithoutUnit);
 
     const ComponentType _componentType;
+
+    NetworkGraphics*    _model;
+    const int deviationIfNotConnected = 7;
 };
 
 #endif // COMPONENT_H

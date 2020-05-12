@@ -11,10 +11,12 @@
 
 #include <model/component.h>
 
+class NetworkGraphics;
+
 class Resistor : public Component
 {
 public:
-    Resistor(QString name, long double valueResistance, int x, int y, bool isVertical, int id);
+    Resistor(QString name, long double valueResistance, int x, int y, bool isVertical, int id, NetworkGraphics* model);
 
     long double getResistanceValue(void) {return _resistanceValue;}
     void        setResistanceValue(long double resistance) { _resistanceValue = resistance;}

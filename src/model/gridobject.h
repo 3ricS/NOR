@@ -11,6 +11,8 @@
 
 #include "model/graphicsobject.h"
 
+class NetworkGraphics;
+
 class GridObject : public GraphicsObject
 {
 public:
@@ -25,9 +27,8 @@ public:
 protected:
     void paintSelectionHighlight(QPainter* painter) override;
 
-    QPointF     _position;
-    const int   _id;
-
+    QPointF             _position;
+    const int           _id;
 };
 
 

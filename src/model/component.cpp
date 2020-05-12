@@ -1,13 +1,15 @@
 #include "defines.h"
 #include "component.h"
+#include "componentport.h"
 
 #include <QDebug>
 
 Component::Component(QPointF position, bool isVertical, QString name, double voltage, ComponentType componentTyp,
-                     int id)
+                     int id, NetworkGraphics* model)
         : GridObject(position, id),
           _name(name), _voltage(voltage),
-          _componentType(componentTyp)
+          _componentType(componentTyp),
+          _model(model)
 {
     if (isVertical)
     {
@@ -137,6 +139,23 @@ Component::paintInformation(QPainter* painter, QString name, double value, QRect
 
     painter->drawText(namePosition, Qt::AlignLeft, name);
     painter->drawText(valuePosition, Qt::AlignRight, displayedValueString);
+}
+
+void Component::calculateDeviationPortAB(int &deviationPortA, int &deviationPortB)
+{
+    deviationPortA = 0;
+    deviationPortB = 0;
+    bool isConnectedPortA = ComponentPort(this, Port::A, _model).isConnected();
+    bool isConnectedPortB = ComponentPort(this, Port::B, _model).isConnected();
+
+    if (!isConnectedPortA)
+    {
+        deviationPortA = deviationIfNotConnected;
+    }
+    if (!isConnectedPortB)
+    {
+        deviationPortB = deviationIfNotConnected;
+    }
 }
 
 QString Component::getDisplayedValueString(double value, Component::ComponentType componentType)

@@ -15,7 +15,8 @@
 class ComponentPort
 {
 public:
-    ComponentPort(Component* component, Component::Port port) : _component(component), _port(port) {}
+    ComponentPort(Component* component, Component::Port port, NetworkGraphics* model) :
+        _component(component), _port(port), _model(model) {}
 
     bool operator==(const ComponentPort& rhs);
     bool operator!=(const ComponentPort& rhs);
@@ -23,14 +24,17 @@ public:
     void invertPort(void);
 
     //getter
+    bool            isConnected(void) const;
     Component*      getComponent(void) const {return _component;}
     Component::Port getPort(void) const {return _port;}
     ComponentPort   getOppisiteComponentPort(void);
 
 private:
-    Component*      _component;
-    Component::Port _port;
-    Component::Port getOppisitePort(void);
+    Component::Port  getOppisitePort(void);
+
+    Component*       _component;
+    Component::Port  _port;
+    NetworkGraphics* _model;
 };
 
 

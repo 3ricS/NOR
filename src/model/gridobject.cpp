@@ -3,6 +3,7 @@
 
 #include "gridobject.h"
 #include "defines.h"
+#include "networkgraphics.h"
 
 /*!
  * \brief Highlightet das Textfeld in einer anderen Farbe.

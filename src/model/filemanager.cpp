@@ -233,13 +233,13 @@ void FileManager::loadConnection(QJsonArray array)
                 int portIntA = obj.value("portA").toInt();
                 Component* componentA = _model->getComponentById(idA);
                 Component::Port portA = toPort(portIntA);
-                ComponentPort componentPortA(componentA, portA);
+                ComponentPort componentPortA(componentA, portA, _model);
 
                 int idB = obj.value("componentIdTwo").toInt();
                 int portIntB = obj.value("portB").toInt();
                 Component* componentB = _model->getComponentById(idB);
                 Component::Port portB = toPort(portIntB);
-                ComponentPort componentPortB(componentB, portB);
+                ComponentPort componentPortB(componentB, portB, _model);
 
                 _model->addConnectionWithoutUndo(componentPortA, componentPortB);
             }

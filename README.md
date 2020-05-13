@@ -31,8 +31,8 @@ Dieses Projekt wurde im Rahmen eines Studiensemsters an der [Privaten Hochschule
 ## Entwicklungszeitraum
 seit 20.01.2020
 
-## Lizent
-Die Lizenzinformationen befinden sich unter [License.md].
+## Lizenz
+Die Lizenzinformationen befinden sich unter [LICENSE.md](LICENSE.md).
 Es wird die Community-Version von Qt eingesetzt.
 
 ## Compiler

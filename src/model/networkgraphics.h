@@ -37,6 +37,7 @@ public:
 
     void save(void);
     void load(void);
+    void loadFromFile(QString file);
     void saveAs(void);
 
     void updateCalc(void);
@@ -193,6 +194,8 @@ private:
     QList<Connection*> getSelectedConnections();
 
     void addObject(GridObject* component);
+
+    void updateNewDocument();
 
 
     int _resistorCount = 0;

@@ -20,7 +20,7 @@ void FileManager::save(void)
     {
         _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
         _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern", _dirFilePath.absolutePath() + _defaultFileName,
-                                                             "Json (*.json);;Text (*.txt)"));
+                                                             _fileFilter));
     }
     _isSaved = saveData();
 }
@@ -36,7 +36,7 @@ void FileManager::saveAs(void)
 {
     _dirFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     _actualFile.setFileName(QFileDialog::getSaveFileName(nullptr, "Speichern",_dirFilePath.absolutePath() + _defaultFileName,
-                                                         "Json (*.json);;Text (*.txt)"));
+                                                         _fileFilter));
     _isSaved = saveData();
 }
 
@@ -134,6 +134,32 @@ QJsonObject FileManager::saveDescription(Description *description)
     return df;
 }
 
+void FileManager::loadActualFile()
+{
+    QJsonDocument json;
+    QJsonArray array;
+    QJsonArray res;
+
+    if (_actualFile.open(QFile::ReadOnly))
+    {
+        const QByteArray file = _actualFile.readAll();
+        json = QJsonDocument::fromJson(file, nullptr);
+
+        if (!json.isEmpty() && json.isArray())
+        {
+            array = json.array();
+            //Zuerst Components laden, da die Connections auf diese zugreifen / zeigen
+            loadComponent(array);
+            //Jetzt Connections zeichnen
+            loadConnection(array);
+            //Jetzt die Textfelder Laden
+            loadDescription(array);
+        }
+    }
+    _actualFile.close();
+    _isSaved = true;
+}
+
 Component::Port FileManager::toPort(int componentPort)
 {
     Component::Port port = Component::null;
@@ -166,28 +192,16 @@ void FileManager::load(void)
     _actualFile.setFileName(QFileDialog::getOpenFileName(nullptr, "Laden", _dirFilePath.absolutePath(), _fileFilter));
     _homePath.setPath(_homePath.filePath(_actualFile.fileName()));
 
-    QJsonDocument json;
-    QJsonArray array;
-    QJsonArray res;
+    loadActualFile();
+}
 
-    if (_actualFile.open(QFile::ReadOnly))
-    {
-        const QByteArray file = _actualFile.readAll();
-        json = QJsonDocument::fromJson(file, nullptr);
+void FileManager::loadFromFile(QString file)
+{
+    _dirFilePath.setPath(file.left(file.lastIndexOf('/')));
+    _actualFile.setFileName(file.right(file.lastIndexOf('/')));
+    _homePath.setPath(_homePath.filePath(_actualFile.fileName()));
 
-        if (!json.isEmpty() && json.isArray())
-        {
-            array = json.array();
-            //Zuerst Components laden, da die Connections auf diese zugreifen / zeigen
-            loadComponent(array);
-            //Jetzt Connections zeichnen
-            loadConnection(array);
-            //Jetzt die Textfelder Laden
-            loadDescription(array);
-        }
-    }
-    _actualFile.close();
-    _isSaved = true;
+    loadActualFile();
 }
 
 void FileManager::loadComponent(QJsonArray array)

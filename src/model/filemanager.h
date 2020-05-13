@@ -30,6 +30,7 @@ public:
 
     void save(void);
     void load(void);
+    void loadFromFile(QString file);
     void saveAs(void);
 
     //Getter
@@ -43,6 +44,7 @@ private:
     QJsonObject saveConnection(Connection* connection);
     QJsonObject saveDescription(Description* description);
 
+    void loadActualFile();
     void loadComponent(QJsonArray array);
     void loadConnection(QJsonArray array);
     void loadDescription(QJsonArray array);
@@ -50,7 +52,7 @@ private:
     Component::Port toPort(int componentPort);
 
     QFile         _actualFile;
-    const QString _fileFilter  = "Json (*.json);;Text (*.txt)";
+    const QString _fileFilter  = "nor (*.nor);;Json (*.json);;Text (*.txt)";
     QDir          _homePath;
     bool          _isSaved = false;
 

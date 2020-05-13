@@ -27,6 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        application.cpp \
         main.cpp \
         model/calculator.cpp \
         model/component.cpp \
@@ -47,6 +48,7 @@ SOURCES += \
         model/gridobject.cpp
 
 HEADERS += \
+        application.h \
         defines.h \
         model/calculator.h \
         model/component.h \

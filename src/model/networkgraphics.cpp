@@ -41,26 +41,15 @@ void NetworkGraphics::load(void)
     _isLoading = true;
     _manager->load();
     _isLoading = false;
-    _hasChangedDocument = false;
+    updateNewDocument();
+}
 
-    updateCalc();
-    emit resistanceValueChanged();
-    if (_objects.count() != 0)
-    {
-        bool powerSupplyFound = false;
-        for (GridObject* gridObject : _objects)
-        {
-            Component* component = dynamic_cast<Component*>(gridObject);
-            if (component != nullptr && (component->getComponentType() == Component::PowerSupply))
-            {
-                powerSupplyFound = true;
-            }
-        }
-
-        bool isAllowedPowerSupply = !powerSupplyFound;
-        emit powerSupplyIsAllowed(isAllowedPowerSupply);
-        emit newNetworkIsLoad();
-    }
+void NetworkGraphics::loadFromFile(QString file)
+{
+    _isLoading = true;
+    _manager->loadFromFile(file);
+    _isLoading = false;
+    updateNewDocument();
 }
 
 /*!
@@ -1364,4 +1353,28 @@ void NetworkGraphics::addObject(GridObject* gridObject)
     addItem(gridObject);
 
     updateCalc();
+}
+
+void NetworkGraphics::updateNewDocument()
+{
+    _hasChangedDocument = false;
+
+    updateCalc();
+    emit resistanceValueChanged();
+    if (_objects.count() != 0)
+    {
+        bool powerSupplyFound = false;
+        for (GridObject* gridObject : _objects)
+        {
+            Component* component = dynamic_cast<Component*>(gridObject);
+            if (component != nullptr && (component->getComponentType() == Component::PowerSupply))
+            {
+                powerSupplyFound = true;
+            }
+        }
+
+        bool isAllowedPowerSupply = !powerSupplyFound;
+        emit powerSupplyIsAllowed(isAllowedPowerSupply);
+        emit newNetworkIsLoad();
+    }
 }

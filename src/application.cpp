@@ -20,6 +20,12 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
     {
         setWindowIcon(QIcon(":/img/resistorLogo.icns"));
     }
+
+    if (arguments().size() > 1)
+    {
+        const QString fileName = arguments().at(1);
+        _model->loadFromFile(fileName);
+    }
 }
 
 

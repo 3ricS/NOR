@@ -34,9 +34,6 @@ seit 20.01.2020
 ## Copyright
 Die Lizenzinformationen befinden sich unter License.md.
 
-## Versionskontrolle
-Als Versionskontrolle wird Git eingesetzt.
-
 ## Compiler
 Desktop Qt 5.14.1 clang 64bit
 

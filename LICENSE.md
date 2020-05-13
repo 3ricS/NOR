@@ -7,8 +7,11 @@ Lizenzinformationen
 GNU GENERAL PUBLIC LICENSE
 
 ## Quellen der Bilder
-Die Icons kommen von den Webseiten:
- - [flaticon.com](flaticon.com)
+Icons made by [Freepik](https://www.flaticon.com/authors/freepik),
+[Good Ware](https://www.flaticon.com/authors/good-ware),
+[Kiranshastry](https://www.flaticon.com/authors/kiranshastry)
+and [Those Icons](https://www.flaticon.com/authors/those-icons)
+from [flaticon.com](flaticon.com)
 
 ---
 

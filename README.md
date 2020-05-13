@@ -17,7 +17,7 @@ Dieses Projekt wurde im Rahmen eines Studiensemsters an der [Privaten Hochschule
 
 ## Screenshot
 <p align="center">
-  <img src="doc/screenshots/screenshot_1.jpg">
+  <img src="doc/screenshots/simple_example.jpg">
 </p>
 
 ---
